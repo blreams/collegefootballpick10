@@ -1,6 +1,6 @@
 from django.db import models
-from utils import getCurrentYear
-from utils import getLatestWeekNum
+from django.utils.timezone import now
+#from utils import getLatestWeekNum
 
 # Create your models here.
 class Team(models.Model):
@@ -12,8 +12,9 @@ class Team(models.Model):
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
 
 class Game(models.Model):
-    game_year = models.IntegerField(default=getCurrentYear())               # Season year corresponding to this game
-    game_week = models.IntegerField(default=getLatestWeekNum() + 1)         # Season week corresponding to this game
+    game_year = models.IntegerField(default=now().year)                     # Season year corresponding to this game
+    #TODO default for game_week should call a function to figure out week number based on now()
+    game_week = models.IntegerField(default=1)                              # Season week corresponding to this game
     game_num = models.IntegerField(default=0)                               # Game number within the week (ie. 1-10)
     team1 = models.ForeignKey('Team')                                       # Pointer back to Team entry
     team2 = models.ForeignKey('Team')                                       # Pointer back to Team entry
@@ -21,10 +22,10 @@ class Game(models.Model):
     team2_actual_points = models.IntegerField(default=-1)                   # Actual points scored 
     favored = models.IntegerField(default=0)                                # Indicates which team is the favorite
     spread = models.IntegerField(default=0)                                 # Point spread added to underdog's score to determine winner
-    game_state = models.Integer(default=0)                                  # Enum (0=invalid, 1=not_started, 2=in_progress, 3=final)
+    game_state = models.IntegerField(default=0)                             # Enum (0=invalid, 1=not_started, 2=in_progress, 3=final)
     quarter = models.CharField(max_length=3, default='1st')                 # Used to indicate game progress ('1st', '2nd', '3rd', '4th', 'OT')
     time_left = models.CharField(max_length=10, default='15:00')            # Time left in the quarter (MM:SS)
-    kickoff_datetime = models.DateTimeField(default=getCurrentSaturday())   # Kickoff timestamp, no picks allowed after this time
+    #kickoff_datetime = models.DateTimeField(default=getCurrentSaturday())   # Kickoff timestamp, no picks allowed after this time
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
 
