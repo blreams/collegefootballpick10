@@ -88,6 +88,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Since default port 8081 is in use on my system, adding this
+os.environ['DJANGO_LIVE_TEST_SERVER_ADDRESS'] = 'localhost:8881'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
