@@ -3,6 +3,11 @@ from django.utils.timezone import now
 #from utils import getLatestWeekNum
 
 # Create your models here.
+
+# We will use the django admin User model instead of creating a Player model
+# Users can belong to groups that define their privileges, groups like
+# 'pooler' and 'commissioner'.
+
 class Team(models.Model):
     team_name = models.CharField(max_length=100)                            # Team name, 'South Carolina'
     mascot = models.CharField(max_length=100)                               # Team mascot, 'Gamecocks'
