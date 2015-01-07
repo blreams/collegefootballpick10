@@ -1,3 +1,7 @@
 from django.shortcuts import render
 
-# Create your views here.
+from pick10.models import Team
+
+def home(request):
+    return render(request, 'pick10/home.html')
+
