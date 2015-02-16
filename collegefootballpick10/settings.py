@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+STATIC_PATH = os.path.join(BASE_DIR, 'static')
+TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')
 
 
 # Quick-start development settings - unsuitable for production
@@ -36,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_browserid',
     'pick10',
 )
 
@@ -47,6 +50,12 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+)
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'django_browserid.auth.AutoLoginBackend',
+    'django_browserid.auth.BrowserIDBackend',
 )
 
 ROOT_URLCONF = 'collegefootballpick10.urls'
@@ -64,14 +73,14 @@ if local_user is not None:
 
 DATABASES = {
     'default': {
-        #'ENGINE': 'django.db.backends.sqlite3',
-        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': mysqldb_name,
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-        'USER': 'user_django',
-        'PASSWORD': 'pass_django',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        #'ENGINE': 'django.db.backends.mysql',
+        #'NAME': mysqldb_name,
+        #'HOST': '127.0.0.1',
+        #'PORT': '3306',
+        #'USER': 'user_django',
+        #'PASSWORD': 'pass_django',
     }
 }
 
@@ -95,5 +104,20 @@ os.environ['DJANGO_LIVE_TEST_SERVER_ADDRESS'] = 'localhost:8881'
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, '../static')
+STATICFILES_DIRS = (
+        STATIC_PATH,
+        )
+#STATIC_ROOT = os.path.join(BASE_DIR, '../static')
+
+TEMPLATE_DIRS = [
+        # Put strings here, like '/home/html/django_templates'.
+        # Always use forward slashes, even for Windows.
+        # Don't forget to use absolute paths, not relative paths.
+        TEMPLATE_PATH,
+        ]
+
+# The following are related to browserid
+BROWSERID_AUTOLOGIN_EMAIL = 'aaa@bbb.com'
+BROWSERID_AUTOLOGIN_ENABLED = True
+LOGIN_REDIRECT_URL = '/'
 
