@@ -12,7 +12,7 @@
     <meta name="author" content="">
     <link rel="icon" href="http://getbootstrap.com/favicon.ico">
 
-    <title>College Football Pick 10</title>
+    <title>{% block header_text %}College Football Pick 10{% endblock %}</title>
 
     <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="http://getbootstrap.com/examples/dashboard/dashboard.css" rel="stylesheet">
@@ -38,6 +38,7 @@
     <div class="container">
         <h1>College Football Pick 10</h1>
     </div>
+    {% block body_block %}{% endblock %}
 
     <script src="http://code.jquery.com/jquery.min.js"></script>
     <script src="https://login.persona.org/include.js"></script>
