@@ -1,5 +1,6 @@
 from django.db import models
-from django.utils.timezone import now
+from django.utils import timezone
+
 #from utils import getLatestWeekNum
 
 # Create your models here.
@@ -7,6 +8,14 @@ from django.utils.timezone import now
 # We will use the django admin User model instead of creating a Player model
 # Users can belong to groups that define their privileges, groups like
 # 'pooler' and 'commissioner'.
+class User(models.Model):
+    email = models.EmailField(primary_key=True)
+    last_login = models.DateTimeField(default=timezone.now)
+    REQUIRED_FIELDS = ()
+    USERNAME_FIELD = 'email'
+
+    def is_authenticated(self):
+        return True
 
 ## For now I'm going to start with only the Team model as it has no dependencies
 ## on other models.
@@ -20,7 +29,7 @@ class Team(models.Model):
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
 
 class Game(models.Model):
-    game_year = models.IntegerField(default=now().year)                     # Season year corresponding to this game
+    game_year = models.IntegerField(default=timezone.now().year)            # Season year corresponding to this game
     #TODO default for game_week should call a function to figure out week number based on now()
     game_week = models.IntegerField(default=1)                              # Season week corresponding to this game
     game_num = models.IntegerField(default=0)                               # Game number within the week (ie. 1-10)
@@ -37,24 +46,23 @@ class Game(models.Model):
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
 
-#TODO Comment the rest of the models until later when we have UTs for them.
-#class Week(models.Model):
-#    week_year = models.IntegerField()                                       # Season year corresponding to this week
-#    week_num = models.IntegerField()                                        # Week number within the season
-#    #games = models.IntegerFields(default=10)                                # Number of games that make up the week
-#    winner = models.ForeignKey('User')                                      # Link to User who won the week
-#    lock_picks = models.BooleanField(default=False)                         # Once the first game kickoff occurs, update to True
-#    lock_scores = models.BooleanField(default=False)                        # Once all scores have been submitted as final by admin, update to True
-#    created = models.DateTimeField(auto_now=False, auto_now_add=True)
-#    updated = models.DateTimeField(auto_now=True, auto_now_add=True)
-#
-#class Pick(models.Model):
-#    pick_week = models.ForeignKey('Week')                                   # Link to week for which this pick applies
-#    pick_user = models.ForeignKey('User')                                   # Link to user for which this pick applies
-#    pick_game = models.ForeignKey('Game')                                   # Link to game for which this pick applies
-#    game_winner = models.IntegerField(default=0)                            # Indicates which team won (1 or 2)
-#    team1_predicted_points = models.IntegerField(default=-1)                # Points predicted for team (tie-break game)
-#    team2_predicted_points = models.IntegerField(default=-1)                # Points predicted for team (tie-break game)
-#    created = models.DateTimeField(auto_now=False, auto_now_add=True)
-#    updated = models.DateTimeField(auto_now=True, auto_now_add=True)
-#
+class Week(models.Model):
+    week_year = models.IntegerField()                                       # Season year corresponding to this week
+    week_num = models.IntegerField()                                        # Week number within the season
+    #games = models.IntegerFields(default=10)                                # Number of games that make up the week
+    winner = models.ForeignKey('User')                                      # Link to User who won the week
+    lock_picks = models.BooleanField(default=False)                         # Once the first game kickoff occurs, update to True
+    lock_scores = models.BooleanField(default=False)                        # Once all scores have been submitted as final by admin, update to True
+    created = models.DateTimeField(auto_now=False, auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True, auto_now_add=True)
+
+class Pick(models.Model):
+    pick_week = models.ForeignKey('Week')                                   # Link to week for which this pick applies
+    pick_user = models.ForeignKey('User')                                   # Link to user for which this pick applies
+    pick_game = models.ForeignKey('Game')                                   # Link to game for which this pick applies
+    game_winner = models.IntegerField(default=0)                            # Indicates which team won (1 or 2)
+    team1_predicted_points = models.IntegerField(default=-1)                # Points predicted for team (tie-break game)
+    team2_predicted_points = models.IntegerField(default=-1)                # Points predicted for team (tie-break game)
+    created = models.DateTimeField(auto_now=False, auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True, auto_now_add=True)
+
