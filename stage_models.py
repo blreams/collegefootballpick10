@@ -4,11 +4,11 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'collegefootballpick10.settings'
 import django
 django.setup()
 
-from pick10.models import Conference, Team
+from pick10.models import Conference, Team, add_conference, add_team
 
-def populate_teams():
+def populate_conferences_teams():
     # American Athletic
-    conf = add_conference('American Athletic')[0]
+    conf = add_conference('American Athletic')
     add_team('Cincinnati', 'Bearcats', conf)
     add_team('Connecticut', 'Huskies', conf)
     add_team('East Carolina', 'Pirates', conf)
@@ -22,7 +22,7 @@ def populate_teams():
     add_team('UCF', 'Knights', conf)
 
     # Atlantic Coast - Atlantic
-    conf = add_conference('Atlantic Coast', 'Atlantic')[0]
+    conf = add_conference('Atlantic Coast', 'Atlantic')
     add_team('Boston College', 'Eagles', conf)
     add_team('Clemson', 'Tigers', conf)
     add_team('Florida State', 'Seminoles', conf)
@@ -31,7 +31,7 @@ def populate_teams():
     add_team('Syracuse', 'Orange', conf)
     add_team('Wake Forest', 'Demon Deacons', conf)
     # Atlantic Coast - Coastal
-    conf = add_conference('Atlantic Coast', 'Coastal')[0]
+    conf = add_conference('Atlantic Coast', 'Coastal')
     add_team('Duke', 'Blue Devils', conf)
     add_team('Georgia Tech', 'Yellow Jackets', conf)
     add_team('Miami (Fla.)', 'Hurricanes', conf)
@@ -41,7 +41,7 @@ def populate_teams():
     add_team('Virginia Tech', 'Hokies', conf)
 
     # Big Ten - East
-    conf = add_conference('Big Ten', 'East')[0]
+    conf = add_conference('Big Ten', 'East')
     add_team('Indiana', 'Hoosiers', conf)
     add_team('Maryland', 'Terrapins', conf)
     add_team('Michigan', 'Wolverines', conf)
@@ -50,7 +50,7 @@ def populate_teams():
     add_team('Penn State', 'Nittany Lions', conf)
     add_team('Rutgers', 'Scarlet Knights', conf)
     # Big Ten - West
-    conf = add_conference('Big Ten', 'West')[0]
+    conf = add_conference('Big Ten', 'West')
     add_team('Illinois', 'Illini', conf)
     add_team('Iowa', 'Hawkeyes', conf)
     add_team('Minnesota', 'Golden Gophers', conf)
@@ -60,7 +60,7 @@ def populate_teams():
     add_team('Wisconsin', 'Badgers', conf)
 
     # Big 12
-    conf = add_conference('Big 12')[0]
+    conf = add_conference('Big 12')
     add_team('Baylor', 'Bears', conf)
     add_team('Iowa State', 'Cyclones', conf)
     add_team('Kansas', 'Jayhawks', conf)
@@ -73,7 +73,7 @@ def populate_teams():
     add_team('West Virginia', 'Mountaineers', conf)
 
     # Conference USA - East
-    conf = add_conference('Conference USA', 'East')[0]
+    conf = add_conference('Conference USA', 'East')
     add_team('Florida Atlantic', 'Owls', conf)
     add_team('Florida International', 'Golden Panthers', conf)
     add_team('Marshall', 'Thundering Herd', conf)
@@ -82,7 +82,7 @@ def populate_teams():
     add_team('UAB', 'Blazers', conf)
     add_team('Western Kentucky', 'Hilltoppers', conf)
     # Conference USA - West
-    conf = add_conference('Conference USA', 'West')[0]
+    conf = add_conference('Conference USA', 'West')
     add_team('Louisiana Tech', 'Bulldogs', conf)
     add_team('North Texas', 'Mean Green', conf)
     add_team('Rice', 'Owls', conf)
@@ -91,14 +91,14 @@ def populate_teams():
     add_team('Texas-San Antonio', 'Road Runners', conf)
 
     # Independents
-    conf = add_conference('Independents')[0]
+    conf = add_conference('Independents')
     add_team('Army', 'Black Knights', conf)
     add_team('Brigham Young', 'Cougars', conf)
     add_team('Navy', 'Midshipmen', conf)
     add_team('Notre Dame', 'Fighting Irish', conf)
 
     # Mid American - East
-    conf = add_conference('Mid American', 'East')[0]
+    conf = add_conference('Mid American', 'East')
     add_team('Akron', 'Zips', conf)
     add_team('Bowling Green', 'Falcons', conf)
     add_team('Buffalo', 'Bulls', conf)
@@ -107,7 +107,7 @@ def populate_teams():
     add_team('Miami (Ohio)', 'Redhawks', conf)
     add_team('Ohio', 'Bobcats', conf)
     # Mid American - West
-    conf = add_conference('Mid American', 'West')[0]
+    conf = add_conference('Mid American', 'West')
     add_team('Ball State', 'Cardinals', conf)
     add_team('Central Michigan', 'Chippewas', conf)
     add_team('Eastern Michigan', 'Eagles', conf)
@@ -116,7 +116,7 @@ def populate_teams():
     add_team('Western Michigan', 'Broncos', conf)
 
     # Mountain West - Mountain
-    conf = add_conference('Mountain West', 'Mountain')[0]
+    conf = add_conference('Mountain West', 'Mountain')
     add_team('Air Force', 'Falcons', conf)
     add_team('Boise State', 'Broncos', conf)
     add_team('Colorado State', 'Rams', conf)
@@ -124,7 +124,7 @@ def populate_teams():
     add_team('Utah State', 'Aggies', conf)
     add_team('Wyoming', 'Cowboys', conf)
     # Mountain West - West
-    conf = add_conference('Mountain West', 'West')[0]
+    conf = add_conference('Mountain West', 'West')
     add_team('Fresno State', 'Bulldogs', conf)
     add_team('Hawaii', 'Rainbox Warriors', conf)
     add_team('Nevada', 'Wolf Pack', conf)
@@ -133,7 +133,7 @@ def populate_teams():
     add_team('UNLV', 'Rebels', conf)
 
     # Pacific 12 - North
-    conf = add_conference('Pacific 12', 'North')[0]
+    conf = add_conference('Pacific 12', 'North')
     add_team('California', 'Golden Bears', conf)
     add_team('Oregon', 'Ducks', conf)
     add_team('Oregon State', 'Beavers', conf)
@@ -141,7 +141,7 @@ def populate_teams():
     add_team('Washington', 'Huskies', conf)
     add_team('Washington State', 'Cougars', conf)
     # Pacific 12 - South
-    conf = add_conference('Pacific 12', 'South')[0]
+    conf = add_conference('Pacific 12', 'South')
     add_team('Arizona', 'Wildcats', conf)
     add_team('Arizona State', 'Sun Devils', conf)
     add_team('Colorado', 'Buffaloes', conf)
@@ -150,7 +150,7 @@ def populate_teams():
     add_team('Utah', 'Utes', conf)
 
     # Southeastern - East
-    conf = add_conference('Southeastern', 'East')[0]
+    conf = add_conference('Southeastern', 'East')
     add_team('Florida', 'Gators', conf)
     add_team('Georgia', 'Bulldogs', conf)
     add_team('Kentucky', 'Wildcats', conf)
@@ -159,7 +159,7 @@ def populate_teams():
     add_team('Tennessee', 'Volunteers', conf)
     add_team('Vanderbilt', 'Commodores', conf)
     # Southeastern - West
-    conf = add_conference('Southeastern', 'West')[0]
+    conf = add_conference('Southeastern', 'West')
     add_team('Alabama', 'Crimson Tide', conf)
     add_team('Arkansas', 'Razorbacks', conf)
     add_team('Auburn', 'Tigers', conf)
@@ -169,7 +169,7 @@ def populate_teams():
     add_team('Texas A&M', 'Aggies', conf)
 
     # Sun Belt
-    conf = add_conference('Sun Belt')[0]
+    conf = add_conference('Sun Belt')
     add_team('Appalachian State', 'Mountaineers', conf)
     add_team('Arkansas State', 'Red Wolves', conf)
     add_team('Georgia Southern', 'Eagle', conf)
@@ -182,18 +182,8 @@ def populate_teams():
     add_team('Troy', 'Trojans', conf)
     add_team('UL Lafayette', 'Ragin Cajuns', conf)
 
-def add_conference(conf_name, div_name=None):
-    c = Conference.objects.get_or_create(conf_name=conf_name, div_name=div_name)
-    return c
-
-def add_team(team_name, mascot, conf):
-    t = Team.objects.get_or_create(team_name=team_name, mascot=mascot, conf=conf)[0]
-    t.current = True
-    t.save()
-    return t
-
 # Execution starts here
 if __name__ == '__main__':
     print "Starting pick10 model population..."
-    populate_teams()
+    populate_conferences_teams()
 

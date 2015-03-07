@@ -30,9 +30,9 @@ class Team(models.Model):
     team_name = models.CharField(max_length=40)                            # Team name, 'South Carolina'
     mascot = models.CharField(max_length=40)                               # Team mascot, 'Gamecocks'
     #TODO Save helmet field for later.
-    #helmet = models.ImageField()                                            # Helmet pic, local file (.png, .gif, .jpg)
-    conf = models.ForeignKey('Conference', default=None)                    # Pointer back to Conference entry
-    current = models.BooleanField(default=True)                             # True if team should be included in selection lists
+    #helmet = models.ImageField()                                          # Helmet pic, local file (.png, .gif, .jpg)
+    conference = models.ForeignKey('Conference', default=None)             # Pointer back to Conference entry
+    current = models.BooleanField(default=True)                            # True if team should be included in selection lists
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
 
@@ -76,4 +76,14 @@ class Pick(models.Model):
     team2_predicted_points = models.IntegerField(default=-1)                # Points predicted for team (tie-break game)
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
+
+def add_conference(conf_name, div_name=None):
+    c = Conference.objects.get_or_create(conf_name=conf_name, div_name=div_name)[0]
+    return c
+
+def add_team(team_name, mascot, conference, current=True):
+    t = Team.objects.get_or_create(team_name=team_name, mascot=mascot, conference=conference)[0]
+    t.current = current
+    t.save()
+    return t
 
