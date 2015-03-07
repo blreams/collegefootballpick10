@@ -17,16 +17,27 @@ class User(models.Model):
     def is_authenticated(self):
         return True
 
-## For now I'm going to start with only the Team model as it has no dependencies
-## on other models.
+class Conference(models.Model):
+    conf_name = models.CharField(max_length=40)                            # Conference name, 'Southeastern'
+    div_name = models.CharField(max_length=40, null=True, blank=True)      # Division name, 'East'
+    created = models.DateTimeField(auto_now=False, auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True, auto_now_add=True)
+
+    def __unicode__(self):
+        return '%s %s'%(self.conf_name, self.div_name,)
+
 class Team(models.Model):
-    team_name = models.CharField(max_length=100)                            # Team name, 'South Carolina'
-    mascot = models.CharField(max_length=100)                               # Team mascot, 'Gamecocks'
+    team_name = models.CharField(max_length=40)                            # Team name, 'South Carolina'
+    mascot = models.CharField(max_length=40)                               # Team mascot, 'Gamecocks'
     #TODO Save helmet field for later.
     #helmet = models.ImageField()                                            # Helmet pic, local file (.png, .gif, .jpg)
+    conf = models.ForeignKey('Conference', default=None)                    # Pointer back to Conference entry
     current = models.BooleanField(default=True)                             # True if team should be included in selection lists
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
+
+    def __unicode__(self):
+        return '%s %s'%(self.team_name, self.mascot,)
 
 class Game(models.Model):
     game_year = models.IntegerField(default=timezone.now().year)            # Season year corresponding to this game
