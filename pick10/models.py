@@ -23,6 +23,9 @@ class Conference(models.Model):
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
 
+    class Meta:
+        verbose_name_plural = '1. Conferences'
+
     def __unicode__(self):
         return '%s %s'%(self.conf_name, self.div_name,)
 
@@ -35,6 +38,9 @@ class Team(models.Model):
     current = models.BooleanField(default=True)                            # True if team should be included in selection lists
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = '2. Teams'
 
     def __unicode__(self):
         return '%s %s'%(self.team_name, self.mascot,)
@@ -57,6 +63,9 @@ class Game(models.Model):
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
 
+    class Meta:
+        verbose_name_plural = '3. Games'
+
     def __unicode__(self):
         return 'Year=%d, Week=%d, Game=%d'%(self.game_year, self.game_week, self.game_num,)
 
@@ -70,6 +79,9 @@ class Week(models.Model):
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
 
+    class Meta:
+        verbose_name_plural = '4. Weeks'
+
     def __unicode__(self):
         return 'Year=%d, Week=%d'%(self.week_year, self.week_num,)
 
@@ -82,6 +94,9 @@ class Pick(models.Model):
     team2_predicted_points = models.IntegerField(default=-1)                # Points predicted for team (tie-break game)
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = '5. Picks'
 
     def __unicode__(self):
         return 'User=%s, Year=%d, Week=%d, Game=%d'%(self.pick_user.email, self.pick_game.game_year, self.pick_game.game_week, self.pick_game.game_num,)
