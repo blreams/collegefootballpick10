@@ -4,7 +4,12 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'collegefootballpick10.settings'
 import django
 django.setup()
 
-from pick10.models import Conference, Team, add_conference, add_team
+from pick10.models import Team
+from pick10.models import add_user, add_conference, add_team, add_game, add_week, add_pick
+from pick10.models import get_user, get_team, get_game, get_week
+
+def populate_users():
+    add_user('aaa@bbb.com')
 
 def populate_conferences_teams():
     # American Athletic
@@ -182,8 +187,84 @@ def populate_conferences_teams():
     add_team('Troy', 'Trojans', conf)
     add_team('UL Lafayette', 'Ragin Cajuns', conf)
 
+def populate_games():
+    year = 2014
+    week = 1
+    add_game(get_team('South Carolina'), get_team('Texas A&M'), year, week, 1)
+    add_game(get_team('Boise State'), get_team('Ole Miss'), year, week, 2)
+    add_game(get_team('Colorado State'), get_team('Colorado'), year, week, 3)
+    add_game(get_team('Appalachian State'), get_team('Michigan'), year, week, 4)
+    add_game(get_team('West Virginia'), get_team('Alabama'), year, week, 5)
+    add_game(get_team('Ohio State'), get_team('Navy'), year, week, 6)
+    add_game(get_team('Florida State'), get_team('Oklahoma State'), year, week, 7)
+    add_game(get_team('Wisconsin'), get_team('LSU'), year, week, 8)
+    add_game(get_team('Miami (Fla.)'), get_team('Louisville'), year, week, 9)
+    add_game(get_team('Clemson'), get_team('Georgia'), year, week, 10)
+    week = 2
+    add_game(get_team('Pittsburgh'), get_team('Boston College'), year, week, 1)
+    add_game(get_team('Michigan'), get_team('Notre Dame'), year, week, 2)
+    add_game(get_team('Michigan State'), get_team('Oregon'), year, week, 3)
+    add_game(get_team('East Carolina'), get_team('South Carolina'), year, week, 4)
+    add_game(get_team('Brigham Young'), get_team('Texas'), year, week, 5)
+    add_game(get_team('Virginia Tech'), get_team('Ohio State'), year, week, 6)
+    add_game(get_team('Air Force'), get_team('Wyoming'), year, week, 7)
+    add_game(get_team('Colorado State'), get_team('Boise State'), year, week, 8)
+    add_game(get_team('Georgia Tech'), get_team('Tulane'), year, week, 9)
+    add_game(get_team('Southern California'), get_team('Stanford'), year, week, 10)
+    week = 3
+    add_game(get_team('East Carolina'), get_team('Virginia Tech'), year, week, 1)
+    add_game(get_team('Iowa State'), get_team('Iowa'), year, week, 2)
+    add_game(get_team('West Virginia'), get_team('Maryland'), year, week, 3)
+    add_game(get_team('Louisville'), get_team('Virginia'), year, week, 4)
+    add_game(get_team('NC State'), get_team('South Florida'), year, week, 5)
+    add_game(get_team('Arkansas'), get_team('Texas Tech'), year, week, 6)
+    add_game(get_team('UCLA'), get_team('Texas'), year, week, 7)
+    add_game(get_team('Penn State'), get_team('Rutgers'), year, week, 8)
+    add_game(get_team('UCF'), get_team('Missouri'), year, week, 9)
+    add_game(get_team('Georgia'), get_team('South Carolina'), year, week, 10)
+    #week = 2
+    #add_game(get_team('_team_'), get_team('_team_'), year, week, 1)
+    #add_game(get_team('_team_'), get_team('_team_'), year, week, 2)
+    #add_game(get_team('_team_'), get_team('_team_'), year, week, 3)
+    #add_game(get_team('_team_'), get_team('_team_'), year, week, 4)
+    #add_game(get_team('_team_'), get_team('_team_'), year, week, 5)
+    #add_game(get_team('_team_'), get_team('_team_'), year, week, 6)
+    #add_game(get_team('_team_'), get_team('_team_'), year, week, 7)
+    #add_game(get_team('_team_'), get_team('_team_'), year, week, 8)
+    #add_game(get_team('_team_'), get_team('_team_'), year, week, 9)
+    #add_game(get_team('_team_'), get_team('_team_'), year, week, 10)
+
+def populate_weeks():
+    add_week(2014, 1)
+    add_week(2014, 2)
+    add_week(2014, 3)
+
+def populate_picks():
+    year = 2014
+    week = 1
+    user = 'aaa@bbb.com'
+    add_pick(get_week(year, week), get_user(user), get_game(year, week, 1), game_winner=1)
+    add_pick(get_week(year, week), get_user(user), get_game(year, week, 2), game_winner=1)
+    add_pick(get_week(year, week), get_user(user), get_game(year, week, 3), game_winner=1)
+    add_pick(get_week(year, week), get_user(user), get_game(year, week, 4), game_winner=1)
+    add_pick(get_week(year, week), get_user(user), get_game(year, week, 5), game_winner=1)
+    add_pick(get_week(year, week), get_user(user), get_game(year, week, 6), game_winner=1)
+    add_pick(get_week(year, week), get_user(user), get_game(year, week, 7), game_winner=1)
+    add_pick(get_week(year, week), get_user(user), get_game(year, week, 8), game_winner=1)
+    add_pick(get_week(year, week), get_user(user), get_game(year, week, 9), game_winner=1)
+    add_pick(get_week(year, week), get_user(user), get_game(year, week, 10), game_winner=1)
+
 # Execution starts here
 if __name__ == '__main__':
     print "Starting pick10 model population..."
+    print "  Populating Users..."
+    populate_users()
+    print "  Populating Conferences and Teams..."
     populate_conferences_teams()
+    print "  Populating Games..."
+    populate_games()
+    print "  Populating Weeks..."
+    populate_weeks()
+    print "  Populating Picks..."
+    populate_picks()
 

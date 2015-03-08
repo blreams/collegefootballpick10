@@ -6,16 +6,21 @@ from django.utils.html import escape
 
 from pick10.views import home
 from pick10.models import User, Conference, Team, Game, Week, Pick
-from pick10.models import add_conference, add_team
-from stage_models import populate_conferences_teams
+from pick10.models import query_picks
+from stage_models import populate_users, populate_conferences_teams
+from stage_models import populate_games, populate_weeks, populate_picks
 
 from unittest import skip
 
 class BasicModelTest(TestCase):
     def setUp(self):
-        conferences = Conference.objects.all()
-        if len(conferences) == 0:
+        users = User.objects.all()
+        if len(users) == 0:
+            populate_users()
             populate_conferences_teams()
+            populate_games()
+            populate_weeks()
+            populate_picks()
 
     def test_save_to_conference_model(self):
         confs = Conference.objects.all()
@@ -29,68 +34,32 @@ class BasicModelTest(TestCase):
     def test_save_to_team_model(self):
         teams = Team.objects.all()
         self.assertGreaterEqual(teams.count(), 120)
-        teams = Team.objects.filter(team_name='South Carolina')
-        self.assertEqual(teams.count(), 1)
-        self.assertEqual(teams[0].mascot, 'Gamecocks')
-        self.assertEqual(teams[0].conference.conf_name, 'Southeastern')
+        team = Team.objects.get(team_name='South Carolina')
+        self.assertEqual(team.mascot, 'Gamecocks')
+        self.assertEqual(team.conference.conf_name, 'Southeastern')
 
         teams = Team.objects.filter(current=False)
         self.assertEqual(teams.count(), 0)
 
     def test_save_to_game_model(self):
-        game1 = Game()
-        game1.team1 = Team.objects.filter(team_name='South Carolina')[0]
-        game1.team2 = Team.objects.filter(team_name='Clemson')[0]
-        game1.save()
-
         games = Game.objects.all()
+        self.assertGreaterEqual(len(games), 10)
+        games = Game.objects.order_by('game_num').filter(game_year=2014, game_week=1)
         self.assertEqual(games[0].team1.team_name, 'South Carolina')
-        self.assertEqual(games[0].team2.team_name, 'Clemson')
+        self.assertEqual(games[0].team2.team_name, 'Texas A&M')
+        self.assertEqual(games[9].team1.team_name, 'Clemson')
+        self.assertEqual(games[9].team2.team_name, 'Georgia')
 
     def test_save_to_week_model(self):
-        user1 = User()
-        user1.email = 'aaa@bbb.com'
-        user1.save()
-
-        week1 = Week()
-        week1.week_year = 2014
-        week1.week_num = 1
-        week1.winner = user1
-        week1.save()
-
-        weeks = Week.objects.all()
-        self.assertEqual(weeks[0].week_year, 2014)
-        self.assertEqual(weeks[0].week_num, 1)
-        self.assertEqual(weeks[0].winner.email, 'aaa@bbb.com')
+        week1 = Week.objects.get(week_year=2014, week_num=1)
+        self.assertEqual(week1.week_year, 2014)
+        self.assertEqual(week1.week_num, 1)
 
     def test_save_pick_model(self):
-        user1 = User()
-        user1.email = 'aaa@bbb.com'
-        user1.save()
-
-        week1 = Week()
-        week1.week_year = 2014
-        week1.week_num = 1
-        week1.winner = user1
-        week1.save()
-
-        game1 = Game()
-        game1.team1 = Team.objects.filter(team_name='South Carolina')[0]
-        game1.team2 = Team.objects.filter(team_name='Clemson')[0]
-        game1.save()
-
-        pick1 = Pick()
-        pick1.pick_week = week1
-        pick1.pick_user = user1
-        pick1.pick_game = game1
-        pick1.save()
-
-        picks = Pick.objects.all()
-        self.assertEqual(picks[0].pick_week.week_year, 2014)
-        self.assertEqual(picks[0].pick_user.email, 'aaa@bbb.com')
+        picks = query_picks('aaa@bbb.com', 2014, 1)
+        self.assertEqual(len(picks), 10)
         self.assertEqual(picks[0].pick_game.team1.team_name, 'South Carolina')
-        self.assertEqual(picks[0].pick_game.team2.team_name, 'Clemson')
-        self.assertEqual(picks[0].game_winner, 0)
-        self.assertEqual(picks[0].team1_predicted_points, -1)
-        self.assertEqual(picks[0].team2_predicted_points, -1)
+        self.assertEqual(picks[0].pick_game.team2.team_name, 'Texas A&M')
+        self.assertEqual(picks[9].pick_game.team1.team_name, 'Clemson')
+        self.assertEqual(picks[9].pick_game.team2.team_name, 'Georgia')
 
