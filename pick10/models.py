@@ -14,6 +14,9 @@ class User(models.Model):
     REQUIRED_FIELDS = ()
     USERNAME_FIELD = 'email'
 
+    def __unicode__(self):
+        return 'Email=%s'%(self.email,)
+
     def is_authenticated(self):
         return True
 
