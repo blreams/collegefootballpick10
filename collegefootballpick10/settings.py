@@ -113,5 +113,5 @@ TEMPLATE_DIRS = [
         TEMPLATE_PATH,
         ]
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/pick10/login/'
 

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block header_text %}College Football Pick 10{% endblock %}
+
+{% block body_block %}
+<h1>Register</h1>
+{% if registered %}
+<strong>Thank you for registering!</strong>
+<a href="/pick10/">Return to the homepage.</a><br />
+{% else %}
+<strong>Register here!</strong><br />
+
+<form id="user_form" method="post" action="/pick10/register/" enctype="multipart/form-data">
+    {% csrf_token %}
+    <!-- Display the form. The as_p method wraps each element in a paragraph
+         tag insuring each element appears on a new line. -->
+    {{ user_form.as_p }}
+
+    <!-- Provide a button to click to submit the form. -->
+    <input type="submit" name="submit" value="Register" />
+</form>
+{% endif %}
+{% endblock %}
+
