@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 
-{% load browserid %}
 {% load staticfiles %}
 
 <html lang="en">
@@ -23,16 +22,13 @@
 
     <![endif]-->
 
-    <link href="{% static 'browserid/persona-buttons.css' %}" rel="stylesheet">
 </head>
 
 <body>
-    {% browserid_info %}
     {% if user.is_authenticated %}
       <p>Current user: {{ user.email }}</p>
-      {% browserid_logout text='Logout' %}
     {% else %}
-      {% browserid_login text='Login' color='dark' %}
+      <p>Current user: Anonymous</p>
     {% endif %}
 
     <div class="container">
@@ -42,7 +38,6 @@
 
     <script src="http://code.jquery.com/jquery.min.js"></script>
     <script src="https://login.persona.org/include.js"></script>
-    {% browserid_js %}
 </body>
 </html>
 

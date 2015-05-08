@@ -38,7 +38,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_browserid',
     'pick10',
 )
 
@@ -54,8 +53,6 @@ MIDDLEWARE_CLASSES = (
 
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'django_browserid.auth.AutoLoginBackend',
-    'django_browserid.auth.BrowserIDBackend',
 )
 
 ROOT_URLCONF = 'collegefootballpick10.urls'
@@ -116,8 +113,5 @@ TEMPLATE_DIRS = [
         TEMPLATE_PATH,
         ]
 
-# The following are related to browserid
-BROWSERID_AUTOLOGIN_EMAIL = 'aaa@bbb.com'
-BROWSERID_AUTOLOGIN_ENABLED = True
 LOGIN_REDIRECT_URL = '/'
 
