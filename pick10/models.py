@@ -1,24 +1,10 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 #from utils import getLatestWeekNum
 
 # Create your models here.
-
-# We will use the django admin User model instead of creating a Player model
-# Users can belong to groups that define their privileges, groups like
-# 'pooler' and 'commissioner'.
-class User(models.Model):
-    email = models.EmailField(primary_key=True)
-    last_login = models.DateTimeField(default=timezone.now)
-    REQUIRED_FIELDS = ()
-    USERNAME_FIELD = 'email'
-
-    def __unicode__(self):
-        return 'Email=%s'%(self.email,)
-
-    def is_authenticated(self):
-        return True
 
 class Conference(models.Model):
     conf_name = models.CharField(max_length=40)                            # Conference name, 'Southeastern'
@@ -75,8 +61,8 @@ class Game(models.Model):
 class Week(models.Model):
     week_year = models.IntegerField()                                       # Season year corresponding to this week
     week_num = models.IntegerField()                                        # Week number within the season
-    #games = models.IntegerFields(default=10)                                # Number of games that make up the week
-    winner = models.ForeignKey('User', null=True, blank=True, default=None) # Link to User who won the week
+    #games = models.IntegerFields(default=10)                               # Number of games that make up the week
+    winner = models.ForeignKey(User, null=True, blank=True, default=None)   # Link to User who won the week
     lock_picks = models.BooleanField(default=False)                         # Once the first game kickoff occurs, update to True
     lock_scores = models.BooleanField(default=False)                        # Once all scores have been submitted as final by admin, update to True
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
@@ -90,7 +76,7 @@ class Week(models.Model):
 
 class Pick(models.Model):
     pick_week = models.ForeignKey('Week')                                   # Link to week for which this pick applies
-    pick_user = models.ForeignKey('User')                                   # Link to user for which this pick applies
+    pick_user = models.ForeignKey(User)                                     # Link to user for which this pick applies
     pick_game = models.ForeignKey('Game')                                   # Link to game for which this pick applies
     game_winner = models.IntegerField(default=0)                            # Indicates which team won (1 or 2)
     team1_predicted_points = models.IntegerField(default=-1)                # Points predicted for team (tie-break game)
@@ -104,8 +90,11 @@ class Pick(models.Model):
     def __unicode__(self):
         return 'User=%s, Year=%d, Week=%d, Game=%d'%(self.pick_user.email, self.pick_game.game_year, self.pick_game.game_week, self.pick_game.game_num,)
 
-def add_user(email):
-    u = User.objects.get_or_create(email=email)
+def add_user(username, email, firstname, lastname):
+    u, created = User.objects.get_or_create(username=username, email=email, first_name=firstname, last_name=lastname)
+    if created:
+        u.set_password(u.last_name)
+        u.save()
     return u
 
 def add_conference(conf_name, div_name=None):
@@ -136,7 +125,11 @@ def add_pick(pick_week, pick_user, pick_game, game_winner):
     p.save()
     return p
 
-def get_user(email):
+def get_user_by_username(username):
+    u = User.objects.get(username=username)
+    return u
+
+def get_user_by_email(email):
     u = User.objects.get(email=email)
     return u
 

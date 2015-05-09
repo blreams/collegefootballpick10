@@ -6,10 +6,10 @@ django.setup()
 
 from pick10.models import Team
 from pick10.models import add_user, add_conference, add_team, add_game, add_week, add_pick
-from pick10.models import get_user, get_team, get_game, get_week
+from pick10.models import get_user_by_username, get_team, get_game, get_week
 
 def populate_users():
-    add_user('aaa@bbb.com')
+    add_user('aaa', 'aaa@aaa.com', 'aaa', 'aaa')
 
 def populate_conferences_teams():
     # American Athletic
@@ -242,17 +242,17 @@ def populate_weeks():
 def populate_picks():
     year = 2014
     week = 1
-    user = 'aaa@bbb.com'
-    add_pick(get_week(year, week), get_user(user), get_game(year, week, 1), game_winner=1)
-    add_pick(get_week(year, week), get_user(user), get_game(year, week, 2), game_winner=1)
-    add_pick(get_week(year, week), get_user(user), get_game(year, week, 3), game_winner=1)
-    add_pick(get_week(year, week), get_user(user), get_game(year, week, 4), game_winner=1)
-    add_pick(get_week(year, week), get_user(user), get_game(year, week, 5), game_winner=1)
-    add_pick(get_week(year, week), get_user(user), get_game(year, week, 6), game_winner=1)
-    add_pick(get_week(year, week), get_user(user), get_game(year, week, 7), game_winner=1)
-    add_pick(get_week(year, week), get_user(user), get_game(year, week, 8), game_winner=1)
-    add_pick(get_week(year, week), get_user(user), get_game(year, week, 9), game_winner=1)
-    add_pick(get_week(year, week), get_user(user), get_game(year, week, 10), game_winner=1)
+    user = 'aaa'
+    add_pick(get_week(year, week), get_user_by_username(user), get_game(year, week, 1), game_winner=1)
+    add_pick(get_week(year, week), get_user_by_username(user), get_game(year, week, 2), game_winner=1)
+    add_pick(get_week(year, week), get_user_by_username(user), get_game(year, week, 3), game_winner=1)
+    add_pick(get_week(year, week), get_user_by_username(user), get_game(year, week, 4), game_winner=1)
+    add_pick(get_week(year, week), get_user_by_username(user), get_game(year, week, 5), game_winner=1)
+    add_pick(get_week(year, week), get_user_by_username(user), get_game(year, week, 6), game_winner=1)
+    add_pick(get_week(year, week), get_user_by_username(user), get_game(year, week, 7), game_winner=1)
+    add_pick(get_week(year, week), get_user_by_username(user), get_game(year, week, 8), game_winner=1)
+    add_pick(get_week(year, week), get_user_by_username(user), get_game(year, week, 9), game_winner=1)
+    add_pick(get_week(year, week), get_user_by_username(user), get_game(year, week, 10), game_winner=1)
 
 # Execution starts here
 if __name__ == '__main__':
