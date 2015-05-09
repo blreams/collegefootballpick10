@@ -7,61 +7,40 @@ from pick10.models import Team
 from pick10.forms import UserForm
 
 def register(request):
-    # A boolean value for telling the template whether the registration was
-    # successful. Set to False initially. Code changes value to True when 
-    # registration succeeds.
     registered = False
 
-    # If it is HTTP POST, we are interested in processing form data.
     if request.method == 'POST':
-        # Attempt to grab information from the raw form.
+        # HTTP POST
         user_form = UserForm(data=request.POST)
-
-        # If the form is valid...
         if user_form.is_valid():
-            # Save the user form data to the db.
+            # Save to db, hash password, save again
             user = user_form.save()
-
-            # Hash password using set_password method, then update user object
             user.set_password(user.password)
             user.save()
-
-            # Update our variable to tell the template registration success.
             registered = True
 
-        # Invalid form, mistakes or something else?
-        # Print problems to the terminal, show to user.
         else:
+            # Invalid form, mistakes, print to term, show to user
             print user_form.errors
 
-    # Not a HTTP POST, so we render our form using ModelForm instance.
-    # This form will be blank, ready for user input.
     else:
+        # not HTTP POST (GET)
         user_form = UserForm()
 
     # Render the template depending on the context.
-    return render(
-            request, 
-            'pick10/register.html',
-            {'user_form': user_form, 'registered': registered}
-            )
+    return render(request, 'pick10/register.html', {'user_form': user_form, 'registered': registered})
 
 def user_login(request):
-    # If the request is HTTP POST, try to pull out the information.
     if request.method == 'POST':
-        # Gather the username and password provided by the user.
-        # This information is obtained from the login form.
+        # HTTP POST
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-        # Use django's machinery to see if username/password is valid.
-        # A user object is returned.
+        # authenticate, user object or None is returned.
         user = authenticate(username=username, password=password)
 
         if user:
-            # Active? could have been disabled.
             if user.is_active:
-                # We can login the user
                 login(request, user)
                 return HttpResponseRedirect('/pick10/')
             else:
@@ -72,9 +51,8 @@ def user_login(request):
             print "Invalid login details: {0}, {1}".format(username, password)
             return HttpResponse("Invalid login details supplied.")
 
-    # The request is not HTTP POST, so display login form.
     else:
-        # No context variable to pass.
+        # not HTTP POST (GET), empty context
         return render(request, 'pick10/login.html', {})
 
 @login_required
@@ -83,10 +61,10 @@ def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/pick10/')
 
+@login_required
 def home(request):
     return render(request, 'pick10/home.html')
 
-@login_required
 def index(request):
     return render(request, 'pick10/index.html')
 
