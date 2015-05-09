@@ -145,8 +145,8 @@ def get_week(year, num):
     w = Week.objects.get(week_year=year, week_num=num)
     return w
 
-def query_picks(user, year, week):
-    u = get_user(user)
+def query_picks(email, year, week):
+    u = get_user_by_email(email)
     w = get_week(year, week)
     picks = Pick.objects.filter(pick_user=u, pick_week=w).order_by('pick_game__game_num')
     return picks

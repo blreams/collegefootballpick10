@@ -56,7 +56,7 @@ class BasicModelTest(TestCase):
         self.assertEqual(week1.week_num, 1)
 
     def test_save_pick_model(self):
-        picks = query_picks('aaa@bbb.com', 2014, 1)
+        picks = query_picks('aaa@aaa.com', 2014, 1)
         self.assertEqual(len(picks), 10)
         self.assertEqual(picks[0].pick_game.team1.team_name, 'South Carolina')
         self.assertEqual(picks[0].pick_game.team2.team_name, 'Texas A&M')
