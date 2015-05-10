@@ -36,14 +36,14 @@
           <span class="icon-bar"></span>
         </button>
         -->
-        <a class="navbar-brand" href="/">Pick10</a>
+        <a class="navbar-brand" id="brand_id" href="/">Pick10</a>
         {% if user.is_authenticated %}
         <p class="navbar-text">Logged in as: {{user.username}}</p>
         {% endif %}
       </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="{% url 'home' %}">Home</a></li>
+          <li><a id="home_id" href="{% url 'home' %}">Home</a></li>
           {% if user.is_authenticated %}
           <li><a href="{% url 'logout' %}">Logout</a></li>
           {% else %}
@@ -59,7 +59,7 @@
   </div>
 
     <div class="container-fluid">
-        <h1>College Football Pick 10</h1>
+        <h1 id=base_id>College Football Pick 10</h1>
     </div>
     {% block body_block %}{% endblock %}
 

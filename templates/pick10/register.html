@@ -5,10 +5,10 @@
 {% block body_block %}
 <h1>Register</h1>
 {% if registered %}
-<strong>Thank you for registering!</strong>
+<p id="thanks_id"><strong>Thank you for registering!</strong></p>
 <a href="/pick10/">Return to the homepage.</a><br />
 {% else %}
-<strong>Register here!</strong><br />
+<p><strong>Register here!</strong></p><br />
 
 <form id="user_form" method="post" action="/pick10/register/" enctype="multipart/form-data">
     {% csrf_token %}

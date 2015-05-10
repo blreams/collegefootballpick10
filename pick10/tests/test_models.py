@@ -3,9 +3,10 @@ from django.test import TestCase
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.utils.html import escape
+from django.contrib.auth.models import User
 
 from pick10.views import home
-from pick10.models import User, Conference, Team, Game, Week, Pick
+from pick10.models import Conference, Team, Game, Week, Pick
 from pick10.models import query_picks
 from stage_models import populate_users, populate_conferences_teams
 from stage_models import populate_games, populate_weeks, populate_picks
