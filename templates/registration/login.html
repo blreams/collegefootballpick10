@@ -3,7 +3,7 @@
 {% block body_block %}
 <link href="http://getbootstrap.com/examples/signin/signin.css" rel="stylesheet">
 
-<form class="form-signin" role="form" method="post" action=".">
+<form id="login_form" class="form-signin" role="form" method="post" action=".">
     {% csrf_token %}
 
     <h2 class="form-signin-heading">Please log in</h2>

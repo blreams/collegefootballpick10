@@ -35,7 +35,7 @@
         </button>
         <a class="navbar-brand" id="brand_id" href="/">Pick10</a>
         {% if user.is_authenticated %}
-        <p class="navbar-text">Logged in as: {{user.username}}</p>
+        <p id="ident_id" class="navbar-text">Logged in as: {{user.username}}</p>
         {% endif %}
       </div>
 
@@ -63,6 +63,7 @@
       </div>
       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
         <div>
+          <h1 id="base_id">College Football Pick 10</h1>
           {% block body_block %}{% endblock %}
         </div>
       </div>

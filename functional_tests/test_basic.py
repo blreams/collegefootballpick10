@@ -32,19 +32,30 @@ class NewVisitorTest(FunctionalTest):
         # He fills in the form to register himself
         username_box = self.browser.find_element_by_name('username')
         email_box = self.browser.find_element_by_name('email')
-        fname_box = self.browser.find_element_by_name('first_name')
-        lname_box = self.browser.find_element_by_name('last_name')
-        password_box = self.browser.find_element_by_name('password')
+        #fname_box = self.browser.find_element_by_name('first_name')
+        #lname_box = self.browser.find_element_by_name('last_name')
+        password1_box = self.browser.find_element_by_name('password1')
+        password2_box = self.browser.find_element_by_name('password2')
         username_box.send_keys('johndoe')
         email_box.send_keys('john.doe@example.com')
-        fname_box.send_keys('John')
-        lname_box.send_keys('Doe')
-        password_box.send_keys('eodnhoj')
-        password_box.submit()
+        #fname_box.send_keys('John')
+        #lname_box.send_keys('Doe')
+        password1_box.send_keys('eodnhoj')
+        password2_box.send_keys('eodnhoj')
+        password2_box.submit()
 
-        # He should be successfully registered.
+        # He should be successfully registered and logged in.
         WebDriverWait(self.browser, 5).until(
                 EC.presence_of_element_located((By.ID, 'thanks_id'))
+            )
+        ident_text = self.browser.find_element_by_id('ident_id').text
+        self.assertIn('johndoe', ident_text)
+
+        # Now he clicks Logout and waits for the index page
+        logout_link = self.browser.find_element_by_link_text('Logout')
+        logout_link.click()
+        WebDriverWait(self.browser, 5).until(
+                EC.presence_of_element_located((By.ID, 'index_h1'))
             )
 
         # Now he clicks Login
