@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'pick10',
+    'registration',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -113,5 +114,9 @@ TEMPLATE_DIRS = [
         TEMPLATE_PATH,
         ]
 
-LOGIN_URL = '/pick10/login/'
+REGISTRATION_OPEN = True             # If True, users can register
+ACCOUNT_ACTIVATION_DAYS = 7          # One week activation window
+REGISTRATION_AUTO_LOGIN = True       # If True, the user will be automatically logged in
+LOGIN_REDIRECT_URL = '/pick10/'      # The page you want users to arrive at upon successful login
+LOGIN_URL = '/accounts/login/'       # The page users are directed to if they are not logged in
 
