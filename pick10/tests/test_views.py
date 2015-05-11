@@ -14,7 +14,3 @@ class HomeViewTest(TestCase):
         response = self.client.get('/')
         self.assertTemplateUsed(response, 'pick10/index.html')
 
-    def test_home_view_renders_home_template(self):
-        response = self.client.get('/pick10/')
-        self.assertTemplateUsed(response, 'pick10/home.html')
-
