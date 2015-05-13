@@ -8,62 +8,144 @@ from pick10.models import Team
 from pick10.models import add_user, add_conference, add_team, add_game, add_week, add_pick
 from pick10.models import get_user_by_username, get_team, get_game, get_week
 
+from excel_history.excel.spreadsheet_test import get_player_years_dict
+
 def populate_users():
-    add_user('chip_aaron', 'chip_aaron@example.com', 'Chip', 'Aaron')
-    add_user('chris_barker', 'chris_barker@example.com', 'Chris', 'Barker')
-    add_user('tate_beasley', 'tate_beasley@example.com', 'Tate', 'Beasley')
-    add_user('greg_beckwith', 'greg_beckwith@example.com', 'Greg', 'Beckwith')
-    add_user('martin_bowers', 'martin_bowers@example.com', 'Martin', 'Bowers')
-    add_user('jerome_boykin', 'jerome_boykin@example.com', 'Jerome', 'Boykin')
-    add_user('brantley_brokaw', 'brantley_brokaw@example.com', 'Brantley', 'Brokaw')
-    add_user('david_brunt', 'david_brunt@example.com', 'David', 'Brunt')
-    add_user('chris_carter', 'chris_carter@example.com', 'Chris', 'Carter')
-    add_user('simon_chan', 'simon_chan@example.com', 'Simon', 'Chan')
-    add_user('dan_desetto', 'dan_desetto@example.com', 'Dan', 'Desetto')
-    add_user('scott_desing', 'scott_desing@example.com', 'Scott', 'Desing')
-    add_user('chris_edwards', 'chris_edwards@example.com', 'Chris', 'Edwards')
-    add_user('nick_emptage', 'nick_emptage@example.com', 'Nick', 'Emptage')
-    add_user('scott_ferguson', 'scott_ferguson@example.com', 'Scott', 'Ferguson')
-    add_user('chris_fonville', 'chris_fonville@example.com', 'Chris', 'Fonville')
-    add_user('stephanie_fonville', 'stephanie_fonville@example.com', 'Stephanie', 'Fonville')
-    add_user('justin_gilmer', 'justin_gilmer@example.com', 'Justin', 'Gilmer')
-    add_user('adam_gregory', 'adam_gregory@example.com', 'Adam', 'Gregory')
-    add_user('matt_hendrick', 'matt_hendrick@example.com', 'Matt', 'Hendrick')
-    add_user('brent_holden', 'brent_holden@example.com', 'Brent', 'Holden')
-    add_user('jeremy_holley', 'jeremy_holley@example.com', 'Jeremy', 'Holley')
-    add_user('greg_inabinet', 'greg_inabinet@example.com', 'Greg', 'Inabinet')
-    add_user('larry_james', 'larry_james@example.com', 'Larry', 'James')
-    add_user('robert_johnson', 'robert_johnson@example.com', 'Robert', 'Johnson')
-    add_user('marwan_kandela', 'marwan_kandela@example.com', 'Marwan', 'Kandela')
-    add_user('dave_locklear', 'dave_locklear@example.com', 'Dave', 'Locklear')
-    add_user('alex_marsh', 'alex_marsh@example.com', 'Alex', 'Marsh')
-    add_user('doug_martin', 'doug_martin@example.com', 'Doug', 'Martin')
-    add_user('william_mccoy', 'william_mccoy@example.com', 'William', 'McCoy')
-    add_user('kevin_moore', 'kevin_moore@example.com', 'Kevin', 'Moore')
-    add_user('bill_murphy', 'bill_murphy@example.com', 'Bill', 'Murphy')
-    add_user('rob_nance', 'rob_nance@example.com', 'Rob', 'Nance')
-    add_user('chad_neill', 'chad_neill@example.com', 'Chad', 'Neill')
-    add_user('thai_nguyen', 'thai_nguyen@example.com', 'Thai', 'Nguyen')
-    add_user('tim_penrose', 'tim_penrose@example.com', 'Tim', 'Penrose')
-    add_user('lamar_powell', 'lamar_powell@example.com', 'LaMar', 'Powell')
-    add_user('moises_puga', 'moises_puga@example.com', 'Moises', 'Puga')
-    add_user('byron_reams', 'byron_reams@example.com', 'Byron', 'Reams')
-    add_user('david_redys', 'david_redys@example.com', 'David', 'Redys')
-    add_user('dale_robbins', 'dale_robbins@example.com', 'Dale', 'Robbins')
-    add_user('chris_ruffin', 'chris_ruffin@example.com', 'Chris', 'Ruffin')
-    add_user('dave_sams', 'dave_sams@example.com', 'Dave', 'Sams')
-    add_user('carl_sapp', 'carl_sapp@example.com', 'Carl', 'Sapp')
-    add_user('jeff_shuey', 'jeff_shuey@example.com', 'Jeff', 'Shuey')
-    add_user('kevin_staub', 'kevin_staub@example.com', 'Kevin', 'Staub')
-    add_user('van_steel', 'van_steel@example.com', 'Van', 'Steel')
-    add_user('david_stonecypher', 'david_stonecypher@example.com', 'David', 'Stonecypher')
-    add_user('adam_straw', 'adam_straw@example.com', 'Adam', 'Straw')
-    add_user('justin_tunnell', 'justin_tunnell@example.com', 'Justin', 'Tunnell')
-    add_user('todd_warren', 'todd_warren@example.com', 'Todd', 'Warren')
-    add_user('seth_wells', 'seth_well@example.com', 'Seth', 'Wells')
-    add_user('jarred_white', 'jarred_white@example.com', 'Jarred', 'White')
-    add_user('steve_winburn', 'steve_winburn@example.com', 'Steve', 'Winburn')
-    add_user('kenneth_young', 'kenneth_young@example.com', 'Kenneth', 'Young')
+    # Create a player translation dict
+    player_username = {}
+    player_username['Aaron, Chip'] = 'aaron_chip'
+    player_username['Acevedo, Alfonso'] = 'acevedo_alfonso'
+    player_username['Adams, Daniel O'] = 'adams_daniel'
+    player_username['Allen, Landon Remote'] = 'allen_landon'
+    player_username['Barker, Christopher A'] = 'barker_christopher'
+    player_username['Barnes, Ike K'] = 'barnes_ike'
+    player_username['Batchler, Wayne'] = 'batchler_wayne'
+    player_username['Beasley, Tate'] = 'beasley_tate'
+    player_username['Beckwith, Greg'] = 'beckwith_greg'
+    player_username['Berger, Matthew A'] = 'berger_matthew'
+    player_username['Bisbee, Curt'] = 'bisbee_curt'
+    player_username['Blackmon, Vaughn'] = 'blackmon_vaughn'
+    player_username['Bowers, Martin L'] = 'bowers_martin'
+    player_username['Boyce, Jonathan E'] = 'boyce_jonathan'
+    player_username['Boykin, Jerome W'] = 'boykin_jerome'
+    player_username['Brokaw, Brantley A'] = 'brokaw_brantley'
+    player_username['Brunt, DavidRemote'] = 'brunt_david'
+    player_username['Carter, Chris'] = 'carter_chris'
+    player_username['Chan, Simon'] = 'chan_simon'
+    player_username['Christiansen, Amos H'] = 'christiansen_amos'
+    player_username['Clark, William J'] = 'clark_william'
+    player_username['Cochcroft, Art'] = 'cochcroft_art'
+    player_username['Cogan, TimothyX J'] = 'cogan_timothy'
+    player_username['Cook, Andrew S'] = 'cook_andrew'
+    player_username['Corley, Ernie'] = 'corley_ernie'
+    player_username['Crenshaw, Ed'] = 'crenshaw_ed'
+    player_username['Desetto, Daniel'] = 'desetto_daniel'
+    player_username['Desing, Scott M'] = 'desing_scott'
+    player_username['Deuell, Russell A'] = 'deuell_russell'
+    player_username['Duzan, Steve'] = 'duzan_steve'
+    player_username['Edwards, Christopher S'] = 'edwards_christoper'
+    player_username['Emptage, Nick'] = 'emptage_nick'
+    player_username['Estrada, Carlos A'] = 'estradia_carlos'
+    player_username['Eusebio, Ariel B'] = 'eusebio_ariel'
+    player_username['Farren, Kevin M'] = 'farren_kevin'
+    player_username['Farren, Leslie Remote'] = 'farren_leslie'
+    player_username['Ferguson, Scott Remote'] = 'ferguson_scott'
+    player_username['Fonville, Chris'] = 'fonville_chris'
+    player_username['Fonville, Stephanie Remote'] = 'fonville_stephanie'
+    player_username['Freedman, Scott Remote'] = 'freedman_scott'
+    player_username['Gibson, Johnny J'] = 'gibson_johnny'
+    player_username['Gilmer, Justin T'] = 'gilmer_justin'
+    player_username['Gindlesperger, Jeffrey C'] = 'gindlesperger_jeffrey'
+    player_username['Gore, Brandon'] = 'gore_brandon'
+    player_username['Gregory, Adam J'] = 'gregory_adam'
+    player_username['Gupta, Ashish O'] = 'gupta_ashish'
+    player_username['Havens, Ryan C'] = 'havens_ryan'
+    player_username['Hawk, Robert W'] = 'hawk_robert'
+    player_username['Hendrick, Matt R'] = 'hendrick_matt'
+    player_username['Holden, Brent'] = 'holden_brent'
+    player_username['Holley, Jeremy Remote'] = 'holley_jeremy'
+    player_username['Howell, David P'] = 'howell_david'
+    player_username['Hucks, Jason'] = 'hucks_jason'
+    player_username['Inabinet, Greg'] = 'inabinet_greg'
+    player_username['James, Larry C'] = 'james_larry'
+    player_username['Johnson, Robert J'] = 'johnson_robert'
+    player_username['Kandela, Marwan'] = 'kandela_marwan'
+    player_username['Kieselhorst, Larry'] = 'kieselhorst_larry'
+    player_username['Knopf, Greg D'] = 'knopf_greg'
+    player_username['Knotts, Brian'] = 'knotts_brian'
+    player_username['Krooswyk, Steven K'] = 'krooswyk_steven'
+    player_username['Locklear, Dave Remote'] = 'locklear_dave'
+    player_username['Lovelace, Van'] = 'lovelace_van'
+    player_username['Luck, Justin'] = 'luck_justin'
+    player_username['Marsh, Alexander Remote'] = 'marsh_alexander'
+    player_username['Martin, Douglas C'] = 'martin_douglas'
+    player_username['McGee, Steve'] = 'mcgee_steve'
+    player_username['McMahon, Pat'] = 'mcmahon_pat'
+    player_username['McTeer, Libby'] = 'mcteer_libby'
+    player_username['Mccall, Sean'] = 'mccall_sean'
+    player_username['Mccoy, William M'] = 'mccoy_william'
+    player_username['Mellitz, Elisha B'] = 'mellitz_elisha'
+    player_username['Miller, James'] = 'miller_james'
+    player_username['Miller, Robert J'] = 'miller_robert'
+    player_username['Moore, Kevin B'] = 'moore_kevin'
+    player_username['Moxley, Dave'] = 'moxley_dave'
+    player_username['Murphy, William A'] = 'murphy_william'
+    player_username['Nagorniak, Kristen M'] = 'nagorniak_kristen'
+    player_username['Nance, Rob'] = 'nance_rob'
+    player_username['Neeley, Amber Remote'] = 'neeley_amber'
+    player_username['Neeley, Michael'] = 'neeley_michael'
+    player_username['Neill, Charles H'] = 'neill_charles'
+    player_username['Nguyen, Thai'] = 'nguyen_thai'
+    player_username['Nye, Mike'] = 'nye_mike'
+    player_username['Parcenka, ThomasX'] = 'parcenka_thomas'
+    player_username['Parris, Brian W'] = 'parris_brian'
+    player_username['Patterson, Kevin R'] = 'patterson_kevin'
+    player_username['Peng, Aaron'] = 'peng_aaron'
+    player_username['Penrose, Tim Remote'] = 'penrose_tim'
+    player_username['Powell, LaMar'] = 'powell_lamar'
+    player_username['Puga, Moises'] = 'puga_moises'
+    player_username['Pytel, Steven G'] = 'pytel_steven'
+    player_username['Reams, Byron L'] = 'reams_byron'
+    player_username['Redalen, Andy'] = 'redalen_andy'
+    player_username['Redys, Brittany'] = 'redys_brittany'
+    player_username['Redys, David Remote'] = 'redys_david'
+    player_username['Reiland, Doug'] = 'reiland_doug'
+    player_username['Reiland, Will Remote'] = 'reiland_will'
+    player_username['Robbins, Dale'] = 'robbins_dale'
+    player_username['Robbins, Thomas D'] = 'robbins_thomas'
+    player_username['Ruffin, Chris'] = 'ruffin_chris'
+    player_username['Sams, David'] = 'sams_david'
+    player_username['Sapp, Carl G'] = 'sapp_carl'
+    player_username['Schelling, Todd'] = 'schelling_todd'
+    player_username['Scrivener, Bo'] = 'scrivener_bo'
+    player_username['Shuey, Jeffrey M'] = 'shuey_jeffrey'
+    player_username['Smoak, Wilson'] = 'smoak_wilson'
+    player_username['Staub, Kevin'] = 'staub_kevin'
+    player_username['Steel, Van Remote'] = 'steel_van'
+    player_username['Steele, David L'] = 'steele_david'
+    player_username['Stonecypher, David'] = 'stonecypher_david'
+    player_username['Straw, Adam D'] = 'straw_adam'
+    player_username['Strom, Brooker'] = 'strom_brooker'
+    player_username['Taylor, Adam'] = 'taylor_adam'
+    player_username['Teasdell, Brian K'] = 'teasdell_brian'
+    player_username['Tunnell, Justin S'] = 'tunnell_justin'
+    player_username['Tyson, Ben'] = 'tyson_ben'
+    player_username['Vang, Tong'] = 'vang_tong'
+    player_username['Vo, Henry'] = 'vo_henry'
+    player_username['Warren, Todd Remote'] = 'warren_todd'
+    player_username['Wells, Jennifer'] = 'wells_jennifer'
+    player_username['Wells, Seth Remote'] = 'wells_seth'
+    player_username['White, Jarred'] = 'white_jarred'
+    player_username['Wiant, Timothy J'] = 'wiant_timothy'
+    player_username['Willingham, JosephX'] = 'willingham_joseph'
+    player_username['Winburn, Steve A'] = 'winburn_steve'
+    player_username['Young, Derick'] = 'young_derick'
+    player_username['Young, Kenneth'] = 'young_kenneth'
+
+    for ss_name, username in player_username.iteritems():
+        last, first = username.split('_')
+        email = '%s_%s@example.com' % (first, last,)
+        add_user(username, email, first.capitalize(), last.capitalize())
 
 def populate_conferences_teams():
     # American Athletic
