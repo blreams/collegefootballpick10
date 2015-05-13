@@ -1,3 +1,6 @@
+import os as _os
+import re
+
 import unittest
 from pool_spreadsheet import *
 
@@ -553,6 +556,25 @@ class TestSpreadsheet(unittest.TestCase):
             self.assertTrue(carl_picks[game_number].default)
             self.assertEquals(carl_picks[game_number].team1_score,None)
             self.assertEquals(carl_picks[game_number].team2_score,None)
+
+def get_player_years_dict():
+    dirname = _os.getcwd() + '/excel_history/data'
+    RE_FILE_SS = re.compile(r'^pool_(\d{4})_standings.xls')
+    filelist = sorted([f for f in _os.listdir(dirname) if RE_FILE_SS.match(f)])
+
+    playerlist = []
+    player_years = {}
+    for f in filelist:
+        year = RE_FILE_SS.match(f).groups()[0]
+        spreadsheet = PoolSpreadsheet(year, dirname + '/' + f)
+        players = spreadsheet.get_player_names()
+        for player in players:
+            if player_years.get(player) is None:
+                player_years[player] = [year]
+            else:
+                player_years[player].append(year)
+
+    return player_years
 
 if __name__ == "__main__":
     unittest.main()
