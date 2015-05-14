@@ -562,7 +562,6 @@ def get_player_years_dict():
     RE_FILE_SS = re.compile(r'^pool_(\d{4})_standings.xls')
     filelist = sorted([f for f in _os.listdir(dirname) if RE_FILE_SS.match(f)])
 
-    playerlist = []
     player_years = {}
     for f in filelist:
         year = RE_FILE_SS.match(f).groups()[0]
@@ -575,6 +574,27 @@ def get_player_years_dict():
                 player_years[player].append(year)
 
     return player_years
+
+def get_team_years_weeks_dict():
+    dirname = _os.getcwd() + '/excel_history/data'
+    RE_FILE_SS = re.compile(r'^pool_(\d{4})_standings.xls')
+    filelist = sorted([f for f in _os.listdir(dirname) if RE_FILE_SS.match(f)])
+
+    team_years_weeks = {}
+    for f in filelist:
+        year = RE_FILE_SS.match(f).groups()[0]
+        spreadsheet = PoolSpreadsheet(year, dirname + '/' + f)
+        for week in spreadsheet.get_week_numbers():
+            games = spreadsheet.get_games(week)
+            for gamenum in games:
+                game = games[gamenum]
+                for team in (game.team1, game.team2):
+                    if team_years_weeks.get(team) is None:
+                        team_years_weeks[team] = []
+                    team_years_weeks[team] = (year, week, game.number)
+
+    return team_years_weeks
+
 
 if __name__ == "__main__":
     unittest.main()

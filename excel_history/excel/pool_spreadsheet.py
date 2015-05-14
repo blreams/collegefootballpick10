@@ -368,7 +368,8 @@ class PoolSpreadsheet:
             elif team1_win == 0.0 and team2_win == 1.0:
                 game.winner = "team2"
             else:
-                raise AssertionError,"team1_win=%s,team2_win=%s" % (team1_win,team2_win)
+                game.winner = None
+                #raise AssertionError,"team1_win=%s,team2_win=%s" % (team1_win,team2_win)
 
         return game
 
@@ -440,7 +441,7 @@ class PoolSpreadsheet:
         return picks
 
     def __get_conferences(self):
-        conference_first_row = 2
+        conference_first_row = 3
         conference_column = 0
 
         sheet = self.__get_sheet("Conference")
