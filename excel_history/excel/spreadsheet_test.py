@@ -591,7 +591,7 @@ def get_team_years_weeks_dict():
                 for team in (game.team1, game.team2):
                     if team_years_weeks.get(team) is None:
                         team_years_weeks[team] = []
-                    team_years_weeks[team] = (year, week, game.number)
+                    team_years_weeks[team].append((year, week, game.number,))
 
     return team_years_weeks
 
