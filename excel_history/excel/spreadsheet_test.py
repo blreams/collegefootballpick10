@@ -82,6 +82,7 @@ correct_team_names = [
     'Pittsburgh',
     'Purdue',
     'Rutgers',
+    'San Diego State',
     'South Carolina',
     'South Florida',
     'Southern Cal',
