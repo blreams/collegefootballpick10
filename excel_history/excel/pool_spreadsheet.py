@@ -1,3 +1,5 @@
+import os as _os
+import re as _re
 from xlrd import *
 from player import *
 from game import *
@@ -6,13 +8,23 @@ from team import *
 
 class PoolSpreadsheet:
 
-    def __init__(self,year,spreadsheet_name):
-        self.__wb = open_workbook(spreadsheet_name)
+    def __init__(self,year):
+        self.spreadsheet_name = self.get_spreadsheet_path_by_year(year)
+        self.__wb = open_workbook(self.spreadsheet_name)
         self.year = year
         self.__players = None
         self.__week_games = dict()
         self.__week_picks = dict()
         self.__teams = None
+
+    def get_spreadsheet_path_by_year(self, year):
+        dirname = _os.getcwd() + '/excel_history/data/'
+        RE_FILE_SS = _re.compile(r'^pool_(\d{4})_standings.xls')
+        filelist = [f for f in _os.listdir(dirname) if RE_FILE_SS.match(f) and str(year) in f]
+
+        if len(filelist) != 1:
+            raise AssertionError, 'Unable to find matching spreadsheet for %d' % year
+        return dirname + filelist[0]
 
     # depends on what sheets are present
     def get_week_numbers(self):
@@ -441,10 +453,18 @@ class PoolSpreadsheet:
         return picks
 
     def __get_conferences(self):
-        conference_first_row = 3
+        conference_first_row = 0
         conference_column = 0
 
         sheet = self.__get_sheet("Conference")
+        while True:
+            row = conference_first_row
+            col = conference_column
+            conference = str(sheet.cell(row,col).value)
+            if conference:
+                break
+            conference_first_row += 1
+
 
         row = conference_first_row
         conferences = []
