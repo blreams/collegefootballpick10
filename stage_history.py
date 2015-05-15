@@ -175,7 +175,7 @@ def populate_conferences_teams():
     conf = add_conference('Atlantic Coast', 'Coastal')
     add_team('Duke', 'Blue Devils', conf)
     add_team('Georgia Tech', 'Yellow Jackets', conf)
-    add_team('Miami (Fla.)', 'Hurricanes', conf)
+    add_team('Miami-Florida', 'Hurricanes', conf)
     add_team('North Carolina', 'Tarheels', conf)
     add_team('Pittsburgh', 'Panthers', conf)
     add_team('Virginia', 'Cavaliers', conf)
@@ -227,14 +227,14 @@ def populate_conferences_teams():
     add_team('Louisiana Tech', 'Bulldogs', conf)
     add_team('North Texas', 'Mean Green', conf)
     add_team('Rice', 'Owls', conf)
-    add_team('Southern Mississippi', 'Golden Eagles', conf)
+    add_team('Southern Miss', 'Golden Eagles', conf)
     add_team('Texas-El Paso', 'Miners', conf)
     add_team('Texas-San Antonio', 'Road Runners', conf)
 
     # Independents
     conf = add_conference('Independents')
     add_team('Army', 'Black Knights', conf)
-    add_team('Brigham Young', 'Cougars', conf)
+    add_team('BYU', 'Cougars', conf)
     add_team('Navy', 'Midshipmen', conf)
     add_team('Notre Dame', 'Fighting Irish', conf)
 
@@ -245,7 +245,7 @@ def populate_conferences_teams():
     add_team('Buffalo', 'Bulls', conf)
     add_team('Kent State', 'Golden Flashes', conf)
     add_team('Massachusetts', 'Minutemen', conf)
-    add_team('Miami (Ohio)', 'Redhawks', conf)
+    add_team('Miami-Ohio', 'Redhawks', conf)
     add_team('Ohio', 'Bobcats', conf)
     # Mid American - West
     conf = add_conference('Mid American', 'West')
@@ -286,7 +286,7 @@ def populate_conferences_teams():
     add_team('Arizona', 'Wildcats', conf)
     add_team('Arizona State', 'Sun Devils', conf)
     add_team('Colorado', 'Buffaloes', conf)
-    add_team('Southern California', 'Trojans', conf)
+    add_team('Southern Cal', 'Trojans', conf)
     add_team('UCLA', 'Bruins', conf)
     add_team('Utah', 'Utes', conf)
 
@@ -306,7 +306,7 @@ def populate_conferences_teams():
     add_team('Auburn', 'Tigers', conf)
     add_team('LSU', 'Tigers', conf)
     add_team('Mississippi State', 'Bulldogs', conf)
-    add_team('Ole Miss', 'Rebels', conf)
+    add_team('Mississippi', 'Rebels', conf)
     add_team('Texas A&M', 'Aggies', conf)
 
     # Sun Belt
@@ -316,59 +316,15 @@ def populate_conferences_teams():
     add_team('Georgia Southern', 'Eagle', conf)
     add_team('Georgia State', 'Panthers', conf)
     add_team('Idaho', 'Vandals', conf)
-    add_team('Louisiana-Monroe', 'Warhawks', conf)
+    add_team('Louisiana Monroe', 'Warhawks', conf)
     add_team('New Mexico State', 'Aggies', conf)
     add_team('South Alabama', 'Jaguars', conf)
     add_team('Texas State', 'Bobcats', conf)
     add_team('Troy', 'Trojans', conf)
-    add_team('UL Lafayette', 'Ragin Cajuns', conf)
+    add_team('Louisiana Lafayette', 'Ragin Cajuns', conf)
 
 def populate_games():
-    year = 2014
-    week = 1
-    add_game(get_team('South Carolina'), get_team('Texas A&M'), year, week, 1)
-    add_game(get_team('Boise State'), get_team('Ole Miss'), year, week, 2)
-    add_game(get_team('Colorado State'), get_team('Colorado'), year, week, 3)
-    add_game(get_team('Appalachian State'), get_team('Michigan'), year, week, 4)
-    add_game(get_team('West Virginia'), get_team('Alabama'), year, week, 5)
-    add_game(get_team('Ohio State'), get_team('Navy'), year, week, 6)
-    add_game(get_team('Florida State'), get_team('Oklahoma State'), year, week, 7)
-    add_game(get_team('Wisconsin'), get_team('LSU'), year, week, 8)
-    add_game(get_team('Miami (Fla.)'), get_team('Louisville'), year, week, 9)
-    add_game(get_team('Clemson'), get_team('Georgia'), year, week, 10)
-    week = 2
-    add_game(get_team('Pittsburgh'), get_team('Boston College'), year, week, 1)
-    add_game(get_team('Michigan'), get_team('Notre Dame'), year, week, 2)
-    add_game(get_team('Michigan State'), get_team('Oregon'), year, week, 3)
-    add_game(get_team('East Carolina'), get_team('South Carolina'), year, week, 4)
-    add_game(get_team('Brigham Young'), get_team('Texas'), year, week, 5)
-    add_game(get_team('Virginia Tech'), get_team('Ohio State'), year, week, 6)
-    add_game(get_team('Air Force'), get_team('Wyoming'), year, week, 7)
-    add_game(get_team('Colorado State'), get_team('Boise State'), year, week, 8)
-    add_game(get_team('Georgia Tech'), get_team('Tulane'), year, week, 9)
-    add_game(get_team('Southern California'), get_team('Stanford'), year, week, 10)
-    week = 3
-    add_game(get_team('East Carolina'), get_team('Virginia Tech'), year, week, 1)
-    add_game(get_team('Iowa State'), get_team('Iowa'), year, week, 2)
-    add_game(get_team('West Virginia'), get_team('Maryland'), year, week, 3)
-    add_game(get_team('Louisville'), get_team('Virginia'), year, week, 4)
-    add_game(get_team('NC State'), get_team('South Florida'), year, week, 5)
-    add_game(get_team('Arkansas'), get_team('Texas Tech'), year, week, 6)
-    add_game(get_team('UCLA'), get_team('Texas'), year, week, 7)
-    add_game(get_team('Penn State'), get_team('Rutgers'), year, week, 8)
-    add_game(get_team('UCF'), get_team('Missouri'), year, week, 9)
-    add_game(get_team('Georgia'), get_team('South Carolina'), year, week, 10)
-    #week = 2
-    #add_game(get_team('_team_'), get_team('_team_'), year, week, 1)
-    #add_game(get_team('_team_'), get_team('_team_'), year, week, 2)
-    #add_game(get_team('_team_'), get_team('_team_'), year, week, 3)
-    #add_game(get_team('_team_'), get_team('_team_'), year, week, 4)
-    #add_game(get_team('_team_'), get_team('_team_'), year, week, 5)
-    #add_game(get_team('_team_'), get_team('_team_'), year, week, 6)
-    #add_game(get_team('_team_'), get_team('_team_'), year, week, 7)
-    #add_game(get_team('_team_'), get_team('_team_'), year, week, 8)
-    #add_game(get_team('_team_'), get_team('_team_'), year, week, 9)
-    #add_game(get_team('_team_'), get_team('_team_'), year, week, 10)
+    pass
 
 def populate_weeks():
     add_week(2014, 1)
@@ -380,15 +336,6 @@ def populate_picks():
     week = 1
     user = 'aaa'
     add_pick(get_week(year, week), get_user_by_username(user), get_game(year, week, 1), game_winner=1)
-    add_pick(get_week(year, week), get_user_by_username(user), get_game(year, week, 2), game_winner=1)
-    add_pick(get_week(year, week), get_user_by_username(user), get_game(year, week, 3), game_winner=1)
-    add_pick(get_week(year, week), get_user_by_username(user), get_game(year, week, 4), game_winner=1)
-    add_pick(get_week(year, week), get_user_by_username(user), get_game(year, week, 5), game_winner=1)
-    add_pick(get_week(year, week), get_user_by_username(user), get_game(year, week, 6), game_winner=1)
-    add_pick(get_week(year, week), get_user_by_username(user), get_game(year, week, 7), game_winner=1)
-    add_pick(get_week(year, week), get_user_by_username(user), get_game(year, week, 8), game_winner=1)
-    add_pick(get_week(year, week), get_user_by_username(user), get_game(year, week, 9), game_winner=1)
-    add_pick(get_week(year, week), get_user_by_username(user), get_game(year, week, 10), game_winner=1)
 
 # Execution starts here
 if __name__ == '__main__':
