@@ -114,7 +114,7 @@ TEMPLATE_DIRS = [
         TEMPLATE_PATH,
         ]
 
-AUTH_PROFILE_MODULE = 'pick10.UserProfile'
+#AUTH_PROFILE_MODULE = 'pick10.UserProfile'
 REGISTRATION_OPEN = True             # If True, users can register
 ACCOUNT_ACTIVATION_DAYS = 7          # One week activation window
 REGISTRATION_AUTO_LOGIN = True       # If True, the user will be automatically logged in
