@@ -50,7 +50,7 @@ class Game(models.Model):
     team1_actual_points = models.IntegerField(default=-1)                   # Actual points scored 
     team2_actual_points = models.IntegerField(default=-1)                   # Actual points scored 
     favored = models.IntegerField(default=0)                                # Indicates which team is the favorite
-    spread = models.FloatField(default=0.0)                                 # Point spread added to underdog's score to determine winner
+    spread = models.DecimalField(default=0.0, decimal_places=1, max_digits=4) # Point spread added to underdog's score to determine winner
     game_state = models.IntegerField(default=0)                             # Enum (0=invalid, 1=not_started, 2=in_progress, 3=final)
     quarter = models.CharField(max_length=3, default='1st')                 # Used to indicate game progress ('1st', '2nd', '3rd', '4th', 'OT')
     time_left = models.CharField(max_length=10, default='15:00')            # Time left in the quarter (MM:SS)
