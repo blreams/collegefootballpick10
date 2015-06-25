@@ -11,7 +11,7 @@ def show_game_year_week_num(obj):
     return 'Year=%d, Week=%d, Game=%d' % (obj.game_year, obj.game_week, obj.game_num,)
 
 class GameAdmin(admin.ModelAdmin):
-    list_display = (show_game_year_week_num, 'team1', 'team2', 'favored', 'spread', 'created', 'updated')
+    list_display = (show_game_year_week_num, 'team1', 'team2', 'favored', 'spread', 'kickoff', 'created', 'updated')
 
 class WeekAdmin(admin.ModelAdmin):
     list_display = ('week_year', 'week_num', 'lock_picks', 'lock_scores', 'created', 'updated')
