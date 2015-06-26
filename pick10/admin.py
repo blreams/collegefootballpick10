@@ -1,5 +1,8 @@
 from django.contrib import admin
-from .models import Conference, Team, Game, Week, Pick
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
+
+from .models import Conference, Team, Game, Week, Pick, UserProfile
 
 class ConferenceAdmin(admin.ModelAdmin):
     list_display = ('conf_name', 'div_name', 'created', 'updated')
@@ -19,9 +22,19 @@ class WeekAdmin(admin.ModelAdmin):
 class PickAdmin(admin.ModelAdmin):
     list_display = ('pick_week', 'pick_user', 'pick_game', 'created', 'updated')
 
+class UserProfileInline(admin.StackedInline):
+    model = UserProfile
+    can_delete = False
+    verbose_name_plural = 'userprofile'
+
+class UserAdmin(UserAdmin):
+    inlines = (UserProfileInline,)
+
 admin.site.register(Conference, ConferenceAdmin)
 admin.site.register(Team, TeamAdmin)
 admin.site.register(Game, GameAdmin)
 admin.site.register(Week, WeekAdmin)
 admin.site.register(Pick, PickAdmin)
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
 

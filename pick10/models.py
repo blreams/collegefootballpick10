@@ -9,8 +9,7 @@ from django.contrib.auth.models import User
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     company = models.CharField(max_length=50, blank=True)
-
-User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
+    # You can customize this with whatever fields you want to extend User.
 
 class Conference(models.Model):
     conf_name = models.CharField(max_length=40)                            # Conference name, 'Southeastern'
