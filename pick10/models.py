@@ -9,7 +9,7 @@ import pytz
 # Create your models here.
 
 class UserProfile(models.Model):
-    tz_choices = [(tz, tz) for tz in pytz.all_timezones if tz.startswith('Us')]
+    tz_choices = [(tz, tz) for tz in pytz.all_timezones if tz.startswith('US')]
     user = models.OneToOneField(User)
     company = models.CharField(max_length=50, blank=True)
     # You can customize this with whatever fields you want to extend User.
