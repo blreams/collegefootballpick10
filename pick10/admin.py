@@ -35,6 +35,7 @@ admin.site.register(Team, TeamAdmin)
 admin.site.register(Game, GameAdmin)
 admin.site.register(Week, WeekAdmin)
 admin.site.register(Pick, PickAdmin)
+admin.site.register(UserProfile)
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 

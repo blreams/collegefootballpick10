@@ -2,14 +2,18 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+import pytz
+
 #from utils import getLatestWeekNum
 
 # Create your models here.
 
 class UserProfile(models.Model):
+    tz_choices = [(tz, tz) for tz in pytz.all_timezones if tz.startswith('Us')]
     user = models.OneToOneField(User)
     company = models.CharField(max_length=50, blank=True)
     # You can customize this with whatever fields you want to extend User.
+    preferredtz = models.CharField(max_length=100, null=True, blank=True, choices=tz_choices)
 
 class Conference(models.Model):
     conf_name = models.CharField(max_length=40)                            # Conference name, 'Southeastern'
