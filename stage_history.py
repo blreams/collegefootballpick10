@@ -277,12 +277,16 @@ def populate_picks(yearlist):
             numpicks = len(Pick.objects.filter(pick_game__game_year=yearnum))
             if numpicks > 10:
                 print "    Picks for year %d already populated, skipping..." % (yearnum,)
-                return
+                continue
         except:
             pass
 
         print "    Populating picks for year %s..." % (yearnum,)
         populate_picks_for_year(yearnum)
+
+def delete_picks_for_year(yearnum):
+    print "Deleting picks for year %d..." % (yearnum,)
+    Pick.objects.filter(pick_game__game_year=yearnum).delete()
 
 def main():
     print "Starting pick10 model population..."
@@ -293,7 +297,7 @@ def main():
     print "  Populating Games..."
     populate_games(range(1997, 2015))
     print "  Populating Picks..."
-    populate_picks([2013, 2014])
+    populate_picks(range(1997, 2015))
 
 # Execution starts here
 if __name__ == '__main__':
