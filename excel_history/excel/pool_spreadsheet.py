@@ -418,7 +418,9 @@ class PoolSpreadsheet:
 
             team1_picked = sheet.cell_type(top_row,column) != CELL_EMPTY
             team2_picked = sheet.cell_type(bottom_row,column) != CELL_EMPTY
-            assert (team1_picked and team2_picked) == False
+            if team1_picked and team2_picked:
+                print "Check spreadsheet for illegal condition (year=%d, week=%s, player=%s)" % (self.year, sheet.name, player_name,)
+            #assert (team1_picked and team2_picked) == False
 
             pick = Pick()
             pick.player_name = player_name

@@ -20,7 +20,7 @@ class WeekAdmin(admin.ModelAdmin):
     list_display = ('week_year', 'week_num', 'lock_picks', 'lock_scores', 'created', 'updated')
 
 class PickAdmin(admin.ModelAdmin):
-    list_display = ('pick_week', 'pick_user', 'pick_game', 'created', 'updated')
+    list_display = ('pick_user', 'pick_game', 'created', 'updated')
 
 class UserProfileInline(admin.StackedInline):
     model = UserProfile

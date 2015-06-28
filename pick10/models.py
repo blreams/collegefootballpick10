@@ -85,10 +85,10 @@ class Week(models.Model):
         return 'Year=%d, Week=%d'%(self.week_year, self.week_num,)
 
 class Pick(models.Model):
-    pick_week = models.ForeignKey('Week')                                   # Link to week for which this pick applies
+    #pick_week = models.ForeignKey('Week')                                   # Link to week for which this pick applies
     pick_user = models.ForeignKey(User)                                     # Link to user for which this pick applies
     pick_game = models.ForeignKey('Game')                                   # Link to game for which this pick applies
-    game_winner = models.IntegerField(default=0)                            # Indicates which team won (1 or 2)
+    pick_winner = models.IntegerField(default=0)                            # Indicates which team was picked to win (1 or 2)
     team1_predicted_points = models.IntegerField(default=-1)                # Points predicted for team (tie-break game)
     team2_predicted_points = models.IntegerField(default=-1)                # Points predicted for team (tie-break game)
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
@@ -117,21 +117,35 @@ def add_team(team_name, mascot, conference, current=True):
     t.save()
     return t
 
-def add_game(team1, team2, game_year, game_week, game_num):
-    g = Game.objects.get_or_create(team1=team1, team2=team2)[0]
-    g.game_year = game_year
-    g.game_week = game_week
-    g.game_num = game_num
+def add_game(team1, team2, game_year, game_week, game_num, favored=0, spread=0.0, kickoff=None):
+    g, created = Game.objects.get_or_create(team1=team1, team2=team2, game_year=game_year, game_week=game_week, game_num=game_num)
+    assert created, "Something weird with add_game()..."
+    g.favored = favored
+    g.spread = spread
+    if kickoff:
+        g.kickoff = kickoff
     g.save()
     return g
+
+def update_game(game_year, game_week, game_num, team1_actual_points, team2_actual_points, game_state):
+    games = Game.objects.filter(game_year=game_year, game_week=game_week, game_num=game_num)
+    assert len(games) == 1, "Something weird with update_game()..."
+    g = games[0]
+    g.team1_actual_points = team1_actual_points
+    g.team2_actual_points = team2_actual_points
+    g.game_state = game_state
+    g.save()
 
 def add_week(week_year, week_num):
     w = Week.objects.get_or_create(week_year=week_year, week_num=week_num)[0]
     return w
 
-def add_pick(pick_week, pick_user, pick_game, game_winner):
-    p = Pick.objects.get_or_create(pick_week=pick_week, pick_user=pick_user, pick_game=pick_game)[0]
-    p.game_winner = game_winner
+def add_pick(pick_user, pick_game, pick_winner, team1_predicted_points=-1, team2_predicted_points=-1):
+    p = Pick.objects.get_or_create(pick_user=pick_user, pick_game=pick_game, pick_winner=pick_winner)[0]
+    if team1_predicted_points != -1:
+        p.team1_predicted_points = team1_predicted_points
+    if team2_predicted_points != -1:
+        p.team2_predicted_points = team2_predicted_points
     p.save()
     return p
 
@@ -156,8 +170,8 @@ def get_week(year, num):
     return w
 
 def query_picks(email, year, week):
-    u = get_user_by_email(email)
-    w = get_week(year, week)
-    picks = Pick.objects.filter(pick_user=u, pick_week=w).order_by('pick_game__game_num')
+    #u = get_user_by_email(email)
+    #w = get_week(year, week)
+    picks = Pick.objects.filter(pick_user__email=u, pick_game__game_year=year, pick_game__game_week=week).order_by('pick_game__game_num')
     return picks
 

@@ -4,19 +4,43 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'collegefootballpick10.settings'
 import django
 django.setup()
 
-from pick10.models import Team
+from django.core.exceptions import ObjectDoesNotExist
+
+from pick10.models import Team, Game, Pick
 from pick10.models import add_user, add_conference, add_team, add_game, add_week, add_pick
 from pick10.models import get_user_by_username, get_team, get_game, get_week
+from pick10.models import update_game
 
 from excel_history.excel.spreadsheet_test import player_username, get_player_years_dict
+from excel_history.excel.pool_spreadsheet import PoolSpreadsheet
 
 def populate_users():
+    # First test to see if a particular user exists, if so then skip the populate
+    try:
+        u = get_user_by_username('reams_byron')
+        print "    Found an expected user, returning..."
+        return
+    except ObjectDoesNotExist:
+        print "    Executing the populate..."
+    except:
+        raise
+
     for ss_name, username in player_username.iteritems():
         last, first = username.split('_')
         email = '%s_%s@example.com' % (first, last,)
         add_user(username, email, first.capitalize(), last.capitalize())
 
 def populate_conferences_teams():
+    # First test to see if a particular team exists, if so then skip the populate
+    try:
+        t = get_team('Ball State')
+        print "    Found an expected team, returning..."
+        return
+    except ObjectDoesNotExist:
+        print "    Executing the populate..."
+    except:
+        raise
+
     # American Athletic
     conf = add_conference('American Athletic')
     add_team('Cincinnati', 'Bearcats', conf)
@@ -192,31 +216,86 @@ def populate_conferences_teams():
     add_team('Troy', 'Trojans', conf)
     add_team('Louisiana Lafayette', 'Ragin Cajuns', conf)
 
-def populate_games():
-    pass
+def populate_games_for_year(yearnum):
+    poolspreadsheet = PoolSpreadsheet(yearnum)
+    for weeknum in poolspreadsheet.get_week_numbers():
+        print "      Populating games for week %d..." % (weeknum,)
+        games = poolspreadsheet.get_games(weeknum)
+        add_week(yearnum, weeknum)
+        for game in games:
+            favored = 1 if poolspreadsheet.get_game_favored_team(weeknum, game) == 'team1' else 2
+            spread = poolspreadsheet.get_game_spread(weeknum, game)
+            add_game(get_team(games[game].team1), get_team(games[game].team2), yearnum, weeknum, game, favored=favored, spread=spread)
+            team1_actual_points = poolspreadsheet.get_game_team1_score(weeknum, game)
+            team2_actual_points = poolspreadsheet.get_game_team2_score(weeknum, game)
+            update_game(yearnum, weeknum, game, team1_actual_points, team2_actual_points, 3)
 
-def populate_weeks():
-    add_week(2014, 1)
-    add_week(2014, 2)
-    add_week(2014, 3)
+def populate_games(yearlist):
+    for yearnum in yearlist:
+        if len(Game.objects.filter(game_year=yearnum)) != 130:
+            print "    Populating games for year %d..." % (yearnum,)
+            populate_games_for_year(yearnum)
+        else:
+            print "    Games for year %d already populated, skipping..." % (yearnum,)
 
-def populate_picks():
-    year = 2014
-    week = 1
-    user = 'aaa'
-    add_pick(get_week(year, week), get_user_by_username(user), get_game(year, week, 1), game_winner=1)
+    for yearnum in yearlist:
+        for weeknum in range(1, 14):
+            if len(Game.objects.filter(game_year=yearnum, game_week=weeknum)) != 10:
+                print "WARN: Year=%d, Week=%d, Did not find 10 games." % (yearnum, weeknum,)
 
-# Execution starts here
-if __name__ == '__main__':
+def populate_picks_for_year_week(yearnum, weeknum, poolspreadsheet=None):
+    try:
+        numpicks = len(Pick.objects.filter(pick_game__game_year=yearnum, pick_game__game_week=weeknum))
+        if numpicks > 10:
+            print "        Picks for week %d already populated, skipping..." % (weeknum,)
+            return
+    except:
+        pass
+
+    if poolspreadsheet is None:
+        poolspreadsheet = PoolSpreadsheet(yearnum)
+    picks = poolspreadsheet.get_picks(weeknum)
+    for pick in picks:
+        game = get_game(yearnum, weeknum, pick.game_number)
+        username = player_username[pick.player_name]
+        user = get_user_by_username(username)
+        pick_winner = 1 if pick.winner == 'team1' else 2
+        if pick.team1_score:
+            add_pick(pick_user=user, pick_game=game, pick_winner=pick_winner, team1_predicted_points=pick.team1_score, team2_predicted_points=pick.team2_score)
+        else:
+            add_pick(pick_user=user, pick_game=game, pick_winner=pick_winner)
+
+def populate_picks_for_year(yearnum):
+    poolspreadsheet = PoolSpreadsheet(yearnum)
+    for weeknum in poolspreadsheet.get_week_numbers():
+        print "      Populating picks for week %d..." % (weeknum,)
+        populate_picks_for_year_week(yearnum, weeknum, poolspreadsheet)
+
+def populate_picks(yearlist):
+    for yearnum in yearlist:
+        try:
+            numpicks = len(Pick.objects.filter(pick_game__game_year=yearnum))
+            if numpicks > 10:
+                print "    Picks for year %d already populated, skipping..." % (yearnum,)
+                return
+        except:
+            pass
+
+        print "    Populating picks for year %s..." % (yearnum,)
+        populate_picks_for_year(yearnum)
+
+def main():
     print "Starting pick10 model population..."
     print "  Populating Users..."
     populate_users()
     print "  Populating Conferences and Teams..."
     populate_conferences_teams()
     print "  Populating Games..."
-    populate_games()
-    print "  Populating Weeks..."
-    populate_weeks()
+    populate_games(range(1997, 2015))
     print "  Populating Picks..."
-    populate_picks()
+    populate_picks([2013, 2014])
+
+# Execution starts here
+if __name__ == '__main__':
+    main()
 
