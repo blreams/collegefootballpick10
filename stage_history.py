@@ -221,18 +221,18 @@ def populate_games_for_year(yearnum):
     for weeknum in poolspreadsheet.get_week_numbers():
         print "      Populating games for week %d..." % (weeknum,)
         games = poolspreadsheet.get_games(weeknum)
-        add_week(yearnum, weeknum)
+        week = add_week(yearnum, weeknum)
         for game in games:
             favored = 1 if poolspreadsheet.get_game_favored_team(weeknum, game) == 'team1' else 2
             spread = poolspreadsheet.get_game_spread(weeknum, game)
-            add_game(get_team(games[game].team1), get_team(games[game].team2), yearnum, weeknum, game, favored=favored, spread=spread)
+            add_game(week, get_team(games[game].team1), get_team(games[game].team2), game, favored=favored, spread=spread)
             team1_actual_points = poolspreadsheet.get_game_team1_score(weeknum, game)
             team2_actual_points = poolspreadsheet.get_game_team2_score(weeknum, game)
             update_game(yearnum, weeknum, game, team1_actual_points, team2_actual_points, 3)
 
 def populate_games(yearlist):
     for yearnum in yearlist:
-        if len(Game.objects.filter(game_year=yearnum)) != 130:
+        if len(Game.objects.filter(week__week_year=yearnum)) != 130:
             print "    Populating games for year %d..." % (yearnum,)
             populate_games_for_year(yearnum)
         else:
@@ -240,12 +240,12 @@ def populate_games(yearlist):
 
     for yearnum in yearlist:
         for weeknum in range(1, 14):
-            if len(Game.objects.filter(game_year=yearnum, game_week=weeknum)) != 10:
+            if len(Game.objects.filter(week__week_year=yearnum, week__week_num=weeknum)) != 10:
                 print "WARN: Year=%d, Week=%d, Did not find 10 games." % (yearnum, weeknum,)
 
 def populate_picks_for_year_week(yearnum, weeknum, poolspreadsheet=None):
     try:
-        numpicks = len(Pick.objects.filter(pick_game__game_year=yearnum, pick_game__game_week=weeknum))
+        numpicks = len(Pick.objects.filter(pick_game__week__week_year=yearnum, pick_game__week__week_num=weeknum))
         if numpicks > 10:
             print "        Picks for week %d already populated, skipping..." % (weeknum,)
             return
@@ -274,7 +274,7 @@ def populate_picks_for_year(yearnum):
 def populate_picks(yearlist):
     for yearnum in yearlist:
         try:
-            numpicks = len(Pick.objects.filter(pick_game__game_year=yearnum))
+            numpicks = len(Pick.objects.filter(pick_game__week__week_year=yearnum))
             if numpicks > 10:
                 print "    Picks for year %d already populated, skipping..." % (yearnum,)
                 continue
@@ -286,18 +286,22 @@ def populate_picks(yearlist):
 
 def delete_picks_for_year(yearnum):
     print "Deleting picks for year %d..." % (yearnum,)
-    Pick.objects.filter(pick_game__game_year=yearnum).delete()
+    Pick.objects.filter(pick_game__week__week_year=yearnum).delete()
 
-def main():
+def main(years=None):
+    if years is None:
+        years = range(1997, 2015)
+    elif isinstance(years, basestring):
+        years = [int(years)]
     print "Starting pick10 model population..."
     print "  Populating Users..."
     populate_users()
     print "  Populating Conferences and Teams..."
     populate_conferences_teams()
     print "  Populating Games..."
-    populate_games(range(1997, 2015))
+    populate_games(years)
     print "  Populating Picks..."
-    populate_picks(range(1997, 2015))
+    populate_picks(years)
 
 # Execution starts here
 if __name__ == '__main__':

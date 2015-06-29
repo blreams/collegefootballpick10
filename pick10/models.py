@@ -43,10 +43,24 @@ class Team(models.Model):
     def __unicode__(self):
         return '%s %s'%(self.team_name, self.mascot,)
 
+class Week(models.Model):
+    week_year = models.IntegerField()                                       # Season year corresponding to this week
+    week_num = models.IntegerField()                                        # Week number within the season
+    #games = models.IntegerFields(default=10)                               # Number of games that make up the week
+    winner = models.ForeignKey(User, null=True, blank=True, default=None)   # Link to User who won the week
+    lock_picks = models.BooleanField(default=False)                         # Once the first game kickoff occurs, update to True
+    lock_scores = models.BooleanField(default=False)                        # Once all scores have been submitted as final by admin, update to True
+    created = models.DateTimeField(auto_now=False, auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True, auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = '3. Weeks'
+
+    def __unicode__(self):
+        return 'Year=%d, Week=%d'%(self.week_year, self.week_num,)
+
 class Game(models.Model):
-    game_year = models.IntegerField(default=timezone.now().year)            # Season year corresponding to this game
-    #TODO default for game_week should call a function to figure out week number based on now()
-    game_week = models.IntegerField(default=1)                              # Season week corresponding to this game
+    week = models.ForeignKey('Week')                                        # Pointer back to Week entry
     game_num = models.IntegerField(default=0)                               # Game number within the week (ie. 1-10)
     team1 = models.ForeignKey('Team', related_name='team1')                 # Pointer back to Team entry
     team2 = models.ForeignKey('Team', related_name='team2')                 # Pointer back to Team entry
@@ -63,29 +77,12 @@ class Game(models.Model):
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
 
     class Meta:
-        verbose_name_plural = '3. Games'
+        verbose_name_plural = '4. Games'
 
     def __unicode__(self):
-        return 'Year=%d, Week=%d, Game=%d'%(self.game_year, self.game_week, self.game_num,)
-
-class Week(models.Model):
-    week_year = models.IntegerField()                                       # Season year corresponding to this week
-    week_num = models.IntegerField()                                        # Week number within the season
-    #games = models.IntegerFields(default=10)                               # Number of games that make up the week
-    winner = models.ForeignKey(User, null=True, blank=True, default=None)   # Link to User who won the week
-    lock_picks = models.BooleanField(default=False)                         # Once the first game kickoff occurs, update to True
-    lock_scores = models.BooleanField(default=False)                        # Once all scores have been submitted as final by admin, update to True
-    created = models.DateTimeField(auto_now=False, auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True, auto_now_add=True)
-
-    class Meta:
-        verbose_name_plural = '4. Weeks'
-
-    def __unicode__(self):
-        return 'Year=%d, Week=%d'%(self.week_year, self.week_num,)
+        return 'Year=%d, Week=%d, Game=%d'%(self.week.week_year, self.week.week_num, self.game_num,)
 
 class Pick(models.Model):
-    #pick_week = models.ForeignKey('Week')                                   # Link to week for which this pick applies
     pick_user = models.ForeignKey(User)                                     # Link to user for which this pick applies
     pick_game = models.ForeignKey('Game')                                   # Link to game for which this pick applies
     pick_winner = models.IntegerField(default=0)                            # Indicates which team was picked to win (1 or 2)
@@ -98,7 +95,7 @@ class Pick(models.Model):
         verbose_name_plural = '5. Picks'
 
     def __unicode__(self):
-        return 'User=%s, Year=%d, Week=%d, Game=%d'%(self.pick_user.email, self.pick_game.game_year, self.pick_game.game_week, self.pick_game.game_num,)
+        return 'User=%s, Year=%d, Week=%d, Game=%d'%(self.pick_user.email, self.pick_game.week.week_year, self.pick_game.week.week_num, self.pick_game.game_num,)
 
 def add_user(username, email, firstname, lastname):
     u, created = User.objects.get_or_create(username=username, email=email, first_name=firstname, last_name=lastname)
@@ -117,8 +114,8 @@ def add_team(team_name, mascot, conference, current=True):
     t.save()
     return t
 
-def add_game(team1, team2, game_year, game_week, game_num, favored=0, spread=0.0, kickoff=None):
-    g, created = Game.objects.get_or_create(team1=team1, team2=team2, game_year=game_year, game_week=game_week, game_num=game_num)
+def add_game(week, team1, team2, game_num, favored=0, spread=0.0, kickoff=None):
+    g, created = Game.objects.get_or_create(week=week, team1=team1, team2=team2, game_num=game_num)
     assert created, "Something weird with add_game()..."
     g.favored = favored
     g.spread = spread
@@ -127,8 +124,8 @@ def add_game(team1, team2, game_year, game_week, game_num, favored=0, spread=0.0
     g.save()
     return g
 
-def update_game(game_year, game_week, game_num, team1_actual_points, team2_actual_points, game_state):
-    games = Game.objects.filter(game_year=game_year, game_week=game_week, game_num=game_num)
+def update_game(yearnum, weeknum, gamenum, team1_actual_points, team2_actual_points, game_state):
+    games = Game.objects.filter(week__week_year=yearnum, week__week_num=weeknum, game_num=gamenum)
     assert len(games) == 1, "Something weird with update_game()..."
     g = games[0]
     g.team1_actual_points = team1_actual_points
@@ -162,7 +159,7 @@ def get_team(team):
     return t
 
 def get_game(year, week, num):
-    g = Game.objects.get(game_year=year, game_week=week, game_num=num)
+    g = Game.objects.get(week__week_year=year, week__week_num=week, game_num=num)
     return g
 
 def get_week(year, num):
@@ -170,8 +167,6 @@ def get_week(year, num):
     return w
 
 def query_picks(email, year, week):
-    #u = get_user_by_email(email)
-    #w = get_week(year, week)
-    picks = Pick.objects.filter(pick_user__email=u, pick_game__game_year=year, pick_game__game_week=week).order_by('pick_game__game_num')
+    picks = Pick.objects.filter(pick_user__email=u, pick_game__week__week_year=year, pick_game__week__week_num=week).order_by('pick_game__game_num')
     return picks
 
