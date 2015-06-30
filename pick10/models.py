@@ -3,10 +3,23 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 
 import pytz
+from datetime import datetime, timedelta
 
-#from utils import getLatestWeekNum
+def get_default_pick_deadline():
+    # The idea behind this is to grab the current day, then figure out the
+    # next Thursday and use 4:00pm in the US/Eastern timezone.
+    # Start with the current datetime
+    naive_dt_now = datetime.now()
+    # Figure out how many days to add to get to the next Thursday
+    days_to_add = 3 - naive_dt_now.weekday()
+    if days_to_add < 0:
+        days_to_add += 7
+    # Create a naive datetime corresponding to next Thursday at 4:00pm
+    naive_dt_deadline = datetime(naive_dt_now.year, naive_dt_now.month, naive_dt_now.day, 16, 0, 0) + timedelta(days=days_to_add)
+    # Localize it assuming US/Eastern time zone
+    deadline = pytz.timezone('US/Eastern').localize(naive_dt_deadline)
+    return deadline
 
-# Create your models here.
 
 class UserProfile(models.Model):
     tz_choices = [(tz, tz) for tz in pytz.all_timezones if tz.startswith('US')]
@@ -48,8 +61,8 @@ class Week(models.Model):
     week_num = models.IntegerField()                                        # Week number within the season
     #games = models.IntegerFields(default=10)                               # Number of games that make up the week
     winner = models.ForeignKey(User, null=True, blank=True, default=None)   # Link to User who won the week
-    lock_picks = models.BooleanField(default=False)                         # Once the first game kickoff occurs, update to True
-    lock_scores = models.BooleanField(default=False)                        # Once all scores have been submitted as final by admin, update to True
+    lock_picks = models.DateTimeField(null=True, blank=True)                # When generating a new Week, use get_default_pick_deadline()
+    lock_scores = models.BooleanField(default=False)                        # Once all scores are submitted as final by admin, update to True
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
 
