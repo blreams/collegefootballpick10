@@ -1,9 +1,11 @@
 from week_data import WeekData
+from pick10.models import Week,get_week
 
 class Database:
 
-    def load_week_data(self,year,week_number,update=False):
+    def load_week_data(self,year,week_number):
         data = WeekData()
+        data.week = self.__get_week_in_database(year,week_number)
         return data
 
     def put_games_week_in_database(self,games,week):
@@ -51,8 +53,8 @@ class Database:
     def load_week_data_timed(self,year,week_number,update=False):
         raise AssertionError,"Not implemented"
 
-    def __get_week_in_database(self,year,week_number,update):
-        raise AssertionError,"Not implemented"
+    def __get_week_in_database(self,year,week_number):
+        return get_week(year,week_number)
 
     def __get_week_games_in_database(self,week,update):
         raise AssertionError,"Not implemented"
