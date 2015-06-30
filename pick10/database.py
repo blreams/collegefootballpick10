@@ -1,4 +1,10 @@
+from week_data import WeekData
+
 class Database:
+
+    def load_week_data(self,year,week_number,update=False):
+        data = WeekData()
+        return data
 
     def put_games_week_in_database(self,games,week):
         raise AssertionError,"Not implemented"
@@ -16,9 +22,6 @@ class Database:
         raise AssertionError,"Not implemented"
 
     def get_next_year_week_for_create_week(self,update=False):
-        raise AssertionError,"Not implemented"
-
-    def load_week_data(self,year,week_number,update=False):
         raise AssertionError,"Not implemented"
 
     def get_week_numbers(self,year,update=False):
