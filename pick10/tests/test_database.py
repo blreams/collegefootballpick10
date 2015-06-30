@@ -13,20 +13,16 @@ class LoadWeekDataTest(TestCase):
     # load the teams
 
     def setUp(self):
-        pass
+        add_week(2014,1)
+        self.db = Database()
 
     # call the load_week_data function
     def test_function_call(self):
-        add_week(2014,1)
-        db = Database()
-        data = db.load_week_data(2014,1)
+        data = self.db.load_week_data(2014,1)
         self.assertIsNotNone(data)
 
     # load the week information
     def test_week_data_present(self):
-        add_week(2014,1)
-        db = Database()
-        data = db.load_week_data(2014,1)
-        week = data.week
+        week = self.db.load_week_data(2014,1).week
         self.assertEqual(week.week_year,2014)
         self.assertEqual(week.week_num,1)
