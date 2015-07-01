@@ -1,6 +1,7 @@
 from django.test import TestCase
 from pick10.database import Database
 from pick10.models import *
+from unit_test_database import *
 
 # This class tests the database.py file load_week_data function
 class LoadWeekDataTest(TestCase):
@@ -12,20 +13,8 @@ class LoadWeekDataTest(TestCase):
     # load the teams
 
     def setUp(self):
-        week = add_week(2014,1)
-        conf = add_conference('ACC')
-        team1 = add_team('Georgia Tech','Buzz',conf)
-        team2 = add_team('Clemson','Tigers',conf)
-        add_game(week,team1,team2,game_num=1,favored=1,spread=0.5)
-        add_game(week,team1,team2,game_num=2,favored=1,spread=0.5)
-        add_game(week,team1,team2,game_num=3,favored=1,spread=0.5)
-        add_game(week,team1,team2,game_num=4,favored=1,spread=0.5)
-        add_game(week,team1,team2,game_num=5,favored=1,spread=0.5)
-        add_game(week,team1,team2,game_num=6,favored=1,spread=0.5)
-        add_game(week,team1,team2,game_num=7,favored=1,spread=0.5)
-        add_game(week,team1,team2,game_num=8,favored=1,spread=0.5)
-        add_game(week,team1,team2,game_num=9,favored=1,spread=0.5)
-        add_game(week,team1,team2,game_num=10,favored=1,spread=0.5)
+        test_db = UnitTestDatabase()
+        test_db.setup_simple_week(2014,1)
         self.db = Database()
 
     # call the load_week_data function
