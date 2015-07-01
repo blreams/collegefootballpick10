@@ -6,7 +6,7 @@ django.setup()
 
 from django.core.exceptions import ObjectDoesNotExist
 
-from pick10.models import Team, Game, Pick
+from pick10.models import Team, Game, Pick, Week
 from pick10.models import add_user, add_conference, add_team, add_game, add_week, add_pick
 from pick10.models import get_user_by_username, get_team, get_game, get_week
 from pick10.models import update_game
@@ -288,11 +288,28 @@ def delete_picks_for_year(yearnum):
     print "Deleting picks for year %d..." % (yearnum,)
     Pick.objects.filter(pick_game__week__week_year=yearnum).delete()
 
+def delete_year_from_db(yearnum):
+    picks = Pick.objects.filter(pick_game__week__week_year=yearnum)
+    if len(picks) > 0:
+        print "Deleting %d picks for year %d..." % (len(picks), yearnum,)
+        picks.delete()
+    games = Game.objects.filter(week__week_year=yearnum)
+    if len(games) > 0:
+        print "Deleting %d games for year %d..." % (len(games), yearnum,)
+        games.delete()
+    weeks = Week.objects.filter(week_year=yearnum)
+    if len(weeks) > 0:
+        print "Deleting %d weeks for year %d..." % (len(weeks), yearnum,)
+        weeks.delete()
+
+
 def main(years=None):
     if years is None:
         years = range(1997, 2015)
     elif isinstance(years, basestring):
         years = [int(years)]
+    elif isinstance(years, (int, long)):
+        years = [years]
     print "Starting pick10 model population..."
     print "  Populating Users..."
     populate_users()

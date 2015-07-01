@@ -148,6 +148,9 @@ def update_game(yearnum, weeknum, gamenum, team1_actual_points, team2_actual_poi
 
 def add_week(week_year, week_num):
     w = Week.objects.get_or_create(week_year=week_year, week_num=week_num)[0]
+    deadline = get_default_pick_deadline()
+    w.lock_picks = deadline
+    w.save()
     return w
 
 def add_pick(pick_user, pick_game, pick_winner, team1_predicted_points=-1, team2_predicted_points=-1):
