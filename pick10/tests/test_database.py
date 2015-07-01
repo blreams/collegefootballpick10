@@ -10,7 +10,6 @@ class LoadWeekDataTest(TestCase):
     # invalid week parameter
     # load the player_picks information
     # load the players
-    # load the teams
 
     def setUp(self):
         test_db = UnitTestDatabase()
@@ -35,3 +34,14 @@ class LoadWeekDataTest(TestCase):
         self.assertEqual(set(data.games.keys()),set([1,2,3,4,5,6,7,8,9,10]))
         for game in data.games.values():
             self.assertEqual(game.week,data.week)
+
+    # load the teams
+    def test_teams_data_present(self):
+        data = self.db.load_week_data(2014,1)
+        self.assertGreater(len(data.teams),0)
+        self.assertIn('Georgia Tech',data.teams)
+        self.assertIn('South Carolina',data.teams)
+        self.assertIn('Clemson',data.teams)
+        self.assertIn(data.teams['Georgia Tech'].team_name,'Georgia Tech')
+        self.assertIn(data.teams['South Carolina'].team_name,'South Carolina')
+        self.assertIn(data.teams['Clemson'].team_name,'Clemson')

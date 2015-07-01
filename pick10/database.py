@@ -7,6 +7,10 @@ class Database:
         data = WeekData()
         data.week = self.__get_week_in_database(year,week_number)
         data.games = self.__get_week_games_in_database(year,week_number)
+        data.player_picks = None
+        data.picks = None
+        data.players = None
+        data.teams = self.load_teams()
         return data
 
     def put_games_week_in_database(self,games,week):
@@ -48,8 +52,9 @@ class Database:
     def delete_players_from_memcache(self,year):
         raise AssertionError,"Not implemented"
 
-    def load_teams(self,key,update=False):
-        raise AssertionError,"Not implemented"
+    def load_teams(self):
+        teams = Team.objects.all()
+        return { t.team_name:t for t in teams }
 
     def load_week_data_timed(self,year,week_number,update=False):
         raise AssertionError,"Not implemented"
