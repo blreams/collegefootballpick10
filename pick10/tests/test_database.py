@@ -6,8 +6,6 @@ from unit_test_database import *
 # This class tests the database.py file load_week_data function
 class LoadWeekDataTest(TestCase):
 
-    # invalid year parameter
-    # invalid week parameter
     # load the player_picks information
     # load the players
 
@@ -20,6 +18,16 @@ class LoadWeekDataTest(TestCase):
     def test_function_call(self):
         data = self.db.load_week_data(2014,1)
         self.assertIsNotNone(data)
+
+    # invalid year parameter
+    def test_bad_year_parameter(self):
+        with self.assertRaises(Exception):
+            data = self.db.load_week_data(1978,1)
+
+    # invalid week parameter
+    def test_bad_week_parameter(self):
+        with self.assertRaises(Exception):
+            data = self.db.load_week_data(2014,15)
 
     # load the week information
     def test_week_data_present(self):
