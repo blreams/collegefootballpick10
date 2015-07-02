@@ -6,8 +6,8 @@ django.setup()
 
 from django.core.exceptions import ObjectDoesNotExist
 
-from pick10.models import Player, Team, Game, Pick, Week
-from pick10.models import add_player, add_user, add_conference, add_team, add_game, add_week, add_pick
+from pick10.models import Year, Player, PlayerYear, Team, Game, Pick, Week
+from pick10.models import add_player, add_conference, add_team, add_game, add_week, add_pick
 from pick10.models import get_user_by_username, get_team, get_game, get_week
 from pick10.models import get_player_by_public_name, get_player_by_private_name
 from pick10.models import update_game
@@ -15,35 +15,43 @@ from pick10.models import update_game
 from excel_history.excel.spreadsheet_test import player_username, get_player_years_dict
 from excel_history.excel.pool_spreadsheet import PoolSpreadsheet
 
-def populate_players():
-    # First test to see if a particular player exists, if so then skip the populate
-    try:
-        p = get_player_by_private_name('reams_byron')
-        print "    Found and expected player, returning..."
-        return
-    except ObjectDoesNotExist:
-        pass
-    except:
-        raise
+def populate_years(yearlist):
+    for year in yearlist:
+        try:
+            y = Year.objects.get(yearnum=year)
+            continue
+        except ObjectDoesNotExist:
+            pass
+        except:
+            raise
 
-    for public_name, private_name in player_username.iteritems():
-        add_player(public_name=public_name, private_name=private_name)
+        y = Year()
+        y.yearnum = year
+        y.save()
 
-def populate_users():
-    # First test to see if a particular user exists, if so then skip the populate
-    try:
-        u = get_user_by_username('reams_byron')
-        print "    Found an expected user, returning..."
-        return
-    except ObjectDoesNotExist:
-        pass
-    except:
-        raise
+def populate_players(yearlist):
+    for year in yearlist:
+        # First test to see if any playeryears exist for the year.
+        playeryears = PlayerYear.objects.filter(year__yearnum=year)
+        if len(playeryears) > 0:
+            print "    Skipping populate_players(%d)"%(year,)
+            continue
 
-    for ss_name, username in player_username.iteritems():
-        last, first = username.split('_')
-        email = '%s_%s@example.com' % (first, last,)
-        add_user(username, email, first.capitalize(), last.capitalize())
+        yearobject = Year.objects.get(yearnum=year)
+        poolspreadsheet = PoolSpreadsheet(year)
+        public_names = poolspreadsheet.get_player_names()
+        for public_name in public_names:
+            try:
+                player = Player.objects.get(public_name=public_name)
+            except ObjectDoesNotExist:
+                player = add_player(public_name=public_name, private_name=player_username[public_name])
+            except:
+                raise
+
+            playeryear = PlayerYear()
+            playeryear.player = player
+            playeryear.year = yearobject
+            playeryear.save()
 
 def populate_conferences_teams():
     # First test to see if a particular team exists, if so then skip the populate
@@ -247,7 +255,7 @@ def populate_games_for_year(yearnum):
 
 def populate_games(yearlist):
     for yearnum in yearlist:
-        if len(Game.objects.filter(week__week_year=yearnum)) != 130:
+        if len(Game.objects.filter(week__year__yearnum=yearnum)) != 130:
             print "    Populating games for year %d..." % (yearnum,)
             populate_games_for_year(yearnum)
         else:
@@ -255,12 +263,12 @@ def populate_games(yearlist):
 
     for yearnum in yearlist:
         for weeknum in range(1, 14):
-            if len(Game.objects.filter(week__week_year=yearnum, week__week_num=weeknum)) != 10:
+            if len(Game.objects.filter(week__year__yearnum=yearnum, week__weeknum=weeknum)) != 10:
                 print "WARN: Year=%d, Week=%d, Did not find 10 games." % (yearnum, weeknum,)
 
 def populate_picks_for_year_week(yearnum, weeknum, poolspreadsheet=None):
     try:
-        numpicks = len(Pick.objects.filter(pick_game__week__week_year=yearnum, pick_game__week__week_num=weeknum))
+        numpicks = len(Pick.objects.filter(game__week__year__yearnum=yearnum, game__week__weeknum=weeknum))
         if numpicks > 10:
             print "        Picks for week %d already populated, skipping..." % (weeknum,)
             return
@@ -273,13 +281,11 @@ def populate_picks_for_year_week(yearnum, weeknum, poolspreadsheet=None):
     for pick in picks:
         game = get_game(yearnum, weeknum, pick.game_number)
         player = get_player_by_public_name(pick.player_name)
-        #username = player_username[pick.player_name]
-        #user = get_user_by_username(username)
-        pick_winner = 1 if pick.winner == 'team1' else 2
+        winner = 1 if pick.winner == 'team1' else 2
         if pick.team1_score:
-            add_pick(pick_player=player, pick_game=game, pick_winner=pick_winner, team1_predicted_points=pick.team1_score, team2_predicted_points=pick.team2_score)
+            add_pick(player=player, game=game, winner=winner, team1_predicted_points=pick.team1_score, team2_predicted_points=pick.team2_score)
         else:
-            add_pick(pick_player=player, pick_game=game, pick_winner=pick_winner)
+            add_pick(player=player, game=game, winner=winner)
 
 def populate_picks_for_year(yearnum):
     poolspreadsheet = PoolSpreadsheet(yearnum)
@@ -290,7 +296,7 @@ def populate_picks_for_year(yearnum):
 def populate_picks(yearlist):
     for yearnum in yearlist:
         try:
-            numpicks = len(Pick.objects.filter(pick_game__week__week_year=yearnum))
+            numpicks = len(Pick.objects.filter(game__week__year__yearnum=yearnum))
             if numpicks > 10:
                 print "    Picks for year %d already populated, skipping..." % (yearnum,)
                 continue
@@ -302,39 +308,45 @@ def populate_picks(yearlist):
 
 def delete_picks_for_year(yearnum):
     print "Deleting picks for year %d..." % (yearnum,)
-    Pick.objects.filter(pick_game__week__week_year=yearnum).delete()
+    Pick.objects.filter(game__week__year__yearnum=yearnum).delete()
 
 def delete_year_from_db(yearnum):
-    picks = Pick.objects.filter(pick_game__week__week_year=yearnum)
+    picks = Pick.objects.filter(game__week__year__yearnum=yearnum)
     if len(picks) > 0:
         print "Deleting %d picks for year %d..." % (len(picks), yearnum,)
         picks.delete()
-    games = Game.objects.filter(week__week_year=yearnum)
+    games = Game.objects.filter(week__year__yearnum=yearnum)
     if len(games) > 0:
         print "Deleting %d games for year %d..." % (len(games), yearnum,)
         games.delete()
-    weeks = Week.objects.filter(week_year=yearnum)
+    weeks = Week.objects.filter(yearnum=yearnum)
     if len(weeks) > 0:
         print "Deleting %d weeks for year %d..." % (len(weeks), yearnum,)
         weeks.delete()
 
 
-def main(years=None):
+def main(years=None, games=False, picks=False):
     if years is None:
         years = range(1997, 2015)
     elif isinstance(years, basestring):
         years = [int(years)]
     elif isinstance(years, (int, long)):
         years = [years]
+    if picks:
+        games = True
     print "Starting pick10 model population..."
+    print "  Populating Year(s)..."
+    populate_years(years)
     print "  Populating Players..."
-    populate_players()
+    populate_players(years)
     print "  Populating Conferences and Teams..."
     populate_conferences_teams()
-    print "  Populating Games..."
-    populate_games(years)
-    print "  Populating Picks..."
-    populate_picks(years)
+    if games:
+        print "  Populating Games..."
+        populate_games(years)
+    if picks:
+        print "  Populating Picks..."
+        populate_picks(years)
 
 # Execution starts here
 if __name__ == '__main__':
