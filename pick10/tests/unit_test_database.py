@@ -2,7 +2,7 @@
 # The class creates a central location for setting up a database 
 # so each unit test doesn't have to reinvent the wheel every time.
 from pick10.models import *
-from stage_history import populate_conferences_teams
+from stage_history import populate_conferences_teams, populate_users, populate_games, populate_picks_for_year_week
 
 class UnitTestDatabase:
 

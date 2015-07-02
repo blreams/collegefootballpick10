@@ -6,9 +6,12 @@ from unit_test_database import *
 # This class tests the database.py file load_week_data function
 class LoadWeekDataTest(TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         test_db = UnitTestDatabase()
         test_db.setup_simple_week(2014,1)
+
+    def setUp(self):
         self.db = Database()
 
     # call the load_week_data function

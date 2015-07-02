@@ -6,9 +6,11 @@ from unit_test_database import *
 # This class tests the calculator.py file load_week_data function
 class CalculatorTests(TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         test_db = UnitTestDatabase()
-        test_db.load_historical_data_for_year(2013)
+        test_db.load_historical_data_for_week(2013,1)
+        test_db.load_historical_data_for_week(2013,2)
 
     def test_blah(self):
         self.fail('Placeholder for tests')
