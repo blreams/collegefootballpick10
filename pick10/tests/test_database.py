@@ -6,9 +6,6 @@ from unit_test_database import *
 # This class tests the database.py file load_week_data function
 class LoadWeekDataTest(TestCase):
 
-    # load the player_picks information
-    # load the players
-
     def setUp(self):
         test_db = UnitTestDatabase()
         test_db.setup_simple_week(2014,1)
@@ -53,3 +50,12 @@ class LoadWeekDataTest(TestCase):
         self.assertIn(data.teams['Georgia Tech'].team_name,'Georgia Tech')
         self.assertIn(data.teams['South Carolina'].team_name,'South Carolina')
         self.assertIn(data.teams['Clemson'].team_name,'Clemson')
+
+    # load the players
+    def test_players_data_present(self):
+        self.fail('Users/Players implementation not final yet')
+
+    # load the player_picks information
+    def test_player_picks_data_present(self):
+        self.fail('Users/Players implementation not final yet')
+
