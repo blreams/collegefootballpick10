@@ -28,6 +28,16 @@ class UserProfile(models.Model):
     # You can customize this with whatever fields you want to extend User.
     preferredtz = models.CharField(max_length=100, null=True, blank=True, choices=tz_choices)
 
+class Player(models.Model):
+    public_name = models.CharField(max_length=100, null=True, blank=True, default='')
+    private_name = models.CharField(max_length=100, null=True, blank=True, default='')
+
+    class Meta:
+        verbose_name_plural = '0. Players'
+
+    def __unicode__(self):
+        return '%s/%s'%(self.private_name, self.public_name,)
+
 class Conference(models.Model):
     conf_name = models.CharField(max_length=40)                            # Conference name, 'Southeastern'
     div_name = models.CharField(max_length=40, null=True, blank=True)      # Division name, 'East'
@@ -96,7 +106,7 @@ class Game(models.Model):
         return 'Year=%d, Week=%d, Game=%d'%(self.week.week_year, self.week.week_num, self.game_num,)
 
 class Pick(models.Model):
-    pick_user = models.ForeignKey(User)                                     # Link to user for which this pick applies
+    pick_player = models.ForeignKey(Player)                                 # Link to player for which this pick applies
     pick_game = models.ForeignKey('Game')                                   # Link to game for which this pick applies
     pick_winner = models.IntegerField(default=0)                            # Indicates which team was picked to win (1 or 2)
     team1_predicted_points = models.IntegerField(default=-1)                # Points predicted for team (tie-break game)
@@ -108,7 +118,11 @@ class Pick(models.Model):
         verbose_name_plural = '5. Picks'
 
     def __unicode__(self):
-        return 'User=%s, Year=%d, Week=%d, Game=%d'%(self.pick_user.email, self.pick_game.week.week_year, self.pick_game.week.week_num, self.pick_game.game_num,)
+        return 'User=%s, Year=%d, Week=%d, Game=%d'%(self.pick_player.private_name, self.pick_game.week.week_year, self.pick_game.week.week_num, self.pick_game.game_num,)
+
+def add_player(public_name, private_name):
+    p = Player.objects.get_or_create(public_name=public_name, private_name=private_name)[0]
+    return p
 
 def add_user(username, email, firstname, lastname):
     u, created = User.objects.get_or_create(username=username, email=email, first_name=firstname, last_name=lastname)
@@ -153,13 +167,21 @@ def add_week(week_year, week_num):
     w.save()
     return w
 
-def add_pick(pick_user, pick_game, pick_winner, team1_predicted_points=-1, team2_predicted_points=-1):
-    p = Pick.objects.get_or_create(pick_user=pick_user, pick_game=pick_game, pick_winner=pick_winner)[0]
+def add_pick(pick_player, pick_game, pick_winner, team1_predicted_points=-1, team2_predicted_points=-1):
+    p = Pick.objects.get_or_create(pick_player=pick_player, pick_game=pick_game, pick_winner=pick_winner)[0]
     if team1_predicted_points != -1:
         p.team1_predicted_points = team1_predicted_points
     if team2_predicted_points != -1:
         p.team2_predicted_points = team2_predicted_points
     p.save()
+    return p
+
+def get_player_by_public_name(public_name):
+    p = Player.objects.get(public_name=public_name)
+    return p
+
+def get_player_by_private_name(private_name):
+    p = Player.objects.get(private_name=private_name)
     return p
 
 def get_user_by_username(username):

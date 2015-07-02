@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
-from .models import Conference, Team, Game, Week, Pick, UserProfile
+from .models import Player, Conference, Team, Game, Week, Pick, UserProfile
 
 class ConferenceAdmin(admin.ModelAdmin):
     list_display = ('conf_name', 'div_name', 'created', 'updated')
@@ -20,7 +20,10 @@ class WeekAdmin(admin.ModelAdmin):
     list_display = ('week_year', 'week_num', 'lock_picks', 'lock_scores', 'created', 'updated')
 
 class PickAdmin(admin.ModelAdmin):
-    list_display = ('pick_user', 'pick_game', 'created', 'updated')
+    list_display = ('pick_player', 'pick_game', 'created', 'updated')
+
+class PlayerAdmin(admin.ModelAdmin):
+    list_display = ('public_name', 'private_name')
 
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
@@ -31,6 +34,7 @@ class UserAdmin(UserAdmin):
     inlines = (UserProfileInline,)
 
 admin.site.register(Conference, ConferenceAdmin)
+admin.site.register(Player, PlayerAdmin)
 admin.site.register(Team, TeamAdmin)
 admin.site.register(Game, GameAdmin)
 admin.site.register(Week, WeekAdmin)
