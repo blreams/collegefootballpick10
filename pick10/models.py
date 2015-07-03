@@ -101,10 +101,9 @@ class Team(models.Model):
 class Week(models.Model):
     year = models.ForeignKey('Year')                                        # Season year corresponding to this week
     weeknum = models.IntegerField()                                         # Week number within the season
-    #games = models.IntegerFields(default=10)                               # Number of games that make up the week
-    winner = models.ForeignKey(User, null=True, blank=True, default=None)   # Link to User who won the week
+    winner = models.ForeignKey(Player, null=True, blank=True, default=None) # Link to Player who won the week
     lock_picks = models.DateTimeField(null=True, blank=True)                # When generating a new Week, use get_default_pick_deadline()
-    lock_scores = models.BooleanField(default=False)                        # Once all scores are submitted as final by admin, update to True
+    lock_scores = models.BooleanField(default=False)                        # Commissioner sets to True, after which only commissioner can update scores
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
 
