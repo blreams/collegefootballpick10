@@ -24,11 +24,15 @@ def get_default_pick_deadline():
 class UserProfile(models.Model):
     tz_choices = [(tz, tz) for tz in pytz.all_timezones if tz.startswith('US')]
     user = models.OneToOneField(User)
+    player = models.OneToOneField('Player', blank=True, null=True)
     company = models.CharField(max_length=50, blank=True)
     # You can customize this with whatever fields you want to extend User.
     preferredtz = models.CharField(max_length=100, null=True, blank=True, choices=tz_choices)
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
+
+    def __unicode__(self):
+        return 'User=%s, Player=%s' % (self.user.username, self.player,)
 
 class Year(models.Model):
     yearnum = models.IntegerField()
