@@ -32,8 +32,8 @@ class LoadWeekDataTest(TestCase):
     # load the week information
     def test_week_data_present(self):
         week = self.db.load_week_data(2014,1).week
-        self.assertEqual(week.week_year,2014)
-        self.assertEqual(week.week_num,1)
+        self.assertEqual(week.year.yearnum,2014)
+        self.assertEqual(week.weeknum,1)
 
     # load the games information
     def test_week_games_data_present(self):
