@@ -21,6 +21,8 @@ class UnitTestDatabase:
         self.setup_game(week,8,"Southern Cal","UCLA",favored=2,spread=4.5)
         self.setup_game(week,9,"Army","Navy",favored=2,spread=5.5)
         self.setup_game(week,10,"Notre Dame","Florida State",favored=1,spread=0.5)
+        self.setup_player(year,'Brent','BrentH')
+        self.setup_player(year,'John','JohnH')
 
     def load_historical_data_for_year(self,year=2014):
         populate_players([year])
@@ -36,7 +38,7 @@ class UnitTestDatabase:
         self.fail('Need to change populate_games to only games in a week')
 
     def setup_week(self,year,week_number):
-        year_model = Year.objects.get_or_create(yearnum=year)
+        (year_model,created) = Year.objects.get_or_create(yearnum=year)
         week = add_week(year,week_number)
         return week
 
@@ -46,4 +48,8 @@ class UnitTestDatabase:
         game = add_game(week,team1,team2,gamenum=game_number,favored=favored,spread=spread)
         return game
 
-
+    def setup_player(self,year,public_name,private_name=''):
+        player = add_player(public_name,private_name)
+        year_model = Year.objects.get_or_create(yearnum=year)[0]
+        player_year = PlayerYear.objects.create(player=player,year=year_model)
+        return player
