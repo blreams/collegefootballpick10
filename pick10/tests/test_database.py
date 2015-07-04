@@ -73,5 +73,12 @@ class LoadWeekDataTest(TestCase):
 
     # load the player_picks information
     def test_player_picks_data_present(self):
-        self.fail('Users/Players implementation not final yet')
+        data = self.db.load_week_data(2014,1)
+        self.assertGreater(len(data.player_picks),0)
 
+        for player_id in data.player_picks:
+            player_picks = data.player_picks[player_id]
+            self.assertEqual(len(player_picks),10)
+            for pick in player_picks:
+                self.assertEqual(pick.player.id,player_id)
+                self.assertEqual(pick.game.week,data.week)

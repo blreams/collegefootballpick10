@@ -7,8 +7,8 @@ class Database:
         data = WeekData()
         data.week = self.__get_week_in_database(year,week_number)
         data.games = self.__get_week_games_in_database(year,week_number)
-        data.player_picks = None
         data.picks = self.__get_week_picks_in_database(data.week)
+        data.player_picks = self.__get_player_week_picks_in_database(data.picks)
         data.players = self.load_players(year)
         data.teams = self.load_teams()
         return data
@@ -69,8 +69,15 @@ class Database:
         game_numbers = range(1,11)
         return { game_num:get_game(year,week_number,game_num) for game_num in game_numbers }
 
-    def __get_player_week_picks_in_database(self,week,update):
-        raise AssertionError,"Not implemented"
+    def __get_player_week_picks_in_database(self,week_picks):
+        player_picks = dict()
+        for pick in week_picks.values():
+            player_id = pick.player.id
+            if player_id not in player_picks:
+                player_picks[player_id] = [pick]
+            else:
+                player_picks[player_id].append(pick)
+        return player_picks
 
     def __get_week_picks_in_database(self,week):
         picks = Pick.objects.filter(game__week=week)
