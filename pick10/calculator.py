@@ -101,8 +101,18 @@ class CalculateResults:
         else:
             return None
 
-    def get_game_winner_team_name(self,game_key):
-        raise AssertionError,"Not implemented"
+    def get_game_winner_team_name(self,game):
+        winner = self.get_game_winner(game)
+        game_not_final = not(winner)
+        if game_not_final:
+            return None
+
+        if winner == TEAM1:
+            return game.team1.team_name
+        elif winner == TEAM2:
+            return game.team2.team_name
+        else:
+            raise AssertionError,"Either team1 or team2 should have won"
 
     def get_team_winning_pool_game(self,game_key):
         raise AssertionError,"Not implemented"
