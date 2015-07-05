@@ -1,6 +1,7 @@
 class WeekData:
     week = None
     games = None
+    games_id = None
     player_picks = None
     picks = None
     teams = None

@@ -6,7 +6,8 @@ class Database:
     def load_week_data(self,year,week_number):
         data = WeekData()
         data.week = self.__get_week_in_database(year,week_number)
-        data.games = self.__get_week_games_in_database(year,week_number)
+        data.games = self.__get_week_games_in_database_indexed_by_game_number(year,week_number)
+        data.games_id = self.__get_week_games_in_database_indexed_by_id(year,week_number)
         data.picks = self.__get_week_picks_in_database(data.week)
         data.player_picks = self.__get_player_week_picks_in_database(data.picks)
         data.players = self.load_players(year)
@@ -65,13 +66,17 @@ class Database:
     def __get_week_in_database(self,year,week_number):
         return get_week(year,week_number)
 
-    def __get_week_games_in_database(self,year,week_number):
+    def __get_week_games_in_database_indexed_by_id(self,year,week_number):
         game_numbers = range(1,11)
         week_games = dict()
         for game_num in game_numbers:
             game = get_game(year,week_number,game_num)
             week_games[game.id] = game
         return week_games
+
+    def __get_week_games_in_database_indexed_by_game_number(self,year,week_number):
+        game_numbers = range(1,11)
+        return { game_num:get_game(year,week_number,game_num) for game_num in game_numbers }
 
     def __get_player_week_picks_in_database(self,week_picks):
         player_picks = dict()

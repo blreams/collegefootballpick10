@@ -35,14 +35,28 @@ class LoadWeekDataTest(TestCase):
         self.assertEqual(week.year.yearnum,2014)
         self.assertEqual(week.weeknum,1)
 
-    # load the games information
+    # load the games indexed by game number information
     def test_week_games_data_present(self):
         data = self.db.load_week_data(2014,1)
         self.assertEqual(len(data.games),10)
-        for game_id in data.games:
-            game = data.games[game_id]
+        self.assertEqual(set(data.games.keys()),set([1,2,3,4,5,6,7,8,9,10]))
+        for game in data.games.values():
+            self.assertEqual(game.week,data.week)
+
+    # load the games indexed by id information
+    def test_week_games_id_data_present(self):
+        data = self.db.load_week_data(2014,1)
+        self.assertEqual(len(data.games_id),10)
+        for game_id in data.games_id:
+            game = data.games_id[game_id]
             self.assertEqual(game.week,data.week)
             self.assertEqual(game_id,game.id)
+
+    # load the games indexed by id information
+    def test_week_games_are_same(self):
+        data = self.db.load_week_data(2014,1)
+        for game in data.games.values():
+            self.assertIn(game.id,data.games_id)
 
     # load the teams
     def test_teams_data_present(self):
