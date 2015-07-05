@@ -67,7 +67,11 @@ class Database:
 
     def __get_week_games_in_database(self,year,week_number):
         game_numbers = range(1,11)
-        return { game_num:get_game(year,week_number,game_num) for game_num in game_numbers }
+        week_games = dict()
+        for game_num in game_numbers:
+            game = get_game(year,week_number,game_num)
+            week_games[game.id] = game
+        return week_games
 
     def __get_player_week_picks_in_database(self,week_picks):
         player_picks = dict()

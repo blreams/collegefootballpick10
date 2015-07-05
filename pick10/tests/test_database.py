@@ -39,9 +39,10 @@ class LoadWeekDataTest(TestCase):
     def test_week_games_data_present(self):
         data = self.db.load_week_data(2014,1)
         self.assertEqual(len(data.games),10)
-        self.assertEqual(set(data.games.keys()),set([1,2,3,4,5,6,7,8,9,10]))
-        for game in data.games.values():
+        for game_id in data.games:
+            game = data.games[game_id]
             self.assertEqual(game.week,data.week)
+            self.assertEqual(game_id,game.id)
 
     # load the teams
     def test_teams_data_present(self):
