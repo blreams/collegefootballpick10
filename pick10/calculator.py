@@ -27,8 +27,18 @@ class CalculateResults:
         assert pick != None,"Could not find a pick that matches the passed in game"
         return pick.winner
 
-    def get_team_name_player_picked_to_win(self,player_key,game_key):
-        raise AssertionError,"Not implemented"
+    def get_team_name_player_picked_to_win(self,player,game):
+        assert game != None and self.__game_id_valid(game.id),"Game is not valid"
+
+        if self.player_did_not_pick(player,game):
+            return ""
+
+        winner = self.get_team_player_picked_to_win(player,game)
+        if winner == TEAM1: 
+            return game.team1.team_name
+        elif winner == TEAM2:
+            return game.team2.team_name
+        raise AssertionError,"Error determining winner name (winner=%s)" % (winner)
 
     def is_team1_winning_pool(self,game):
         score_diff = game.team2_actual_points-game.team1_actual_points
@@ -67,8 +77,14 @@ class CalculateResults:
     def get_team_name_winning_game(self,game_key):
         raise AssertionError,"Not implemented"
 
-    def player_did_not_pick(self,player_key,game_key):
-        raise AssertionError,"Not implemented"
+    def player_did_not_pick(self,player,game):
+        assert game != None and self.__game_id_valid(game.id),"Game is not valid"
+        picks = self.__data.player_picks[player.id]
+        pick = self.__find_player_pick_for_game(picks,game)
+        if pick == None:
+            return True
+                                                    
+        return pick.winner == 0
 
     def did_player_win_game(self,player_key,game_key):
         raise AssertionError,"Not implemented"
@@ -150,8 +166,8 @@ class CalculateResults:
                 return pick
         return None
 
-    def __game_key_valid(self,game_key):
-        raise AssertionError,"Not implemented"
+    def __game_id_valid(self,game_id):
+        return game_id in self.__data.games_id
 
     def __player_key_valid(self,player_key):
         raise AssertionError,"Not implemented"
