@@ -1,7 +1,7 @@
 class CalculateResults:
 
     def __init__(self,data):
-        raise AssertionError,"Not implemented"
+        self.__data = data
 
     def get_game_state(self):
         raise AssertionError,"Not implemented"
@@ -24,8 +24,8 @@ class CalculateResults:
     def get_team_name_player_picked_to_win(self,player_key,game_key):
         raise AssertionError,"Not implemented"
 
-    def is_team1_winning_pool(self,game_key):
-        raise AssertionError,"Not implemented"
+    def is_team1_winning_pool(self,game):
+        return None
 
     def is_team2_winning_pool(self,game_key):
         raise AssertionError,"Not implemented"
