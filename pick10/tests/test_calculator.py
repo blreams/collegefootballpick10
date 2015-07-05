@@ -49,6 +49,17 @@ class CalculatorTests(TestCase):
         self.__t3_team1_boundary_case3()
         self.__t3_team1_boundary_case4()
 
+    def test_t4_is_team2_winning_pool(self):
+        self.__t4_bad_game_favored_value()
+        self.__t4_team2_ahead()
+        self.__t4_team2_behind()
+        self.__t4_team2_ahead_in_pool_behind_in_game()
+        self.__t4_team2_behind_in_pool_ahead_in_game()
+        self.__t4_team2_boundary_case1()
+        self.__t4_team2_boundary_case2()
+        self.__t4_team2_boundary_case3()
+        self.__t4_team2_boundary_case4()
+
     def __t1_invalid_player(self):
         bad_player = Player()
         bad_player.id = -1
@@ -189,6 +200,79 @@ class CalculatorTests(TestCase):
         g.favored = TEAM2
         g.spread = 0.5 
         self.assertFalse(self.calc.is_team1_winning_pool(g))
+
+    def __t4_bad_game_favored_value(self):
+        g = Game()
+        g.team1_actual_points = 0
+        g.team2_actual_points = 0
+        g.favored = 0
+        g.spread = 0.5
+        with self.assertRaises(AssertionError):
+            self.calc.is_team2_winning_pool(g)
+
+    def __t4_team2_ahead(self):
+        g = Game()
+        g.team1_actual_points = 10 
+        g.team2_actual_points = 20 
+        g.favored = TEAM2
+        g.spread = 5.5 
+        self.assertTrue(self.calc.is_team2_winning_pool(g))
+
+    def __t4_team2_behind(self):
+        g = Game()
+        g.team1_actual_points = 20 
+        g.team2_actual_points = 10 
+        g.favored = TEAM2
+        g.spread = 5.5 
+        self.assertFalse(self.calc.is_team2_winning_pool(g))
+
+    def __t4_team2_ahead_in_pool_behind_in_game(self):
+        g = Game()
+        g.team1_actual_points = 17 
+        g.team2_actual_points = 14 
+        g.favored = TEAM1
+        g.spread = 3.5 
+        self.assertTrue(self.calc.is_team2_winning_pool(g))
+
+    def __t4_team2_behind_in_pool_ahead_in_game(self):
+        g = Game()
+        g.team1_actual_points = 17
+        g.team2_actual_points = 21
+        g.favored = TEAM2
+        g.spread = 4.5 
+        self.assertFalse(self.calc.is_team2_winning_pool(g))
+
+    def __t4_team2_boundary_case1(self):
+        g = Game()
+        g.team1_actual_points = 16 
+        g.team2_actual_points = 17 
+        g.favored = TEAM2
+        g.spread = 0.5 
+        self.assertTrue(self.calc.is_team2_winning_pool(g))
+
+    def __t4_team2_boundary_case2(self):
+        g = Game()
+        g.team1_actual_points = 17 
+        g.team2_actual_points = 16 
+        g.favored = TEAM2
+        g.spread = 0.5 
+        self.assertFalse(self.calc.is_team2_winning_pool(g))
+
+    def __t4_team2_boundary_case3(self):
+        g = Game()
+        g.team1_actual_points = 16 
+        g.team2_actual_points = 17 
+        g.favored = TEAM1
+        g.spread = 0.5 
+        self.assertTrue(self.calc.is_team2_winning_pool(g))
+
+    def __t4_team2_boundary_case4(self):
+        g = Game()
+        g.team1_actual_points = 17 
+        g.team2_actual_points = 16 
+        g.favored = TEAM1
+        g.spread = 0.5 
+        self.assertFalse(self.calc.is_team2_winning_pool(g))
 
     def __get_a_valid_game(self):
         return self.week1.games[1]
