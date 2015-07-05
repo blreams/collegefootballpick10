@@ -67,6 +67,13 @@ class CalculatorTests(TestCase):
         self.__t5_team1_won()
         self.__t5_team2_won()
 
+    def test_t6_get_pool_game_winner_team_name(self):
+        self.__t6_game_none()
+        self.__t6_game_in_progress()
+        self.__t6_game_not_started()
+        self.__t6_team1_won()
+        self.__t6_team2_won()
+
     def __t1_invalid_player(self):
         bad_player = Player()
         bad_player.id = -1
@@ -287,12 +294,12 @@ class CalculatorTests(TestCase):
 
     def __t5_game_in_progress(self):
         g = Game()
-        g.state = IN_PROGRESS
+        g.game_state = IN_PROGRESS
         self.assertIsNone(self.calc.get_pool_game_winner(g))
 
     def __t5_game_not_started(self):
         g = Game()
-        g.state = NOT_STARTED
+        g.game_state = NOT_STARTED
         self.assertIsNone(self.calc.get_pool_game_winner(g))
 
     def __t5_team1_won(self):
@@ -301,7 +308,7 @@ class CalculatorTests(TestCase):
         g.team2_actual_points = 10 
         g.favored = TEAM1
         g.spread = 10.5
-        g.state = FINAL
+        g.game_state = FINAL
         self.assertEqual(self.calc.get_pool_game_winner(g),TEAM1)
 
     def __t5_team2_won(self):
@@ -310,8 +317,30 @@ class CalculatorTests(TestCase):
         g.team2_actual_points = 25 
         g.favored = TEAM1
         g.spread = 10.5
-        g.state = FINAL
+        g.game_state = FINAL
         self.assertEqual(self.calc.get_pool_game_winner(g),TEAM2)
+
+    def __t6_game_none(self):
+        with self.assertRaises(Exception):
+            self.calc.get_pool_game_winner_team_name(None)
+
+    def __t6_game_in_progress(self):
+        g = Game()
+        g.game_state = IN_PROGRESS
+        self.assertIsNone(self.calc.get_pool_game_winner_team_name(g))
+
+    def __t6_game_not_started(self):
+        g = Game()
+        g.game_state = NOT_STARTED
+        self.assertIsNone(self.calc.get_pool_game_winner_team_name(g))
+
+    def __t6_team1_won(self):
+        game = self.__find_game("LSU","TCU")
+        self.assertEqual(self.calc.get_pool_game_winner_team_name(game),"LSU")
+
+    def __t6_team2_won(self):
+        game = self.__find_game("Boise State","Washington")
+        self.assertEqual(self.calc.get_pool_game_winner_team_name(game),"Washington")
 
     def __get_a_valid_game(self):
         return self.week1.games[1]

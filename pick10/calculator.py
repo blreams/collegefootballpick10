@@ -64,7 +64,7 @@ class CalculateResults:
         return score_diff > spread
 
     def get_pool_game_winner(self,game):
-        if game.state == FINAL:
+        if game.game_state == FINAL:
             if self.is_team1_winning_pool(game):
                 return TEAM1
             elif self.is_team2_winning_pool(game):
@@ -74,8 +74,18 @@ class CalculateResults:
         else:
             return None
 
-    def get_pool_game_winner_team_name(self,game_key):
-        raise AssertionError,"Not implemented"
+    def get_pool_game_winner_team_name(self,game):
+        winner = self.get_pool_game_winner(game)
+        game_not_final = not(winner)
+        if game_not_final:
+            return None
+
+        if winner == TEAM1:
+            return game.team1.team_name
+        elif winner == TEAM2:
+            return game.team2.team_name
+        else:
+            raise AssertionError,"Either team1 or team2 should have won"
 
     def get_game_winner(self,game_key):
         raise AssertionError,"Not implemented"
