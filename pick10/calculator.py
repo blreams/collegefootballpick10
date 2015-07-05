@@ -1,3 +1,6 @@
+TEAM1 = 1
+TEAM2 = 2
+
 class CalculateResults:
 
     def __init__(self,data):
@@ -25,7 +28,14 @@ class CalculateResults:
         raise AssertionError,"Not implemented"
 
     def is_team1_winning_pool(self,game):
-        return None
+        score_diff = game.team2_actual_points-game.team1_actual_points
+        if game.favored == TEAM2:
+            spread = game.spread
+        elif game.favored == TEAM1:
+            spread = -game.spread
+        else:
+            raise AssertionError,"game.favored has an invalid value"
+        return score_diff < spread
 
     def is_team2_winning_pool(self,game_key):
         raise AssertionError,"Not implemented"
