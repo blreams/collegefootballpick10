@@ -21,8 +21,11 @@ class CalculateResults:
     def get_team_name(self,team_key):
         raise AssertionError,"Not implemented"
 
-    def get_team_player_picked_to_win(self,player_key,game_key):
-        raise AssertionError,"Not implemented"
+    def get_team_player_picked_to_win(self,player,game):
+        picks = self.__data.player_picks[player.id]
+        pick = self.__find_player_pick_for_game(picks,game)
+        assert pick != None,"Could not find a pick that matches the passed in game"
+        return pick.winner
 
     def get_team_name_player_picked_to_win(self,player_key,game_key):
         raise AssertionError,"Not implemented"
@@ -139,8 +142,13 @@ class CalculateResults:
     def get_player_submit_time(self,player_key,week=None):
         raise AssertionError,"Not implemented"
 
-    def __find_player_pick_for_game(self,picks,game_key):
-        raise AssertionError,"Not implemented"
+    def __find_player_pick_for_game(self,picks,game):
+        if game == None:
+            return None
+        for pick in picks:
+            if pick.game.id == game.id:
+                return pick
+        return None
 
     def __game_key_valid(self,game_key):
         raise AssertionError,"Not implemented"

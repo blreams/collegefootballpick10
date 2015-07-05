@@ -10,13 +10,26 @@ class CalculatorTests(TestCase):
     @classmethod
     def setUpClass(cls):
         test_db = UnitTestDatabase()
-        #test_db.load_historical_data_for_week(2013,1)
-        #test_db.load_historical_data_for_week(2013,2)
+        test_db.load_historical_data_for_week(2013,1)
+        test_db.load_historical_data_for_week(2013,2)
 
     def setUp(self):
-        self.calc = CalculateResults(data=None)
+        self.db = Database()
+        self.week1 = self.db.load_week_data(2013,1)
+        self.week2 = self.db.load_week_data(2013,2)
+        self.calc = CalculateResults(data=self.week1)
 
-    # test is_team1_winning_pool
+    # function name decode:  
+    # test_ : each function to test must start with test_ (unittest requirement)
+    # _t<number>_ : unique identifier used to specify this test function
+    # _<name> : this is the name of the function in calculator.py that is being tested
+    def test_t1_get_team_player_picked_to_win(self):
+        self.__t1_invalid_player()
+        self.__t1_invalid_game()
+        self.__t1_game_none()
+        self.__t1_team1_winner()
+        self.__t1_team2_winner()
+
     def test_t3_is_team1_winning_pool(self):
         self.__t3_bad_game_favored_value()
         self.__t3_team1_ahead()
@@ -27,6 +40,36 @@ class CalculatorTests(TestCase):
         self.__t3_team1_boundary_case2()
         self.__t3_team1_boundary_case3()
         self.__t3_team1_boundary_case4()
+
+    def __t1_invalid_player(self):
+        bad_player = Player()
+        bad_player.id = -1
+        game = self.__get_a_valid_game()
+        with self.assertRaises(KeyError):
+            self.calc.get_team_player_picked_to_win(bad_player,game)
+
+    def __t1_invalid_game(self):
+        invalid_game = self.__get_a_valid_game2()
+        valid_player = self.week1.get_player("holden_brent")
+        with self.assertRaises(AssertionError):
+            self.calc.get_team_player_picked_to_win(valid_player,invalid_game)
+
+    def __t1_game_none(self):
+        valid_player = self.week1.get_player("holden_brent")
+        with self.assertRaises(AssertionError):
+            self.calc.get_team_player_picked_to_win(valid_player,None)
+
+    def __t1_team2_winner(self):
+        game = self.__find_game("North Carolina","South Carolina")
+        brent = self.week1.get_player("holden_brent")
+        team = self.calc.get_team_player_picked_to_win(brent,game)
+        self.assertEqual(team,TEAM2)
+
+    def __t1_team1_winner(self):
+        game = self.__find_game("LSU","TCU")
+        brent = self.week1.get_player("holden_brent")
+        team = self.calc.get_team_player_picked_to_win(brent,game)
+        self.assertEqual(team,TEAM1)
 
     def __t3_bad_game_favored_value(self):
         g = Game()
@@ -101,3 +144,15 @@ class CalculatorTests(TestCase):
         g.spread = 0.5 
         self.assertFalse(self.calc.is_team1_winning_pool(g))
 
+    def __get_a_valid_game(self):
+        return self.week1.games[1]
+
+    def __get_a_valid_game2(self):
+        return self.week2.games[1]
+
+    def __find_game(self,team1,team2):
+        for game in self.week1.games.values():
+            same_teams = team1 == game.team1.team_name and team2 == game.team2.team_name
+            if same_teams:
+                return game
+        raise AssertionError, "Could not find game"
