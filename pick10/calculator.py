@@ -1,5 +1,8 @@
 TEAM1 = 1
 TEAM2 = 2
+NOT_STARTED = 1
+IN_PROGRESS = 2
+FINAL = 3
 
 class CalculateResults:
 
@@ -60,8 +63,16 @@ class CalculateResults:
             raise AssertionError,"game.favored has an invalid value"
         return score_diff > spread
 
-    def get_pool_game_winner(self,game_key):
-        raise AssertionError,"Not implemented"
+    def get_pool_game_winner(self,game):
+        if game.state == FINAL:
+            if self.is_team1_winning_pool(game):
+                return TEAM1
+            elif self.is_team2_winning_pool(game):
+                return TEAM2
+            else:
+                raise AssertionError,"Either team1 or team2 should be ahead"
+        else:
+            return None
 
     def get_pool_game_winner_team_name(self,game_key):
         raise AssertionError,"Not implemented"

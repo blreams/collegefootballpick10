@@ -60,6 +60,13 @@ class CalculatorTests(TestCase):
         self.__t4_team2_boundary_case3()
         self.__t4_team2_boundary_case4()
 
+    def test_t5_get_pool_game_winner(self):
+        self.__t5_game_none()
+        self.__t5_game_in_progress()
+        self.__t5_game_not_started()
+        self.__t5_team1_won()
+        self.__t5_team2_won()
+
     def __t1_invalid_player(self):
         bad_player = Player()
         bad_player.id = -1
@@ -273,6 +280,38 @@ class CalculatorTests(TestCase):
         g.favored = TEAM1
         g.spread = 0.5 
         self.assertFalse(self.calc.is_team2_winning_pool(g))
+
+    def __t5_game_none(self):
+        with self.assertRaises(Exception):
+            self.calc.get_pool_game_winner(None)
+
+    def __t5_game_in_progress(self):
+        g = Game()
+        g.state = IN_PROGRESS
+        self.assertIsNone(self.calc.get_pool_game_winner(g))
+
+    def __t5_game_not_started(self):
+        g = Game()
+        g.state = NOT_STARTED
+        self.assertIsNone(self.calc.get_pool_game_winner(g))
+
+    def __t5_team1_won(self):
+        g = Game()
+        g.team1_actual_points = 30 
+        g.team2_actual_points = 10 
+        g.favored = TEAM1
+        g.spread = 10.5
+        g.state = FINAL
+        self.assertEqual(self.calc.get_pool_game_winner(g),TEAM1)
+
+    def __t5_team2_won(self):
+        g = Game()
+        g.team1_actual_points = 30 
+        g.team2_actual_points = 25 
+        g.favored = TEAM1
+        g.spread = 10.5
+        g.state = FINAL
+        self.assertEqual(self.calc.get_pool_game_winner(g),TEAM2)
 
     def __get_a_valid_game(self):
         return self.week1.games[1]
