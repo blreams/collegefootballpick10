@@ -74,6 +74,16 @@ class CalculatorTests(TestCase):
         self.__t6_team1_won()
         self.__t6_team2_won()
 
+    def test_t7_get_game_winner(self):
+        self.__t7_game_none()
+        self.__t7_game_in_progress()
+        self.__t7_game_not_started()
+        self.__t7_same_score()
+        self.__t7_team1_won()
+        self.__t7_team2_won()
+        self.__t7_team1_won_but_not_favored()
+        self.__t7_team2_won_but_not_favored()
+
     def __t1_invalid_player(self):
         bad_player = Player()
         bad_player.id = -1
@@ -341,6 +351,66 @@ class CalculatorTests(TestCase):
     def __t6_team2_won(self):
         game = self.__find_game("Boise State","Washington")
         self.assertEqual(self.calc.get_pool_game_winner_team_name(game),"Washington")
+
+    def __t7_game_none(self):
+        with self.assertRaises(Exception):
+            self.calc.get_game_winner(None)
+
+    def __t7_game_in_progress(self):
+        g = Game()
+        g.game_state = IN_PROGRESS
+        self.assertIsNone(self.calc.get_game_winner(g))
+
+    def __t7_game_not_started(self):
+        g = Game()
+        g.game_state = NOT_STARTED
+        self.assertIsNone(self.calc.get_game_winner(g))
+
+    def __t7_same_score(self):
+        g = Game()
+        g.team1_actual_points = 21
+        g.team2_actual_points = 21
+        g.favored = TEAM1
+        g.spread = 10.5
+        g.game_state = FINAL
+        with self.assertRaises(AssertionError):
+            self.calc.get_game_winner(g)
+
+    def __t7_team1_won(self):
+        g = Game()
+        g.team1_actual_points = 31
+        g.team2_actual_points = 21
+        g.favored = TEAM1
+        g.spread = 10.5
+        g.game_state = FINAL
+        self.assertEqual(self.calc.get_game_winner(g),TEAM1)
+
+    def __t7_team2_won(self):
+        g = Game()
+        g.team1_actual_points = 10 
+        g.team2_actual_points = 24 
+        g.favored = TEAM2
+        g.spread = 14.5
+        g.game_state = FINAL
+        self.assertEqual(self.calc.get_game_winner(g),TEAM2)
+
+    def __t7_team1_won_but_not_favored(self):
+        g = Game()
+        g.team1_actual_points = 24
+        g.team2_actual_points = 21
+        g.favored = TEAM2
+        g.spread = 5.5
+        g.game_state = FINAL
+        self.assertEqual(self.calc.get_game_winner(g),TEAM1)
+
+    def __t7_team2_won_but_not_favored(self):
+        g = Game()
+        g.team1_actual_points = 41
+        g.team2_actual_points = 48
+        g.favored = TEAM1
+        g.spread = 7.5
+        g.game_state = FINAL
+        self.assertEqual(self.calc.get_game_winner(g),TEAM2)
 
     def __get_a_valid_game(self):
         return self.week1.games[1]

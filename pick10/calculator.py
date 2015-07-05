@@ -87,8 +87,19 @@ class CalculateResults:
         else:
             raise AssertionError,"Either team1 or team2 should have won"
 
-    def get_game_winner(self,game_key):
-        raise AssertionError,"Not implemented"
+    def get_game_winner(self,game):
+        if game.game_state == FINAL:
+
+            assert game.team1_actual_points != game.team2_actual_points,\
+                   "Game cannot end in a tie (%s to %s)" %\
+                   (game.team1_actual_points,game.team2_actual_points)
+
+            if game.team1_actual_points > game.team2_actual_points:
+                return TEAM1
+            else:
+                return TEAM2
+        else:
+            return None
 
     def get_game_winner_team_name(self,game_key):
         raise AssertionError,"Not implemented"
