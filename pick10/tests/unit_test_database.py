@@ -2,7 +2,7 @@
 # The class creates a central location for setting up a database 
 # so each unit test doesn't have to reinvent the wheel every time.
 from pick10.models import *
-from stage_history import populate_conferences_teams, populate_players, populate_games_for_year, populate_picks_for_year_week, populate_picks
+from stage_history import populate_conferences_teams, populate_players, populate_games_for_year, populate_picks_for_year_week, populate_picks, populate_games_for_year_week
 
 TEAM1 = 1
 TEAM2 = 2
@@ -48,17 +48,17 @@ class UnitTestDatabase:
         add_pick(john,game10,TEAM2,7,21)
 
     def load_historical_data_for_year(self,year=2014):
+        for week_number in range(1,14):
+            week = self.setup_week(year,week_number)
         populate_players([year])
         populate_games_for_year(year)
         populate_picks([year])
-        self.fail('Need to change Users/Players (move to init?)')
 
     def load_historical_data_for_week(self,year=2014,week_number=1):
+        week = self.setup_week(year,week_number)
         populate_players([year])
-        populate_games_for_year(year)
+        populate_games_for_year_week(year,week_number)
         populate_picks_for_year_week(year,week_number)
-        self.fail('Need to change Users/Players (move to init?)')
-        self.fail('Need to change populate_games to only games in a week')
 
     def setup_week(self,year,week_number):
         (year_model,created) = Year.objects.get_or_create(yearnum=year)

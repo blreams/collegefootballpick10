@@ -253,6 +253,19 @@ def populate_games_for_year(yearnum):
             team2_actual_points = poolspreadsheet.get_game_team2_score(weeknum, game)
             update_game(yearnum, weeknum, game, team1_actual_points, team2_actual_points, 3)
 
+def populate_games_for_year_week(yearnum, weeknum):
+    poolspreadsheet = PoolSpreadsheet(yearnum)
+    print "      Populating games for week %d..." % (weeknum,)
+    games = poolspreadsheet.get_games(weeknum)
+    week = add_week(yearnum, weeknum)
+    for game in games:
+        favored = 1 if poolspreadsheet.get_game_favored_team(weeknum, game) == 'team1' else 2
+        spread = poolspreadsheet.get_game_spread(weeknum, game)
+        add_game(week, get_team(games[game].team1), get_team(games[game].team2), game, favored=favored, spread=spread)
+        team1_actual_points = poolspreadsheet.get_game_team1_score(weeknum, game)
+        team2_actual_points = poolspreadsheet.get_game_team2_score(weeknum, game)
+        update_game(yearnum, weeknum, game, team1_actual_points, team2_actual_points, 3)
+
 def populate_games(yearlist):
     for yearnum in yearlist:
         if len(Game.objects.filter(week__year__yearnum=yearnum)) != 130:
