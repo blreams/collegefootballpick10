@@ -6,22 +6,17 @@ from django.utils.html import escape
 from django.contrib.auth.models import User
 
 from pick10.views import home
-from pick10.models import Conference, Team, Game, Week, Pick
+from pick10.models import Conference, Team, Game, Week, Pick, Player
 from pick10.models import query_picks
-from stage_models import populate_users, populate_conferences_teams
-from stage_models import populate_games, populate_weeks, populate_picks
+from stage_history import main as shmain
 
 from unittest import skip
 
 class BasicModelTest(TestCase):
     def setUp(self):
-        users = User.objects.all()
-        if len(users) == 0:
-            populate_users()
-            populate_conferences_teams()
-            populate_games()
-            populate_weeks()
-            populate_picks()
+        players = Player.objects.all()
+        if len(players) == 0:
+            shmain(2014)
 
     def test_save_to_conference_model(self):
         confs = Conference.objects.all()
@@ -52,15 +47,17 @@ class BasicModelTest(TestCase):
         self.assertEqual(games[9].team2.team_name, 'Georgia')
 
     def test_save_to_week_model(self):
-        week1 = Week.objects.get(week_year=2014, week_num=1)
-        self.assertEqual(week1.week_year, 2014)
-        self.assertEqual(week1.week_num, 1)
+        weeks = Week.objects.filter(year__yearnum=2014, weeknum=1)
+        self.assertEqual(len(weeks), 1)
+        week= weeks[0]
+        self.assertEqual(week.year.yearnum, 2014)
+        self.assertEqual(week.weeknum, 1)
 
     def test_save_pick_model(self):
-        picks = query_picks('aaa@aaa.com', 2014, 1)
+        picks = Pick.objects.filter(player__public_name='Reams, Byron L', game__week__year__yearnum=2014, game__week__weeknum=1)
         self.assertEqual(len(picks), 10)
-        self.assertEqual(picks[0].pick_game.team1.team_name, 'South Carolina')
-        self.assertEqual(picks[0].pick_game.team2.team_name, 'Texas A&M')
-        self.assertEqual(picks[9].pick_game.team1.team_name, 'Clemson')
-        self.assertEqual(picks[9].pick_game.team2.team_name, 'Georgia')
+        self.assertEqual(picks[0].game.team1.team_name, 'South Carolina')
+        self.assertEqual(picks[0].game.team2.team_name, 'Texas A&M')
+        self.assertEqual(picks[9].game.team1.team_name, 'Clemson')
+        self.assertEqual(picks[9].game.team2.team_name, 'Georgia')
 
