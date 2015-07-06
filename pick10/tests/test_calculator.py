@@ -124,25 +124,39 @@ class CalculatorTests(TestCase):
         self.__t12_team1_ahead()
         self.__t12_team2_ahead()
 
+    # t13 tests are broken up into multiple functions
+    # to allow setUp() to run again and restore data
     def test_t13_player_did_not_pick(self):
-        pass
-        #self.__t13_game_none()
-        #self.__t13_game_invalid()
-        #self.__t13_invalid_player()
-        #self.__t13_player_missing_all_week_picks()
-        #self.__t13_player_missing_pick_for_game()
-        #self.__t13_player_missing_pick_winner()
-        #self.__t13_player_made_pick()
+        self.__t13_game_none()
+        self.__t13_game_invalid()
+        self.__t13_invalid_player()
+
+    def test_t13_1_player_did_not_pick(self):
+        self.__t13_player_missing_all_week_picks()
+
+    def test_t13_2_player_did_not_pick(self):
+        self.__t13_player_missing_pick_for_game()
+
+    def test_t13_3_player_did_not_pick(self):
+        self.__t13_player_missing_pick_winner()
+
+    def test_t13_4_player_did_not_pick(self):
+        self.__t13_player_made_pick()
 
     def test_t14_did_player_win_game(self):
-        pass
-        #self.__t14_game_none()
-        #self.__t14_invalid_player()
-        #self.__t14_player_missing_pick()
-        #self.__t14_game_in_progress()
-        #self.__t14_game_not_started()
-        #self.__t14_player_won_game()
-        #self.__t14_player_lost_game()
+        self.__t14_game_none()
+        self.__t14_invalid_player()
+        self.__t14_player_won_game()
+        self.__t14_player_lost_game()
+
+    def test_t14_1_did_player_win_game(self):
+        self.__t14_player_missing_pick()
+
+    def test_t14_2_did_player_win_game(self):
+        self.__t14_game_in_progress()
+
+    def test_t14_3_did_player_win_game(self):
+        self.__t14_game_not_started()
 
     def test_t15_did_player_lose_game(self):
         pass
@@ -714,80 +728,69 @@ class CalculatorTests(TestCase):
         with self.assertRaises(Exception):
             self.calc.player_did_not_pick(bad_player,game)
 
-    # TODO
     def __t13_player_missing_all_week_picks(self):
-        valid_player = self.week1.get_player("holden_brent")
-        player_key = self.__get_a_valid_player_key()
-        game_key = self.__get_a_valid_game_key()
-        self.__make_all_picks_missing(player_key)
-        self.assertTrue(self.calc.player_did_not_pick(player_key,game_key))
-        self.__restore_picks(player_key)
+        player = self.week1.get_player("holden_brent")
+        game = self.__get_a_valid_game()
+        self.__make_all_picks_missing(player)
+        self.assertTrue(self.calc.player_did_not_pick(player,game))
 
     def __t13_player_missing_pick_for_game(self):
-        player_key = self.week1.get_player_key("Brent H.")
-        game_key = self.__get_a_valid_game_key()
-
-        self.__remove_game_from_picks(player_key,game_key)
-        self.assertTrue(self.calc.player_did_not_pick(player_key,game_key))
-        self.__restore_picks(player_key)
-
+        player = self.week1.get_player("holden_brent")
+        game = self.__get_a_valid_game()
+        self.__remove_game_from_picks(player,game)
+        self.assertTrue(self.calc.player_did_not_pick(player,game))
 
     def __t13_player_missing_pick_winner(self):
-        player_key = self.week1.get_player_key("Brent H.")
-        game_key = self.__get_a_valid_game_key()
-
-        self.__make_winner_missing(player_key,game_key)
-        self.assertTrue(self.calc.player_did_not_pick(player_key,game_key))
-        self.__restore_picks(player_key)
+        player = self.week1.get_player("holden_brent")
+        game = self.__get_a_valid_game()
+        self.__make_winner_missing(player,game)
+        self.assertTrue(self.calc.player_did_not_pick(player,game))
 
     def __t13_player_made_pick(self):
-        player_key = self.week1.get_player_key("Brent H.")
-        game_key = self.__get_a_valid_game_key()
-        self.assertFalse(self.calc.player_did_not_pick(player_key,game_key))
+        player = self.week1.get_player("holden_brent")
+        game = self.__get_a_valid_game()
+        self.assertFalse(self.calc.player_did_not_pick(player,game))
 
     def __t14_game_none(self):
-        player_key = self.__get_a_valid_player_key()
+        player = self.week1.get_player("holden_brent")
         with self.assertRaises(Exception):
-            self.calc.did_player_win_game(player_key,None)
+            self.calc.did_player_win_game(player,None)
 
     def __t14_invalid_player(self):
-        game_key = self.__get_a_valid_game_key()
+        bad_player = Player()
+        bad_player.id = -1
+        game = self.__get_a_valid_game()
         with self.assertRaises(Exception):
-            self.calc.did_player_win_game("bad key",game_key)
+            self.calc.did_player_win_game(bad_player,game)
 
     def __t14_player_missing_pick(self):
-        player_key = self.week1.get_player_key("Brent H.")
-        game_key = self.__get_a_valid_game_key()
+        player = self.week1.get_player("holden_brent")
+        game = self.__get_a_valid_game()
 
-        self.__remove_game_from_picks(player_key,game_key)
-        self.assertFalse(self.calc.did_player_win_game(player_key,game_key))
-        self.__restore_picks(player_key)
+        self.__remove_game_from_picks(player,game)
+        self.assertFalse(self.calc.did_player_win_game(player,game))
 
     def __t14_game_in_progress(self):
-        player_key = self.week1.get_player_key("Brent H.")
-        g = Game()
-        g.game_state = IN_PROGRESS
-        game_key = self.__edit_existing_game(g)
-        self.assertFalse(self.calc.did_player_win_game(player_key,game_key))
-        self.__restore_game(game_key)
+        player = self.week1.get_player("holden_brent")
+        game = self.__get_a_valid_game()
+        game.game_state = IN_PROGRESS
+        self.assertFalse(self.calc.did_player_win_game(player,game))
 
     def __t14_game_not_started(self):
-        player_key = self.week1.get_player_key("Brent H.")
-        g = Game()
-        g.game_state = NOT_STARTED
-        game_key = self.__edit_existing_game(g)
-        self.assertFalse(self.calc.did_player_win_game(player_key,game_key))
-        self.__restore_game(game_key)
+        player = self.week1.get_player("holden_brent")
+        game = self.__get_a_valid_game()
+        game.game_state = NOT_STARTED
+        self.assertFalse(self.calc.did_player_win_game(player,game))
 
     def __t14_player_won_game(self):
-        player_key = self.week1.get_player_key("Brent H.")
-        game_key = self.__find_game_key("North Carolina","South Carolina")
-        self.assertTrue(self.calc.did_player_win_game(player_key,game_key))
+        player = self.week1.get_player("holden_brent")
+        game = self.__find_game("North Carolina","South Carolina")
+        self.assertTrue(self.calc.did_player_win_game(player,game))
 
     def __t14_player_lost_game(self):
-        player_key = self.week1.get_player_key("Brent H.")
-        game_key = self.__find_game_key("Penn State","Syracuse")
-        self.assertFalse(self.calc.did_player_win_game(player_key,game_key))
+        player = self.week1.get_player("holden_brent")
+        game = self.__find_game("Penn State","Syracuse")
+        self.assertFalse(self.calc.did_player_win_game(player,game))
 
     def __t15_game_none(self):
         player_key = self.__get_a_valid_player_key()
@@ -857,3 +860,13 @@ class CalculatorTests(TestCase):
                 self.week1.player_picks[player.id][i].winner = 0
                 return
         raise AssertionError,"could not find game in picks"
+
+    def __make_all_picks_missing(self,player):
+        self.week1.player_picks[player.id] = []
+
+    def __remove_game_from_picks(self,player,game):
+        new_picks = []
+        for pick in self.week1.player_picks[player.id]:
+            if pick.game != game:
+                new_picks.append(pick)
+        self.week1.player_picks[player.id] = new_picks
