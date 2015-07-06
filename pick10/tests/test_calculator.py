@@ -92,6 +92,68 @@ class CalculatorTests(TestCase):
         self.__t8_team1_won()
         self.__t8_team2_won()
 
+    def test_t9_get_team_winning_pool_game(self):
+        self.__t9_game_none()
+        self.__t9_game_final()
+        self.__t9_game_not_started()
+        self.__t9_same_score()
+        self.__t9_team1_ahead()
+        self.__t9_team2_ahead()
+
+    def test_t10_get_team_name_winning_pool_game(self):
+        self.__t10_game_none()
+        self.__t10_game_final()
+        self.__t10_game_not_started()
+        self.__t10_same_score()
+        self.__t10_team1_ahead()
+        self.__t10_team2_ahead()
+
+    def test_t11_get_team_winning_game(self):
+        self.__t11_game_none()
+        self.__t11_game_final()
+        self.__t11_game_not_started()
+        self.__t11_same_score()
+        self.__t11_team1_ahead()
+        self.__t11_team2_ahead()
+
+    def test_t12_get_team_name_winning_game(self):
+        self.__t12_game_none()
+        self.__t12_game_final()
+        self.__t12_game_not_started()
+        self.__t12_same_score()
+        self.__t12_team1_ahead()
+        self.__t12_team2_ahead()
+
+    def test_t13_player_did_not_pick(self):
+        pass
+        #self.__t13_game_none()
+        #self.__t13_game_invalid()
+        #self.__t13_invalid_player()
+        #self.__t13_player_missing_all_week_picks()
+        #self.__t13_player_missing_pick_for_game()
+        #self.__t13_player_missing_pick_winner()
+        #self.__t13_player_made_pick()
+
+    def test_t14_did_player_win_game(self):
+        pass
+        #self.__t14_game_none()
+        #self.__t14_invalid_player()
+        #self.__t14_player_missing_pick()
+        #self.__t14_game_in_progress()
+        #self.__t14_game_not_started()
+        #self.__t14_player_won_game()
+        #self.__t14_player_lost_game()
+
+    def test_t15_did_player_lose_game(self):
+        pass
+        #self.__t15_game_none()
+        #self.__t15_invalid_player()
+        #self.__t15_player_missing_pick()
+        #self.__t15_game_in_progress()
+        #self.__t15_game_not_started()
+        #self.__t15_player_won_game()
+        #self.__t15_player_lost_game()
+
     def __t1_invalid_player(self):
         bad_player = Player()
         bad_player.id = -1
@@ -456,6 +518,321 @@ class CalculatorTests(TestCase):
         with self.assertRaises(Exception):
             self.calc.get_team_winning_pool_game(None)
 
+    def __t9_game_final(self):
+        g = Game()
+        g.game_state = FINAL
+        self.assertIsNone(self.calc.get_team_winning_pool_game(g))
+
+    def __t9_game_not_started(self):
+        g = Game()
+        g.game_state = NOT_STARTED
+        self.assertIsNone(self.calc.get_team_winning_pool_game(g))
+
+    def __t9_same_score(self):
+        g = Game()
+        g.team1_actual_points = 35
+        g.team2_actual_points = 35
+        g.favored = TEAM1
+        g.spread = 0.5
+        g.game_state = IN_PROGRESS
+        self.assertEqual(self.calc.get_team_winning_pool_game(g),TEAM2)
+
+    def __t9_team1_ahead(self):
+        g = Game()
+        g.team1_actual_points = 44
+        g.team2_actual_points = 48
+        g.favored = TEAM2
+        g.spread = 4.5
+        g.game_state = IN_PROGRESS
+        self.assertEqual(self.calc.get_team_winning_pool_game(g),TEAM1)
+
+    def __t9_team2_ahead(self):
+        g = Game()
+        g.team1_actual_points = 21
+        g.team2_actual_points = 18
+        g.favored = TEAM1
+        g.spread = 3.5
+        g.game_state = IN_PROGRESS
+        self.assertEqual(self.calc.get_team_winning_pool_game(g),TEAM2)
+
+    def __t10_game_none(self):
+        with self.assertRaises(Exception):
+            self.calc.get_team_name_winning_pool_game(None)
+
+    def __t10_game_final(self):
+        g = Game()
+        g.game_state = FINAL
+        self.assertIsNone(self.calc.get_team_name_winning_pool_game(g))
+
+    def __t10_game_not_started(self):
+        g = Game()
+        g.game_state = NOT_STARTED
+        self.assertIsNone(self.calc.get_team_name_winning_pool_game(g))
+
+    def __t10_same_score(self):
+        g = Game()
+        g.team1 = self.__find_team("Georgia Tech")
+        g.team2 = self.__find_team("Clemson")
+        g.team1_actual_points = 35
+        g.team2_actual_points = 35
+        g.favored = TEAM1
+        g.spread = 0.5
+        g.game_state = IN_PROGRESS
+        self.assertEqual(self.calc.get_team_name_winning_pool_game(g),"Clemson")
+
+    def __t10_team1_ahead(self):
+        g = Game()
+        g.team1 = self.__find_team("Georgia Tech")
+        g.team2 = self.__find_team("Clemson")
+        g.team1_actual_points = 44
+        g.team2_actual_points = 48
+        g.favored = TEAM2
+        g.spread = 4.5
+        g.game_state = IN_PROGRESS
+        self.assertEqual(self.calc.get_team_name_winning_pool_game(g),"Georgia Tech")
+
+    def __t10_team2_ahead(self):
+        g = Game()
+        g.team1 = self.__find_team("Georgia Tech")
+        g.team2 = self.__find_team("Clemson")
+        g.team1_actual_points = 21
+        g.team2_actual_points = 18
+        g.favored = TEAM1
+        g.spread = 3.5
+        g.game_state = IN_PROGRESS
+        self.assertEqual(self.calc.get_team_name_winning_pool_game(g),"Clemson")
+
+    def __t11_game_none(self):
+        with self.assertRaises(Exception):
+            self.calc.get_team_winning_game(None)
+
+    def __t11_game_final(self):
+        g = Game()
+        g.game_state = FINAL
+        self.assertIsNone(self.calc.get_team_winning_game(g))
+
+    def __t11_game_not_started(self):
+        g = Game()
+        g.game_state = NOT_STARTED
+        self.assertIsNone(self.calc.get_team_winning_game(g))
+
+    def __t11_same_score(self):
+        g = Game()
+        g.team1 = self.__find_team("Georgia Tech")
+        g.team2 = self.__find_team("Clemson")
+        g.team1_actual_points = 35
+        g.team2_actual_points = 35
+        g.favored = TEAM1
+        g.spread = 0.5
+        g.game_state = IN_PROGRESS
+        self.assertEqual(self.calc.get_team_winning_game(g),TIED)
+
+    def __t11_team1_ahead(self):
+        g = Game()
+        g.team1 = self.__find_team("Georgia Tech")
+        g.team2 = self.__find_team("Clemson")
+        g.team1_actual_points = 31
+        g.team2_actual_points = 24
+        g.favored = TEAM2
+        g.spread = 4.5
+        g.game_state = IN_PROGRESS
+        self.assertEqual(self.calc.get_team_winning_game(g),TEAM1)
+
+    def __t11_team2_ahead(self):
+        g = Game()
+        g.team1 = self.__find_team("Georgia Tech")
+        g.team2 = self.__find_team("Clemson")
+        g.team1_actual_points = 17
+        g.team2_actual_points = 31
+        g.favored = TEAM1
+        g.spread = 3.5
+        g.game_state = IN_PROGRESS
+        self.assertEqual(self.calc.get_team_winning_game(g),TEAM2)
+
+    def __t12_game_none(self):
+        with self.assertRaises(Exception):
+            self.calc.get_team_name_winning_game(None)
+
+    def __t12_game_final(self):
+        g = Game()
+        g.game_state = FINAL
+        self.assertIsNone(self.calc.get_team_name_winning_game(g))
+
+    def __t12_game_not_started(self):
+        g = Game()
+        g.game_state = NOT_STARTED
+        self.assertIsNone(self.calc.get_team_name_winning_game(g))
+
+    def __t12_same_score(self):
+        g = Game()
+        g.team1 = self.__find_team("Georgia Tech")
+        g.team2 = self.__find_team("Clemson")
+        g.team1_actual_points = 35
+        g.team2_actual_points = 35
+        g.favored = TEAM1
+        g.spread = 0.5
+        g.game_state = IN_PROGRESS
+        self.assertEqual(self.calc.get_team_name_winning_game(g),"tied")
+
+    def __t12_team1_ahead(self):
+        g = Game()
+        g.team1 = self.__find_team("Georgia Tech")
+        g.team2 = self.__find_team("Clemson")
+        g.team1_actual_points = 31
+        g.team2_actual_points = 24
+        g.favored = TEAM2
+        g.spread = 4.5
+        g.game_state = IN_PROGRESS
+        self.assertEqual(self.calc.get_team_name_winning_game(g),"Georgia Tech")
+
+    def __t12_team2_ahead(self):
+        g = Game()
+        g.team1 = self.__find_team("Georgia Tech")
+        g.team2 = self.__find_team("Clemson")
+        g.team1_actual_points = 17
+        g.team2_actual_points = 31
+        g.favored = TEAM1
+        g.spread = 3.5
+        g.game_state = IN_PROGRESS
+        self.assertEqual(self.calc.get_team_name_winning_game(g),"Clemson")
+
+    def __t13_game_none(self):
+        valid_player = self.week1.get_player("holden_brent")
+        with self.assertRaises(Exception):
+            self.calc.player_did_not_pick(valid_player,None)
+
+    def __t13_game_invalid(self):
+        valid_player = self.week1.get_player("holden_brent")
+        invalid_game = self.__get_a_valid_game2()
+        with self.assertRaises(Exception):
+            self.calc.player_did_not_pick(valid_player,invalid_game)
+
+    def __t13_invalid_player(self):
+        bad_player = Player()
+        bad_player.id = -1
+        game = self.__get_a_valid_game()
+        with self.assertRaises(Exception):
+            self.calc.player_did_not_pick(bad_player,game)
+
+    # TODO
+    def __t13_player_missing_all_week_picks(self):
+        valid_player = self.week1.get_player("holden_brent")
+        player_key = self.__get_a_valid_player_key()
+        game_key = self.__get_a_valid_game_key()
+        self.__make_all_picks_missing(player_key)
+        self.assertTrue(self.calc.player_did_not_pick(player_key,game_key))
+        self.__restore_picks(player_key)
+
+    def __t13_player_missing_pick_for_game(self):
+        player_key = self.week1.get_player_key("Brent H.")
+        game_key = self.__get_a_valid_game_key()
+
+        self.__remove_game_from_picks(player_key,game_key)
+        self.assertTrue(self.calc.player_did_not_pick(player_key,game_key))
+        self.__restore_picks(player_key)
+
+
+    def __t13_player_missing_pick_winner(self):
+        player_key = self.week1.get_player_key("Brent H.")
+        game_key = self.__get_a_valid_game_key()
+
+        self.__make_winner_missing(player_key,game_key)
+        self.assertTrue(self.calc.player_did_not_pick(player_key,game_key))
+        self.__restore_picks(player_key)
+
+    def __t13_player_made_pick(self):
+        player_key = self.week1.get_player_key("Brent H.")
+        game_key = self.__get_a_valid_game_key()
+        self.assertFalse(self.calc.player_did_not_pick(player_key,game_key))
+
+    def __t14_game_none(self):
+        player_key = self.__get_a_valid_player_key()
+        with self.assertRaises(Exception):
+            self.calc.did_player_win_game(player_key,None)
+
+    def __t14_invalid_player(self):
+        game_key = self.__get_a_valid_game_key()
+        with self.assertRaises(Exception):
+            self.calc.did_player_win_game("bad key",game_key)
+
+    def __t14_player_missing_pick(self):
+        player_key = self.week1.get_player_key("Brent H.")
+        game_key = self.__get_a_valid_game_key()
+
+        self.__remove_game_from_picks(player_key,game_key)
+        self.assertFalse(self.calc.did_player_win_game(player_key,game_key))
+        self.__restore_picks(player_key)
+
+    def __t14_game_in_progress(self):
+        player_key = self.week1.get_player_key("Brent H.")
+        g = Game()
+        g.game_state = IN_PROGRESS
+        game_key = self.__edit_existing_game(g)
+        self.assertFalse(self.calc.did_player_win_game(player_key,game_key))
+        self.__restore_game(game_key)
+
+    def __t14_game_not_started(self):
+        player_key = self.week1.get_player_key("Brent H.")
+        g = Game()
+        g.game_state = NOT_STARTED
+        game_key = self.__edit_existing_game(g)
+        self.assertFalse(self.calc.did_player_win_game(player_key,game_key))
+        self.__restore_game(game_key)
+
+    def __t14_player_won_game(self):
+        player_key = self.week1.get_player_key("Brent H.")
+        game_key = self.__find_game_key("North Carolina","South Carolina")
+        self.assertTrue(self.calc.did_player_win_game(player_key,game_key))
+
+    def __t14_player_lost_game(self):
+        player_key = self.week1.get_player_key("Brent H.")
+        game_key = self.__find_game_key("Penn State","Syracuse")
+        self.assertFalse(self.calc.did_player_win_game(player_key,game_key))
+
+    def __t15_game_none(self):
+        player_key = self.__get_a_valid_player_key()
+        with self.assertRaises(Exception):
+            self.calc.did_player_lose_game(player_key,None)
+
+    def __t15_invalid_player(self):
+        game_key = self.__get_a_valid_game_key()
+        with self.assertRaises(Exception):
+            self.calc.did_player_lose_game("bad key",game_key)
+
+    def __t15_player_missing_pick(self):
+        player_key = self.week1.get_player_key("Brent H.")
+        game_key = self.__get_a_valid_game_key()
+
+        self.__remove_game_from_picks(player_key,game_key)
+        self.assertTrue(self.calc.did_player_lose_game(player_key,game_key))
+        self.__restore_picks(player_key)
+
+    def __t15_game_in_progress(self):
+        player_key = self.week1.get_player_key("Brent H.")
+        g = Game()
+        g.game_state = IN_PROGRESS
+        game_key = self.__edit_existing_game(g)
+        self.assertFalse(self.calc.did_player_lose_game(player_key,game_key))
+        self.__restore_game(game_key)
+
+    def __t15_game_not_started(self):
+        player_key = self.week1.get_player_key("Brent H.")
+        g = Game()
+        g.game_state = NOT_STARTED
+        game_key = self.__edit_existing_game(g)
+        self.assertFalse(self.calc.did_player_lose_game(player_key,game_key))
+        self.__restore_game(game_key)
+
+    def __t15_player_won_game(self):
+        player_key = self.week1.get_player_key("Brent H.")
+        game_key = self.__find_game_key("North Carolina","South Carolina")
+        self.assertFalse(self.calc.did_player_lose_game(player_key,game_key))
+
+    def __t15_player_lost_game(self):
+        player_key = self.week1.get_player_key("Brent H.")
+        game_key = self.__find_game_key("Penn State","Syracuse")
+        self.assertTrue(self.calc.did_player_lose_game(player_key,game_key))
+
     def __get_a_valid_game(self):
         return self.week1.games[1]
 
@@ -468,6 +845,11 @@ class CalculatorTests(TestCase):
             if same_teams:
                 return game
         raise AssertionError, "Could not find game"
+
+    def __find_team(self,name):
+        if name not in self.week1.teams:
+            raise AssertionError,"Could not find team %s" % (name)
+        return self.week1.teams[name]
 
     def __make_winner_missing(self,player,game):
         for i,pick in enumerate(self.week1.player_picks[player.id]):

@@ -1,5 +1,6 @@
 TEAM1 = 1
 TEAM2 = 2
+TIED = 3
 NOT_STARTED = 1
 IN_PROGRESS = 2
 FINAL = 3
@@ -114,17 +115,55 @@ class CalculateResults:
         else:
             raise AssertionError,"Either team1 or team2 should have won"
 
-    def get_team_winning_pool_game(self,game_key):
-        raise AssertionError,"Not implemented"
+    def get_team_winning_pool_game(self,game):
+        if game.game_state == IN_PROGRESS:
+            if self.is_team1_winning_pool(game):
+                return TEAM1
+            elif self.is_team2_winning_pool(game):
+                return TEAM2
+            else:
+                raise AssertionError,"Either team1 or team2 should be ahead"
+        else:
+            return None
 
-    def get_team_name_winning_pool_game(self,game_key):
-        raise AssertionError,"Not implemented"
+    def get_team_name_winning_pool_game(self,game):
+        team = self.get_team_winning_pool_game(game)
+        game_not_in_progress = not(team)
+        if game_not_in_progress:
+            return None
 
-    def get_team_winning_game(self,game_key):
-        raise AssertionError,"Not implemented"
+        if team == TEAM1:
+            return game.team1.team_name
+        elif team == TEAM2:
+            return game.team2.team_name
+        else:
+            raise AssertionError,"Either team1 or team2 should be ahead"
 
-    def get_team_name_winning_game(self,game_key):
-        raise AssertionError,"Not implemented"
+    def get_team_winning_game(self,game):
+        if game.game_state == IN_PROGRESS:
+            if game.team1_actual_points > game.team2_actual_points:
+                return TEAM1
+            elif game.team1_actual_points == game.team2_actual_points:
+                return TIED
+            else:
+                return TEAM2
+        else:
+            return None
+
+    def get_team_name_winning_game(self,game):
+        team = self.get_team_winning_game(game)
+        game_not_in_progress = not(team)
+        if game_not_in_progress:
+            return None
+
+        if team == TEAM1:
+            return game.team1.team_name
+        elif team == TEAM2:
+            return game.team2.team_name
+        elif team == TIED:
+            return "tied"
+        else:
+            raise AssertionError,"Invalid team value"
 
     def player_did_not_pick(self,player,game):
         assert game != None and self.__game_id_valid(game.id),"Game is not valid"
@@ -135,11 +174,26 @@ class CalculateResults:
                                                     
         return pick.winner == 0
 
-    def did_player_win_game(self,player_key,game_key):
-        raise AssertionError,"Not implemented"
+    def did_player_win_game(self,player,game):
+        if self.player_did_not_pick(player,game):
+            return False
 
-    def did_player_lose_game(self,player_key,game_key):
-        raise AssertionError,"Not implemented"
+        game_winner = self.get_pool_game_winner(game)
+        if game_winner:
+            player_winner = self.get_team_player_picked_to_win(player,game)
+            return player_winner == game_winner
+        return False
+
+
+    def did_player_lose_game(self,player,game):
+        if self.player_did_not_pick(player,game):
+            return True
+
+        game_winner = self.get_pool_game_winner(game)
+        if game_winner:
+            player_winner = self.get_team_player_picked_to_win(player,game)
+            return player_winner != game_winner
+        return False
 
     def get_number_of_wins(self,player_key):
         raise AssertionError,"Not implemented"
