@@ -76,3 +76,13 @@ class UnitTestDatabase:
         year_model = Year.objects.get_or_create(yearnum=year)[0]
         player_year = PlayerYear.objects.create(player=player,year=year_model)
         return player
+
+    # TODO
+    # week with no games started
+    # week with some games in progress
+    # week with mixture of not_started, in_progress, final
+    # week with all games final
+    # player with no picks
+    # player with 0 wins
+    # player with 10 wins
+    # player with mix of wins/losses

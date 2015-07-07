@@ -174,15 +174,28 @@ class CalculatorTests(TestCase):
         self.__t15_game_not_started()
 
     def test_t16_get_number_of_wins(self):
-        #self.__t16_invalid_player()
-        #self.__t16_no_games_started()
-        #self.__t16_some_games_in_progress()
-        #self.__t16_mixed_game_states()
-        #self.__t16_all_games_final()
-        #self.__t16_player_with_no_picks()
-        #self.__t16_player_0_wins()
-        #self.__t16_player_10_wins()
-        pass
+        self.__t16_invalid_player()
+
+    def test_t16_1_get_number_of_wins(self):
+        self.__t16_no_games_started()
+
+    def test_t16_2_get_number_of_wins(self):
+        self.__t16_some_games_in_progress()
+
+    def test_t16_3_get_number_of_wins(self):
+        self.__t16_mixed_game_states()
+
+    def test_t16_4_get_number_of_wins(self):
+        self.__t16_all_games_final()
+
+    def test_t16_5_get_number_of_wins(self):
+        self.__t16_player_with_no_picks()
+
+    def test_t16_6_get_number_of_wins(self):
+        self.__t16_player_0_wins()
+
+    def test_t16_7_get_number_of_wins(self):
+        self.__t16_player_10_wins()
 
     def test_t17_get_number_of_losses(self):
         #self.__t17_invalid_player()
@@ -907,53 +920,50 @@ class CalculatorTests(TestCase):
         self.assertTrue(self.calc.did_player_lose_game(player,game))
 
     def __t16_invalid_player(self):
+        bad_player = Player()
+        bad_player.id = -1
         with self.assertRaises(Exception):
-            self.calc.get_number_of_wins("bad key")
+            self.calc.get_number_of_wins(bad_player)
 
     def __t16_no_games_started(self):
-        player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
         self.__modify_game_states(['not_started']*10)
-        self.assertEqual(self.calc.get_number_of_wins(player_key),0)
-        self.__restore_games()
+        self.assertEqual(self.calc.get_number_of_wins(player),0)
 
     def __t16_some_games_in_progress(self):
-        player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
         states = ['not_started']*3 + ['in_progress']*7
         self.__modify_game_states(states)
-        self.assertEqual(self.calc.get_number_of_wins(player_key),0)
-        self.__restore_games()
+        self.assertEqual(self.calc.get_number_of_wins(player),0)
 
     def __t16_mixed_game_states(self):
-        player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
         num_wins_in_first_3_games_2013_week_1 = 2
 
         states = ['final']*3 + ['not_started']*3 + ['in_progress']*4
         self.__modify_game_states(states)
-        self.assertEqual(self.calc.get_number_of_wins(player_key),num_wins_in_first_3_games_2013_week_1)
-        self.__restore_games()
+        import pdb; pdb.set_trace()
+        self.assertEqual(self.calc.get_number_of_wins(player),num_wins_in_first_3_games_2013_week_1)
 
     def __t16_all_games_final(self):
-        player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
         num_wins_2013_week_1 = 5
-        self.assertEqual(self.calc.get_number_of_wins(player_key),num_wins_2013_week_1)
+        self.assertEqual(self.calc.get_number_of_wins(player),num_wins_2013_week_1)
 
     def __t16_player_with_no_picks(self):
-        player_key = self.week1.get_player_key("Brent H.")
-        self.__make_all_player_picks_not_entered(player_key)
-        self.assertEqual(self.calc.get_number_of_wins(player_key),0)
-        self.__restore_picks(player_key)
+        player = self.week1.get_player("holden_brent")
+        self.__make_all_player_picks_not_entered(player)
+        self.assertEqual(self.calc.get_number_of_wins(player),0)
 
     def __t16_player_0_wins(self):
-        player_key = self.week1.get_player_key("Dale R.")
+        player = self.week1.get_player("robbins_dale")
         self.__make_dale_0_wins()
-        self.assertEqual(self.calc.get_number_of_wins(player_key),0)
-        self.__restore_picks(player_key)
+        self.assertEqual(self.calc.get_number_of_wins(player),0)
 
     def __t16_player_10_wins(self):
-        player_key = self.week1.get_player_key("William M.")
+        player = self.week1.get_player("murphy_william")
         self.__make_william_10_wins()
-        self.assertEqual(self.calc.get_number_of_wins(player_key),10)
-        self.__restore_picks(player_key)
+        self.assertEqual(self.calc.get_number_of_wins(player),10)
 
     def __t17_invalid_player(self):
         with self.assertRaises(Exception):
@@ -961,12 +971,14 @@ class CalculatorTests(TestCase):
 
     def __t17_no_games_started(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
         self.__modify_game_states(['not_started']*10)
         self.assertEqual(self.calc.get_number_of_losses(player_key),0)
         self.__restore_games()
 
     def __t17_some_games_in_progress(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
         states = ['not_started']*3 + ['in_progress']*7
         self.__modify_game_states(states)
         self.assertEqual(self.calc.get_number_of_losses(player_key),0)
@@ -974,6 +986,7 @@ class CalculatorTests(TestCase):
 
     def __t17_mixed_game_states(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
         num_losses_in_first_3_games_2013_week_1 = 1
 
         states = ['final']*3 + ['not_started']*3 + ['in_progress']*4
@@ -983,11 +996,13 @@ class CalculatorTests(TestCase):
 
     def __t17_all_games_final(self):
         player_key = self.week1.get_player_key("Byron R.")
+        player = self.week1.get_player("reams_byron")
         num_losses_2013_week_1 = 4
         self.assertEqual(self.calc.get_number_of_losses(player_key),num_losses_2013_week_1)
 
     def __t17_player_with_no_picks(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
         self.__make_all_player_picks_not_entered(player_key)
         self.assertEqual(self.calc.get_number_of_losses(player_key),10)
         self.__restore_picks(player_key)
@@ -1016,6 +1031,7 @@ class CalculatorTests(TestCase):
 
     def __t18_player_pick_missing_game_not_started(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
 
         game = Game()
         game.favored = "team1"
@@ -1034,6 +1050,7 @@ class CalculatorTests(TestCase):
 
     def __t18_player_pick_missing_game_in_progress(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
 
         game = Game()
         game.favored = "team1"
@@ -1052,6 +1069,7 @@ class CalculatorTests(TestCase):
 
     def __t18_player_pick_missing_game_final(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
 
         game = Game()
         game.favored = "team1"
@@ -1070,6 +1088,7 @@ class CalculatorTests(TestCase):
 
     def __t18_player_ahead_in_game_and_pool(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
         self.__save_picks(self.week1.player_picks[player_key])
 
         game = Game()
@@ -1089,6 +1108,7 @@ class CalculatorTests(TestCase):
 
     def __t18_player_behind_in_game_and_pool(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
         self.__save_picks(self.week1.player_picks[player_key])
 
         game = Game()
@@ -1105,6 +1125,7 @@ class CalculatorTests(TestCase):
 
     def __t18_player_ahead_in_game_and_behind_in_pool(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
         self.__save_picks(self.week1.player_picks[player_key])
 
         game = Game()
@@ -1124,6 +1145,7 @@ class CalculatorTests(TestCase):
 
     def __t18_player_behind_in_game_and_ahead_in_pool(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
         self.__save_picks(self.week1.player_picks[player_key])
 
         game = Game()
@@ -1143,6 +1165,7 @@ class CalculatorTests(TestCase):
 
     def __t18_game_not_started(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
         self.__save_picks(self.week1.player_picks[player_key])
 
         game = Game()
@@ -1162,6 +1185,7 @@ class CalculatorTests(TestCase):
 
     def __t18_game_final(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
         self.__save_picks(self.week1.player_picks[player_key])
 
         game = Game()
@@ -1191,6 +1215,7 @@ class CalculatorTests(TestCase):
 
     def __t19_game_not_started(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
 
         game = Game()
         game.favored = "team2"
@@ -1209,6 +1234,7 @@ class CalculatorTests(TestCase):
 
     def __t19_game_final(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
 
         game = Game()
         game.favored = "team2"
@@ -1227,6 +1253,7 @@ class CalculatorTests(TestCase):
 
     def __t19_player_pick_missing_game_not_started(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
 
         game = Game()
         game.favored = "team1"
@@ -1245,6 +1272,7 @@ class CalculatorTests(TestCase):
 
     def __t19_player_pick_missing_game_in_progress(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
 
         game = Game()
         game.favored = "team1"
@@ -1263,6 +1291,7 @@ class CalculatorTests(TestCase):
 
     def __t19_player_pick_missing_game_final(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
 
         game = Game()
         game.favored = "team1"
@@ -1281,6 +1310,7 @@ class CalculatorTests(TestCase):
 
     def __t19_player_ahead_in_game_and_pool(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
 
         game = Game()
         game.favored = "team1"
@@ -1299,6 +1329,7 @@ class CalculatorTests(TestCase):
 
     def __t19_player_behind_in_game_and_pool(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
 
         game = Game()
         game.favored = "team1"
@@ -1317,6 +1348,7 @@ class CalculatorTests(TestCase):
 
     def __t19_player_ahead_in_game_and_behind_in_pool(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
 
         game = Game()
         game.favored = "team2"
@@ -1335,6 +1367,7 @@ class CalculatorTests(TestCase):
 
     def __t19_player_behind_in_game_and_ahead_in_pool(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
 
         game = Game()
         game.favored = "team2"
@@ -1363,6 +1396,7 @@ class CalculatorTests(TestCase):
 
     def __t20_player_pick_missing(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
 
         game = Game()
         game.favored = "team1"
@@ -1382,6 +1416,7 @@ class CalculatorTests(TestCase):
 
     def __t20_game_final_player_ahead_in_game_and_pool(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
 
         game = Game()
         game.favored = "team1"
@@ -1401,6 +1436,7 @@ class CalculatorTests(TestCase):
 
     def __t20_game_final_player_behind_in_game_and_pool(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
 
         game = Game()
         game.favored = "team1"
@@ -1420,6 +1456,7 @@ class CalculatorTests(TestCase):
 
     def __t20_game_final_player_ahead_in_game_and_behind_in_pool(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
 
         game = Game()
         game.favored = "team2"
@@ -1440,6 +1477,7 @@ class CalculatorTests(TestCase):
 
     def __t20_game_final_player_behind_in_game_and_ahead_in_pool(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
 
         game = Game()
         game.favored = "team2"
@@ -1458,6 +1496,7 @@ class CalculatorTests(TestCase):
 
     def __t20_game_in_progress_player_ahead_in_game_and_pool(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
 
         game = Game()
         game.favored = "team1"
@@ -1478,6 +1517,7 @@ class CalculatorTests(TestCase):
 
     def __t20_game_in_progress_player_behind_in_game_and_pool(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
 
         game = Game()
         game.favored = "team1"
@@ -1496,6 +1536,7 @@ class CalculatorTests(TestCase):
 
     def __t20_game_in_progress_player_ahead_in_game_and_behind_in_pool(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
 
         game = Game()
         game.favored = "team2"
@@ -1515,6 +1556,7 @@ class CalculatorTests(TestCase):
 
     def __t20_game_in_progress_player_behind_in_game_and_ahead_in_pool(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
 
         game = Game()
         game.favored = "team2"
@@ -1534,6 +1576,7 @@ class CalculatorTests(TestCase):
 
     def __t20_game_not_started_player_ahead_in_game_and_pool(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
 
         game = Game()
         game.favored = "team1"
@@ -1552,6 +1595,7 @@ class CalculatorTests(TestCase):
 
     def __t20_game_not_started_player_behind_in_game_and_pool(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
 
         game = Game()
         game.favored = "team1"
@@ -1571,6 +1615,7 @@ class CalculatorTests(TestCase):
 
     def __t20_game_not_started_player_ahead_in_game_and_behind_in_pool(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
 
         game = Game()
         game.favored = "team2"
@@ -1590,6 +1635,7 @@ class CalculatorTests(TestCase):
 
     def __t20_game_not_started_player_behind_in_game_and_ahead_in_pool(self):
         player_key = self.week1.get_player_key("Brent H.")
+        player = self.week1.get_player("holden_brent")
 
         game = Game()
         game.favored = "team2"
@@ -1641,3 +1687,41 @@ class CalculatorTests(TestCase):
             if pick.game != game:
                 new_picks.append(pick)
         self.week1.player_picks[player.id] = new_picks
+
+    def __modify_game_states(self,states):
+        assert len(states) == 10
+        assert len(self.week1.games) == 10
+
+        for game_key in self.week1.games:
+            game = self.week1.games[game_key]
+            state_index = game.gamenum - 1
+            self.week1.games[game_key].game_state = states[state_index]
+
+    def __make_all_player_picks_not_entered(self,player):
+        for i in range(len(self.week1.player_picks[player.id])):
+            self.week1.player_picks[player.id][i].winner = 0
+
+    def __make_dale_0_wins(self):
+        player = self.week1.get_player("robbins_dale")
+        game1 = self.__find_game("North Carolina","South Carolina")
+        game2 = self.__find_game("Utah State","Utah")
+        game3 = self.__find_game("Georgia","Clemson")
+        self.__change_player_pick(player,game1)
+        self.__change_player_pick(player,game2)
+        self.__change_player_pick(player,game3)
+
+    def __make_william_10_wins(self):
+        player = self.week1.get_player("murphy_william")
+        game1 = self.__find_game("Colorado","Colorado State")
+        self.__change_player_pick(player,game1)
+
+    def __change_player_pick(self,player,game,new_value=0):
+        player_picks = self.week1.player_picks[player.id]
+        for i,pick in enumerate(player_picks):
+            if pick.game == game:
+                if new_value != 0:
+                    self.week1.player_picks[player.id][i].winner = new_value
+                elif pick.winner == TEAM1:
+                    self.week1.player_picks[player.id][i].winner = TEAM2
+                elif pick.winner == TEAM2:
+                    self.week1.player_picks[player.id][i].winner = TEAM1
