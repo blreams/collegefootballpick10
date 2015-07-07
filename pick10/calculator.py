@@ -195,23 +195,82 @@ class CalculateResults:
             return player_winner != game_winner
         return False
 
-    def get_number_of_wins(self,player_key):
-        raise AssertionError,"Not implemented"
+    def get_number_of_wins(self,player):
+        wins = 0
+        for game in self.__data.games.values():
+            if self.did_player_win_game(player,game):
+                wins += 1
+        return wins
 
     def __debug_print_game(self,player_key,game_key):
         raise AssertionError,"Not implemented"
 
-    def get_number_of_losses(self,player_key):
-        raise AssertionError,"Not implemented"
+    def get_number_of_losses(self,player):
+        losses = 0
+        for game in self.__data.games.values():
+            if self.did_player_lose_game(player,game):
+                losses += 1
+        return losses
 
-    def is_player_winning_game(self,player_key,game_key):
-        raise AssertionError,"Not implemented"
+    def is_player_winning_game(self,player,game):
+        assert game != None and self.__game_id_valid(game.id),"invalid game"
+        assert player != None and self.__player_id_valid(player.id),"invalid player"
 
-    def is_player_losing_game(self,player_key,game_key):
-        raise AssertionError,"Not implemented"
+        if game.game_state == FINAL:
+            return False
 
-    def is_player_projected_to_win_game(self,player_key,game_key):
-        raise AssertionError,"Not implemented"
+        if self.player_did_not_pick(player,game):
+            return False
+
+        team_ahead = self.get_team_winning_pool_game(game)
+
+        if team_ahead:
+            picks = self.__data.player_picks[player.id]
+            pick = self.__find_player_pick_for_game(picks,game)
+            assert pick != None, "Could not find pick for player id %s" % (player.id)
+
+            return team_ahead == pick.winner
+
+        return False
+
+
+    def is_player_losing_game(self,player,game):
+        assert game != None and self.__game_id_valid(game.id),"invalid game"
+        assert player != None and self.__player_id_valid(player.id),"invalid player"
+
+        if game.game_state == FINAL:
+            return False
+
+        if self.player_did_not_pick(player,game):
+            return True
+
+        team_ahead = self.get_team_winning_pool_game(game)
+
+        if team_ahead:
+            picks = self.__data.player_picks[player.id]
+            pick = self.__find_player_pick_for_game(picks,game)
+            assert pick != None, "Could not find pick for player id %s" % (player.id)
+
+            return team_ahead != pick.winner
+
+        return False
+
+
+    def is_player_projected_to_win_game(self,player,game):
+        assert game != None and self.__game_id_valid(game.id),"invalid game"
+        assert player != None and self.__player_id_valid(player.id),"invalid player"
+
+        if self.player_did_not_pick(player,game):
+            return False
+
+        if game.game_state == FINAL:
+            return self.did_player_win_game(player,game)
+        elif game.game_state == IN_PROGRESS:
+            return self.is_player_winning_game(player,game)
+        elif game.game_state == NOT_STARTED:
+            return True
+        else:
+            raise AssertionError,"invalid game state"
 
     def is_player_possible_to_win_game(self,player_key,game_key):
         raise AssertionError,"Not implemented"
@@ -272,8 +331,8 @@ class CalculateResults:
     def __game_id_valid(self,game_id):
         return game_id in self.__data.games_id
 
-    def __player_key_valid(self,player_key):
-        raise AssertionError,"Not implemented"
+    def __player_id_valid(self,player_id):
+        return player_id in self.__data.players
 
     def __submit_time_invalid(self,week,submit_time):
         raise AssertionError,"Not implemented"
