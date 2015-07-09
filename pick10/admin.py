@@ -8,7 +8,7 @@ class YearAdmin(admin.ModelAdmin):
     list_display = ('yearnum', 'entry_fee', 'payout_week', 'payout_first', 'payout_second', 'payout_third')
 
 class PlayerAdmin(admin.ModelAdmin):
-    list_display = ('public_name', 'private_name')
+    list_display = ('public_name', 'private_name', 'ss_name')
 
 class PlayerYearAdmin(admin.ModelAdmin):
     list_display = ('player', 'year')

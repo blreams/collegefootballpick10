@@ -53,6 +53,7 @@ class Year(models.Model):
 class Player(models.Model):
     public_name = models.CharField(max_length=100, null=True, blank=True, default='')
     private_name = models.CharField(max_length=100, null=True, blank=True, default='')
+    ss_name = models.CharField(max_length=100, null=True, blank=True, default='')
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
 
@@ -60,7 +61,7 @@ class Player(models.Model):
         verbose_name_plural = '2. Players'
 
     def __unicode__(self):
-        return '%s/%s'%(self.private_name, self.public_name,)
+        return '%s/%s/%s'%(self.private_name, self.public_name, self.ss_name)
 
 class PlayerYear(models.Model):
     player = models.ForeignKey('Player')
