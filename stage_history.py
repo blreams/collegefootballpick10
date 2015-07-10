@@ -38,6 +38,23 @@ def delete_year_from_db(yearnum):
     if len(weeks) > 0:
         print "Deleting %d weeks for year %d..." % (len(weeks), yearnum,)
         weeks.delete()
+    playeryears = PlayerYear.objects.filter(year__yearnum=yearnum)
+    if len(playeryears) > 0:
+        print "Deleting %d playeryears for year %d..." % (len(playeryears), yearnum,)
+        playeryears.delete()
+    players = []
+    for player in Player.objects.all():
+        playeryears = PlayerYear.objects.filter(player=player)
+        if len(playeryears) == 0:
+            players.append(player)
+    if len(players) > 0:
+        print "Deleting %d players for year %d..." % (len(players), yearnum,)
+        for player in players:
+            player.delete()
+    years = Year.objects.filter(yearnum=yearnum)
+    if len(years) > 0:
+        print "Deleting year %d..." % (yearnum,)
+        years.delete()
 
 
 def populate_year(yearnum):
@@ -110,10 +127,13 @@ def populate_games_for_year_week(yearnum, weeknum):
         team1obj = populate_team(games_dict[gamenum].team1)
         team2obj = populate_team(games_dict[gamenum].team2)
         team1actualpoints = poolspreadsheet.get_game_team1_score(weeknum, gamenum)
-        team2actualpoints = poolspreadsheet.get_game_team1_score(weeknum, gamenum)
+        team2actualpoints = poolspreadsheet.get_game_team2_score(weeknum, gamenum)
         favored = 1 if poolspreadsheet.get_game_favored_team(weeknum, gamenum) == 'team1' else 2
         spread = poolspreadsheet.get_game_spread(weeknum, gamenum)
-        gameobj = Game.objects.get_or_create(week=weekobj, gamenum=gamenum, team1=team1obj, team2=team2obj, team1_actual_points=team1actualpoints, team2_actual_points=team2actualpoints, favored=favored, spread=spread)
+        winner = 1
+        if (favored == 1 and (team1actualpoints - team2actualpoints) < spread) or (favored == 2 and (team2actualpoints - team1actualpoints) > spread):
+            winner = 2
+        gameobj = Game.objects.get_or_create(week=weekobj, gamenum=gamenum, team1=team1obj, team2=team2obj, team1_actual_points=team1actualpoints, team2_actual_points=team2actualpoints, favored=favored, spread=spread, winner=winner)
 
 def populate_picks_for_year_week(yearnum, weeknum):
     yearobj = Year.objects.get(yearnum=yearnum)
