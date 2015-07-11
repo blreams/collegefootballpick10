@@ -222,18 +222,35 @@ class CalculatorTests(TestCase):
         self.__t17_player_10_losses()
 
     def test_t18_is_player_winning_game(self):
-        #self.__t18_game_none()
-        #self.__t18_invalid_player()
-        #self.__t18_player_pick_missing_game_not_started()
-        #self.__t18_player_pick_missing_game_in_progress()
-        #self.__t18_player_pick_missing_game_final()
-        #self.__t18_game_not_started()
-        #self.__t18_game_final()
-        #self.__t18_player_ahead_in_game_and_pool()
-        #self.__t18_player_behind_in_game_and_pool()
-        #self.__t18_player_ahead_in_game_and_behind_in_pool()
-        #self.__t18_player_behind_in_game_and_ahead_in_pool()
-        pass
+        self.__t18_game_none()
+        self.__t18_invalid_player()
+
+    def test_t18_1_is_player_winning_game(self):
+        self.__t18_player_pick_missing_game_not_started()
+
+    def test_t18_2_is_player_winning_game(self):
+        self.__t18_player_pick_missing_game_in_progress()
+
+    def test_t18_3_is_player_winning_game(self):
+        self.__t18_player_pick_missing_game_final()
+
+    def test_t18_4_is_player_winning_game(self):
+        self.__t18_game_not_started()
+
+    def test_t18_5_is_player_winning_game(self):
+        self.__t18_game_final()
+
+    def test_t18_6_is_player_winning_game(self):
+        self.__t18_player_ahead_in_game_and_pool()
+
+    def test_t18_7_is_player_winning_game(self):
+        self.__t18_player_behind_in_game_and_pool()
+
+    def test_t18_8_is_player_winning_game(self):
+        self.__t18_player_ahead_in_game_and_behind_in_pool()
+
+    def test_t18_8_is_player_winning_game(self):
+        self.__t18_player_behind_in_game_and_ahead_in_pool()
 
     def test_t19_is_player_losing_game(self):
         #self.__t19_game_none()
@@ -1023,188 +1040,134 @@ class CalculatorTests(TestCase):
         self.assertEqual(self.calc.get_number_of_losses(player),10)
 
     def __t18_game_none(self):
-        player_key = self.__get_a_valid_player_key()
+        valid_player = self.week1.get_player("holden_brent")
         with self.assertRaises(Exception):
-            self.calc.is_player_winning_game(player_key,None)
+            self.calc.is_player_winning_game(valid_player,None)
 
     def __t18_invalid_player(self):
-        game_key = self.__get_a_valid_game_key()
+        bad_player = Player()
+        bad_player.id = -1
+        game = self.__get_a_valid_game()
         with self.assertRaises(Exception):
-            self.calc.is_player_winning_game("bad key",game_key)
+            self.calc.is_player_winning_game(bad_player,game)
 
     def __t18_player_pick_missing_game_not_started(self):
-        player_key = self.week1.get_player_key("Brent H.")
         player = self.week1.get_player("holden_brent")
 
         game = Game()
-        game.favored = "team1"
+        game.favored = TEAM1
         game.spread = 5.5
-        game.team1_score = 25
-        game.team2_score = 10
-        game.state = "not_started"
+        game.team1_actual_points = 25
+        game.team2_actual_points = 10
+        game.game_state = NOT_STARTED
 
-        game_key = self.__edit_existing_game(game)
         self.__make_winner_missing(player_key,game_key)
+        self.assertFalse(self.calc.is_player_winning_game(player,game))
 
-        self.assertFalse(self.calc.is_player_winning_game(player_key,game_key))
-
-        self.__restore_picks(player_key)
-        self.__restore_game(game_key)
 
     def __t18_player_pick_missing_game_in_progress(self):
-        player_key = self.week1.get_player_key("Brent H.")
         player = self.week1.get_player("holden_brent")
 
         game = Game()
-        game.favored = "team1"
+        game.favored = TEAM1
         game.spread = 5.5
-        game.team1_score = 25
-        game.team2_score = 10
-        game.state = "in_progress"
+        game.team1_actual_points = 25
+        game.team2_actual_points = 10
+        game.game_state = IN_PROGRESS
 
-        game_key = self.__edit_existing_game(game)
-        self.__make_winner_missing(player_key,game_key)
-
-        self.assertFalse(self.calc.is_player_winning_game(player_key,game_key))
-
-        self.__restore_picks(player_key)
-        self.__restore_game(game_key)
+        self.__make_winner_missing(player,game)
+        self.assertFalse(self.calc.is_player_winning_game(player,game))
 
     def __t18_player_pick_missing_game_final(self):
-        player_key = self.week1.get_player_key("Brent H.")
         player = self.week1.get_player("holden_brent")
 
         game = Game()
-        game.favored = "team1"
+        game.favored = TEAM1
         game.spread = 5.5
-        game.team1_score = 25
-        game.team2_score = 10
-        game.state = "final"
+        game.team1_actual_points = 25
+        game.team2_actual_points = 10
+        game.game_state = FINAL
 
-        game_key = self.__edit_existing_game(game)
-        self.__make_winner_missing(player_key,game_key)
-
-        self.assertFalse(self.calc.is_player_winning_game(player_key,game_key))
-
-        self.__restore_picks(player_key)
-        self.__restore_game(game_key)
+        self.__make_winner_missing(player,game)
+        self.assertFalse(self.calc.is_player_winning_game(player,game))
 
     def __t18_player_ahead_in_game_and_pool(self):
-        player_key = self.week1.get_player_key("Brent H.")
         player = self.week1.get_player("holden_brent")
-        self.__save_picks(self.week1.player_picks[player_key])
 
         game = Game()
-        game.favored = "team1"
+        game.favored = TEAM1
         game.spread = 5.5
-        game.team1_score = 25
-        game.team2_score = 10
-        game.state = "in_progress"
+        game.team1_actual_points = 25
+        game.team2_actual_points = 10
+        game.game_state = IN_PROGRESS
 
-        game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,"team1")
-
-        self.assertTrue(self.calc.is_player_winning_game(player_key,game_key))
-
-        self.__restore_picks(player_key)
-        self.__restore_game(game_key)
+        self.__change_player_pick(player,game,TEAM1)
+        self.assertTrue(self.calc.is_player_winning_game(player,game))
 
     def __t18_player_behind_in_game_and_pool(self):
-        player_key = self.week1.get_player_key("Brent H.")
         player = self.week1.get_player("holden_brent")
-        self.__save_picks(self.week1.player_picks[player_key])
 
         game = Game()
-        game.favored = "team1"
+        game.favored = TEAM1
         game.spread = 5.5
-        game.team1_score = 10
-        game.team2_score = 30
-        game.state = "in_progress"
+        game.team1_actual_points = 10
+        game.team2_actual_points = 30
+        game.game_state = IN_PROGRESS
 
-        game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,"team1")
-
-        self.assertFalse(self.calc.is_player_winning_game(player_key,game_key))
+        self.__change_player_pick(player,game,TEAM1)
+        self.assertFalse(self.calc.is_player_winning_game(player,game))
 
     def __t18_player_ahead_in_game_and_behind_in_pool(self):
-        player_key = self.week1.get_player_key("Brent H.")
         player = self.week1.get_player("holden_brent")
-        self.__save_picks(self.week1.player_picks[player_key])
 
         game = Game()
-        game.favored = "team2"
+        game.favored = TEAM2
         game.spread = 5.5
-        game.team1_score = 20 
-        game.team2_score = 25
-        game.state = "in_progress"
+        game.team1_actual_points = 20 
+        game.team2_actual_points = 25
+        game.game_state = IN_PROGRESS
 
-        game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,"team2")
-
-        self.assertFalse(self.calc.is_player_winning_game(player_key,game_key))
-
-        self.__restore_picks(player_key)
-        self.__restore_game(game_key)
+        self.__change_player_pick(player,game,TEAM2)
+        self.assertFalse(self.calc.is_player_winning_game(player,game))
 
     def __t18_player_behind_in_game_and_ahead_in_pool(self):
-        player_key = self.week1.get_player_key("Brent H.")
         player = self.week1.get_player("holden_brent")
-        self.__save_picks(self.week1.player_picks[player_key])
 
         game = Game()
-        game.favored = "team2"
+        game.favored = TEAM2
         game.spread = 1.5
-        game.team1_score = 20 
-        game.team2_score = 21
-        game.state = "in_progress"
+        game.team1_actual_points = 20 
+        game.team2_actual_points = 21
+        game.game_state = IN_PROGRESS
 
-        game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,"team1")
-
-        self.assertTrue(self.calc.is_player_winning_game(player_key,game_key))
-
-        self.__restore_picks(player_key)
-        self.__restore_game(game_key)
+        self.__change_player_pick(player,game,TEAM1)
+        self.assertTrue(self.calc.is_player_winning_game(player,game))
 
     def __t18_game_not_started(self):
-        player_key = self.week1.get_player_key("Brent H.")
         player = self.week1.get_player("holden_brent")
-        self.__save_picks(self.week1.player_picks[player_key])
 
         game = Game()
-        game.favored = "team2"
+        game.favored = TEAM2
         game.spread = 1.5
-        game.team1_score = 20 
-        game.team2_score = 21
-        game.state = "not_started"
+        game.team1_actual_points = 20 
+        game.team2_actual_points = 21
+        game.game_state = NOT_STARTED
 
-        game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,"team1")
-
-        self.assertFalse(self.calc.is_player_winning_game(player_key,game_key))
-
-        self.__restore_picks(player_key)
-        self.__restore_game(game_key)
+        self.__change_player_pick(player,game,TEAM1)
+        self.assertFalse(self.calc.is_player_winning_game(player,game))
 
     def __t18_game_final(self):
-        player_key = self.week1.get_player_key("Brent H.")
         player = self.week1.get_player("holden_brent")
-        self.__save_picks(self.week1.player_picks[player_key])
 
         game = Game()
-        game.favored = "team2"
+        game.favored = TEAM2
         game.spread = 1.5
-        game.team1_score = 20 
-        game.team2_score = 21
-        game.state = "final"
+        game.team1_actual_points = 20 
+        game.team2_actual_points = 21
+        game.game_state = FINAL
 
-        game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,"team1")
-
-        self.assertFalse(self.calc.is_player_winning_game(player_key,game_key))
-
-        self.__restore_picks(player_key)
-        self.__restore_game(game_key)
+        self.__change_player_pick(player,game,TEAM1)
+        self.assertFalse(self.calc.is_player_winning_game(player,game))
 
     def __t19_game_none(self):
         player_key = self.__get_a_valid_player_key()
@@ -1221,14 +1184,14 @@ class CalculatorTests(TestCase):
         player = self.week1.get_player("holden_brent")
 
         game = Game()
-        game.favored = "team2"
+        game.favored = TEAM2
         game.spread = 1.5
-        game.team1_score = 20 
-        game.team2_score = 21
-        game.state = "not_started"
+        game.team1_actual_points = 20 
+        game.team2_actual_points = 21
+        game.game_state = NOT_STARTED
 
         game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,"team1")
+        self.__change_player_pick(player_key,game_key,TEAM1)
 
         self.assertFalse(self.calc.is_player_losing_game(player_key,game_key))
 
@@ -1240,14 +1203,14 @@ class CalculatorTests(TestCase):
         player = self.week1.get_player("holden_brent")
 
         game = Game()
-        game.favored = "team2"
+        game.favored = TEAM2
         game.spread = 1.5
-        game.team1_score = 20 
-        game.team2_score = 21
-        game.state = "final"
+        game.team1_actual_points = 20 
+        game.team2_actual_points = 21
+        game.game_state = FINAL
 
         game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,"team1")
+        self.__change_player_pick(player_key,game_key,TEAM1)
 
         self.assertFalse(self.calc.is_player_losing_game(player_key,game_key))
 
@@ -1259,11 +1222,11 @@ class CalculatorTests(TestCase):
         player = self.week1.get_player("holden_brent")
 
         game = Game()
-        game.favored = "team1"
+        game.favored = TEAM1
         game.spread = 5.5
-        game.team1_score = 25
-        game.team2_score = 10
-        game.state = "not_started"
+        game.team1_actual_points = 25
+        game.team2_actual_points = 10
+        game.game_state = NOT_STARTED
 
         game_key = self.__edit_existing_game(game)
         self.__make_winner_missing(player_key,game_key)
@@ -1278,11 +1241,11 @@ class CalculatorTests(TestCase):
         player = self.week1.get_player("holden_brent")
 
         game = Game()
-        game.favored = "team1"
+        game.favored = TEAM1
         game.spread = 5.5
-        game.team1_score = 25
-        game.team2_score = 10
-        game.state = "in_progress"
+        game.team1_actual_points = 25
+        game.team2_actual_points = 10
+        game.game_state = IN_PROGRESS
 
         game_key = self.__edit_existing_game(game)
         self.__make_winner_missing(player_key,game_key)
@@ -1297,11 +1260,11 @@ class CalculatorTests(TestCase):
         player = self.week1.get_player("holden_brent")
 
         game = Game()
-        game.favored = "team1"
+        game.favored = TEAM1
         game.spread = 5.5
-        game.team1_score = 10
-        game.team2_score = 25
-        game.state = "final"
+        game.team1_actual_points = 10
+        game.team2_actual_points = 25
+        game.game_state = FINAL
 
         game_key = self.__edit_existing_game(game)
         self.__make_winner_missing(player_key,game_key)
@@ -1316,14 +1279,14 @@ class CalculatorTests(TestCase):
         player = self.week1.get_player("holden_brent")
 
         game = Game()
-        game.favored = "team1"
+        game.favored = TEAM1
         game.spread = 5.5
-        game.team1_score = 25
-        game.team2_score = 10
-        game.state = "in_progress"
+        game.team1_actual_points = 25
+        game.team2_actual_points = 10
+        game.game_state = IN_PROGRESS
 
         game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,"team1")
+        self.__change_player_pick(player_key,game_key,TEAM1)
 
         self.assertFalse(self.calc.is_player_losing_game(player_key,game_key))
 
@@ -1335,14 +1298,14 @@ class CalculatorTests(TestCase):
         player = self.week1.get_player("holden_brent")
 
         game = Game()
-        game.favored = "team1"
+        game.favored = TEAM1
         game.spread = 5.5
-        game.team1_score = 10
-        game.team2_score = 30
-        game.state = "in_progress"
+        game.team1_actual_points = 10
+        game.team2_actual_points = 30
+        game.game_state = IN_PROGRESS
 
         game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,"team1")
+        self.__change_player_pick(player_key,game_key,TEAM1)
 
         self.assertTrue(self.calc.is_player_losing_game(player_key,game_key))
 
@@ -1354,14 +1317,14 @@ class CalculatorTests(TestCase):
         player = self.week1.get_player("holden_brent")
 
         game = Game()
-        game.favored = "team2"
+        game.favored = TEAM2
         game.spread = 5.5
-        game.team1_score = 20 
-        game.team2_score = 25
-        game.state = "in_progress"
+        game.team1_actual_points = 20 
+        game.team2_actual_points = 25
+        game.game_state = IN_PROGRESS
         
         game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,"team2")
+        self.__change_player_pick(player_key,game_key,TEAM2)
 
         self.assertTrue(self.calc.is_player_losing_game(player_key,game_key))
 
@@ -1373,14 +1336,14 @@ class CalculatorTests(TestCase):
         player = self.week1.get_player("holden_brent")
 
         game = Game()
-        game.favored = "team2"
+        game.favored = TEAM2
         game.spread = 1.5
-        game.team1_score = 20 
-        game.team2_score = 21
-        game.state = "in_progress"
+        game.team1_actual_points = 20 
+        game.team2_actual_points = 21
+        game.game_state = IN_PROGRESS
 
         game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,"team1")
+        self.__change_player_pick(player_key,game_key,TEAM1)
 
         self.assertFalse(self.calc.is_player_losing_game(player_key,game_key))
 
@@ -1402,11 +1365,11 @@ class CalculatorTests(TestCase):
         player = self.week1.get_player("holden_brent")
 
         game = Game()
-        game.favored = "team1"
+        game.favored = TEAM1
         game.spread = 5.5
-        game.team1_score = 10
-        game.team2_score = 25
-        game.state = "in_progress"
+        game.team1_actual_points = 10
+        game.team2_actual_points = 25
+        game.game_state = IN_PROGRESS
 
         game_key = self.__edit_existing_game(game)
         self.__make_winner_missing(player_key,game_key)
@@ -1422,14 +1385,14 @@ class CalculatorTests(TestCase):
         player = self.week1.get_player("holden_brent")
 
         game = Game()
-        game.favored = "team1"
+        game.favored = TEAM1
         game.spread = 5.5
-        game.team1_score = 25
-        game.team2_score = 10
-        game.state = "final"
+        game.team1_actual_points = 25
+        game.team2_actual_points = 10
+        game.game_state = FINAL
 
         game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,"team1")
+        self.__change_player_pick(player_key,game_key,TEAM1)
 
         self.assertTrue(self.calc.is_player_projected_to_win_game(player_key,game_key))
 
@@ -1442,14 +1405,14 @@ class CalculatorTests(TestCase):
         player = self.week1.get_player("holden_brent")
 
         game = Game()
-        game.favored = "team1"
+        game.favored = TEAM1
         game.spread = 5.5
-        game.team1_score = 10
-        game.team2_score = 30
-        game.state = "final"
+        game.team1_actual_points = 10
+        game.team2_actual_points = 30
+        game.game_state = FINAL
 
         game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,"team1")
+        self.__change_player_pick(player_key,game_key,TEAM1)
 
         self.assertFalse(self.calc.is_player_projected_to_win_game(player_key,game_key))
 
@@ -1462,14 +1425,14 @@ class CalculatorTests(TestCase):
         player = self.week1.get_player("holden_brent")
 
         game = Game()
-        game.favored = "team2"
+        game.favored = TEAM2
         game.spread = 5.5
-        game.team1_score = 20 
-        game.team2_score = 25
-        game.state = "final"
+        game.team1_actual_points = 20 
+        game.team2_actual_points = 25
+        game.game_state = FINAL
 
         game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,"team2")
+        self.__change_player_pick(player_key,game_key,TEAM2)
 
         self.assertFalse(self.calc.is_player_projected_to_win_game(player_key,game_key))
 
@@ -1483,14 +1446,14 @@ class CalculatorTests(TestCase):
         player = self.week1.get_player("holden_brent")
 
         game = Game()
-        game.favored = "team2"
+        game.favored = TEAM2
         game.spread = 1.5
-        game.team1_score = 20 
-        game.team2_score = 21
-        game.state = "final"
+        game.team1_actual_points = 20 
+        game.team2_actual_points = 21
+        game.game_state = FINAL
 
         game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,"team1")
+        self.__change_player_pick(player_key,game_key,TEAM1)
 
         self.assertTrue(self.calc.is_player_projected_to_win_game(player_key,game_key))
 
@@ -1502,14 +1465,14 @@ class CalculatorTests(TestCase):
         player = self.week1.get_player("holden_brent")
 
         game = Game()
-        game.favored = "team1"
+        game.favored = TEAM1
         game.spread = 5.5
-        game.team1_score = 25
-        game.team2_score = 10
-        game.state = "in_progress"
+        game.team1_actual_points = 25
+        game.team2_actual_points = 10
+        game.game_state = IN_PROGRESS
 
         game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,"team1")
+        self.__change_player_pick(player_key,game_key,TEAM1)
 
         self.assertTrue(self.calc.is_player_projected_to_win_game(player_key,game_key))
 
@@ -1523,14 +1486,14 @@ class CalculatorTests(TestCase):
         player = self.week1.get_player("holden_brent")
 
         game = Game()
-        game.favored = "team1"
+        game.favored = TEAM1
         game.spread = 5.5
-        game.team1_score = 10
-        game.team2_score = 30
-        game.state = "in_progress"
+        game.team1_actual_points = 10
+        game.team2_actual_points = 30
+        game.game_state = IN_PROGRESS
 
         game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,"team1")
+        self.__change_player_pick(player_key,game_key,TEAM1)
 
         self.assertFalse(self.calc.is_player_projected_to_win_game(player_key,game_key))
 
@@ -1542,14 +1505,14 @@ class CalculatorTests(TestCase):
         player = self.week1.get_player("holden_brent")
 
         game = Game()
-        game.favored = "team2"
+        game.favored = TEAM2
         game.spread = 5.5
-        game.team1_score = 20 
-        game.team2_score = 25
-        game.state = "in_progress"
+        game.team1_actual_points = 20 
+        game.team2_actual_points = 25
+        game.game_state = IN_PROGRESS
 
         game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,"team2")
+        self.__change_player_pick(player_key,game_key,TEAM2)
 
         self.assertFalse(self.calc.is_player_projected_to_win_game(player_key,game_key))
 
@@ -1562,14 +1525,14 @@ class CalculatorTests(TestCase):
         player = self.week1.get_player("holden_brent")
 
         game = Game()
-        game.favored = "team2"
+        game.favored = TEAM2
         game.spread = 1.5
-        game.team1_score = 20 
-        game.team2_score = 21
-        game.state = "in_progress"
+        game.team1_actual_points = 20 
+        game.team2_actual_points = 21
+        game.game_state = IN_PROGRESS
 
         game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,"team1")
+        self.__change_player_pick(player_key,game_key,TEAM1)
 
         self.assertTrue(self.calc.is_player_projected_to_win_game(player_key,game_key))
 
@@ -1582,14 +1545,14 @@ class CalculatorTests(TestCase):
         player = self.week1.get_player("holden_brent")
 
         game = Game()
-        game.favored = "team1"
+        game.favored = TEAM1
         game.spread = 5.5
-        game.team1_score = 25
-        game.team2_score = 10
-        game.state = "not_started"
+        game.team1_actual_points = 25
+        game.team2_actual_points = 10
+        game.game_state = NOT_STARTED
 
         game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,"team1")
+        self.__change_player_pick(player_key,game_key,TEAM1)
 
         self.assertTrue(self.calc.is_player_projected_to_win_game(player_key,game_key))
 
@@ -1601,14 +1564,14 @@ class CalculatorTests(TestCase):
         player = self.week1.get_player("holden_brent")
 
         game = Game()
-        game.favored = "team1"
+        game.favored = TEAM1
         game.spread = 5.5
-        game.team1_score = 10
-        game.team2_score = 30
-        game.state = "not_started"
+        game.team1_actual_points = 10
+        game.team2_actual_points = 30
+        game.game_state = NOT_STARTED
 
         game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,"team1")
+        self.__change_player_pick(player_key,game_key,TEAM1)
 
         self.assertTrue(self.calc.is_player_projected_to_win_game(player_key,game_key))
 
@@ -1621,14 +1584,14 @@ class CalculatorTests(TestCase):
         player = self.week1.get_player("holden_brent")
 
         game = Game()
-        game.favored = "team2"
+        game.favored = TEAM2
         game.spread = 5.5
-        game.team1_score = 20 
-        game.team2_score = 25
-        game.state = "not_started"
+        game.team1_actual_points = 20 
+        game.team2_actual_points = 25
+        game.game_state = NOT_STARTED
 
         game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,"team2")
+        self.__change_player_pick(player_key,game_key,TEAM2)
 
         self.assertTrue(self.calc.is_player_projected_to_win_game(player_key,game_key))
 
@@ -1641,14 +1604,14 @@ class CalculatorTests(TestCase):
         player = self.week1.get_player("holden_brent")
 
         game = Game()
-        game.favored = "team2"
+        game.favored = TEAM2
         game.spread = 1.5
-        game.team1_score = 20 
-        game.team2_score = 21
-        game.state = "not_started"
+        game.team1_actual_points = 20 
+        game.team2_actual_points = 21
+        game.game_state = NOT_STARTED
 
         game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,"team1")
+        self.__change_player_pick(player_key,game_key,TEAM1)
 
         self.assertTrue(self.calc.is_player_projected_to_win_game(player_key,game_key))
 
