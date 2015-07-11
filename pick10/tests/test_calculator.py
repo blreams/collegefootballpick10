@@ -1054,21 +1054,21 @@ class CalculatorTests(TestCase):
     def __t18_player_pick_missing_game_not_started(self):
         player = self.week1.get_player("holden_brent")
 
-        game = Game()
+        game = self.__get_a_valid_game()
         game.favored = TEAM1
         game.spread = 5.5
         game.team1_actual_points = 25
         game.team2_actual_points = 10
         game.game_state = NOT_STARTED
 
-        self.__make_winner_missing(player_key,game_key)
+        self.__make_winner_missing(player,game)
         self.assertFalse(self.calc.is_player_winning_game(player,game))
 
 
     def __t18_player_pick_missing_game_in_progress(self):
         player = self.week1.get_player("holden_brent")
 
-        game = Game()
+        game = self.__get_a_valid_game()
         game.favored = TEAM1
         game.spread = 5.5
         game.team1_actual_points = 25
@@ -1081,7 +1081,7 @@ class CalculatorTests(TestCase):
     def __t18_player_pick_missing_game_final(self):
         player = self.week1.get_player("holden_brent")
 
-        game = Game()
+        game = self.__get_a_valid_game()
         game.favored = TEAM1
         game.spread = 5.5
         game.team1_actual_points = 25
@@ -1094,7 +1094,7 @@ class CalculatorTests(TestCase):
     def __t18_player_ahead_in_game_and_pool(self):
         player = self.week1.get_player("holden_brent")
 
-        game = Game()
+        game = self.__get_a_valid_game()
         game.favored = TEAM1
         game.spread = 5.5
         game.team1_actual_points = 25
@@ -1107,7 +1107,7 @@ class CalculatorTests(TestCase):
     def __t18_player_behind_in_game_and_pool(self):
         player = self.week1.get_player("holden_brent")
 
-        game = Game()
+        game = self.__get_a_valid_game()
         game.favored = TEAM1
         game.spread = 5.5
         game.team1_actual_points = 10
@@ -1120,7 +1120,7 @@ class CalculatorTests(TestCase):
     def __t18_player_ahead_in_game_and_behind_in_pool(self):
         player = self.week1.get_player("holden_brent")
 
-        game = Game()
+        game = self.__get_a_valid_game()
         game.favored = TEAM2
         game.spread = 5.5
         game.team1_actual_points = 20 
@@ -1133,7 +1133,7 @@ class CalculatorTests(TestCase):
     def __t18_player_behind_in_game_and_ahead_in_pool(self):
         player = self.week1.get_player("holden_brent")
 
-        game = Game()
+        game = self.__get_a_valid_game()
         game.favored = TEAM2
         game.spread = 1.5
         game.team1_actual_points = 20 
@@ -1146,7 +1146,7 @@ class CalculatorTests(TestCase):
     def __t18_game_not_started(self):
         player = self.week1.get_player("holden_brent")
 
-        game = Game()
+        game = self.__get_a_valid_game()
         game.favored = TEAM2
         game.spread = 1.5
         game.team1_actual_points = 20 
@@ -1159,7 +1159,7 @@ class CalculatorTests(TestCase):
     def __t18_game_final(self):
         player = self.week1.get_player("holden_brent")
 
-        game = Game()
+        game = self.__get_a_valid_game()
         game.favored = TEAM2
         game.spread = 1.5
         game.team1_actual_points = 20 
