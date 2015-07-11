@@ -249,22 +249,39 @@ class CalculatorTests(TestCase):
     def test_t18_8_is_player_winning_game(self):
         self.__t18_player_ahead_in_game_and_behind_in_pool()
 
-    def test_t18_8_is_player_winning_game(self):
+    def test_t18_9_is_player_winning_game(self):
         self.__t18_player_behind_in_game_and_ahead_in_pool()
 
     def test_t19_is_player_losing_game(self):
-        #self.__t19_game_none()
-        #self.__t19_invalid_player()
-        #self.__t19_player_pick_missing_game_not_started()
-        #self.__t19_player_pick_missing_game_in_progress()
-        #self.__t19_player_pick_missing_game_final()
-        #self.__t19_game_not_started()
-        #self.__t19_game_final()
-        #self.__t19_player_ahead_in_game_and_pool()
-        #self.__t19_player_behind_in_game_and_pool()
-        #self.__t19_player_ahead_in_game_and_behind_in_pool()
-        #self.__t19_player_behind_in_game_and_ahead_in_pool()
-        pass
+        self.__t19_game_none()
+        self.__t19_invalid_player()
+
+    def test_t19_1_is_player_losing_game(self):
+        self.__t19_player_pick_missing_game_not_started()
+
+    def test_t19_2_is_player_losing_game(self):
+        self.__t19_player_pick_missing_game_in_progress()
+
+    def test_t19_3_is_player_losing_game(self):
+        self.__t19_player_pick_missing_game_final()
+
+    def test_t19_4_is_player_losing_game(self):
+        self.__t19_game_not_started()
+
+    def test_t19_5_is_player_losing_game(self):
+        self.__t19_game_final()
+
+    def test_t19_6_is_player_losing_game(self):
+        self.__t19_player_ahead_in_game_and_pool()
+
+    def test_t19_7_is_player_losing_game(self):
+        self.__t19_player_behind_in_game_and_pool()
+
+    def test_t19_8_is_player_losing_game(self):
+        self.__t19_player_ahead_in_game_and_behind_in_pool()
+
+    def test_t19_9_is_player_losing_game(self):
+        self.__t19_player_behind_in_game_and_ahead_in_pool()
 
     def test_t20_is_player_projected_to_win_game(self):
         #self.__t20_game_none()
@@ -1170,185 +1187,133 @@ class CalculatorTests(TestCase):
         self.assertFalse(self.calc.is_player_winning_game(player,game))
 
     def __t19_game_none(self):
-        player_key = self.__get_a_valid_player_key()
+        valid_player = self.week1.get_player("holden_brent")
         with self.assertRaises(Exception):
-            self.calc.is_player_losing_game(player_key,None)
+            self.calc.is_player_losing_game(valid_player,None)
 
     def __t19_invalid_player(self):
-        game_key = self.__get_a_valid_game_key()
+        bad_player = Player()
+        bad_player.id = -1
+        game = self.__get_a_valid_game()
         with self.assertRaises(Exception):
-            self.calc.is_player_losing_game("bad key",game_key)
+            self.calc.is_player_losing_game(bad_player,game)
 
     def __t19_game_not_started(self):
-        player_key = self.week1.get_player_key("Brent H.")
         player = self.week1.get_player("holden_brent")
 
-        game = Game()
+        game = self.__get_a_valid_game()
         game.favored = TEAM2
         game.spread = 1.5
         game.team1_actual_points = 20 
         game.team2_actual_points = 21
         game.game_state = NOT_STARTED
 
-        game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,TEAM1)
-
-        self.assertFalse(self.calc.is_player_losing_game(player_key,game_key))
-
-        self.__restore_picks(player_key)
-        self.__restore_game(game_key)
+        self.__change_player_pick(player,game,TEAM1)
+        self.assertFalse(self.calc.is_player_losing_game(player,game))
 
     def __t19_game_final(self):
-        player_key = self.week1.get_player_key("Brent H.")
         player = self.week1.get_player("holden_brent")
 
-        game = Game()
+        game = self.__get_a_valid_game()
         game.favored = TEAM2
         game.spread = 1.5
         game.team1_actual_points = 20 
         game.team2_actual_points = 21
         game.game_state = FINAL
 
-        game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,TEAM1)
-
-        self.assertFalse(self.calc.is_player_losing_game(player_key,game_key))
-
-        self.__restore_picks(player_key)
-        self.__restore_game(game_key)
+        self.__change_player_pick(player,game,TEAM1)
+        self.assertFalse(self.calc.is_player_losing_game(player,game))
 
     def __t19_player_pick_missing_game_not_started(self):
-        player_key = self.week1.get_player_key("Brent H.")
         player = self.week1.get_player("holden_brent")
 
-        game = Game()
+        game = self.__get_a_valid_game()
         game.favored = TEAM1
         game.spread = 5.5
         game.team1_actual_points = 25
         game.team2_actual_points = 10
         game.game_state = NOT_STARTED
 
-        game_key = self.__edit_existing_game(game)
-        self.__make_winner_missing(player_key,game_key)
-
-        self.assertTrue(self.calc.is_player_losing_game(player_key,game_key))
-
-        self.__restore_picks(player_key)
-        self.__restore_game(game_key)
+        self.__make_winner_missing(player,game)
+        self.assertTrue(self.calc.is_player_losing_game(player,game))
 
     def __t19_player_pick_missing_game_in_progress(self):
-        player_key = self.week1.get_player_key("Brent H.")
         player = self.week1.get_player("holden_brent")
 
-        game = Game()
+        game = self.__get_a_valid_game()
         game.favored = TEAM1
         game.spread = 5.5
         game.team1_actual_points = 25
         game.team2_actual_points = 10
         game.game_state = IN_PROGRESS
 
-        game_key = self.__edit_existing_game(game)
-        self.__make_winner_missing(player_key,game_key)
-
-        self.assertTrue(self.calc.is_player_losing_game(player_key,game_key))
-
-        self.__restore_picks(player_key)
-        self.__restore_game(game_key)
+        self.__make_winner_missing(player,game)
+        self.assertTrue(self.calc.is_player_losing_game(player,game))
 
     def __t19_player_pick_missing_game_final(self):
-        player_key = self.week1.get_player_key("Brent H.")
         player = self.week1.get_player("holden_brent")
 
-        game = Game()
+        game = self.__get_a_valid_game()
         game.favored = TEAM1
         game.spread = 5.5
         game.team1_actual_points = 10
         game.team2_actual_points = 25
         game.game_state = FINAL
 
-        game_key = self.__edit_existing_game(game)
-        self.__make_winner_missing(player_key,game_key)
-
-        self.assertFalse(self.calc.is_player_losing_game(player_key,game_key))
-
-        self.__restore_picks(player_key)
-        self.__restore_game(game_key)
+        self.__make_winner_missing(player,game)
+        self.assertFalse(self.calc.is_player_losing_game(player,game))
 
     def __t19_player_ahead_in_game_and_pool(self):
-        player_key = self.week1.get_player_key("Brent H.")
         player = self.week1.get_player("holden_brent")
 
-        game = Game()
+        game = self.__get_a_valid_game()
         game.favored = TEAM1
         game.spread = 5.5
         game.team1_actual_points = 25
         game.team2_actual_points = 10
         game.game_state = IN_PROGRESS
 
-        game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,TEAM1)
-
-        self.assertFalse(self.calc.is_player_losing_game(player_key,game_key))
-
-        self.__restore_picks(player_key)
-        self.__restore_game(game_key)
+        self.__change_player_pick(player,game,TEAM1)
+        self.assertFalse(self.calc.is_player_losing_game(player,game))
 
     def __t19_player_behind_in_game_and_pool(self):
-        player_key = self.week1.get_player_key("Brent H.")
         player = self.week1.get_player("holden_brent")
 
-        game = Game()
+        game = self.__get_a_valid_game()
         game.favored = TEAM1
         game.spread = 5.5
         game.team1_actual_points = 10
         game.team2_actual_points = 30
         game.game_state = IN_PROGRESS
 
-        game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,TEAM1)
-
-        self.assertTrue(self.calc.is_player_losing_game(player_key,game_key))
-
-        self.__restore_picks(player_key)
-        self.__restore_game(game_key)
+        self.__change_player_pick(player,game,TEAM1)
+        self.assertTrue(self.calc.is_player_losing_game(player,game))
 
     def __t19_player_ahead_in_game_and_behind_in_pool(self):
-        player_key = self.week1.get_player_key("Brent H.")
         player = self.week1.get_player("holden_brent")
 
-        game = Game()
+        game = self.__get_a_valid_game()
         game.favored = TEAM2
         game.spread = 5.5
         game.team1_actual_points = 20 
         game.team2_actual_points = 25
         game.game_state = IN_PROGRESS
         
-        game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,TEAM2)
-
-        self.assertTrue(self.calc.is_player_losing_game(player_key,game_key))
-
-        self.__restore_picks(player_key)
-        self.__restore_game(game_key)
+        self.__change_player_pick(player,game,TEAM2)
+        self.assertTrue(self.calc.is_player_losing_game(player,game))
 
     def __t19_player_behind_in_game_and_ahead_in_pool(self):
-        player_key = self.week1.get_player_key("Brent H.")
         player = self.week1.get_player("holden_brent")
 
-        game = Game()
+        game = self.__get_a_valid_game()
         game.favored = TEAM2
         game.spread = 1.5
         game.team1_actual_points = 20 
         game.team2_actual_points = 21
         game.game_state = IN_PROGRESS
 
-        game_key = self.__edit_existing_game(game)
-        self.__change_player_pick(player_key,game_key,TEAM1)
-
-        self.assertFalse(self.calc.is_player_losing_game(player_key,game_key))
-
-        self.__restore_picks(player_key)
-        self.__restore_game(game_key)
+        self.__change_player_pick(player,game,TEAM1)
+        self.assertFalse(self.calc.is_player_losing_game(player,game))
 
     def __t20_game_none(self):
         player_key = self.__get_a_valid_player_key()
