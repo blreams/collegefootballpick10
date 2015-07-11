@@ -198,15 +198,28 @@ class CalculatorTests(TestCase):
         self.__t16_player_10_wins()
 
     def test_t17_get_number_of_losses(self):
-        #self.__t17_invalid_player()
-        #self.__t17_no_games_started()
-        #self.__t17_some_games_in_progress()
-        #self.__t17_mixed_game_states()
-        #self.__t17_all_games_final()
-        #self.__t17_player_with_no_picks()
-        #self.__t17_player_0_losses()
-        #self.__t17_player_10_losses()
-        pass
+        self.__t17_invalid_player()
+
+    def test_t17_1_get_number_of_losses(self):
+        self.__t17_no_games_started()
+
+    def test_t17_2_get_number_of_losses(self):
+        self.__t17_some_games_in_progress()
+
+    def test_t17_3_get_number_of_losses(self):
+        self.__t17_mixed_game_states()
+
+    def test_t17_4_get_number_of_losses(self):
+        self.__t17_all_games_final()
+
+    def test_t17_5_get_number_of_losses(self):
+        self.__t17_player_with_no_picks()
+
+    def test_t17_6_get_number_of_losses(self):
+        self.__t17_player_0_losses()
+
+    def test_t17_7_get_number_of_losses(self):
+        self.__t17_player_10_losses()
 
     def test_t18_is_player_winning_game(self):
         #self.__t18_game_none()
@@ -927,12 +940,12 @@ class CalculatorTests(TestCase):
 
     def __t16_no_games_started(self):
         player = self.week1.get_player("holden_brent")
-        self.__modify_game_states(['not_started']*10)
+        self.__modify_game_states([NOT_STARTED]*10)
         self.assertEqual(self.calc.get_number_of_wins(player),0)
 
     def __t16_some_games_in_progress(self):
         player = self.week1.get_player("holden_brent")
-        states = ['not_started']*3 + ['in_progress']*7
+        states = [NOT_STARTED]*3 + [IN_PROGRESS]*7
         self.__modify_game_states(states)
         self.assertEqual(self.calc.get_number_of_wins(player),0)
 
@@ -940,9 +953,8 @@ class CalculatorTests(TestCase):
         player = self.week1.get_player("holden_brent")
         num_wins_in_first_3_games_2013_week_1 = 2
 
-        states = ['final']*3 + ['not_started']*3 + ['in_progress']*4
+        states = [FINAL]*3 + [NOT_STARTED]*3 + [IN_PROGRESS]*4
         self.__modify_game_states(states)
-        import pdb; pdb.set_trace()
         self.assertEqual(self.calc.get_number_of_wins(player),num_wins_in_first_3_games_2013_week_1)
 
     def __t16_all_games_final(self):
@@ -966,58 +978,49 @@ class CalculatorTests(TestCase):
         self.assertEqual(self.calc.get_number_of_wins(player),10)
 
     def __t17_invalid_player(self):
+        bad_player = Player()
+        bad_player.id = -1
         with self.assertRaises(Exception):
-            self.calc.get_number_of_losses("bad key")
+            self.calc.get_number_of_losses(bad_player)
 
     def __t17_no_games_started(self):
-        player_key = self.week1.get_player_key("Brent H.")
         player = self.week1.get_player("holden_brent")
-        self.__modify_game_states(['not_started']*10)
-        self.assertEqual(self.calc.get_number_of_losses(player_key),0)
-        self.__restore_games()
+        self.__modify_game_states([NOT_STARTED]*10)
+        self.assertEqual(self.calc.get_number_of_losses(player),0)
 
     def __t17_some_games_in_progress(self):
-        player_key = self.week1.get_player_key("Brent H.")
         player = self.week1.get_player("holden_brent")
-        states = ['not_started']*3 + ['in_progress']*7
+        states = [NOT_STARTED]*3 + [IN_PROGRESS]*7
         self.__modify_game_states(states)
-        self.assertEqual(self.calc.get_number_of_losses(player_key),0)
-        self.__restore_games()
+        self.assertEqual(self.calc.get_number_of_losses(player),0)
 
     def __t17_mixed_game_states(self):
-        player_key = self.week1.get_player_key("Brent H.")
         player = self.week1.get_player("holden_brent")
         num_losses_in_first_3_games_2013_week_1 = 1
 
-        states = ['final']*3 + ['not_started']*3 + ['in_progress']*4
+        states = [FINAL]*3 + [NOT_STARTED]*3 + [IN_PROGRESS]*4
         self.__modify_game_states(states)
-        self.assertEqual(self.calc.get_number_of_losses(player_key),num_losses_in_first_3_games_2013_week_1)
-        self.__restore_games()
+        self.assertEqual(self.calc.get_number_of_losses(player),num_losses_in_first_3_games_2013_week_1)
 
     def __t17_all_games_final(self):
-        player_key = self.week1.get_player_key("Byron R.")
         player = self.week1.get_player("reams_byron")
         num_losses_2013_week_1 = 4
-        self.assertEqual(self.calc.get_number_of_losses(player_key),num_losses_2013_week_1)
+        self.assertEqual(self.calc.get_number_of_losses(player),num_losses_2013_week_1)
 
     def __t17_player_with_no_picks(self):
-        player_key = self.week1.get_player_key("Brent H.")
         player = self.week1.get_player("holden_brent")
-        self.__make_all_player_picks_not_entered(player_key)
-        self.assertEqual(self.calc.get_number_of_losses(player_key),10)
-        self.__restore_picks(player_key)
+        self.__make_all_player_picks_not_entered(player)
+        self.assertEqual(self.calc.get_number_of_losses(player),10)
 
     def __t17_player_0_losses(self):
-        player_key = self.week1.get_player_key("William M.")
+        player = self.week1.get_player("murphy_william")
         self.__make_william_10_wins()
-        self.assertEqual(self.calc.get_number_of_losses(player_key),0)
-        self.__restore_picks(player_key)
+        self.assertEqual(self.calc.get_number_of_losses(player),0)
 
     def __t17_player_10_losses(self):
-        player_key = self.week1.get_player_key("Dale R.")
+        player = self.week1.get_player("robbins_dale")
         self.__make_dale_0_wins()
-        self.assertEqual(self.calc.get_number_of_losses(player_key),10)
-        self.__restore_picks(player_key)
+        self.assertEqual(self.calc.get_number_of_losses(player),10)
 
     def __t18_game_none(self):
         player_key = self.__get_a_valid_player_key()
