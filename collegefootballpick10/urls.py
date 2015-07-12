@@ -11,5 +11,5 @@ urlpatterns = patterns('',
     url(r'^reset/done/$', auth_views.password_reset_complete, name='password_reset_complete'),
     url(r'^$', 'pick10.views.index', name='index'),
     url(r'^pick10/', include('pick10.urls')),
-    url(r'^accounts/', include('registration.backends.simple.urls')),
+    url(r'^accounts/', include('registration.backends.default.urls')),
 )
