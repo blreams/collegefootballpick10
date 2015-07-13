@@ -406,19 +406,40 @@ class CalculatorTests(TestCase):
         self.__t22_game_final_player_10_wins()
 
     def test_t23_get_number_of_possible_wins(self):
-        pass
-        #self.__t23_invalid_player()
-        #self.__t23_no_games_started()
-        #self.__t23_some_games_in_progress()
-        #self.__t23_mixed_game_states()
-        #self.__t23_all_games_final()
-        #self.__t23_player_with_no_picks()
-        #self.__t23_game_not_started_player_0_wins()
-        #self.__t23_game_not_started_player_10_wins()
-        #self.__t23_game_in_progress_player_0_wins()
-        #self.__t23_game_in_progress_player_10_wins()
-        #self.__t23_game_final_player_0_wins()
-        #self.__t23_game_final_player_10_wins()
+        self.__t23_invalid_player()
+
+    def test_t23_1_get_number_of_possible_wins(self):
+        self.__t23_no_games_started()
+
+    def test_t23_2_get_number_of_possible_wins(self):
+        self.__t23_some_games_in_progress()
+
+    def test_t23_3_get_number_of_possible_wins(self):
+        self.__t23_mixed_game_states()
+
+    def test_t23_4_get_number_of_possible_wins(self):
+        self.__t23_all_games_final()
+
+    def test_t23_5_get_number_of_possible_wins(self):
+        self.__t23_player_with_no_picks()
+
+    def test_t23_6_get_number_of_possible_wins(self):
+        self.__t23_game_not_started_player_0_wins()
+
+    def test_t23_7_get_number_of_possible_wins(self):
+        self.__t23_game_not_started_player_10_wins()
+
+    def test_t23_8_get_number_of_possible_wins(self):
+        self.__t23_game_in_progress_player_0_wins()
+
+    def test_t23_9_get_number_of_possible_wins(self):
+        self.__t23_game_in_progress_player_10_wins()
+
+    def test_t23_10_get_number_of_possible_wins(self):
+        self.__t23_game_final_player_0_wins()
+
+    def test_t23_11_get_number_of_possible_wins(self):
+        self.__t23_game_final_player_10_wins()
 
     def test_t24_all_games_final(self):
         pass
@@ -1887,23 +1908,21 @@ class CalculatorTests(TestCase):
         self.assertEqual(self.calc.get_number_of_projected_wins(player),10)
 
     def __t23_invalid_player(self):
+        bad_player = Player()
+        bad_player.id = -1
         with self.assertRaises(Exception):
-            self.calc.get_number_of_possible_wins("bad key")
+            self.calc.get_number_of_possible_wins(bad_player)
 
     def __t23_no_games_started(self):
-        player_key = self.week1.get_player_key("Brent H.")
         player = self.week1.get_player("holden_brent")
         self.__modify_game_states([NOT_STARTED]*10)
-        self.assertEqual(self.calc.get_number_of_possible_wins(player_key),10)
-        self.__restore_games()
+        self.assertEqual(self.calc.get_number_of_possible_wins(player),10)
 
     def __t23_some_games_in_progress(self):
-        player_key = self.week1.get_player_key("Brent H.")
         player = self.week1.get_player("holden_brent")
         states = [NOT_STARTED]*3 + [IN_PROGRESS]*7
         self.__modify_game_states(states)
-        self.assertEqual(self.calc.get_number_of_possible_wins(player_key),10)
-        self.__restore_games()
+        self.assertEqual(self.calc.get_number_of_possible_wins(player),10)
 
     def __t23_mixed_game_states(self):
         num_possible_wins_first_3_games = 2
@@ -1911,79 +1930,57 @@ class CalculatorTests(TestCase):
         num_possible_wins_last_4_games = 4
         num_possible_wins_2013_week_1 = num_possible_wins_first_3_games + num_possible_wins_next_3_games + num_possible_wins_last_4_games
 
-        player_key = self.week1.get_player_key("Brent H.")
         player = self.week1.get_player("holden_brent")
 
         states = [FINAL]*3 + [NOT_STARTED]*3 + [IN_PROGRESS]*4
         self.__modify_game_states(states)
-        self.assertEqual(self.calc.get_number_of_possible_wins(player_key),num_possible_wins_2013_week_1)
-        self.__restore_games()
+        self.assertEqual(self.calc.get_number_of_possible_wins(player),num_possible_wins_2013_week_1)
 
     def __t23_all_games_final(self):
         num_possible_wins_2013_week_1 = 6
-        player_key = self.week1.get_player_key("Byron R.")
-        self.assertEqual(self.calc.get_number_of_possible_wins(player_key),num_possible_wins_2013_week_1)
+        player = self.week1.get_player("reams_byron")
+        self.assertEqual(self.calc.get_number_of_possible_wins(player),num_possible_wins_2013_week_1)
 
     def __t23_player_with_no_picks(self):
-        player_key = self.week1.get_player_key("Brent H.")
         player = self.week1.get_player("holden_brent")
-        self.__make_all_player_picks_not_entered(player_key)
-        self.assertEqual(self.calc.get_number_of_possible_wins(player_key),0)
-        self.__restore_picks(player_key)
+        self.__make_all_player_picks_not_entered(player)
+        self.assertEqual(self.calc.get_number_of_possible_wins(player),0)
 
     def __t23_game_final_player_0_wins(self):
-        player_key = self.week1.get_player_key("Dale R.")
         player = self.week1.get_player("robbins_dale")
         self.__make_dale_0_wins()
         self.__modify_game_states([FINAL]*10)
-        self.assertEqual(self.calc.get_number_of_possible_wins(player_key),0)
-        self.__restore_picks(player_key)
-        self.__restore_games()
+        self.assertEqual(self.calc.get_number_of_possible_wins(player),0)
 
     def __t23_game_final_player_10_wins(self):
-        player_key = self.week1.get_player_key("William M.")
         player = self.week1.get_player("murphy_william")
         self.__make_william_10_wins()
         self.__modify_game_states([FINAL]*10)
-        self.assertEqual(self.calc.get_number_of_possible_wins(player_key),10)
-        self.__restore_picks(player_key)
-        self.__restore_games()
+        self.assertEqual(self.calc.get_number_of_possible_wins(player),10)
 
     def __t23_game_in_progress_player_0_wins(self):
-        player_key = self.week1.get_player_key("Dale R.")
         player = self.week1.get_player("robbins_dale")
         self.__make_dale_0_wins()
         self.__modify_game_states([IN_PROGRESS]*10)
-        self.assertEqual(self.calc.get_number_of_possible_wins(player_key),10)
-        self.__restore_picks(player_key)
-        self.__restore_games()
+        self.assertEqual(self.calc.get_number_of_possible_wins(player),10)
 
     def __t23_game_in_progress_player_10_wins(self):
-        player_key = self.week1.get_player_key("William M.")
         player = self.week1.get_player("murphy_william")
         self.__make_william_10_wins()
         self.__modify_game_states([IN_PROGRESS]*10)
-        self.assertEqual(self.calc.get_number_of_possible_wins(player_key),10)
-        self.__restore_picks(player_key)
-        self.__restore_games()
+        self.assertEqual(self.calc.get_number_of_possible_wins(player),10)
 
     def __t23_game_not_started_player_0_wins(self):
-        player_key = self.week1.get_player_key("Dale R.")
         player = self.week1.get_player("robbins_dale")
         self.__make_dale_0_wins()
         self.__modify_game_states([NOT_STARTED]*10)
-        self.assertEqual(self.calc.get_number_of_possible_wins(player_key),10)
-        self.__restore_picks(player_key)
-        self.__restore_games()
+        self.assertEqual(self.calc.get_number_of_possible_wins(player),10)
 
     def __t23_game_not_started_player_10_wins(self):
-        player_key = self.week1.get_player_key("William M.")
         player = self.week1.get_player("murphy_william")
         self.__make_william_10_wins()
         self.__modify_game_states([NOT_STARTED]*10)
-        self.assertEqual(self.calc.get_number_of_possible_wins(player_key),10)
-        self.__restore_picks(player_key)
-        self.__restore_games()
+        self.assertEqual(self.calc.get_number_of_possible_wins(player),10)
 
     def __t24_no_games_started(self):
         self.__modify_game_states([NOT_STARTED]*10)
