@@ -465,6 +465,79 @@ class CalculatorTests(TestCase):
     def test_t25_4_no_games_started(self):
         self.__t25_all_games_final()
 
+    def test_t26_1_at_least_one_game_in_progress(self):
+        return
+        self.__t26_no_games_started()
+        self.__t26_one_game_in_progress()
+        self.__t26_some_games_in_progress()
+        self.__t26_mixed_game_states()
+        self.__t26_all_games_final()
+
+    def test_t27_get_summary_state_of_all_games(self):
+        return
+        self.__t27_no_games_started()
+        self.__t27_one_game_in_progress()
+        self.__t27_some_games_in_progress()
+        self.__t27_mixed_game_states()
+        self.__t27_all_games_final()
+
+    def test_t28_get_game_result_string(self):
+        return
+        self.__t28_game_none()
+        self.__t28_invalid_player()
+        self.__t28_player_pick_missing()
+        self.__t28_game_win()
+        self.__t28_game_loss()
+        self.__t28_game_ahead()
+        self.__t28_game_behind()
+        self.__t28_game_not_started()
+
+    def test_t29_get_favored_team_name(self):
+        return
+        self.__t29_game_none()
+        self.__t29_invalid_favored()
+        self.__t29_team1_favored()
+        self.__t29_team2_favored()
+
+    def test_t30_get_game_score_spread(self):
+        return
+        self.__t30_game_none()
+        self.__t30_game_not_started()
+        self.__t30_game_in_progress()
+        self.__t30_tied_score()
+        self.__t30_team1_ahead()
+        self.__t30_team2_ahead()
+
+    def test_t31_get_pick_score_spread(self):
+        return
+        self.__t31_pick_none()
+        self.__t31_pick_team1_score_none()
+        self.__t31_pick_team2_score_none()
+        self.__t31_tied_score()
+        self.__t31_team1_ahead()
+        self.__t31_team2_ahead()
+
+    def test_t32_get_featured_game(self):
+        return
+        self.__t32_featured_game_missing()
+        self.__t32_featured_game()
+
+    def test_t33_get_win_percent(self):
+        return
+        self.__t33_invalid_player()
+        self.__t33_games_not_started()
+        self.__t33_games_in_progress()
+        self.__t33_games_mixed()
+        self.__t33_games_final()
+
+    def test_t34_get_win_percent_string(self):
+        return
+        self.__t34_invalid_player()
+        self.__t34_games_not_started()
+        self.__t34_games_in_progress()
+        self.__t34_games_mixed()
+        self.__t34_games_final()
+
     def __t1_invalid_player(self):
         bad_player = Player()
         bad_player.id = -1
@@ -2025,6 +2098,401 @@ class CalculatorTests(TestCase):
 
     def __t25_all_games_final(self):
         self.assertFalse(self.calc.no_games_started())
+
+    def __t26_no_games_started(self):
+        self.__modify_game_states([NOT_STARTED]*10)
+        self.assertFalse(self.calc.at_least_one_game_in_progress())
+        self.__restore_games()
+
+    def __t26_one_game_in_progress(self):
+        states = [NOT_STARTED]*1 + [IN_PROGRESS]*9
+        self.__modify_game_states(states)
+        self.assertTrue(self.calc.at_least_one_game_in_progress())
+        self.__restore_games()
+
+    def __t26_some_games_in_progress(self):
+        states = [NOT_STARTED]*3 + [IN_PROGRESS]*7
+        self.__modify_game_states(states)
+        self.assertTrue(self.calc.at_least_one_game_in_progress())
+        self.__restore_games()
+
+    def __t26_mixed_game_states(self):
+        states = [FINAL]*3 + [NOT_STARTED]*3 + [IN_PROGRESS]*4
+        self.__modify_game_states(states)
+        self.assertTrue(self.calc.at_least_one_game_in_progress())
+        self.__restore_games()
+
+    def __t26_all_games_final(self):
+        self.assertFalse(self.calc.at_least_one_game_in_progress())
+
+    def __t27_no_games_started(self):
+        self.__modify_game_states([NOT_STARTED]*10)
+        self.assertEqual(self.calc.get_summary_state_of_all_games(),"not_started")
+        self.__restore_games()
+
+    def __t27_one_game_in_progress(self):
+        states = [NOT_STARTED]*1 + [IN_PROGRESS]*9
+        self.__modify_game_states(states)
+        self.assertEqual(self.calc.get_summary_state_of_all_games(),"in_progress")
+        self.__restore_games()
+
+    def __t27_some_games_in_progress(self):
+        states = [NOT_STARTED]*3 + [IN_PROGRESS]*7
+        self.__modify_game_states(states)
+        self.assertEqual(self.calc.get_summary_state_of_all_games(),"in_progress")
+        self.__restore_games()
+
+    def __t27_mixed_game_states(self):
+        states = [FINAL]*3 + [NOT_STARTED]*3 + [IN_PROGRESS]*4
+        self.__modify_game_states(states)
+        self.assertEqual(self.calc.get_summary_state_of_all_games(),"in_progress")
+        self.__restore_games()
+
+    def __t27_all_games_final(self):
+        self.assertEqual(self.calc.get_summary_state_of_all_games(),"final")
+
+    def __t28_game_none(self):
+        player_key = self.__get_a_valid_player_key()
+        with self.assertRaises(Exception):
+            self.calc.get_game_result_string(player_key,None)
+
+    def __t28_invalid_player(self):
+        game_key = self.__get_a_valid_game_key()
+        with self.assertRaises(Exception):
+            self.calc.get_game_result_string("bad key",game_key)
+
+    def __t28_player_pick_missing(self):
+        player = self.week1.get_player("holden_brent")
+
+        game = Game()
+        game.favored = "team1"
+        game.spread = 5.5
+        game.team1_score = 10
+        game.team2_score = 25
+        game.state = "in_progress"
+
+        game_key = self.__edit_existing_game(game)
+        self.__make_winner_missing(player_key,game_key)
+
+        self.assertEqual(self.calc.get_game_result_string(player_key,game_key),"loss")
+
+        self.__restore_picks(player_key)
+        self.__restore_game(game_key)
+
+
+    def __t28_game_win(self):
+        player = self.week1.get_player("holden_brent")
+
+        game = Game()
+        game.favored = "team1"
+        game.spread = 5.5
+        game.team1_score = 10
+        game.team2_score = 25
+        game.state = "final"
+
+        game_key = self.__edit_existing_game(game)
+        self.__change_player_pick(player_key,game_key,"team2")
+
+        self.assertEqual(self.calc.get_game_result_string(player_key,game_key),"win")
+
+        self.__restore_picks(player_key)
+        self.__restore_game(game_key)
+
+
+    def __t28_game_loss(self):
+        player = self.week1.get_player("holden_brent")
+
+        game = Game()
+        game.favored = "team1"
+        game.spread = 5.5
+        game.team1_score = 10
+        game.team2_score = 25
+        game.state = "final"
+
+        game_key = self.__edit_existing_game(game)
+        self.__change_player_pick(player_key,game_key,"team1")
+
+        self.assertEqual(self.calc.get_game_result_string(player_key,game_key),"loss")
+
+        self.__restore_picks(player_key)
+        self.__restore_game(game_key)
+
+
+    def __t28_game_ahead(self):
+        player = self.week1.get_player("holden_brent")
+
+        game = Game()
+        game.favored = "team1"
+        game.spread = 5.5
+        game.team1_score = 10
+        game.team2_score = 25
+        game.state = "in_progress"
+
+        game_key = self.__edit_existing_game(game)
+        self.__change_player_pick(player_key,game_key,"team2")
+
+        self.assertEqual(self.calc.get_game_result_string(player_key,game_key),"ahead")
+
+        self.__restore_picks(player_key)
+        self.__restore_game(game_key)
+
+
+    def __t28_game_behind(self):
+        player = self.week1.get_player("holden_brent")
+
+        game = Game()
+        game.favored = "team1"
+        game.spread = 5.5
+        game.team1_score = 10
+        game.team2_score = 25
+        game.state = "in_progress"
+
+        game_key = self.__edit_existing_game(game)
+        self.__change_player_pick(player_key,game_key,"team1")
+
+        self.assertEqual(self.calc.get_game_result_string(player_key,game_key),"behind")
+
+        self.__restore_picks(player_key)
+        self.__restore_game(game_key)
+
+
+    def __t28_game_not_started(self):
+        player = self.week1.get_player("holden_brent")
+
+        game = Game()
+        game.favored = "team1"
+        game.spread = 5.5
+        game.team1_score = 10
+        game.team2_score = 25
+        game.state = "not_started"
+
+        game_key = self.__edit_existing_game(game)
+        self.__change_player_pick(player_key,game_key,"team1")
+
+        self.assertEqual(self.calc.get_game_result_string(player_key,game_key),"")
+
+        self.__restore_picks(player_key)
+        self.__restore_game(game_key)
+
+
+    def __t29_game_none(self):
+        with self.assertRaises(Exception):
+            self.calc.get_favored_team_name(None)
+
+    def __t29_invalid_favored(self):
+        player = self.week1.get_player("holden_brent")
+
+        game = Game()
+        game.favored = "invalid"
+
+        game_key = self.__edit_existing_game(game)
+
+        with self.assertRaises(AssertionError):
+            self.calc.get_favored_team_name(game_key)
+
+        self.__restore_game(game_key)
+
+    def __t29_team1_favored(self):
+        game_key = self.__find_game_key("LSU","TCU")
+        self.assertEqual(self.calc.get_favored_team_name(game_key),"LSU")
+
+    def __t29_team2_favored(self):
+        game_key = self.__find_game_key("North Carolina","South Carolina")
+        self.assertEqual(self.calc.get_favored_team_name(game_key),"South Carolina")
+
+    def __t30_game_none(self):
+        with self.assertRaises(Exception):
+            self.calc.get_game_score_spread(None)
+
+    def __t30_game_not_started(self):
+        player = self.week1.get_player("holden_brent")
+
+        game = Game()
+        game.favored = "team1"
+        game.spread = 5.5
+        game.team1_score = 10
+        game.team2_score = 25
+        game.state = "not_started"
+
+        game_key = self.__edit_existing_game(game)
+
+        with self.assertRaises(Exception):
+            self.calc.get_game_score_spread(game_key)
+
+        self.__restore_game(game_key)
+
+    def __t30_game_in_progress(self):
+        player = self.week1.get_player("holden_brent")
+
+        game = Game()
+        game.favored = "team1"
+        game.spread = 5.5
+        game.team1_score = 10
+        game.team2_score = 25
+        game.state = "in_progress"
+
+        game_key = self.__edit_existing_game(game)
+        self.assertEqual(self.calc.get_game_score_spread(game_key),15)
+        self.__restore_game(game_key)
+
+
+    def __t30_tied_score(self):
+        player = self.week1.get_player("holden_brent")
+
+        game = Game()
+        game.favored = "team1"
+        game.spread = 5.5
+        game.team1_score = 13 
+        game.team2_score = 13
+        game.state = "final"
+
+        game_key = self.__edit_existing_game(game)
+        self.assertEqual(self.calc.get_game_score_spread(game_key),0)
+        self.__restore_game(game_key)
+
+    def __t30_team1_ahead(self):
+        player = self.week1.get_player("holden_brent")
+
+        game = Game()
+        game.favored = "team1"
+        game.spread = 5.5
+        game.team1_score = 24
+        game.team2_score = 11
+        game.state = "final"
+
+        game_key = self.__edit_existing_game(game)
+        self.assertEqual(self.calc.get_game_score_spread(game_key),13)
+        self.__restore_game(game_key)
+
+    def __t30_team2_ahead(self):
+        player = self.week1.get_player("holden_brent")
+
+        game = Game()
+
+        game.favored = "team1"
+        game.spread = 5.5
+        game.team1_score = 9
+        game.team2_score = 31
+        game.state = "final"
+
+        game_key = self.__edit_existing_game(game)
+        self.assertEqual(self.calc.get_game_score_spread(game_key),22)
+        self.__restore_game(game_key)
+
+    def __t31_pick_none(self):
+        with self.assertRaises(Exception):
+            self.calc.get_pick_score_spread(None)
+
+    def __t31_pick_team1_score_none(self):
+        pick = Pick()
+        pick.team1_score = None
+        pick.team2_score = 10
+        with self.assertRaises(AssertionError):
+            self.calc.get_pick_score_spread(pick)
+
+    def __t31_pick_team2_score_none(self):
+        pick = Pick()
+        pick.team1_score = 10
+        pick.team2_score = None
+        with self.assertRaises(AssertionError):
+            self.calc.get_pick_score_spread(pick)
+
+    def __t31_tied_score(self):
+        pick = Pick()
+        pick.team1_score = 15 
+        pick.team2_score = 15
+        self.assertEqual(self.calc.get_pick_score_spread(pick),0)
+
+    def __t31_team1_ahead(self):
+        pick = Pick()
+        pick.team1_score = 20 
+        pick.team2_score = 11
+        self.assertEqual(self.calc.get_pick_score_spread(pick),9)
+
+    def __t31_team2_ahead(self):
+        pick = Pick()
+        pick.team1_score = 3
+        pick.team2_score = 11
+        self.assertEqual(self.calc.get_pick_score_spread(pick),8)
+
+    def __t32_featured_game(self):
+        game = self.calc.get_featured_game()
+        self.assertEqual(game.number,10)
+
+    def __t32_featured_game_missing(self):
+        featured_game_key = self.__get_game10_key()
+        self.week1.games[featured_game_key].number = 11
+
+        with self.assertRaises(AssertionError):
+            self.calc.get_featured_game()
+
+        self.week1.games[featured_game_key].number = 10
+
+    def __t33_invalid_player(self):
+        with self.assertRaises(Exception):
+            self.calc.get_win_percent("bad key")
+
+    def __t33_games_not_started(self):
+        player = self.week1.get_player("holden_brent")
+        self.__modify_game_states([NOT_STARTED]*10)
+        self.assertEqual(self.calc.get_win_percent(player_key),0.00)
+        self.__restore_games()
+
+    def __t33_games_in_progress(self):
+        player = self.week1.get_player("holden_brent")
+        states = [IN_PROGRESS]*10
+        self.__modify_game_states(states)
+        self.assertEqual(self.calc.get_win_percent(player_key),0.00)
+        self.__restore_games()
+
+    def __t33_games_mixed(self):
+        player = self.week1.get_player("holden_brent")
+        states = [FINAL]*3 + [NOT_STARTED]*3 + [IN_PROGRESS]*4
+
+        num_wins_in_first_3_games = 2
+        num_games_final = 3
+        expected_win_pct = float(num_wins_in_first_3_games) / float(num_games_final)
+
+        self.__modify_game_states(states)
+        self.assertEqual(self.calc.get_win_percent(player_key),expected_win_pct)
+        self.__restore_games()
+
+    def __t33_games_final(self):
+        player = self.week1.get_player("holden_brent")
+        num_wins = 5
+        num_games_final = 10 
+        expected_win_pct = float(num_wins) / float(num_games_final)
+
+        self.assertEqual(self.calc.get_win_percent(player_key),expected_win_pct)
+
+    def __t34_invalid_player(self):
+        with self.assertRaises(Exception):
+            self.calc.get_win_percent_string("bad key")
+
+    def __t34_games_not_started(self):
+        player = self.week1.get_player("holden_brent")
+        self.__modify_game_states([NOT_STARTED]*10)
+        self.assertEqual(self.calc.get_win_percent_string(player_key),"0.000")
+        self.__restore_games()
+
+    def __t34_games_in_progress(self):
+        player = self.week1.get_player("holden_brent")
+        states = [IN_PROGRESS]*10
+        self.__modify_game_states(states)
+        self.assertEqual(self.calc.get_win_percent_string(player_key),"0.000")
+        self.__restore_games()
+
+    def __t34_games_mixed(self):
+        player = self.week1.get_player("holden_brent")
+        states = [FINAL]*3 + [NOT_STARTED]*3 + [IN_PROGRESS]*4
+
+        self.__modify_game_states(states)
+        self.assertEqual(self.calc.get_win_percent_string(player_key),"0.667")
+        self.__restore_games()
+
+    def __t34_games_final(self):
+        player = self.week1.get_player("holden_brent")
+        self.assertEqual(self.calc.get_win_percent_string(player_key),"0.500")
 
     def __get_a_valid_game(self):
         return self.week1.games[1]

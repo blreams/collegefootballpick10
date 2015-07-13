@@ -316,31 +316,76 @@ class CalculateResults:
         return not_started == len(self.__data.games)
 
     def at_least_one_game_in_progress(self):
-        raise AssertionError,"Not implemented"
+        in_progress = 0
+        for game in self.__data.games.values():
+            if game.game_state == IN_PROGRESS:
+                in_progress += 1
+        return in_progress > 0
 
     def get_summary_state_of_all_games(self):
-        raise AssertionError,"Not implemented"
+        if self.all_games_final():
+            return FINAL
+        if self.no_games_started():
+            return NOT_STARTED
+        return IN_PROGRESS
 
-    def get_game_result_string(self,player_key,game_key):
-        raise AssertionError,"Not implemented"
+    def get_game_result_string(self,player,game):
+        assert game != None and self.__game_id_valid(game.id),"invalid game"
+        assert player != None and self.__player_id_valid(player.id),"invalid player"
 
-    def get_favored_team_name(self,game_key):
-        raise AssertionError,"Not implemented"
+        if self.did_player_win_game(player,game):
+            return "win"
+        if self.did_player_lose_game(player,game):
+            return "loss"
+        if self.is_player_winning_game(player,game):
+            return "ahead"
+        if self.is_player_losing_game(player,game):
+            return "behind"
+        return ""
 
-    def get_game_score_spread(self,game_key):
-        raise AssertionError,"Not implemented"
+    def get_favored_team_name(self,game):
+        assert game != None and self.__game_id_valid(game.id),"invalid game"
+
+        if game.favored == TEAM1:
+            return game.team1.team_name
+        elif game.favored == TEAM2:
+            return game.team2.team_name
+        raise AssertionError,"invalid favored value"
+
+    def get_game_score_spread(self,game):
+        assert game != None and self.__game_id_valid(game.id),"invalid game"
+        assert game.game_state != NOT_STARTED,"a game that has not started has no spread"
+        assert game.team1_actual_points != None,"invalid score value"
+        assert game.team2_actual_points != None,"invalid score value"
+        assert game.team1_actual_points >= 0,"invalid score value"
+        assert game.team2_actual_points >= 0,"invalid score value"
+        return abs(game.team1_actual_points-game.team2_actual_points)
 
     def get_pick_score_spread(self,pick):
-        raise AssertionError,"Not implemented"
+        assert pick != None,"invalid pick value"
+        assert pick.team1_predicted_points != None,"pick team1 score is invalid"
+        assert pick.team2_predicted_points != None,"pick team2 score is invalid"
+        assert pick.team1_predicted_points >= 0,"pick team1 score is invalid"
+        assert pick.team2_predicted_points >= 0,"pick team2 score is invalid"
+        return abs(pick.team1_score-pick.team2_score)
 
     def get_featured_game(self):
-        raise AssertionError,"Not implemented"
+        game = self.__data.games.get(10)
+        assert game != None, "did not find a featured game"
+        return game
 
-    def get_win_percent(self,player_key):
-        raise AssertionError,"Not implemented"
+    def get_win_percent(self,player):
+        wins = self.get_number_of_wins(player)
+        losses = self.get_number_of_losses(player)
+        num_games = wins+losses
 
-    def get_win_percent_string(self,player_key):
-        raise AssertionError,"Not implemented"
+        if num_games == 0:
+            return 0.0
+        return float(wins) / float(num_games)
+
+    def get_win_percent_string(self,player):
+        win_pct = self.get_win_percent(player_key)
+        return "%0.3f" % (win_pct)
 
     def get_player_pick_for_game(self,player_key,game_key):
         raise AssertionError,"Not implemented"
