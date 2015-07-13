@@ -272,20 +272,48 @@ class CalculateResults:
         else:
             raise AssertionError,"invalid game state"
 
-    def is_player_possible_to_win_game(self,player_key,game_key):
-        raise AssertionError,"Not implemented"
+    def is_player_possible_to_win_game(self,player,game):
+        assert game != None and self.__game_id_valid(game.id),"invalid game"
 
-    def get_number_of_projected_wins(self,player_key):
-        raise AssertionError,"Not implemented"
+        if self.player_did_not_pick(player,game):
+            return False
 
-    def get_number_of_possible_wins(self,player_key):
-        raise AssertionError,"Not implemented"
+        if game.game_state == FINAL:
+            return self.did_player_win_game(player,game)
+        elif game.game_state == IN_PROGRESS:
+            return True
+        elif game.game_state == NOT_STARTED:
+            return True
+        else:
+            raise AssertionError,"invalid game state"
+
+    def get_number_of_projected_wins(self,player):
+        wins = 0
+        for game in self.__data.games.values():
+            if self.is_player_projected_to_win_game(player,game):
+                wins += 1
+        return wins
+
+    def get_number_of_possible_wins(self,player):
+        wins = 0
+        for game in self.__data.games.values():
+            if self.is_player_possible_to_win_game(player,game):
+                wins += 1
+        return wins
 
     def all_games_final(self):
-        raise AssertionError,"Not implemented"
+        final_games = 0
+        for game in self.__data.games.values():
+            if game.game_state == FINAL:
+                final_games += 1
+        return final_games == len(self.__data.games)
 
     def no_games_started(self):
-        raise AssertionError,"Not implemented"
+        not_started = 0
+        for game in self.__data.games.values():
+            if game.state == NOT_STARTED:
+                not_started += 1
+        return not_started == len(self.__data.games)
 
     def at_least_one_game_in_progress(self):
         raise AssertionError,"Not implemented"
