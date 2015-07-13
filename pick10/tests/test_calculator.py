@@ -441,19 +441,29 @@ class CalculatorTests(TestCase):
     def test_t23_11_get_number_of_possible_wins(self):
         self.__t23_game_final_player_10_wins()
 
-    def test_t24_all_games_final(self):
-        pass
-        #self.__t24_no_games_started()
-        #self.__t24_some_games_in_progress()
-        #self.__t24_mixed_game_states()
-        #self.__t24_all_games_final()
+    def test_t24_1_all_games_final(self):
+        self.__t24_no_games_started()
 
-    def test_t25_no_games_started(self):
-        pass
-        #self.__t25_no_games_started()
-        #self.__t25_some_games_in_progress()
-        #self.__t25_mixed_game_states()
-        #self.__t25_all_games_final()
+    def test_t24_2_all_games_final(self):
+        self.__t24_some_games_in_progress()
+
+    def test_t24_3_all_games_final(self):
+        self.__t24_mixed_game_states()
+
+    def test_t24_4_all_games_final(self):
+        self.__t24_all_games_final()
+
+    def test_t25_1_no_games_started(self):
+        self.__t25_no_games_started()
+
+    def test_t25_2_no_games_started(self):
+        self.__t25_some_games_in_progress()
+
+    def test_t25_3_no_games_started(self):
+        self.__t25_mixed_game_states()
+
+    def test_t25_4_no_games_started(self):
+        self.__t25_all_games_final()
 
     def __t1_invalid_player(self):
         bad_player = Player()
@@ -1985,19 +1995,16 @@ class CalculatorTests(TestCase):
     def __t24_no_games_started(self):
         self.__modify_game_states([NOT_STARTED]*10)
         self.assertFalse(self.calc.all_games_final())
-        self.__restore_games()
 
     def __t24_some_games_in_progress(self):
         states = [NOT_STARTED]*3 + [IN_PROGRESS]*7
         self.__modify_game_states(states)
         self.assertFalse(self.calc.all_games_final())
-        self.__restore_games()
 
     def __t24_mixed_game_states(self):
         states = [FINAL]*3 + [NOT_STARTED]*3 + [IN_PROGRESS]*4
         self.__modify_game_states(states)
         self.assertFalse(self.calc.all_games_final())
-        self.__restore_games()
 
     def __t24_all_games_final(self):
         self.assertTrue(self.calc.all_games_final())
@@ -2005,19 +2012,16 @@ class CalculatorTests(TestCase):
     def __t25_no_games_started(self):
         self.__modify_game_states([NOT_STARTED]*10)
         self.assertTrue(self.calc.no_games_started())
-        self.__restore_games()
 
     def __t25_some_games_in_progress(self):
         states = [NOT_STARTED]*3 + [IN_PROGRESS]*7
         self.__modify_game_states(states)
         self.assertFalse(self.calc.no_games_started())
-        self.__restore_games()
 
     def __t25_mixed_game_states(self):
         states = [FINAL]*3 + [NOT_STARTED]*3 + [IN_PROGRESS]*4
         self.__modify_game_states(states)
         self.assertFalse(self.calc.no_games_started())
-        self.__restore_games()
 
     def __t25_all_games_final(self):
         self.assertFalse(self.calc.no_games_started())

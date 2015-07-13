@@ -311,7 +311,7 @@ class CalculateResults:
     def no_games_started(self):
         not_started = 0
         for game in self.__data.games.values():
-            if game.state == NOT_STARTED:
+            if game.game_state == NOT_STARTED:
                 not_started += 1
         return not_started == len(self.__data.games)
 
