@@ -511,26 +511,36 @@ class CalculatorTests(TestCase):
     def test_t28_4_get_game_result_string(self):
         self.__t28_game_ahead()
 
-    def test_t28_6_get_game_result_string(self):
+    def test_t28_5_get_game_result_string(self):
         self.__t28_game_behind()
 
     def test_t28_6_get_game_result_string(self):
         self.__t28_game_not_started()
 
     def test_t29_get_favored_team_name(self):
-        return
         self.__t29_game_none()
-        self.__t29_invalid_favored()
         self.__t29_team1_favored()
         self.__t29_team2_favored()
 
+    def test_t29_1_get_favored_team_name(self):
+        self.__t29_invalid_favored()
+
     def test_t30_get_game_score_spread(self):
-        return
         self.__t30_game_none()
+
+    def test_t30_1_get_game_score_spread(self):
         self.__t30_game_not_started()
+
+    def test_t30_2_get_game_score_spread(self):
         self.__t30_game_in_progress()
+
+    def test_t30_3_get_game_score_spread(self):
         self.__t30_tied_score()
+
+    def test_t30_4_get_game_score_spread(self):
         self.__t30_team1_ahead()
+
+    def test_t30_5_get_game_score_spread(self):
         self.__t30_team2_ahead()
 
     def test_t31_get_pick_score_spread(self):
@@ -2266,13 +2276,10 @@ class CalculatorTests(TestCase):
         player = self.week1.get_player("holden_brent")
 
         game = self.__get_a_valid_game()
-        game.favored = "invalid"
-
+        game.favored = 0
 
         with self.assertRaises(AssertionError):
             self.calc.get_favored_team_name(game)
-
-        self.__restore_game(game)
 
     def __t29_team1_favored(self):
         game = self.__find_game("LSU","TCU")
@@ -2299,8 +2306,6 @@ class CalculatorTests(TestCase):
         with self.assertRaises(Exception):
             self.calc.get_game_score_spread(game)
 
-        self.__restore_game(game)
-
     def __t30_game_in_progress(self):
         player = self.week1.get_player("holden_brent")
 
@@ -2312,8 +2317,6 @@ class CalculatorTests(TestCase):
         game.game_state = IN_PROGRESS
 
         self.assertEqual(self.calc.get_game_score_spread(game),15)
-        self.__restore_game(game)
-
 
     def __t30_tied_score(self):
         player = self.week1.get_player("holden_brent")
@@ -2326,7 +2329,6 @@ class CalculatorTests(TestCase):
         game.game_state = FINAL
 
         self.assertEqual(self.calc.get_game_score_spread(game),0)
-        self.__restore_game(game)
 
     def __t30_team1_ahead(self):
         player = self.week1.get_player("holden_brent")
@@ -2339,13 +2341,11 @@ class CalculatorTests(TestCase):
         game.game_state = FINAL
 
         self.assertEqual(self.calc.get_game_score_spread(game),13)
-        self.__restore_game(game)
 
     def __t30_team2_ahead(self):
         player = self.week1.get_player("holden_brent")
 
         game = self.__get_a_valid_game()
-
         game.favored = TEAM1
         game.spread = 5.5
         game.team1_actual_points = 9
@@ -2353,7 +2353,6 @@ class CalculatorTests(TestCase):
         game.game_state = FINAL
 
         self.assertEqual(self.calc.get_game_score_spread(game),22)
-        self.__restore_game(game)
 
     def __t31_pick_none(self):
         with self.assertRaises(Exception):
