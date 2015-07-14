@@ -367,7 +367,7 @@ class CalculateResults:
         assert pick.team2_predicted_points != None,"pick team2 score is invalid"
         assert pick.team1_predicted_points >= 0,"pick team1 score is invalid"
         assert pick.team2_predicted_points >= 0,"pick team2 score is invalid"
-        return abs(pick.team1_score-pick.team2_score)
+        return abs(pick.team1_predicted_points-pick.team2_predicted_points)
 
     def get_featured_game(self):
         game = self.__data.games.get(10)
@@ -384,11 +384,14 @@ class CalculateResults:
         return float(wins) / float(num_games)
 
     def get_win_percent_string(self,player):
-        win_pct = self.get_win_percent(player_key)
+        win_pct = self.get_win_percent(player)
         return "%0.3f" % (win_pct)
 
-    def get_player_pick_for_game(self,player_key,game_key):
-        raise AssertionError,"Not implemented"
+    def get_player_pick_for_game(self,player,game):
+        picks = self.__data.player_picks[player.id]
+        pick = self.__find_player_pick_for_game(picks,game)
+        assert pick != None,"Could not find a pick that matches the passed in game"
+        return pick
 
     def get_player_submit_time(self,player_key,week=None):
         raise AssertionError,"Not implemented"
