@@ -2608,7 +2608,7 @@ class CalculatorTests(TestCase):
         self.__change_player_pick_time(player,games[8],created=created_time,updated=dt.datetime(2013,8,10))
         self.__change_player_pick_time(player,games[9],created=created_time,updated=dt.datetime(2013,8,10))
         self.__change_player_pick_time(player,games[10],created=created_time,updated=dt.datetime(2013,8,10))
-        self.assertEqual(self.calc.get_player_submit_time(player,week),dt.datetime(2013,8,11))
+        self.assertIsNone(self.calc.get_player_submit_time(player,week))
 
     def __t36_submit_after_week_lock(self):
         player = self.week1.get_player("holden_brent")
@@ -2738,7 +2738,7 @@ class CalculatorTests(TestCase):
                     self.week1.player_picks[player.id][i].winner = TEAM1
 
     def __change_player_pick_time(self,player,game,created=None,updated=None):
-        assert created == None or updated == None,"At least one of the time fields should be specified"
+        assert created != None or updated != None,"At least one of the time fields should be specified"
 
         create_and_update = created != None and updated != None
         create_only = created != None and updated == None
