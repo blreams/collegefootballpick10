@@ -1,0 +1,7 @@
+Welcome to CollegeFootballPick10.
+
+To activate your account, go here:
+    http://{{ site }}{% url 'registration_activate' activation_key %}
+
+NOTE: If the link above is not clickable, cut-n-paste the link in your browser.
+

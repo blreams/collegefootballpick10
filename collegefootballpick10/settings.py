@@ -19,7 +19,8 @@ TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = ')qrym+f!gm*^c4fwf#sykrx4n)nhfv1+=@a5v_w4qk*z!fw@f('
+#SECRET_KEY = ')qrym+f!gm*^c4fwf#sykrx4n)nhfv1+=@a5v_w4qk*z!fw@f('
+SECRET_KEY = os.environ.get('COLLEGEFOOTBALLPICK10_DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -120,4 +121,13 @@ ACCOUNT_ACTIVATION_DAYS = 7          # One week activation window
 REGISTRATION_AUTO_LOGIN = True       # If True, the user will be automatically logged in
 LOGIN_REDIRECT_URL = '/pick10/'      # The page you want users to arrive at upon successful login
 LOGIN_URL = '/accounts/login/'       # The page users are directed to if they are not logged in
+
+# The following settins are specific to sending email:
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'collegefootballpick10'
+EMAIL_HOST_PASSWORD = os.environ.get('COLLEGEFOOTBALLPICK10_GMAIL_PASSWORD')
+DEFAULT_FROM_EMAIL = 'collegefootballpick10@gmail.com'
+DEFAULT_TO_EMAIL = 'fluffgazer@hotmail.com'
 

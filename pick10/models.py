@@ -24,11 +24,15 @@ def get_default_pick_deadline():
 class UserProfile(models.Model):
     tz_choices = [(tz, tz) for tz in pytz.all_timezones if tz.startswith('US')]
     user = models.OneToOneField(User)
+    player = models.OneToOneField('Player', blank=True, null=True)
     company = models.CharField(max_length=50, blank=True)
     # You can customize this with whatever fields you want to extend User.
     preferredtz = models.CharField(max_length=100, null=True, blank=True, choices=tz_choices)
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
+
+    def __unicode__(self):
+        return 'User=%s, Player=%s' % (self.user.username, self.player,)
 
 class Year(models.Model):
     yearnum = models.IntegerField()
@@ -49,6 +53,7 @@ class Year(models.Model):
 class Player(models.Model):
     public_name = models.CharField(max_length=100, null=True, blank=True, default='')
     private_name = models.CharField(max_length=100, null=True, blank=True, default='')
+    ss_name = models.CharField(max_length=100, null=True, blank=True, default='')
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
 
@@ -56,7 +61,7 @@ class Player(models.Model):
         verbose_name_plural = '2. Players'
 
     def __unicode__(self):
-        return '%s/%s'%(self.private_name, self.public_name,)
+        return '%s/%s/%s'%(self.private_name, self.public_name, self.ss_name)
 
 class PlayerYear(models.Model):
     player = models.ForeignKey('Player')
@@ -101,10 +106,9 @@ class Team(models.Model):
 class Week(models.Model):
     year = models.ForeignKey('Year')                                        # Season year corresponding to this week
     weeknum = models.IntegerField()                                         # Week number within the season
-    #games = models.IntegerFields(default=10)                               # Number of games that make up the week
-    winner = models.ForeignKey(User, null=True, blank=True, default=None)   # Link to User who won the week
+    winner = models.ForeignKey(Player, null=True, blank=True, default=None) # Link to Player who won the week
     lock_picks = models.DateTimeField(null=True, blank=True)                # When generating a new Week, use get_default_pick_deadline()
-    lock_scores = models.BooleanField(default=False)                        # Once all scores are submitted as final by admin, update to True
+    lock_scores = models.BooleanField(default=False)                        # Commissioner sets to True, after which only commissioner can update scores
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
 
@@ -127,6 +131,7 @@ class Game(models.Model):
     game_state = models.IntegerField(default=0)                             # Enum (0=invalid, 1=not_started, 2=in_progress, 3=final)
     quarter = models.CharField(max_length=3, default='1st')                 # Used to indicate game progress ('1st', '2nd', '3rd', '4th', 'OT')
     time_left = models.CharField(max_length=10, default='15:00')            # Time left in the quarter (MM:SS)
+    winner = models.IntegerField(default=0)                                 # Winner according to spread
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
 
