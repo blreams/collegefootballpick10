@@ -3,6 +3,7 @@ from pick10.database import Database
 from pick10.calculator import *
 from pick10.models import *
 from unit_test_database import *
+import datetime as dt
 
 # This class tests the calculator.py file load_week_data function
 class CalculatorTests(TestCase):
@@ -600,6 +601,27 @@ class CalculatorTests(TestCase):
 
     def test_t35_3_get_player_pick_for_game(self):
         self.__t35_valid_player_pick()
+
+    def test_t36_0_get_player_submit_time(self):
+        self.__t36_invalid_player()
+
+    def test_t36_1_get_player_submit_time(self):
+        self.__t36_pick_created_entry_time()
+
+    def test_t36_2_get_player_submit_time(self):
+        self.__t36_pick_updated_entry_time()
+
+    def test_t36_3_get_player_submit_time(self):
+        self.__t36_week_lock_picks_not_specified()
+
+    def test_t36_4_get_player_submit_time(self):
+        self.__t36_submit_after_week_lock()
+
+    def test_t36_5_get_player_submit_time(self):
+        self.__t36_submit_before_week_lock()
+
+    def test_t36_6_get_player_submit_time(self):
+        self.__t36_submit_same_as_week_lock()
 
     def __t1_invalid_player(self):
         bad_player = Player()
@@ -2533,6 +2555,115 @@ class CalculatorTests(TestCase):
         pick = self.calc.get_player_pick_for_game(player,game)
         self.assertEqual(pick.game.id,game.id)
 
+    def __t36_invalid_player(self):
+        bad_player = Player()
+        bad_player.id = -1
+        with self.assertRaises(Exception):
+            self.calc.get_player_submit_time(bad_player)
+
+    def __t36_pick_created_entry_time(self):
+        player = self.week1.get_player("holden_brent")
+        games = self.week1.games
+        self.__change_player_pick_time(player,games[1],created=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[2],created=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[3],created=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[4],created=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[5],created=dt.datetime(2013,8,11))
+        self.__change_player_pick_time(player,games[6],created=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[7],created=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[8],created=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[9],created=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[10],created=dt.datetime(2013,8,10))
+        self.assertEqual(self.calc.get_player_submit_time(player),dt.datetime(2013,8,11))
+
+    def __t36_pick_updated_entry_time(self):
+        player = self.week1.get_player("holden_brent")
+        games = self.week1.games
+        created_time=dt.datetime(2013,8,1)
+        self.__change_player_pick_time(player,games[1],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[2],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[3],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[4],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[5],created=created_time,updated=dt.datetime(2013,8,11))
+        self.__change_player_pick_time(player,games[6],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[7],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[8],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[9],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[10],created=created_time,updated=dt.datetime(2013,8,10))
+        self.assertEqual(self.calc.get_player_submit_time(player),dt.datetime(2013,8,11))
+
+    def __t36_week_lock_picks_not_specified(self):
+        player = self.week1.get_player("holden_brent")
+        games = self.week1.games
+        week = self.week1.week
+        week.lock_picks = None
+        created_time=dt.datetime(2013,8,1)
+        self.__change_player_pick_time(player,games[1],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[2],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[3],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[4],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[5],created=created_time,updated=dt.datetime(2013,8,11))
+        self.__change_player_pick_time(player,games[6],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[7],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[8],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[9],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[10],created=created_time,updated=dt.datetime(2013,8,10))
+        self.assertEqual(self.calc.get_player_submit_time(player,week),dt.datetime(2013,8,11))
+
+    def __t36_submit_after_week_lock(self):
+        player = self.week1.get_player("holden_brent")
+        games = self.week1.games
+        week = self.week1.week
+        week.lock_picks = dt.datetime(2013,8,10)
+        created_time=dt.datetime(2013,8,1)
+        self.__change_player_pick_time(player,games[1],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[2],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[3],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[4],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[5],created=created_time,updated=dt.datetime(2013,8,11))
+        self.__change_player_pick_time(player,games[6],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[7],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[8],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[9],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[10],created=created_time,updated=dt.datetime(2013,8,10))
+        self.assertIsNone(self.calc.get_player_submit_time(player,week))
+
+    def __t36_submit_before_week_lock(self):
+        player = self.week1.get_player("holden_brent")
+        games = self.week1.games
+        week = self.week1.week
+        week.lock_picks = dt.datetime(2013,8,12)
+        created_time=dt.datetime(2013,8,1)
+        self.__change_player_pick_time(player,games[1],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[2],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[3],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[4],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[5],created=created_time,updated=dt.datetime(2013,8,11))
+        self.__change_player_pick_time(player,games[6],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[7],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[8],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[9],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[10],created=created_time,updated=dt.datetime(2013,8,10))
+        self.assertEqual(self.calc.get_player_submit_time(player,week),dt.datetime(2013,8,11))
+
+    def __t36_submit_same_as_week_lock(self):
+        player = self.week1.get_player("holden_brent")
+        games = self.week1.games
+        week = self.week1.week
+        week.lock_picks = dt.datetime(2013,8,11)
+        created_time=dt.datetime(2013,8,1)
+        self.__change_player_pick_time(player,games[1],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[2],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[3],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[4],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[5],created=created_time,updated=dt.datetime(2013,8,11))
+        self.__change_player_pick_time(player,games[6],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[7],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[8],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[9],created=created_time,updated=dt.datetime(2013,8,10))
+        self.__change_player_pick_time(player,games[10],created=created_time,updated=dt.datetime(2013,8,10))
+        self.assertEqual(self.calc.get_player_submit_time(player,week),dt.datetime(2013,8,11))
+
     def __get_a_valid_game(self):
         return self.week1.games[1]
 
@@ -2605,3 +2736,23 @@ class CalculatorTests(TestCase):
                     self.week1.player_picks[player.id][i].winner = TEAM2
                 elif pick.winner == TEAM2:
                     self.week1.player_picks[player.id][i].winner = TEAM1
+
+    def __change_player_pick_time(self,player,game,created=None,updated=None):
+        assert created == None or updated == None,"At least one of the time fields should be specified"
+
+        create_and_update = created != None and updated != None
+        create_only = created != None and updated == None
+        update_only = created == None and updated != None
+
+        player_picks = self.week1.player_picks[player.id]
+        for i,pick in enumerate(player_picks):
+            if pick.game == game:
+                if create_and_update:
+                    self.week1.player_picks[player.id][i].created = created
+                    self.week1.player_picks[player.id][i].updated = updated
+                elif create_only:
+                    self.week1.player_picks[player.id][i].created = created
+                    self.week1.player_picks[player.id][i].updated = created
+                elif update_only:
+                    self.week1.player_picks[player.id][i].created = updated
+                    self.week1.player_picks[player.id][i].updated = updated

@@ -393,8 +393,19 @@ class CalculateResults:
         assert pick != None,"Could not find a pick that matches the passed in game"
         return pick
 
-    def get_player_submit_time(self,player_key,week=None):
-        raise AssertionError,"Not implemented"
+    def get_player_submit_time(self,player,week=None):
+        picks = self.__data.player_picks[player.id]
+        latest_time = None
+        for pick in picks:
+            pick_entry_time = max(pick.created,pick.updated)
+
+            if latest_time == None or pick_entry_time > latest_time:
+                latest_time = pick_entry_time
+
+        if self.__submit_time_invalid(week,latest_time):
+            return None
+
+        return latest_time
 
     def __find_player_pick_for_game(self,picks,game):
         if game == None:
@@ -411,5 +422,16 @@ class CalculateResults:
         return player_id in self.__data.players
 
     def __submit_time_invalid(self,week,submit_time):
-        raise AssertionError,"Not implemented"
+        if week == None:
+            return False
+
+        pick_deadline_not_set = week.lock_picks == None
+        if pick_deadline_not_set:
+            return True
+
+        picks_entered_after_pick_deadline = submit_time > week.lock_picks
+        if picks_entered_after_pick_deadline:
+            return True
+
+        return False
 
