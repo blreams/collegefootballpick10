@@ -11,6 +11,7 @@ class CalculatorTests(TestCase):
     @classmethod
     def setUpClass(cls):
         test_db = UnitTestDatabase()
+        import pdb; pdb.set_trace()
         test_db.load_historical_data_for_week(2013,1)
         test_db.load_historical_data_for_week(2013,2)
 

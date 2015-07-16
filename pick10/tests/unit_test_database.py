@@ -2,7 +2,8 @@
 # The class creates a central location for setting up a database 
 # so each unit test doesn't have to reinvent the wheel every time.
 from pick10.models import *
-from stage_history import populate_conferences_teams, populate_players, populate_picks_for_year_week, populate_games_for_year_week
+from stage_history import main, populate_picks_for_year_week, populate_games_for_year_week, populate_year, populate_player_count
+from stage_models import populate_conferences_teams
 
 TEAM1 = 1
 TEAM2 = 2
@@ -21,7 +22,7 @@ class UnitTestDatabase:
         game5 = self.setup_game(week,5,"South Carolina","Georgia",favored=1,spread=9.5)
         game6 = self.setup_game(week,6,"Tennessee","Vanderbilt",favored=2,spread=11.5)
         game7 = self.setup_game(week,7,"Auburn","Alabama",favored=1,spread=1.5)
-        game8 = self.setup_game(week,8,"Southern Cal","UCLA",favored=2,spread=4.5)
+        game8 = self.setup_game(week,8,"Southern California","UCLA",favored=2,spread=4.5)
         game9 = self.setup_game(week,9,"Army","Navy",favored=2,spread=5.5)
         game10 = self.setup_game(week,10,"Notre Dame","Florida State",favored=1,spread=0.5)
         brent = self.setup_player(year,'Brent','BrentH')
@@ -47,21 +48,35 @@ class UnitTestDatabase:
         add_pick(john,game9,TEAM2)
         add_pick(john,game10,TEAM2,7,21)
 
-    def load_historical_data_for_year(self,year=2014):
+    def load_historical_data_for_year(self,year=2014): # TODO
+        main(years=[year])
+        return
+        year = populate_year(year)
+        populate_player_count(year,0)
         for week_number in range(1,14):
-            week = self.setup_week(year,week_number)
-        populate_players([year])
-        populate_games_for_year(year)
-        populate_picks([year])
+            #week = self.setup_week(year,week_number)
+            populate_week(year, week_number)
+            populate_games_for_year_week(year, week_number)
+            populate_picks_for_year_week(year, week_number)
+        #populate_games_for_year(year)
+        #populate_picks([year])
 
-    def load_historical_data_for_week(self,year=2014,week_number=1):
-        week = self.setup_week(year,week_number)
-        populate_players([year])
-        populate_games_for_year_week(year,week_number)
-        populate_picks_for_year_week(year,week_number)
+    def load_historical_data_for_week(self,year=2014,week_number=1): # TODO
+        main(years=[year],weeks=[week_number])
+        return
+        year = populate_year(year)
+        populate_player_count(year,0)
+        populate_week(year, week_number)
+        populate_games_for_year_week(year, week_number)
+        populate_picks_for_year_week(year, week_number)
+        #main(years=[2014],weeks=[week_number])
+        #week = self.setup_week(year,week_number)
+        #populate_players([year])
+        #populate_games_for_year_week(year,week_number)
+        #populate_picks_for_year_week(year,week_number)
 
     def setup_week(self,year,week_number):
-        (year_model,created) = Year.objects.get_or_create(yearnum=year)
+        year_model = populate_year(year)
         week = add_week(year,week_number)
         return week
 
