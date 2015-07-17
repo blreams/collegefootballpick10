@@ -11,9 +11,15 @@ class CalculatorTests(TestCase):
     @classmethod
     def setUpClass(cls):
         test_db = UnitTestDatabase()
-        import pdb; pdb.set_trace()
         test_db.load_historical_data_for_week(2013,1)
         test_db.load_historical_data_for_week(2013,2)
+        super(CalculatorTests, cls).setUpClass()
+
+    @classmethod
+    def tearDownClass(cls):
+        test_db = UnitTestDatabase()
+        test_db.delete_database()
+        super(CalculatorTests, cls).tearDownClass()
 
     def setUp(self):
         self.db = Database()
@@ -633,24 +639,24 @@ class CalculatorTests(TestCase):
 
     def __t1_invalid_game(self):
         invalid_game = self.__get_a_valid_game2()
-        valid_player = self.week1.get_player("holden_brent")
+        valid_player = self.week1.get_player("Brent Holden")
         with self.assertRaises(AssertionError):
             self.calc.get_team_player_picked_to_win(valid_player,invalid_game)
 
     def __t1_game_none(self):
-        valid_player = self.week1.get_player("holden_brent")
+        valid_player = self.week1.get_player("Brent Holden")
         with self.assertRaises(AssertionError):
             self.calc.get_team_player_picked_to_win(valid_player,None)
 
     def __t1_team2_winner(self):
         game = self.__find_game("North Carolina","South Carolina")
-        brent = self.week1.get_player("holden_brent")
+        brent = self.week1.get_player("Brent Holden")
         team = self.calc.get_team_player_picked_to_win(brent,game)
         self.assertEqual(team,TEAM2)
 
     def __t1_team1_winner(self):
         game = self.__find_game("LSU","TCU")
-        brent = self.week1.get_player("holden_brent")
+        brent = self.week1.get_player("Brent Holden")
         team = self.calc.get_team_player_picked_to_win(brent,game)
         self.assertEqual(team,TEAM1)
 
@@ -663,29 +669,29 @@ class CalculatorTests(TestCase):
 
     def __t2_invalid_game(self):
         invalid_game = self.__get_a_valid_game2()
-        valid_player = self.week1.get_player("holden_brent")
+        valid_player = self.week1.get_player("Brent Holden")
         with self.assertRaises(AssertionError):
             self.calc.get_team_name_player_picked_to_win(valid_player,invalid_game)
 
     def __t2_game_none(self):
-        valid_player = self.week1.get_player("holden_brent")
+        valid_player = self.week1.get_player("Brent Holden")
         with self.assertRaises(AssertionError):
             self.calc.get_team_name_player_picked_to_win(valid_player,None)
 
     def __t2_team2_winner(self):
         game = self.__find_game("North Carolina","South Carolina")
-        brent = self.week1.get_player("holden_brent")
+        brent = self.week1.get_player("Brent Holden")
         team = self.calc.get_team_name_player_picked_to_win(brent,game)
         self.assertEqual(team,"South Carolina")
 
     def __t2_team1_winner(self):
         game = self.__find_game("LSU","TCU")
-        brent = self.week1.get_player("holden_brent")
+        brent = self.week1.get_player("Brent Holden")
         team = self.calc.get_team_name_player_picked_to_win(brent,game)
         self.assertEqual(team,"LSU")
 
     def __t2_winner_missing(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         game = self.__get_a_valid_game()
 
         self.__make_winner_missing(player,game)
@@ -1167,12 +1173,12 @@ class CalculatorTests(TestCase):
         self.assertEqual(self.calc.get_team_name_winning_game(g),"Clemson")
 
     def __t13_game_none(self):
-        valid_player = self.week1.get_player("holden_brent")
+        valid_player = self.week1.get_player("Brent Holden")
         with self.assertRaises(Exception):
             self.calc.player_did_not_pick(valid_player,None)
 
     def __t13_game_invalid(self):
-        valid_player = self.week1.get_player("holden_brent")
+        valid_player = self.week1.get_player("Brent Holden")
         invalid_game = self.__get_a_valid_game2()
         with self.assertRaises(Exception):
             self.calc.player_did_not_pick(valid_player,invalid_game)
@@ -1185,30 +1191,30 @@ class CalculatorTests(TestCase):
             self.calc.player_did_not_pick(bad_player,game)
 
     def __t13_player_missing_all_week_picks(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         game = self.__get_a_valid_game()
         self.__make_all_picks_missing(player)
         self.assertTrue(self.calc.player_did_not_pick(player,game))
 
     def __t13_player_missing_pick_for_game(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         game = self.__get_a_valid_game()
         self.__remove_game_from_picks(player,game)
         self.assertTrue(self.calc.player_did_not_pick(player,game))
 
     def __t13_player_missing_pick_winner(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         game = self.__get_a_valid_game()
         self.__make_winner_missing(player,game)
         self.assertTrue(self.calc.player_did_not_pick(player,game))
 
     def __t13_player_made_pick(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         game = self.__get_a_valid_game()
         self.assertFalse(self.calc.player_did_not_pick(player,game))
 
     def __t14_game_none(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         with self.assertRaises(Exception):
             self.calc.did_player_win_game(player,None)
 
@@ -1220,36 +1226,36 @@ class CalculatorTests(TestCase):
             self.calc.did_player_win_game(bad_player,game)
 
     def __t14_player_missing_pick(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         game = self.__get_a_valid_game()
 
         self.__remove_game_from_picks(player,game)
         self.assertFalse(self.calc.did_player_win_game(player,game))
 
     def __t14_game_in_progress(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         game = self.__get_a_valid_game()
         game.game_state = IN_PROGRESS
         self.assertFalse(self.calc.did_player_win_game(player,game))
 
     def __t14_game_not_started(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         game = self.__get_a_valid_game()
         game.game_state = NOT_STARTED
         self.assertFalse(self.calc.did_player_win_game(player,game))
 
     def __t14_player_won_game(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         game = self.__find_game("North Carolina","South Carolina")
         self.assertTrue(self.calc.did_player_win_game(player,game))
 
     def __t14_player_lost_game(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         game = self.__find_game("Penn State","Syracuse")
         self.assertFalse(self.calc.did_player_win_game(player,game))
 
     def __t15_game_none(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         with self.assertRaises(Exception):
             self.calc.did_player_lose_game(player,None)
 
@@ -1261,30 +1267,30 @@ class CalculatorTests(TestCase):
             self.calc.did_player_lose_game(bad_player,game)
 
     def __t15_player_missing_pick(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         game = self.__get_a_valid_game()
         self.__remove_game_from_picks(player,game)
         self.assertTrue(self.calc.did_player_lose_game(player,game))
 
     def __t15_game_in_progress(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         game = self.__get_a_valid_game()
         game.game_state = IN_PROGRESS
         self.assertFalse(self.calc.did_player_lose_game(player,game))
 
     def __t15_game_not_started(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         game = self.__get_a_valid_game()
         game.game_state = NOT_STARTED
         self.assertFalse(self.calc.did_player_lose_game(player,game))
 
     def __t15_player_won_game(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         game = self.__find_game("North Carolina","South Carolina")
         self.assertFalse(self.calc.did_player_lose_game(player,game))
 
     def __t15_player_lost_game(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         game = self.__find_game("Penn State","Syracuse")
         self.assertTrue(self.calc.did_player_lose_game(player,game))
 
@@ -1295,18 +1301,18 @@ class CalculatorTests(TestCase):
             self.calc.get_number_of_wins(bad_player)
 
     def __t16_no_games_started(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         self.__modify_game_states([NOT_STARTED]*10)
         self.assertEqual(self.calc.get_number_of_wins(player),0)
 
     def __t16_some_games_in_progress(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         states = [NOT_STARTED]*3 + [IN_PROGRESS]*7
         self.__modify_game_states(states)
         self.assertEqual(self.calc.get_number_of_wins(player),0)
 
     def __t16_mixed_game_states(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         num_wins_in_first_3_games_2013_week_1 = 2
 
         states = [FINAL]*3 + [NOT_STARTED]*3 + [IN_PROGRESS]*4
@@ -1314,22 +1320,22 @@ class CalculatorTests(TestCase):
         self.assertEqual(self.calc.get_number_of_wins(player),num_wins_in_first_3_games_2013_week_1)
 
     def __t16_all_games_final(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         num_wins_2013_week_1 = 5
         self.assertEqual(self.calc.get_number_of_wins(player),num_wins_2013_week_1)
 
     def __t16_player_with_no_picks(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         self.__make_all_player_picks_not_entered(player)
         self.assertEqual(self.calc.get_number_of_wins(player),0)
 
     def __t16_player_0_wins(self):
-        player = self.week1.get_player("robbins_dale")
+        player = self.week1.get_player("Dale Robbins")
         self.__make_dale_0_wins()
         self.assertEqual(self.calc.get_number_of_wins(player),0)
 
     def __t16_player_10_wins(self):
-        player = self.week1.get_player("murphy_william")
+        player = self.week1.get_player("William Murphy")
         self.__make_william_10_wins()
         self.assertEqual(self.calc.get_number_of_wins(player),10)
 
@@ -1340,18 +1346,18 @@ class CalculatorTests(TestCase):
             self.calc.get_number_of_losses(bad_player)
 
     def __t17_no_games_started(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         self.__modify_game_states([NOT_STARTED]*10)
         self.assertEqual(self.calc.get_number_of_losses(player),0)
 
     def __t17_some_games_in_progress(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         states = [NOT_STARTED]*3 + [IN_PROGRESS]*7
         self.__modify_game_states(states)
         self.assertEqual(self.calc.get_number_of_losses(player),0)
 
     def __t17_mixed_game_states(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         num_losses_in_first_3_games_2013_week_1 = 1
 
         states = [FINAL]*3 + [NOT_STARTED]*3 + [IN_PROGRESS]*4
@@ -1359,27 +1365,27 @@ class CalculatorTests(TestCase):
         self.assertEqual(self.calc.get_number_of_losses(player),num_losses_in_first_3_games_2013_week_1)
 
     def __t17_all_games_final(self):
-        player = self.week1.get_player("reams_byron")
+        player = self.week1.get_player("Byron Reams")
         num_losses_2013_week_1 = 4
         self.assertEqual(self.calc.get_number_of_losses(player),num_losses_2013_week_1)
 
     def __t17_player_with_no_picks(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         self.__make_all_player_picks_not_entered(player)
         self.assertEqual(self.calc.get_number_of_losses(player),10)
 
     def __t17_player_0_losses(self):
-        player = self.week1.get_player("murphy_william")
+        player = self.week1.get_player("William Murphy")
         self.__make_william_10_wins()
         self.assertEqual(self.calc.get_number_of_losses(player),0)
 
     def __t17_player_10_losses(self):
-        player = self.week1.get_player("robbins_dale")
+        player = self.week1.get_player("Dale Robbins")
         self.__make_dale_0_wins()
         self.assertEqual(self.calc.get_number_of_losses(player),10)
 
     def __t18_game_none(self):
-        valid_player = self.week1.get_player("holden_brent")
+        valid_player = self.week1.get_player("Brent Holden")
         with self.assertRaises(Exception):
             self.calc.is_player_winning_game(valid_player,None)
 
@@ -1391,7 +1397,7 @@ class CalculatorTests(TestCase):
             self.calc.is_player_winning_game(bad_player,game)
 
     def __t18_player_pick_missing_game_not_started(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -1405,7 +1411,7 @@ class CalculatorTests(TestCase):
 
 
     def __t18_player_pick_missing_game_in_progress(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -1418,7 +1424,7 @@ class CalculatorTests(TestCase):
         self.assertFalse(self.calc.is_player_winning_game(player,game))
 
     def __t18_player_pick_missing_game_final(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -1431,7 +1437,7 @@ class CalculatorTests(TestCase):
         self.assertFalse(self.calc.is_player_winning_game(player,game))
 
     def __t18_player_ahead_in_game_and_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -1444,7 +1450,7 @@ class CalculatorTests(TestCase):
         self.assertTrue(self.calc.is_player_winning_game(player,game))
 
     def __t18_player_behind_in_game_and_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -1457,7 +1463,7 @@ class CalculatorTests(TestCase):
         self.assertFalse(self.calc.is_player_winning_game(player,game))
 
     def __t18_player_ahead_in_game_and_behind_in_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM2
@@ -1470,7 +1476,7 @@ class CalculatorTests(TestCase):
         self.assertFalse(self.calc.is_player_winning_game(player,game))
 
     def __t18_player_behind_in_game_and_ahead_in_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM2
@@ -1483,7 +1489,7 @@ class CalculatorTests(TestCase):
         self.assertTrue(self.calc.is_player_winning_game(player,game))
 
     def __t18_game_not_started(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM2
@@ -1496,7 +1502,7 @@ class CalculatorTests(TestCase):
         self.assertFalse(self.calc.is_player_winning_game(player,game))
 
     def __t18_game_final(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM2
@@ -1509,7 +1515,7 @@ class CalculatorTests(TestCase):
         self.assertFalse(self.calc.is_player_winning_game(player,game))
 
     def __t19_game_none(self):
-        valid_player = self.week1.get_player("holden_brent")
+        valid_player = self.week1.get_player("Brent Holden")
         with self.assertRaises(Exception):
             self.calc.is_player_losing_game(valid_player,None)
 
@@ -1521,7 +1527,7 @@ class CalculatorTests(TestCase):
             self.calc.is_player_losing_game(bad_player,game)
 
     def __t19_game_not_started(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM2
@@ -1534,7 +1540,7 @@ class CalculatorTests(TestCase):
         self.assertFalse(self.calc.is_player_losing_game(player,game))
 
     def __t19_game_final(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM2
@@ -1547,7 +1553,7 @@ class CalculatorTests(TestCase):
         self.assertFalse(self.calc.is_player_losing_game(player,game))
 
     def __t19_player_pick_missing_game_not_started(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -1560,7 +1566,7 @@ class CalculatorTests(TestCase):
         self.assertTrue(self.calc.is_player_losing_game(player,game))
 
     def __t19_player_pick_missing_game_in_progress(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -1573,7 +1579,7 @@ class CalculatorTests(TestCase):
         self.assertTrue(self.calc.is_player_losing_game(player,game))
 
     def __t19_player_pick_missing_game_final(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -1586,7 +1592,7 @@ class CalculatorTests(TestCase):
         self.assertFalse(self.calc.is_player_losing_game(player,game))
 
     def __t19_player_ahead_in_game_and_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -1599,7 +1605,7 @@ class CalculatorTests(TestCase):
         self.assertFalse(self.calc.is_player_losing_game(player,game))
 
     def __t19_player_behind_in_game_and_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -1612,7 +1618,7 @@ class CalculatorTests(TestCase):
         self.assertTrue(self.calc.is_player_losing_game(player,game))
 
     def __t19_player_ahead_in_game_and_behind_in_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM2
@@ -1625,7 +1631,7 @@ class CalculatorTests(TestCase):
         self.assertTrue(self.calc.is_player_losing_game(player,game))
 
     def __t19_player_behind_in_game_and_ahead_in_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM2
@@ -1638,7 +1644,7 @@ class CalculatorTests(TestCase):
         self.assertFalse(self.calc.is_player_losing_game(player,game))
 
     def __t20_game_none(self):
-        valid_player = self.week1.get_player("holden_brent")
+        valid_player = self.week1.get_player("Brent Holden")
         with self.assertRaises(Exception):
             self.calc.is_player_projected_to_win_game(valid_player,None)
 
@@ -1650,7 +1656,7 @@ class CalculatorTests(TestCase):
             self.calc.is_player_projected_to_win_game(bad_player,game)
 
     def __t20_player_pick_missing(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -1663,7 +1669,7 @@ class CalculatorTests(TestCase):
         self.assertFalse(self.calc.is_player_projected_to_win_game(player,game))
 
     def __t20_game_final_player_ahead_in_game_and_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -1676,7 +1682,7 @@ class CalculatorTests(TestCase):
         self.assertTrue(self.calc.is_player_projected_to_win_game(player,game))
 
     def __t20_game_final_player_behind_in_game_and_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -1689,7 +1695,7 @@ class CalculatorTests(TestCase):
         self.assertFalse(self.calc.is_player_projected_to_win_game(player,game))
 
     def __t20_game_final_player_ahead_in_game_and_behind_in_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM2
@@ -1702,7 +1708,7 @@ class CalculatorTests(TestCase):
         self.assertFalse(self.calc.is_player_projected_to_win_game(player,game))
 
     def __t20_game_final_player_behind_in_game_and_ahead_in_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM2
@@ -1715,7 +1721,7 @@ class CalculatorTests(TestCase):
         self.assertTrue(self.calc.is_player_projected_to_win_game(player,game))
 
     def __t20_game_in_progress_player_ahead_in_game_and_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -1728,7 +1734,7 @@ class CalculatorTests(TestCase):
         self.assertTrue(self.calc.is_player_projected_to_win_game(player,game))
 
     def __t20_game_in_progress_player_behind_in_game_and_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -1741,7 +1747,7 @@ class CalculatorTests(TestCase):
         self.assertFalse(self.calc.is_player_projected_to_win_game(player,game))
 
     def __t20_game_in_progress_player_ahead_in_game_and_behind_in_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM2
@@ -1754,7 +1760,7 @@ class CalculatorTests(TestCase):
         self.assertFalse(self.calc.is_player_projected_to_win_game(player,game))
 
     def __t20_game_in_progress_player_behind_in_game_and_ahead_in_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM2
@@ -1767,7 +1773,7 @@ class CalculatorTests(TestCase):
         self.assertTrue(self.calc.is_player_projected_to_win_game(player,game))
 
     def __t20_game_not_started_player_ahead_in_game_and_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -1780,7 +1786,7 @@ class CalculatorTests(TestCase):
         self.assertTrue(self.calc.is_player_projected_to_win_game(player,game))
 
     def __t20_game_not_started_player_behind_in_game_and_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -1793,7 +1799,7 @@ class CalculatorTests(TestCase):
         self.assertTrue(self.calc.is_player_projected_to_win_game(player,game))
 
     def __t20_game_not_started_player_ahead_in_game_and_behind_in_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM2
@@ -1806,7 +1812,7 @@ class CalculatorTests(TestCase):
         self.assertTrue(self.calc.is_player_projected_to_win_game(player,game))
 
     def __t20_game_not_started_player_behind_in_game_and_ahead_in_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM2
@@ -1819,7 +1825,7 @@ class CalculatorTests(TestCase):
         self.assertTrue(self.calc.is_player_projected_to_win_game(player,game))
 
     def __t21_game_none(self):
-        valid_player = self.week1.get_player("holden_brent")
+        valid_player = self.week1.get_player("Brent Holden")
         with self.assertRaises(Exception):
             self.calc.is_player_possible_to_win_game(player,None)
 
@@ -1831,7 +1837,7 @@ class CalculatorTests(TestCase):
             self.calc.is_player_possible_to_win_game(bad_player,game)
 
     def __t21_player_pick_missing(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -1844,7 +1850,7 @@ class CalculatorTests(TestCase):
         self.assertFalse(self.calc.is_player_possible_to_win_game(player,game))
 
     def __t21_game_final_player_ahead_in_game_and_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -1857,7 +1863,7 @@ class CalculatorTests(TestCase):
         self.assertTrue(self.calc.is_player_possible_to_win_game(player,game))
 
     def __t21_game_final_player_behind_in_game_and_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -1870,7 +1876,7 @@ class CalculatorTests(TestCase):
         self.assertFalse(self.calc.is_player_possible_to_win_game(player,game))
 
     def __t21_game_final_player_ahead_in_game_and_behind_in_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM2
@@ -1883,7 +1889,7 @@ class CalculatorTests(TestCase):
         self.assertFalse(self.calc.is_player_possible_to_win_game(player,game))
 
     def __t21_game_final_player_behind_in_game_and_ahead_in_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM2
@@ -1896,7 +1902,7 @@ class CalculatorTests(TestCase):
         self.assertTrue(self.calc.is_player_possible_to_win_game(player,game))
 
     def __t21_game_in_progress_player_ahead_in_game_and_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -1909,7 +1915,7 @@ class CalculatorTests(TestCase):
         self.assertTrue(self.calc.is_player_possible_to_win_game(player,game))
 
     def __t21_game_in_progress_player_behind_in_game_and_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -1922,7 +1928,7 @@ class CalculatorTests(TestCase):
         self.assertTrue(self.calc.is_player_possible_to_win_game(player,game))
 
     def __t21_game_in_progress_player_ahead_in_game_and_behind_in_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM2
@@ -1935,7 +1941,7 @@ class CalculatorTests(TestCase):
         self.assertTrue(self.calc.is_player_possible_to_win_game(player,game))
 
     def __t21_game_in_progress_player_behind_in_game_and_ahead_in_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM2
@@ -1948,7 +1954,7 @@ class CalculatorTests(TestCase):
         self.assertTrue(self.calc.is_player_possible_to_win_game(player,game))
 
     def __t21_game_not_started_player_ahead_in_game_and_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -1961,7 +1967,7 @@ class CalculatorTests(TestCase):
         self.assertTrue(self.calc.is_player_possible_to_win_game(player,game))
 
     def __t21_game_not_started_player_behind_in_game_and_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -1974,7 +1980,7 @@ class CalculatorTests(TestCase):
         self.assertTrue(self.calc.is_player_possible_to_win_game(player,game))
 
     def __t21_game_not_started_player_ahead_in_game_and_behind_in_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM2
@@ -1987,7 +1993,7 @@ class CalculatorTests(TestCase):
         self.assertTrue(self.calc.is_player_possible_to_win_game(player,game))
 
     def __t21_game_not_started_player_behind_in_game_and_ahead_in_pool(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM2
@@ -2006,12 +2012,12 @@ class CalculatorTests(TestCase):
             self.calc.get_number_of_projected_wins(bad_player)
 
     def __t22_no_games_started(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         self.__modify_game_states([NOT_STARTED]*10)
         self.assertEqual(self.calc.get_number_of_projected_wins(player),10)
 
     def __t22_some_games_in_progress(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         num_projected_wins_last_7_games_2013_week_1 = 6
 
         states = [NOT_STARTED]*3 + [IN_PROGRESS]*7
@@ -2024,54 +2030,54 @@ class CalculatorTests(TestCase):
         num_projected_wins_last_4_games = 2
         num_projected_wins_2013_week_1 = num_projected_wins_first_3_games + num_projected_wins_next_3_games + num_projected_wins_last_4_games
 
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         states = [FINAL]*3 + [NOT_STARTED]*3 + [IN_PROGRESS]*4
         self.__modify_game_states(states)
         self.assertEqual(self.calc.get_number_of_projected_wins(player),num_projected_wins_2013_week_1)
 
     def __t22_all_games_final(self):
-        player = self.week1.get_player("reams_byron")
+        player = self.week1.get_player("Byron Reams")
         num_projected_wins_2013_week_1 = 6
         self.assertEqual(self.calc.get_number_of_projected_wins(player),num_projected_wins_2013_week_1)
 
     def __t22_player_with_no_picks(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         self.__make_all_player_picks_not_entered(player)
         self.assertEqual(self.calc.get_number_of_projected_wins(player),0)
 
     def __t22_game_final_player_0_wins(self):
-        player = self.week1.get_player("robbins_dale")
+        player = self.week1.get_player("Dale Robbins")
         self.__make_dale_0_wins()
         self.__modify_game_states([FINAL]*10)
         self.assertEqual(self.calc.get_number_of_projected_wins(player),0)
 
     def __t22_game_final_player_10_wins(self):
-        player = self.week1.get_player("murphy_william")
+        player = self.week1.get_player("William Murphy")
         self.__make_william_10_wins()
         self.__modify_game_states([FINAL]*10)
         self.assertEqual(self.calc.get_number_of_projected_wins(player),10)
 
     def __t22_game_in_progress_player_0_wins(self):
-        player = self.week1.get_player("robbins_dale")
+        player = self.week1.get_player("Dale Robbins")
         self.__make_dale_0_wins()
         self.__modify_game_states([IN_PROGRESS]*10)
         self.assertEqual(self.calc.get_number_of_projected_wins(player),0)
 
     def __t22_game_in_progress_player_10_wins(self):
-        player = self.week1.get_player("murphy_william")
+        player = self.week1.get_player("William Murphy")
         self.__make_william_10_wins()
         self.__modify_game_states([IN_PROGRESS]*10)
         self.assertEqual(self.calc.get_number_of_projected_wins(player),10)
 
     def __t22_game_not_started_player_0_wins(self):
-        player = self.week1.get_player("robbins_dale")
+        player = self.week1.get_player("Dale Robbins")
         self.__make_dale_0_wins()
         self.__modify_game_states([NOT_STARTED]*10)
         self.assertEqual(self.calc.get_number_of_projected_wins(player),10)
 
     def __t22_game_not_started_player_10_wins(self):
-        player = self.week1.get_player("murphy_william")
+        player = self.week1.get_player("William Murphy")
         self.__make_william_10_wins()
         self.__modify_game_states([NOT_STARTED]*10)
         self.assertEqual(self.calc.get_number_of_projected_wins(player),10)
@@ -2083,12 +2089,12 @@ class CalculatorTests(TestCase):
             self.calc.get_number_of_possible_wins(bad_player)
 
     def __t23_no_games_started(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         self.__modify_game_states([NOT_STARTED]*10)
         self.assertEqual(self.calc.get_number_of_possible_wins(player),10)
 
     def __t23_some_games_in_progress(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         states = [NOT_STARTED]*3 + [IN_PROGRESS]*7
         self.__modify_game_states(states)
         self.assertEqual(self.calc.get_number_of_possible_wins(player),10)
@@ -2099,7 +2105,7 @@ class CalculatorTests(TestCase):
         num_possible_wins_last_4_games = 4
         num_possible_wins_2013_week_1 = num_possible_wins_first_3_games + num_possible_wins_next_3_games + num_possible_wins_last_4_games
 
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         states = [FINAL]*3 + [NOT_STARTED]*3 + [IN_PROGRESS]*4
         self.__modify_game_states(states)
@@ -2107,46 +2113,46 @@ class CalculatorTests(TestCase):
 
     def __t23_all_games_final(self):
         num_possible_wins_2013_week_1 = 6
-        player = self.week1.get_player("reams_byron")
+        player = self.week1.get_player("Byron Reams")
         self.assertEqual(self.calc.get_number_of_possible_wins(player),num_possible_wins_2013_week_1)
 
     def __t23_player_with_no_picks(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         self.__make_all_player_picks_not_entered(player)
         self.assertEqual(self.calc.get_number_of_possible_wins(player),0)
 
     def __t23_game_final_player_0_wins(self):
-        player = self.week1.get_player("robbins_dale")
+        player = self.week1.get_player("Dale Robbins")
         self.__make_dale_0_wins()
         self.__modify_game_states([FINAL]*10)
         self.assertEqual(self.calc.get_number_of_possible_wins(player),0)
 
     def __t23_game_final_player_10_wins(self):
-        player = self.week1.get_player("murphy_william")
+        player = self.week1.get_player("William Murphy")
         self.__make_william_10_wins()
         self.__modify_game_states([FINAL]*10)
         self.assertEqual(self.calc.get_number_of_possible_wins(player),10)
 
     def __t23_game_in_progress_player_0_wins(self):
-        player = self.week1.get_player("robbins_dale")
+        player = self.week1.get_player("Dale Robbins")
         self.__make_dale_0_wins()
         self.__modify_game_states([IN_PROGRESS]*10)
         self.assertEqual(self.calc.get_number_of_possible_wins(player),10)
 
     def __t23_game_in_progress_player_10_wins(self):
-        player = self.week1.get_player("murphy_william")
+        player = self.week1.get_player("William Murphy")
         self.__make_william_10_wins()
         self.__modify_game_states([IN_PROGRESS]*10)
         self.assertEqual(self.calc.get_number_of_possible_wins(player),10)
 
     def __t23_game_not_started_player_0_wins(self):
-        player = self.week1.get_player("robbins_dale")
+        player = self.week1.get_player("Dale Robbins")
         self.__make_dale_0_wins()
         self.__modify_game_states([NOT_STARTED]*10)
         self.assertEqual(self.calc.get_number_of_possible_wins(player),10)
 
     def __t23_game_not_started_player_10_wins(self):
-        player = self.week1.get_player("murphy_william")
+        player = self.week1.get_player("William Murphy")
         self.__make_william_10_wins()
         self.__modify_game_states([NOT_STARTED]*10)
         self.assertEqual(self.calc.get_number_of_possible_wins(player),10)
@@ -2230,7 +2236,7 @@ class CalculatorTests(TestCase):
         self.assertEqual(self.calc.get_summary_state_of_all_games(),FINAL)
 
     def __t28_game_none(self):
-        valid_player = self.week1.get_player("holden_brent")
+        valid_player = self.week1.get_player("Brent Holden")
         with self.assertRaises(Exception):
             self.calc.get_game_result_string(valid_player,None)
 
@@ -2242,7 +2248,7 @@ class CalculatorTests(TestCase):
             self.calc.get_game_result_string(bad_player,game)
 
     def __t28_player_pick_missing(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -2255,7 +2261,7 @@ class CalculatorTests(TestCase):
         self.assertEqual(self.calc.get_game_result_string(player,game),"loss")
 
     def __t28_game_win(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -2268,7 +2274,7 @@ class CalculatorTests(TestCase):
         self.assertEqual(self.calc.get_game_result_string(player,game),"win")
 
     def __t28_game_loss(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -2281,7 +2287,7 @@ class CalculatorTests(TestCase):
         self.assertEqual(self.calc.get_game_result_string(player,game),"loss")
 
     def __t28_game_ahead(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -2294,7 +2300,7 @@ class CalculatorTests(TestCase):
         self.assertEqual(self.calc.get_game_result_string(player,game),"ahead")
 
     def __t28_game_behind(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -2307,7 +2313,7 @@ class CalculatorTests(TestCase):
         self.assertEqual(self.calc.get_game_result_string(player,game),"behind")
 
     def __t28_game_not_started(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -2324,7 +2330,7 @@ class CalculatorTests(TestCase):
             self.calc.get_favored_team_name(None)
 
     def __t29_invalid_favored(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = 0
@@ -2345,7 +2351,7 @@ class CalculatorTests(TestCase):
             self.calc.get_game_score_spread(None)
 
     def __t30_game_not_started(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -2358,7 +2364,7 @@ class CalculatorTests(TestCase):
             self.calc.get_game_score_spread(game)
 
     def __t30_game_in_progress(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -2370,7 +2376,7 @@ class CalculatorTests(TestCase):
         self.assertEqual(self.calc.get_game_score_spread(game),15)
 
     def __t30_tied_score(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -2382,7 +2388,7 @@ class CalculatorTests(TestCase):
         self.assertEqual(self.calc.get_game_score_spread(game),0)
 
     def __t30_team1_ahead(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -2394,7 +2400,7 @@ class CalculatorTests(TestCase):
         self.assertEqual(self.calc.get_game_score_spread(game),13)
 
     def __t30_team2_ahead(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
 
         game = self.__get_a_valid_game()
         game.favored = TEAM1
@@ -2475,18 +2481,18 @@ class CalculatorTests(TestCase):
             self.calc.get_win_percent(bad_player)
 
     def __t33_games_not_started(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         self.__modify_game_states([NOT_STARTED]*10)
         self.assertEqual(self.calc.get_win_percent(player),0.00)
 
     def __t33_games_in_progress(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         states = [IN_PROGRESS]*10
         self.__modify_game_states(states)
         self.assertEqual(self.calc.get_win_percent(player),0.00)
 
     def __t33_games_mixed(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         states = [FINAL]*3 + [NOT_STARTED]*3 + [IN_PROGRESS]*4
 
         num_wins_in_first_3_games = 2
@@ -2497,7 +2503,7 @@ class CalculatorTests(TestCase):
         self.assertEqual(self.calc.get_win_percent(player),expected_win_pct)
 
     def __t33_games_final(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         num_wins = 5
         num_games_final = 10 
         expected_win_pct = float(num_wins) / float(num_games_final)
@@ -2511,29 +2517,29 @@ class CalculatorTests(TestCase):
             self.calc.get_win_percent_string(bad_player)
 
     def __t34_games_not_started(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         self.__modify_game_states([NOT_STARTED]*10)
         self.assertEqual(self.calc.get_win_percent_string(player),"0.000")
 
     def __t34_games_in_progress(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         states = [IN_PROGRESS]*10
         self.__modify_game_states(states)
         self.assertEqual(self.calc.get_win_percent_string(player),"0.000")
 
     def __t34_games_mixed(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         states = [FINAL]*3 + [NOT_STARTED]*3 + [IN_PROGRESS]*4
 
         self.__modify_game_states(states)
         self.assertEqual(self.calc.get_win_percent_string(player),"0.667")
 
     def __t34_games_final(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         self.assertEqual(self.calc.get_win_percent_string(player),"0.500")
 
     def __t35_game_none(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         with self.assertRaises(Exception):
             self.calc.get_player_pick_for_game(player,None)
 
@@ -2545,13 +2551,13 @@ class CalculatorTests(TestCase):
             self.calc.get_player_pick_for_game(bad_player,game)
 
     def __t35_game_invalid(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         invalid_game = self.__get_a_valid_game2()
         with self.assertRaises(Exception):
             self.calc.get_player_pick_for_game(player,invalid_game)
 
     def __t35_valid_player_pick(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         game = self.__get_a_valid_game()
         pick = self.calc.get_player_pick_for_game(player,game)
         self.assertEqual(pick.game.id,game.id)
@@ -2563,7 +2569,7 @@ class CalculatorTests(TestCase):
             self.calc.get_player_submit_time(bad_player)
 
     def __t36_pick_created_entry_time(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         games = self.week1.games
         self.__change_player_pick_time(player,games[1],created=dt.datetime(2013,8,10))
         self.__change_player_pick_time(player,games[2],created=dt.datetime(2013,8,10))
@@ -2578,7 +2584,7 @@ class CalculatorTests(TestCase):
         self.assertEqual(self.calc.get_player_submit_time(player),dt.datetime(2013,8,11))
 
     def __t36_pick_updated_entry_time(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         games = self.week1.games
         created_time=dt.datetime(2013,8,1)
         self.__change_player_pick_time(player,games[1],created=created_time,updated=dt.datetime(2013,8,10))
@@ -2594,7 +2600,7 @@ class CalculatorTests(TestCase):
         self.assertEqual(self.calc.get_player_submit_time(player),dt.datetime(2013,8,11))
 
     def __t36_week_lock_picks_not_specified(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         games = self.week1.games
         week = self.week1.week
         week.lock_picks = None
@@ -2612,7 +2618,7 @@ class CalculatorTests(TestCase):
         self.assertIsNone(self.calc.get_player_submit_time(player,week))
 
     def __t36_submit_after_week_lock(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         games = self.week1.games
         week = self.week1.week
         week.lock_picks = dt.datetime(2013,8,10)
@@ -2630,7 +2636,7 @@ class CalculatorTests(TestCase):
         self.assertIsNone(self.calc.get_player_submit_time(player,week))
 
     def __t36_submit_before_week_lock(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         games = self.week1.games
         week = self.week1.week
         week.lock_picks = dt.datetime(2013,8,12)
@@ -2648,7 +2654,7 @@ class CalculatorTests(TestCase):
         self.assertEqual(self.calc.get_player_submit_time(player,week),dt.datetime(2013,8,11))
 
     def __t36_submit_same_as_week_lock(self):
-        player = self.week1.get_player("holden_brent")
+        player = self.week1.get_player("Brent Holden")
         games = self.week1.games
         week = self.week1.week
         week.lock_picks = dt.datetime(2013,8,11)
@@ -2714,7 +2720,7 @@ class CalculatorTests(TestCase):
             self.week1.player_picks[player.id][i].winner = 0
 
     def __make_dale_0_wins(self):
-        player = self.week1.get_player("robbins_dale")
+        player = self.week1.get_player("Dale Robbins")
         game1 = self.__find_game("North Carolina","South Carolina")
         game2 = self.__find_game("Utah State","Utah")
         game3 = self.__find_game("Georgia","Clemson")
@@ -2723,7 +2729,7 @@ class CalculatorTests(TestCase):
         self.__change_player_pick(player,game3)
 
     def __make_william_10_wins(self):
-        player = self.week1.get_player("murphy_william")
+        player = self.week1.get_player("William Murphy")
         game1 = self.__find_game("Colorado","Colorado State")
         self.__change_player_pick(player,game1)
 

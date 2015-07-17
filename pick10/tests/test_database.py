@@ -10,6 +10,13 @@ class LoadWeekDataTest(TestCase):
     def setUpClass(cls):
         test_db = UnitTestDatabase()
         test_db.setup_simple_week(2014,1)
+        super(LoadWeekDataTest, cls).setUpClass()
+
+    @classmethod
+    def tearDownClass(cls):
+        test_db = UnitTestDatabase()
+        test_db.delete_database()
+        super(LoadWeekDataTest, cls).tearDownClass()
 
     def setUp(self):
         self.db = Database()

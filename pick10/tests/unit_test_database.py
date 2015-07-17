@@ -48,32 +48,11 @@ class UnitTestDatabase:
         add_pick(john,game9,TEAM2)
         add_pick(john,game10,TEAM2,7,21)
 
-    def load_historical_data_for_year(self,year=2014): # TODO
+    def load_historical_data_for_year(self,year=2014):
         main(years=[year])
-        return
-        year = populate_year(year)
-        populate_player_count(year,0)
-        for week_number in range(1,14):
-            #week = self.setup_week(year,week_number)
-            populate_week(year, week_number)
-            populate_games_for_year_week(year, week_number)
-            populate_picks_for_year_week(year, week_number)
-        #populate_games_for_year(year)
-        #populate_picks([year])
 
-    def load_historical_data_for_week(self,year=2014,week_number=1): # TODO
+    def load_historical_data_for_week(self,year=2014,week_number=1):
         main(years=[year],weeks=[week_number])
-        return
-        year = populate_year(year)
-        populate_player_count(year,0)
-        populate_week(year, week_number)
-        populate_games_for_year_week(year, week_number)
-        populate_picks_for_year_week(year, week_number)
-        #main(years=[2014],weeks=[week_number])
-        #week = self.setup_week(year,week_number)
-        #populate_players([year])
-        #populate_games_for_year_week(year,week_number)
-        #populate_picks_for_year_week(year,week_number)
 
     def setup_week(self,year,week_number):
         year_model = populate_year(year)
@@ -91,6 +70,16 @@ class UnitTestDatabase:
         year_model = Year.objects.get_or_create(yearnum=year)[0]
         player_year = PlayerYear.objects.create(player=player,year=year_model)
         return player
+
+    def delete_database(self):
+        Year.objects.all().delete()
+        Team.objects.all().delete()
+        Player.objects.all().delete()
+        PlayerYear.objects.all().delete()
+        Conference.objects.all().delete()
+        Week.objects.all().delete()
+        Game.objects.all().delete()
+        Pick.objects.all().delete()
 
     # TODO
     # week with no games started
