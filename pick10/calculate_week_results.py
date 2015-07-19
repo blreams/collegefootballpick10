@@ -3,7 +3,7 @@ from database import *
 
 class CalculateWeekResults:
 
-    def __init__(self,year,week_number):
+    def __init__(self,year,week_number,private_names=False):
         self.year = year
         self.week_number = week_number
 
