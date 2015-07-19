@@ -1,5 +1,6 @@
 from calculator import *
 from database import *
+from week_results import *
 
 class CalculateWeekResults:
 
