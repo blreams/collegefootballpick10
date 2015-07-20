@@ -10,8 +10,7 @@ class CalculateWeekResultsTests(TestCase):
     def setUpClass(cls):
         print "Loading database with data from 2013...(may take a few minutes)"
         test_db = UnitTestDatabase()
-        test_db.load_historical_data_for_week(2013,1)
-        #test_db.load_historical_data_for_year(2013)
+        test_db.load_historical_data_for_year(2013)
         super(CalculateWeekResultsTests, cls).setUpClass()
 
     @classmethod
@@ -25,7 +24,6 @@ class CalculateWeekResultsTests(TestCase):
 
         data_2013 = WeekResults2013(players,use_private_names=False)
         self.__test_week_results(2013,1,data_2013.week1())
-        return
         self.__test_week_results(2013,2,data_2013.week2())
         self.__test_week_results(2013,3,data_2013.week3())
         self.__test_week_results(2013,4,data_2013.week4())
@@ -40,7 +38,6 @@ class CalculateWeekResultsTests(TestCase):
         self.__test_week_results(2013,13,data_2013.week13())
 
     def test_week_results_against_expected_data_with_private_names(self):
-        return
         players = self.__get_players(2013)
 
         data_2013 = WeekResults2013(players,use_private_names=True)

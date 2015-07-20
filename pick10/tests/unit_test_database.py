@@ -4,9 +4,13 @@
 from pick10.models import *
 from stage_history import main, populate_picks_for_year_week, populate_games_for_year_week, populate_year, populate_player_count
 from stage_models import populate_conferences_teams
+import random
 
 TEAM1 = 1
 TEAM2 = 2
+NOT_STARTED = 1
+IN_PROGRESS = 2
+FINAL = 3
 
 class UnitTestDatabase:
 
@@ -54,22 +58,70 @@ class UnitTestDatabase:
     def load_historical_data_for_week(self,year=2014,week_number=1):
         main(years=[year],weeks=[week_number])
 
+    def setup_week_not_started(self,year=1978,week_number=6,seed=777):
+        random.seed(seed)
+        week = self.setup_week(year,week_number)
+        games = [None]*10
+        game[0] = self.setup_game(week,1,"Georgia Tech","Clemson",state=NOT_STARTED)
+        game[1] = self.setup_game(week,2,"Duke","North Carolina",state=NOT_STARTED)
+        game[2] = self.setup_game(week,3,"Virginia","Virginia Tech",state=NOT_STARTED)
+        game[3] = self.setup_game(week,4,"Indiana","Maryland",state=NOT_STARTED)
+        game[4] = self.setup_game(week,5,"South Carolina","Georgia",state=NOT_STARTED)
+        game[5] = self.setup_game(week,6,"Tennessee","Vanderbilt",state=NOT_STARTED)
+        game[6] = self.setup_game(week,7,"Auburn","Alabama",state=NOT_STARTED)
+        game[7] = self.setup_game(week,8,"Southern California","UCLA",state=NOT_STARTED)
+        game[8] = self.setup_game(week,9,"Army","Navy",state=NOT_STARTED)
+        game[9] = self.setup_game(week,10,"Notre Dame","Florida State",state=NOT_STARTED)
+        self.setup_player_with_random_picks(year,"Brent")
+        self.setup_player_with_random_picks(year,"Byron")
+        self.setup_player_with_random_picks(year,"Alice")
+        self.setup_player_with_random_picks(year,"Joan")
+        self.setup_player_with_random_picks(year,"Bill")
+        self.setup_player_with_random_picks(year,"David")
+        self.setup_player_with_random_picks(year,"Amy")
+        self.setup_player_with_random_picks(year,"Annie")
+        self.setup_player_with_random_picks(year,"Kevin")
+        self.setup_player_with_random_picks(year,"John")
+
     def setup_week(self,year,week_number):
         year_model = populate_year(year)
         week = add_week(year,week_number)
         return week
 
-    def setup_game(self,week,game_number,team1_name,team2_name,favored,spread):
+    def setup_game(self,week,game_number,team1_name,team2_name,favored=2,spread=0.5,state=FINAL,team1_score=-1,team2_score=-1):
         team1 = get_team(team1_name)
         team2 = get_team(team2_name)
         game = add_game(week,team1,team2,gamenum=game_number,favored=favored,spread=spread)
+        game.game_state = state
+        game.team1_actual_points = team1_score
+        game.team2_actual_points = team2_score
+        game.save()
         return game
 
-    def setup_player(self,year,public_name,private_name=''):
+    def setup_player(self,year,public_name,private_name='',ss_name=''):
         player = add_player(public_name,private_name)
+        player.ss_name = ss_name
+        player.save()
         year_model = Year.objects.get_or_create(yearnum=year)[0]
         player_year = PlayerYear.objects.create(player=player,year=year_model)
         return player
+
+    def setup_random_pick(self,player,game):
+        winner = random.randint(1,2)
+
+        if game.gamenum == 10:
+            team1_points = random.randint(0,50)
+            team2_points = random.randint(0,50)
+            pick = add_pick(player,game,winner,team1_points,team2_points)
+        else:
+            pick = add_pick(player,game,winner)
+
+        return pick
+
+    def setup_player_with_random_picks(self,year,player_name,games):
+        player = self.setup_player(year,player_name,player_name)
+        for game in games:
+            self.setup_random_pick(player,game)
 
     def delete_database(self):
         Year.objects.all().delete()
