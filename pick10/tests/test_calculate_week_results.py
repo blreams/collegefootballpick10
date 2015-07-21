@@ -99,6 +99,19 @@ class CalculateWeekResultsTests(TestCase):
         self.__t5_week_in_progress()
         self.__t5_week_final()
 
+    def __t1_week_not_started(self):
+        test_db = UnitTestDatabase()
+        test_db.setup_week_not_started(1978,6)
+        expected_results = None
+        self.__test_week_results(1978,6,expected_results)
+
+    def __t1_week_not_started_with_defaulters(self):
+        self.fail('not implemented yet')
+        testdata = WeekNotStartedWithDefaulters(leave_objects_in_datastore=False)
+        testdata.setup()
+        self.__test_get_week_results(testdata.year,testdata.week_number,testdata.get_expected_results())
+        testdata.cleanup()
+
     def __test_week_results(self,year,week_number,expected_results,private_names=False):
         results = CalculateWeekResults(year,week_number,private_names).get_results()
         self.__verify_results_ignore_tied_order(results,expected_results)

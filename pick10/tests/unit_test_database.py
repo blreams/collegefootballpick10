@@ -58,8 +58,7 @@ class UnitTestDatabase:
     def load_historical_data_for_week(self,year=2014,week_number=1):
         main(years=[year],weeks=[week_number])
 
-    def setup_week_not_started(self,year=1978,week_number=6,seed=777):
-        random.seed(seed)
+    def setup_week_not_started(self,year=1978,week_number=6):
         week = self.setup_week(year,week_number)
         games = [None]*10
         game[0] = self.setup_game(week,1,"Georgia Tech","Clemson",state=NOT_STARTED)
@@ -72,16 +71,27 @@ class UnitTestDatabase:
         game[7] = self.setup_game(week,8,"Southern California","UCLA",state=NOT_STARTED)
         game[8] = self.setup_game(week,9,"Army","Navy",state=NOT_STARTED)
         game[9] = self.setup_game(week,10,"Notre Dame","Florida State",state=NOT_STARTED)
-        self.setup_player_with_random_picks(year,"Brent")
-        self.setup_player_with_random_picks(year,"Byron")
-        self.setup_player_with_random_picks(year,"Alice")
-        self.setup_player_with_random_picks(year,"Joan")
-        self.setup_player_with_random_picks(year,"Bill")
-        self.setup_player_with_random_picks(year,"David")
-        self.setup_player_with_random_picks(year,"Amy")
-        self.setup_player_with_random_picks(year,"Annie")
-        self.setup_player_with_random_picks(year,"Kevin")
-        self.setup_player_with_random_picks(year,"John")
+        brent = self.setup_player(year,'Brent','Brent')
+        byron = self.setup_player(year,'Byron','Byron')
+        alice = self.setup_player(year,'Alice','Alice')
+        joan = self.setup_player(year,'Joan','Joan')
+        bill = self.setup_player(year,'Bill','Bill')
+        david = self.setup_player(year,'David','David')
+        amy = self.setup_player(year,'Amy','Amy')
+        annie = self.setup_player(year,'Annie','Annie')
+        kevin = self.setup_player(year,'Kevin','Kevin')
+        john = self.setup_player(year,'John','John')
+        for game in games:
+            self.setup_pick(brent,game,winner=TEAM1)
+            self.setup_pick(byron,game,winner=TEAM1)
+            self.setup_pick(alice,game,winner=TEAM1)
+            self.setup_pick(joan,game,winner=TEAM1)
+            self.setup_pick(bill,game,winner=TEAM1)
+            self.setup_pick(david,game,winner=TEAM1)
+            self.setup_pick(amy,game,winner=TEAM1)
+            self.setup_pick(annie,game,winner=TEAM1)
+            self.setup_pick(kevin,game,winner=TEAM1)
+            self.setup_pick(john,game,winner=TEAM1)
 
     def setup_week(self,year,week_number):
         year_model = populate_year(year)
@@ -105,6 +115,10 @@ class UnitTestDatabase:
         year_model = Year.objects.get_or_create(yearnum=year)[0]
         player_year = PlayerYear.objects.create(player=player,year=year_model)
         return player
+
+    def setup_pick(self,player,game,winner):
+        pick = add_pick(player,game,winner)
+        return pick
 
     def setup_random_pick(self,player,game):
         winner = random.randint(1,2)
