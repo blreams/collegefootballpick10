@@ -61,26 +61,26 @@ class UnitTestDatabase:
     def setup_week_not_started(self,year=1978,week_number=6):
         week = self.setup_week(year,week_number)
         games = [None]*10
-        game[0] = self.setup_game(week,1,"Georgia Tech","Clemson",state=NOT_STARTED)
-        game[1] = self.setup_game(week,2,"Duke","North Carolina",state=NOT_STARTED)
-        game[2] = self.setup_game(week,3,"Virginia","Virginia Tech",state=NOT_STARTED)
-        game[3] = self.setup_game(week,4,"Indiana","Maryland",state=NOT_STARTED)
-        game[4] = self.setup_game(week,5,"South Carolina","Georgia",state=NOT_STARTED)
-        game[5] = self.setup_game(week,6,"Tennessee","Vanderbilt",state=NOT_STARTED)
-        game[6] = self.setup_game(week,7,"Auburn","Alabama",state=NOT_STARTED)
-        game[7] = self.setup_game(week,8,"Southern California","UCLA",state=NOT_STARTED)
-        game[8] = self.setup_game(week,9,"Army","Navy",state=NOT_STARTED)
-        game[9] = self.setup_game(week,10,"Notre Dame","Florida State",state=NOT_STARTED)
-        brent = self.setup_player(year,'Brent','Brent')
-        byron = self.setup_player(year,'Byron','Byron')
-        alice = self.setup_player(year,'Alice','Alice')
-        joan = self.setup_player(year,'Joan','Joan')
-        bill = self.setup_player(year,'Bill','Bill')
-        david = self.setup_player(year,'David','David')
-        amy = self.setup_player(year,'Amy','Amy')
-        annie = self.setup_player(year,'Annie','Annie')
-        kevin = self.setup_player(year,'Kevin','Kevin')
-        john = self.setup_player(year,'John','John')
+        games[0] = self.setup_game(week,1,"Georgia Tech","Clemson",state=NOT_STARTED)
+        games[1] = self.setup_game(week,2,"Duke","North Carolina",state=NOT_STARTED)
+        games[2] = self.setup_game(week,3,"Virginia","Virginia Tech",state=NOT_STARTED)
+        games[3] = self.setup_game(week,4,"Indiana","Maryland",state=NOT_STARTED)
+        games[4] = self.setup_game(week,5,"South Carolina","Georgia",state=NOT_STARTED)
+        games[5] = self.setup_game(week,6,"Tennessee","Vanderbilt",state=NOT_STARTED)
+        games[6] = self.setup_game(week,7,"Auburn","Alabama",state=NOT_STARTED)
+        games[7] = self.setup_game(week,8,"Southern California","UCLA",state=NOT_STARTED)
+        games[8] = self.setup_game(week,9,"Army","Navy",state=NOT_STARTED)
+        games[9] = self.setup_game(week,10,"Notre Dame","Florida State",state=NOT_STARTED)
+        brent = self.setup_player(year,'Brent')
+        byron = self.setup_player(year,'Byron')
+        alice = self.setup_player(year,'Alice')
+        joan = self.setup_player(year,'Joan')
+        bill = self.setup_player(year,'Bill')
+        david = self.setup_player(year,'David')
+        amy = self.setup_player(year,'Amy')
+        annie = self.setup_player(year,'Annie')
+        kevin = self.setup_player(year,'Kevin')
+        john = self.setup_player(year,'John')
         for game in games:
             self.setup_pick(brent,game,winner=TEAM1)
             self.setup_pick(byron,game,winner=TEAM1)
@@ -108,9 +108,11 @@ class UnitTestDatabase:
         game.save()
         return game
 
-    def setup_player(self,year,public_name,private_name='',ss_name=''):
-        player = add_player(public_name,private_name)
-        player.ss_name = ss_name
+    def setup_player(self,year,public_name,private_name=None,ss_name=None):
+        private = public_name if private_name == None else private_name
+        ss = public_name if ss_name == None else ss_name
+        player = add_player(public_name,private)
+        player.ss_name = ss
         player.save()
         year_model = Year.objects.get_or_create(yearnum=year)[0]
         player_year = PlayerYear.objects.create(player=player,year=year_model)
