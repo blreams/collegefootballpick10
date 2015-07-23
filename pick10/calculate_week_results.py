@@ -48,24 +48,24 @@ class CalculateWeekResults:
             winner_state = winner.get_winner_state()
 
             if winner_state == "no_winner_yet":
-                results = self.__assign_rank(results,winner=None)
-                results = self.__assign_projected_rank(results,projected_winner=None)
+                results = self.assign_rank(results,winner=None)
+                results = self.assign_projected_rank(results,projected_winner=None)
             elif winner_state == "official":
                 calculated_winner = winner.get_winner()
-                results = self.__assign_rank(results,winner=calculated_winner)
-                results = self.__assign_projected_rank(results,projected_winner=calculated_winner)
+                results = self.assign_rank(results,winner=calculated_winner)
+                results = self.assign_projected_rank(results,projected_winner=calculated_winner)
             elif winner_state == "unofficial":
                 calculated_winner = winner.get_winner()
-                results = self.__assign_rank(results,winner=calculated_winner)
-                results = self.__assign_projected_rank(results,projected_winner=None)
+                results = self.assign_rank(results,winner=calculated_winner)
+                results = self.assign_projected_rank(results,projected_winner=None)
             elif winner_state == "projected":
                 calculated_winner = winner.get_winner()
-                results = self.__assign_rank(results,winner=None)
-                results = self.__assign_projected_rank(results,projected_winner=calculated_winner)
+                results = self.assign_rank(results,winner=None)
+                results = self.assign_projected_rank(results,projected_winner=calculated_winner)
             elif winner_state == "possible":
                 calculated_winner = winner.get_winner()
-                results = self.__assign_rank(results,winner=None)
-                results = self.__assign_projected_rank(results,projected_winner=None)
+                results = self.assign_rank(results,winner=None)
+                results = self.assign_projected_rank(results,projected_winner=None)
             else:
                 raise AssertionError,"unexpected winner state %s" % (winner_state)
 
@@ -95,7 +95,7 @@ class CalculateWeekResults:
     def __sort_by_rank(self,results):
         return sorted(results,key=lambda result:result.rank)
 
-    def __assign_rank(self,results,winner=None):
+    def assign_rank(self,results,winner=None):
         # sort by losses first so that people with more losses get a lower rank
         # this is the case where a player did not enter any picks for a week
         # that player would have 10 losses before any games were started, and therefore
@@ -146,7 +146,7 @@ class CalculateWeekResults:
 
 
 
-    def __assign_projected_rank(self,results,projected_winner=None):
+    def assign_projected_rank(self,results,projected_winner=None):
         sorted_results = sorted(results,key=lambda result:result.projected_wins,reverse=True)
 
         assigned_results = []
