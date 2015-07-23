@@ -1,6 +1,7 @@
 from calculator import *
 from database import *
 from week_results import *
+from week_winner import *
 
 class CalculateWeekResults:
 
@@ -18,8 +19,7 @@ class CalculateWeekResults:
         week_data = database.load_week_data(self.year,self.week_number)
 
         calc = CalculateResults(week_data)
-        #winner = WeekWinner(year,week_number) TODO
-        winner = None
+        winner = WeekWinner(self.year,self.week_number,week_data)
         week_state = calc.get_summary_state_of_all_games()
 
         results = []
@@ -45,8 +45,7 @@ class CalculateWeekResults:
             results.append(player_results)
 
         if len(results) > 0:
-            # winner_state = winner.get_winner_state() TODO
-            winner_state = "no_winner_yet"
+            winner_state = winner.get_winner_state()
 
             if winner_state == "no_winner_yet":
                 results = self.__assign_rank(results,winner=None)
@@ -75,7 +74,23 @@ class CalculateWeekResults:
         self.__results = results
 
     def __get_winner_message(self,player,winner):
-        return "" # TODO
+        winner_state = winner.get_winner_state()
+        winning_player = winner.get_winner()
+        if winning_player == None:
+            return ""
+
+        if winner_state == "no_winner_yet":
+            return ""
+        elif winner_state == "official" and player == winning_player:
+            return "WINNER"
+        elif winner_state == "unofficial" and player == winning_player:
+            return "UNOFFICIAL WINNER"
+        elif winner_state == "projected" and player == winning_player:
+            return "PROJECTED WINNER"
+        elif winner_state == "possible" and player in winning_player:
+            return "POSSIBLE WINNER"
+        else:
+            return ""
 
     def __sort_by_rank(self,results):
         return sorted(results,key=lambda result:result.rank)
@@ -91,8 +106,6 @@ class CalculateWeekResults:
         assigned_results = []
 
         if winner != None:
-            # TODO
-            raise AssertionError, "Not implemented yet"
             self.__move_winner_to_top_of_results(sorted_results,winner)
             self.__winner_sanity_check(sorted_results)
             next_rank = 2   # no ties for first place
@@ -139,8 +152,6 @@ class CalculateWeekResults:
         assigned_results = []
 
         if projected_winner != None:
-            # TODO
-            raise AssertionError,"Not implemented yet"
             self.__move_winner_to_top_of_results(sorted_results,projected_winner)
             self.__projected_winner_sanity_check(sorted_results)
             next_rank = 2   # no ties for first place
@@ -175,3 +186,30 @@ class CalculateWeekResults:
             assigned_results.append(player_result)
 
         return assigned_results
+
+    def __move_winner_to_top_of_results(self,results,winner):
+        winner_index = None
+        for i,player in enumerate(results):
+            if player.player_id == winner.id:
+                winner_index = i
+        assert winner_index != None,"Could not find the winning player in the results"
+        results.insert(0,results.pop(winner_index))
+
+    def __winner_sanity_check(self,results):
+        # the winner should have the best record or tied for the best record
+        assert len(results) > 2, "Expected more than 1 player in the results"
+
+        winner = results[0]
+        next_best = results[1]
+
+        assert winner.wins >= next_best.wins,"Winner had fewer wins than another (%d vs. %d)" % (winner.wins,next_best.wins)
+        assert winner.losses <= next_best.losses,"Winner had more losses than another (%d vs. %d)" % (winner.losses,next_best.losses)
+
+    def __projected_winner_sanity_check(self,results):
+        # the winner should have the best record or tied for the best record
+        assert len(results) > 2, "Expected more than 1 player in the results"
+
+        winner = results[0]
+        next_best = results[1]
+
+        assert winner.projected_wins >= next_best.projected_wins,"Projected winner had fewer wins than another (%d vs. %d)" % (winner.projected_wins,next_best.projected_wins)
