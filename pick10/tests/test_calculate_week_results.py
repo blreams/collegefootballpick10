@@ -1,6 +1,7 @@
 from django.test import TestCase
 from pick10.tests.data.week_results_2013 import *
 from pick10.tests.data.week_not_started_results import *
+from pick10.tests.data.week_not_started_with_defaulters_results import *
 from pick10.database import *
 from pick10.calculate_week_results import *
 from unit_test_database import *
@@ -13,6 +14,7 @@ class CalculateWeekResultsTests(TestCase):
         test_db = UnitTestDatabase()
         test_db.load_historical_data_for_year(2013)
         test_db.setup_week_not_started(1978,6)
+        test_db.setup_week_not_started_with_defaulters(1978,7)
         super(CalculateWeekResultsTests, cls).setUpClass()
 
     @classmethod
@@ -59,7 +61,6 @@ class CalculateWeekResultsTests(TestCase):
 
     def test_t1_week_not_started(self):
         self.__t1_week_not_started()
-        return
         self.__t1_week_not_started_with_defaulters()
 
     def test_t2_assign_rank(self):
@@ -107,11 +108,9 @@ class CalculateWeekResultsTests(TestCase):
         self.__test_week_results(1978,6,wns.week_results())
 
     def __t1_week_not_started_with_defaulters(self):
-        self.fail('not implemented yet')
-        testdata = WeekNotStartedWithDefaulters(leave_objects_in_datastore=False)
-        testdata.setup()
-        self.__test_get_week_results(testdata.year,testdata.week_number,testdata.get_expected_results())
-        testdata.cleanup()
+        players = self.__get_players(1978)
+        wnsd = WeekNotStartedWithDefaultersResults(players)
+        self.__test_week_results(1978,7,wnsd.week_results())
 
     def __test_week_results(self,year,week_number,expected_results,private_names=False):
         results = CalculateWeekResults(year,week_number,private_names).get_results()
