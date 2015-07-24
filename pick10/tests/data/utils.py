@@ -9,7 +9,7 @@ class TestDataUtils:
 
     def add_week_result(self,results,rank=None,projected_rank=None,player_name=None,\
                         wins=None,losses=None,win_pct=None,projected_wins=None,\
-                        possible_wins=None,winner=None,expected_rank=None):
+                        possible_wins=None,winner=None,expected_rank=None,player_id=None):
 
         result = WeekResults()
         result.rank = rank
@@ -20,6 +20,7 @@ class TestDataUtils:
         result.projected_wins = projected_wins
         result.possible_wins = possible_wins
         result.winner = '' if winner == None else winner
+        result.player_id = player_id
 
         rank_test_hook = expected_rank != None
         if rank_test_hook:
