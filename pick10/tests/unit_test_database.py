@@ -2,15 +2,10 @@
 # The class creates a central location for setting up a database 
 # so each unit test doesn't have to reinvent the wheel every time.
 from pick10.models import *
+from pick10.calculator import *
 from stage_history import main, populate_picks_for_year_week, populate_games_for_year_week, populate_year, populate_player_count
 from stage_models import populate_conferences_teams
 import random
-
-TEAM1 = 1
-TEAM2 = 2
-NOT_STARTED = 1
-IN_PROGRESS = 2
-FINAL = 3
 
 class UnitTestDatabase:
 
@@ -129,6 +124,40 @@ class UnitTestDatabase:
             self.setup_pick(kevin,game,winner=0)
             self.setup_pick(john,game,winner=0)
 
+    def setup_week_in_progress(self,year=1978,week_number=8):
+        week = self.setup_week(year,week_number)
+        games = [None]*10
+        games[0] = self.setup_game_with_winner(week,1,"Georgia Tech","Clemson",state=FINAL,winner=TEAM1)
+        games[1] = self.setup_game_with_winner(week,2,"Duke","North Carolina",state=FINAL,winner=TEAM1)
+        games[2] = self.setup_game_with_winner(week,3,"Virginia","Virginia Tech",state=FINAL,winner=TEAM1)
+        games[3] = self.setup_game_with_winner(week,4,"Indiana","Maryland",state=FINAL,winner=TEAM2)
+        games[4] = self.setup_game_with_winner(week,5,"South Carolina","Georgia",state=FINAL,winner=TEAM2)
+        games[5] = self.setup_game_with_winner(week,6,"Tennessee","Vanderbilt",state=FINAL,winner=TEAM2)
+        games[6] = self.setup_game(week,7,"Auburn","Alabama",state=NOT_STARTED)
+        games[7] = self.setup_game(week,8,"Southern California","UCLA",state=NOT_STARTED)
+        games[8] = self.setup_game(week,9,"Army","Navy",state=NOT_STARTED)
+        games[9] = self.setup_game(week,10,"Notre Dame","Florida State",state=NOT_STARTED)
+        brent = self.setup_player(year,'Brent')
+        byron = self.setup_player(year,'Byron')
+        alice = self.setup_player(year,'Alice')
+        joan = self.setup_player(year,'Joan')
+        bill = self.setup_player(year,'Bill')
+        david = self.setup_player(year,'David')
+        amy = self.setup_player(year,'Amy')
+        annie = self.setup_player(year,'Annie')
+        kevin = self.setup_player(year,'Kevin')
+        john = self.setup_player(year,'John')
+        self.setup_player_picks(brent,games,number_of_wins=6)
+        self.setup_player_picks(byron,games,number_of_wins=6)
+        self.setup_player_picks(alice,games,number_of_wins=5)
+        self.setup_player_picks(joan,games,number_of_wins=5)
+        self.setup_player_picks(bill,games,number_of_wins=4)
+        self.setup_player_picks(david,games,number_of_wins=4)
+        self.setup_player_picks(amy,games,number_of_wins=3)
+        self.setup_player_picks(annie,games,number_of_wins=3)
+        self.setup_player_picks(kevin,games,number_of_wins=1)
+        self.setup_player_default(john,games)
+
     def setup_week(self,year,week_number):
         year_model = populate_year(year)
         week = add_week(year,week_number)
@@ -144,6 +173,12 @@ class UnitTestDatabase:
         game.save()
         return game
 
+    def setup_game_with_winner(self,week,game_number,team1_name,team2_name,winner,state=FINAL):
+        assert state == IN_PROGRESS or state == FINAL,"game state should be in progress or final"
+        favored,spread,team1_score,team2_score = self.__compute_game_winner(winner)
+        game = self.setup_game(week,game_number,team1_name,team2_name,favored,spread,state,team1_score,team2_score)
+        return game
+
     def setup_player(self,year,public_name,private_name=None,ss_name=None):
         private = public_name if private_name == None else private_name
         ss = public_name if ss_name == None else ss_name
@@ -155,6 +190,45 @@ class UnitTestDatabase:
     def setup_pick(self,player,game,winner):
         pick = add_pick(player,game,winner)
         return pick
+
+    def setup_player_default(self,player,games):
+        for game in games:
+            self.setup_pick(player,game,winner=0)
+
+    def setup_player_picks(self,player,games,number_of_wins=0,number_ahead=0):
+        wins_left = number_of_wins
+        ahead_left = number_ahead
+        for game in games:
+
+            if game.game_state == FINAL:
+                make_pick_win = wins_left > 0
+                game_winner = self.__determine_game_winner(game)
+                assert game_winner == TEAM1 or game_winner == TEAM2
+
+                if make_pick_win:
+                    self.setup_pick(player,game,winner=game_winner)
+                    wins_left -= 1
+                else:
+                    game_loser = TEAM1 if game_winner == TEAM2 else TEAM2
+                    self.setup_pick(player,game,winner=game_loser)
+
+            elif game.game_state == IN_PROGRESS:
+                make_pick_ahead = ahead_left > 0
+                ahead = self.__determine_game_team_ahead(game)
+                assert ahead == TEAM1 or ahead == TEAM2
+
+                if make_pick_ahead:
+                    self.setup_pick(player,game,winner=ahead)
+                    ahead_left -= 1
+                else:
+                    behind = TEAM1 if ahead == TEAM2 else TEAM2
+                    self.setup_pick(player,game,winner=behind)
+
+            elif game.game_state == NOT_STARTED:
+                self.setup_pick(player,game,winner=TEAM1)
+
+        assert wins_left == 0,'number of wins constraint not satisfied'
+        assert ahead_left == 0,'number ahead constraint not satisfied'
 
     def setup_random_pick(self,player,game):
         winner = random.randint(1,2)
@@ -182,6 +256,25 @@ class UnitTestDatabase:
         Week.objects.all().delete()
         Game.objects.all().delete()
         Pick.objects.all().delete()
+
+    def __compute_game_winner(self,winner):
+        favored = winner
+        spread = 0.5
+        if winner == TEAM1:
+            team1_score = 25
+            team2_score = 20
+        else:
+            team1_score = 15
+            team2_score = 30
+        return favored,spread,team1_score,team2_score
+
+    def __determine_game_winner(self,game):
+        calc = CalculateResults(None)
+        return calc.get_pool_game_winner(game)
+
+    def __determine_game_team_ahead(self,game):
+        calc = CalculateResults(None)
+        return calc.get_team_winning_pool_game(game)
 
     # TODO
     # week with no games started

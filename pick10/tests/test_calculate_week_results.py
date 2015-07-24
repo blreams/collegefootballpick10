@@ -2,6 +2,7 @@ from django.test import TestCase
 from pick10.tests.data.week_results_2013 import *
 from pick10.tests.data.week_not_started_results import *
 from pick10.tests.data.week_not_started_with_defaulters_results import *
+from pick10.tests.data.week_in_progress_results import *
 from pick10.tests.data.utils import *
 from pick10.database import *
 from pick10.calculate_week_results import *
@@ -16,6 +17,7 @@ class CalculateWeekResultsTests(TestCase):
         test_db.load_historical_data_for_year(2013)
         test_db.setup_week_not_started(1978,6)
         test_db.setup_week_not_started_with_defaulters(1978,7)
+        test_db.setup_week_in_progress(1978,8)
         super(CalculateWeekResultsTests, cls).setUpClass()
 
     @classmethod
@@ -78,7 +80,7 @@ class CalculateWeekResultsTests(TestCase):
         self.__t2_winner_insane()
 
     def test_t3_assign_projected_rank(self):
-        return
+        self.utils = TestDataUtils(None)
         self.__t3_wins_all_different()
         self.__t3_week_not_started()
         self.__t3_week_not_started_with_defaulters()
@@ -93,8 +95,8 @@ class CalculateWeekResultsTests(TestCase):
         self.__t3_winner_insane()
 
     def test_t4_get_week_results_week_in_progress(self):
-        return
         self.__t4_week_in_progress()
+        return
         self.__t4_week_in_progress_with_games_in_progress()
 
     def test_t5_get_week_state(self):
@@ -308,6 +310,209 @@ class CalculateWeekResultsTests(TestCase):
         with self.assertRaises(Exception):
             self.__run_assign_rank_test(winner=8,num_tests=1)
 
+    def __t3_wins_all_different(self):
+        week_results = []
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=11,projected_wins=0)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=10,projected_wins=1)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=9,projected_wins=2)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=8,projected_wins=3)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=7,projected_wins=4)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=6,projected_wins=5)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=5,projected_wins=6)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=4,projected_wins=7)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=3,projected_wins=8)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=2,projected_wins=9)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=10)
+
+        self.__run_assign_projected_rank_test(week_results)
+
+    def __t3_week_not_started(self): 
+        # in the week not started case, player projected to win all games
+        # all should be tied for first place
+        week_results = []
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=10)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=10)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=10)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=10)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=10)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=10)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=10)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=10)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=10)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=10)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=10)
+
+        self.__run_assign_projected_rank_test(week_results)
+
+    def __t3_week_not_started_with_defaulters(self): 
+        # in the week not started case, players with picks projected to win all games
+        # defaulters should be projected to win 0 games
+        # players with picks tied for 1st, defaulters tied for last place
+        week_results = []
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=8,projected_wins=0)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=8,projected_wins=0)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=8,projected_wins=0)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=8,projected_wins=0)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=10)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=10)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=10)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=10)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=10)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=10)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=10)
+
+        self.__run_assign_projected_rank_test(week_results)
+
+    def __t3_week_not_started_with_some_missing_picks(self): 
+        # players with all picks expect to win all games
+        # players missing picks expect to lost those games
+        week_results = []
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=10)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=10)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=10)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=10)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=5,projected_wins=9)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=5,projected_wins=9)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=7,projected_wins=5)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=8,projected_wins=4)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=9,projected_wins=0)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=9,projected_wins=0)
+
+        self.__run_assign_projected_rank_test(week_results)
+
+    def __t3_wins_with_ties(self): 
+        week_results = []
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=10)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=10)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=3,projected_wins=9)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=3,projected_wins=9)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=5,projected_wins=8)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=5,projected_wins=8)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=7,projected_wins=7)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=7,projected_wins=7)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=9,projected_wins=6)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=9,projected_wins=6)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=11,projected_wins=5)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=11,projected_wins=5)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=13,projected_wins=4)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=13,projected_wins=4)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=15,projected_wins=3)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=15,projected_wins=3)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=17,projected_wins=2)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=17,projected_wins=2)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=19,projected_wins=1)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=19,projected_wins=1)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=21,projected_wins=0)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=21,projected_wins=0)
+
+        self.__run_assign_projected_rank_test(week_results)
+
+    def __t3_less_than_10_wins(self): 
+        week_results = []
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=7)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=7)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=3,projected_wins=6)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=4,projected_wins=5)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=5,projected_wins=4)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=6,projected_wins=3)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=6,projected_wins=3)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=8,projected_wins=0)
+
+        self.__run_assign_projected_rank_test(week_results)
+
+    def __t3_all_wins_0(self): 
+        week_results = []
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=0)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=0)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=0)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=0)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=0)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=0)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=0)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=0)
+
+        self.__run_assign_projected_rank_test(week_results)
+
+    def __t3_first_place_ties(self): 
+        week_results = []
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=8)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=8)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=8)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=8)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=8)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=6,projected_wins=5)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=7,projected_wins=4)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=8,projected_wins=3)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=9,projected_wins=2)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=10,projected_wins=1)
+
+        self.__run_assign_projected_rank_test(week_results)
+
+    def __t3_winner_specified(self): 
+        week_results = []
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=8,player_id=8)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=2,projected_wins=7,player_id=7)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=3,projected_wins=6,player_id=6)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=4,projected_wins=5,player_id=5)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=5,projected_wins=4,player_id=4)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=6,projected_wins=3,player_id=3)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=7,projected_wins=2,player_id=2)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=8,projected_wins=1,player_id=1)
+
+        self.__run_assign_projected_rank_test(week_results,projected_winner=8)
+
+    def __t3_first_place_tie_with_winner_specified(self): 
+        week_results = []
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=2,projected_wins=7,player_id=1)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=2,projected_wins=7,player_id=2)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=7,player_id=3)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=2,projected_wins=7,player_id=4)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=2,projected_wins=7,player_id=5)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=6,projected_wins=6,player_id=6)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=7,projected_wins=5,player_id=7)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=8,projected_wins=4,player_id=8)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=9,projected_wins=3,player_id=9)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=10,projected_wins=2,player_id=10)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=11,projected_wins=1,player_id=11)
+
+        self.__run_assign_projected_rank_test(week_results,projected_winner=3)
+
+    def __t3_winner_missing(self): 
+        week_results = []
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=7,player_id=1)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=7,player_id=2)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=7,player_id=3)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=7,player_id=4)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=7,player_id=5)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=6,projected_wins=6,player_id=6)
+
+        with self.assertRaises(Exception):
+            self.__run_assign_projected_rank_test(week_results,projected_winner=255,num_tests=1)
+
+    def __t3_winner_insane(self): 
+        week_results = []
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=7,player_id=1)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=7,player_id=2)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=7,player_id=3)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=7,player_id=4)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=1,projected_wins=7,player_id=5)
+        self.utils.add_week_result(week_results,projected_rank=None,expected_rank=6,projected_wins=6,player_id=6)
+
+        with self.assertRaises(Exception):
+            self.__run_assign_projected_rank_test(week_results,projected_winner=6,num_tests=1)
+
+    def __t4_week_in_progress(self):
+        players = self.__get_players(1978)
+        wip = WeekInProgressResults(players)
+        self.__test_week_results(1978,8,wip.week_results())
+
+    def __t4_week_in_progress_with_games_in_progress(self):
+        testdata = WeekInProgressGamesInProgress(leave_objects_in_datastore=False)
+        testdata.setup()
+        self.__test_get_week_results(testdata.year,testdata.week_number,testdata.get_expected_results())
+        testdata.cleanup()
+
+
     def __test_week_results(self,year,week_number,expected_results,private_names=False):
         results = CalculateWeekResults(year,week_number,private_names).get_results()
         self.__verify_results_ignore_tied_order(results,expected_results)
@@ -357,7 +562,7 @@ class CalculateWeekResultsTests(TestCase):
                 assigned_results = cwr.assign_rank(test_results,winner=winner_model)
             self.__verify_ranks(assigned_results)
 
-    def __run_assign_projected_rank_test(self,num_tests=10,projected_winner=None):
+    def __run_assign_projected_rank_test(self,week_results,num_tests=10,projected_winner=None):
         cwr = CalculateWeekResults(year=2013,week_number=1)
         random.seed(888)
         for i in range(num_tests):
@@ -365,7 +570,9 @@ class CalculateWeekResultsTests(TestCase):
             if not(projected_winner):
                 assigned_results = cwr.assign_projected_rank(week_results)
             else:
-                assigned_results = cwr.assign_projected_rank(week_results,projected_winner=projected_winner)
+                winner_model = Player()
+                winner_model.id = projected_winner
+                assigned_results = cwr.assign_projected_rank(week_results,projected_winner=winner_model)
             self.__verify_projected_ranks(assigned_results)
 
     def __randomize_results_order(self,week_results):
