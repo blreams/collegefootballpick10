@@ -2,6 +2,7 @@ from django.test import TestCase
 from pick10.tests.data.week_results_2013 import *
 from pick10.tests.data.week_not_started_results import *
 from pick10.tests.data.week_not_started_with_defaulters_results import *
+from pick10.tests.data.utils import *
 from pick10.database import *
 from pick10.calculate_week_results import *
 from unit_test_database import *
@@ -64,8 +65,9 @@ class CalculateWeekResultsTests(TestCase):
         self.__t1_week_not_started_with_defaulters()
 
     def test_t2_assign_rank(self):
-        return
+        self.utils = TestDataUtils(None)
         self.__t2_win_loss_all_different()
+        return
         self.__t2_week_not_started()
         self.__t2_week_not_started_with_defaulters()
         self.__t2_week_not_started_with_some_missing_picks()
@@ -112,6 +114,201 @@ class CalculateWeekResultsTests(TestCase):
         wnsd = WeekNotStartedWithDefaultersResults(players)
         self.__test_week_results(1978,7,wnsd.week_results())
 
+    def __t2_win_loss_all_different(self):
+        week_results = []
+        self.utils.add_week_result(week_results,rank=None,expected_rank=11,wins=0,losses=10)
+        self.utils.add_week_result(week_results,rank=None,expected_rank=10,wins=1,losses=9)
+        self.utils.add_week_result(week_results,rank=None,expected_rank=9,wins=2,losses=8)
+        self.utils.add_week_result(week_results,rank=None,expected_rank=8,wins=3,losses=7)
+        self.utils.add_week_result(week_results,rank=None,expected_rank=7,wins=4,losses=6)
+        self.utils.add_week_result(week_results,rank=None,expected_rank=6,wins=5,losses=5)
+        self.utils.add_week_result(week_results,rank=None,expected_rank=5,wins=6,losses=4)
+        self.utils.add_week_result(week_results,rank=None,expected_rank=4,wins=7,losses=3)
+        self.utils.add_week_result(week_results,rank=None,expected_rank=3,wins=8,losses=2)
+        self.utils.add_week_result(week_results,rank=None,expected_rank=2,wins=9,losses=1)
+        self.utils.add_week_result(week_results,rank=None,expected_rank=1,wins=10,losses=0)
+
+        self.__run_assign_rank_test(week_results)
+
+    def __t2_week_not_started(self): 
+        # in the week not started case, all records are 0-0
+        # all should be tied for first place
+        self.__week_results = []
+        self.__add_result(rank=None,expected_rank=1,wins=0,losses=0)
+        self.__add_result(rank=None,expected_rank=1,wins=0,losses=0)
+        self.__add_result(rank=None,expected_rank=1,wins=0,losses=0)
+        self.__add_result(rank=None,expected_rank=1,wins=0,losses=0)
+        self.__add_result(rank=None,expected_rank=1,wins=0,losses=0)
+        self.__add_result(rank=None,expected_rank=1,wins=0,losses=0)
+        self.__add_result(rank=None,expected_rank=1,wins=0,losses=0)
+        self.__add_result(rank=None,expected_rank=1,wins=0,losses=0)
+        self.__add_result(rank=None,expected_rank=1,wins=0,losses=0)
+        self.__add_result(rank=None,expected_rank=1,wins=0,losses=0)
+        self.__add_result(rank=None,expected_rank=1,wins=0,losses=0)
+
+        self.__run_assign_rank_test()
+
+    def __t2_week_not_started_with_defaulters(self): 
+        # in the week not started case, players with picks have record 0-0
+        # defaulters have a record of 0-10
+        # defaulters tied for last place, all others tied for first place
+        self.__week_results = []
+        self.__add_result(rank=None,expected_rank=1,wins=0,losses=0)
+        self.__add_result(rank=None,expected_rank=1,wins=0,losses=0)
+        self.__add_result(rank=None,expected_rank=1,wins=0,losses=0)
+        self.__add_result(rank=None,expected_rank=1,wins=0,losses=0)
+        self.__add_result(rank=None,expected_rank=1,wins=0,losses=0)
+        self.__add_result(rank=None,expected_rank=9,wins=0,losses=10)
+        self.__add_result(rank=None,expected_rank=9,wins=0,losses=10)
+        self.__add_result(rank=None,expected_rank=9,wins=0,losses=10)
+        self.__add_result(rank=None,expected_rank=1,wins=0,losses=0)
+        self.__add_result(rank=None,expected_rank=1,wins=0,losses=0)
+        self.__add_result(rank=None,expected_rank=1,wins=0,losses=0)
+
+        self.__run_assign_rank_test()
+
+    def __t2_week_not_started_with_some_missing_picks(self): 
+        # not started player with picks have record 0-0
+        # not started player with missing picks have losses 0-#losses
+        self.__week_results = []
+        self.__add_result(rank=None,expected_rank=1,wins=0,losses=0)
+        self.__add_result(rank=None,expected_rank=1,wins=0,losses=0)
+        self.__add_result(rank=None,expected_rank=1,wins=0,losses=0)
+        self.__add_result(rank=None,expected_rank=1,wins=0,losses=0)
+        self.__add_result(rank=None,expected_rank=1,wins=0,losses=0)
+        self.__add_result(rank=None,expected_rank=1,wins=0,losses=0)
+        self.__add_result(rank=None,expected_rank=7,wins=0,losses=1)
+        self.__add_result(rank=None,expected_rank=7,wins=0,losses=1)
+        self.__add_result(rank=None,expected_rank=9,wins=0,losses=2)
+        self.__add_result(rank=None,expected_rank=10,wins=0,losses=10)
+        self.__add_result(rank=None,expected_rank=10,wins=0,losses=10)
+
+        self.__run_assign_rank_test()
+
+    def __t2_win_loss_with_ties(self):
+        self.__week_results = []
+        self.__add_result(rank=None,expected_rank=1,wins=10,losses=0)
+        self.__add_result(rank=None,expected_rank=2,wins=9,losses=1)
+        self.__add_result(rank=None,expected_rank=2,wins=9,losses=1)
+        self.__add_result(rank=None,expected_rank=4,wins=8,losses=2)
+        self.__add_result(rank=None,expected_rank=4,wins=8,losses=2)
+        self.__add_result(rank=None,expected_rank=6,wins=7,losses=3)
+        self.__add_result(rank=None,expected_rank=6,wins=7,losses=3)
+        self.__add_result(rank=None,expected_rank=8,wins=6,losses=4)
+        self.__add_result(rank=None,expected_rank=8,wins=6,losses=4)
+        self.__add_result(rank=None,expected_rank=10,wins=5,losses=5)
+        self.__add_result(rank=None,expected_rank=10,wins=5,losses=5)
+        self.__add_result(rank=None,expected_rank=12,wins=4,losses=6)
+        self.__add_result(rank=None,expected_rank=12,wins=4,losses=6)
+        self.__add_result(rank=None,expected_rank=14,wins=3,losses=7)
+        self.__add_result(rank=None,expected_rank=14,wins=3,losses=7)
+        self.__add_result(rank=None,expected_rank=16,wins=2,losses=8)
+        self.__add_result(rank=None,expected_rank=16,wins=2,losses=8)
+        self.__add_result(rank=None,expected_rank=18,wins=1,losses=9)
+        self.__add_result(rank=None,expected_rank=18,wins=1,losses=9)
+        self.__add_result(rank=None,expected_rank=20,wins=0,losses=10)
+        self.__add_result(rank=None,expected_rank=20,wins=0,losses=10)
+
+        self.__run_assign_rank_test()
+
+    def __t2_win_loss_with_ties_less_than_10_games_complete(self):
+        self.__week_results = []
+        self.__add_result(rank=None,expected_rank=1,wins=5,losses=1)
+        self.__add_result(rank=None,expected_rank=1,wins=5,losses=1)
+        self.__add_result(rank=None,expected_rank=3,wins=4,losses=2)
+        self.__add_result(rank=None,expected_rank=3,wins=4,losses=2)
+        self.__add_result(rank=None,expected_rank=3,wins=4,losses=2)
+        self.__add_result(rank=None,expected_rank=6,wins=3,losses=3)
+        self.__add_result(rank=None,expected_rank=6,wins=3,losses=3)
+        self.__add_result(rank=None,expected_rank=6,wins=3,losses=3)
+        self.__add_result(rank=None,expected_rank=9,wins=2,losses=4)
+        self.__add_result(rank=None,expected_rank=9,wins=2,losses=4)
+        self.__add_result(rank=None,expected_rank=11,wins=1,losses=5)
+
+        self.__run_assign_rank_test()
+
+    def __t2_win_loss_with_first_place_ties(self):
+        self.__week_results = []
+        self.__add_result(rank=None,expected_rank=1,wins=8,losses=2)
+        self.__add_result(rank=None,expected_rank=1,wins=8,losses=2)
+        self.__add_result(rank=None,expected_rank=1,wins=8,losses=2)
+        self.__add_result(rank=None,expected_rank=1,wins=8,losses=2)
+        self.__add_result(rank=None,expected_rank=1,wins=8,losses=2)
+        self.__add_result(rank=None,expected_rank=6,wins=7,losses=3)
+        self.__add_result(rank=None,expected_rank=7,wins=6,losses=4)
+        self.__add_result(rank=None,expected_rank=7,wins=6,losses=4)
+        self.__add_result(rank=None,expected_rank=9,wins=5,losses=5)
+        self.__add_result(rank=None,expected_rank=10,wins=4,losses=6)
+        self.__add_result(rank=None,expected_rank=11,wins=3,losses=7)
+        self.__add_result(rank=None,expected_rank=12,wins=2,losses=8)
+        self.__add_result(rank=None,expected_rank=13,wins=1,losses=9)
+        self.__add_result(rank=None,expected_rank=14,wins=0,losses=10)
+        self.__add_result(rank=None,expected_rank=14,wins=0,losses=10)
+
+        self.__run_assign_rank_test()
+
+    def __t2_win_loss_with_first_place_ties_and_winner_specified(self): 
+        self.__week_results = []
+        self.__add_result(rank=None,expected_rank=1,wins=8,losses=2,player_key="player15")
+        self.__add_result(rank=None,expected_rank=2,wins=8,losses=2,player_key="player14")
+        self.__add_result(rank=None,expected_rank=2,wins=8,losses=2,player_key="player13")
+        self.__add_result(rank=None,expected_rank=2,wins=8,losses=2,player_key="player12")
+        self.__add_result(rank=None,expected_rank=2,wins=8,losses=2,player_key="player11")
+        self.__add_result(rank=None,expected_rank=6,wins=7,losses=3,player_key="player10")
+        self.__add_result(rank=None,expected_rank=7,wins=6,losses=4,player_key="player9")
+        self.__add_result(rank=None,expected_rank=7,wins=6,losses=4,player_key="player8")
+        self.__add_result(rank=None,expected_rank=9,wins=5,losses=5,player_key="player7")
+        self.__add_result(rank=None,expected_rank=10,wins=4,losses=6,player_key="player6")
+        self.__add_result(rank=None,expected_rank=11,wins=3,losses=7,player_key="player5")
+        self.__add_result(rank=None,expected_rank=12,wins=2,losses=8,player_key="player4")
+        self.__add_result(rank=None,expected_rank=13,wins=1,losses=9,player_key="player3")
+        self.__add_result(rank=None,expected_rank=14,wins=0,losses=10,player_key="player2")
+        self.__add_result(rank=None,expected_rank=14,wins=0,losses=10,player_key="player1")
+
+        self.__run_assign_rank_test(winner="player15")
+
+    def __t2_winner_missing(self):
+        self.__week_results = []
+        self.__add_result(rank=None,expected_rank=1,wins=8,losses=2,player_key="player15")
+        self.__add_result(rank=None,expected_rank=2,wins=8,losses=2,player_key="player14")
+        self.__add_result(rank=None,expected_rank=2,wins=8,losses=2,player_key="player13")
+        self.__add_result(rank=None,expected_rank=4,wins=8,losses=2,player_key="player12")
+        self.__add_result(rank=None,expected_rank=4,wins=8,losses=2,player_key="player11")
+        self.__add_result(rank=None,expected_rank=6,wins=7,losses=3,player_key="player10")
+        self.__add_result(rank=None,expected_rank=8,wins=6,losses=4,player_key="player9")
+        self.__add_result(rank=None,expected_rank=8,wins=6,losses=4,player_key="player8")
+        self.__add_result(rank=None,expected_rank=10,wins=5,losses=5,player_key="player7")
+        self.__add_result(rank=None,expected_rank=12,wins=4,losses=6,player_key="player6")
+        self.__add_result(rank=None,expected_rank=14,wins=3,losses=7,player_key="player5")
+        self.__add_result(rank=None,expected_rank=16,wins=2,losses=8,player_key="player4")
+        self.__add_result(rank=None,expected_rank=18,wins=1,losses=9,player_key="player3")
+        self.__add_result(rank=None,expected_rank=20,wins=0,losses=10,player_key="player2")
+        self.__add_result(rank=None,expected_rank=20,wins=0,losses=10,player_key="player1")
+
+        with self.assertRaises(Exception):
+            self.__run_assign_rank_test(winner="playerxxx",num_tests=1)
+
+    def __t2_winner_insane(self):
+        self.__week_results = []
+        self.__add_result(rank=None,expected_rank=1,wins=8,losses=2,player_key="player15")
+        self.__add_result(rank=None,expected_rank=2,wins=8,losses=2,player_key="player14")
+        self.__add_result(rank=None,expected_rank=2,wins=8,losses=2,player_key="player13")
+        self.__add_result(rank=None,expected_rank=4,wins=8,losses=2,player_key="player12")
+        self.__add_result(rank=None,expected_rank=4,wins=8,losses=2,player_key="player11")
+        self.__add_result(rank=None,expected_rank=6,wins=7,losses=3,player_key="player10")
+        self.__add_result(rank=None,expected_rank=8,wins=6,losses=4,player_key="player9")
+        self.__add_result(rank=None,expected_rank=8,wins=6,losses=4,player_key="player8")
+        self.__add_result(rank=None,expected_rank=10,wins=5,losses=5,player_key="player7")
+        self.__add_result(rank=None,expected_rank=12,wins=4,losses=6,player_key="player6")
+        self.__add_result(rank=None,expected_rank=14,wins=3,losses=7,player_key="player5")
+        self.__add_result(rank=None,expected_rank=16,wins=2,losses=8,player_key="player4")
+        self.__add_result(rank=None,expected_rank=18,wins=1,losses=9,player_key="player3")
+        self.__add_result(rank=None,expected_rank=20,wins=0,losses=10,player_key="player2")
+        self.__add_result(rank=None,expected_rank=20,wins=0,losses=10,player_key="player1")
+
+        with self.assertRaises(Exception):
+            self.__run_assign_rank_test(winner="player8",num_tests=1)
+
     def __test_week_results(self,year,week_number,expected_results,private_names=False):
         results = CalculateWeekResults(year,week_number,private_names).get_results()
         self.__verify_results_ignore_tied_order(results,expected_results)
@@ -140,10 +337,50 @@ class CalculateWeekResultsTests(TestCase):
             self.assertEqual(result.win_pct,expected.win_pct)
             self.assertEqual(result.projected_wins,expected.projected_wins)
             self.assertEqual(result.possible_wins,expected.possible_wins)
-            # TODO self.assertEqual(results.winner,expected.winner)
+            self.assertEqual(result.winner,expected.winner)
 
     def __find_expected_result(self,result,expected_results):
         for expected in expected_results:
             if expected.player_name == result.player_name:
                 return expected
         raise AssertionError,"could not find expected result"
+
+    def __run_assign_rank_test(self,week_results,num_tests=10,winner=None):
+        cwr = CalculateWeekResults(year=2013,week_number=1)
+        random.seed(777)
+        for i in range(num_tests):
+            test_results = self.__randomize_results_order(week_results)
+            if not(winner):
+                assigned_results = cwr.assign_rank(test_results)
+            else:
+                assigned_results = cwr.assign_rank(test_results,winner=winner)
+            self.__verify_ranks(assigned_results)
+
+    def __run_assign_projected_rank_test(self,num_tests=10,projected_winner=None):
+        cwr = CalculateWeekResults(year=2013,week_number=1)
+        random.seed(888)
+        for i in range(num_tests):
+            test_results = self.__randomize_results_order(week_results)
+            if not(projected_winner):
+                assigned_results = cwr.assign_projected_rank(week_results)
+            else:
+                assigned_results = cwr.assign_projected_rank(week_results,projected_winner=projected_winner)
+            self.__verify_projected_ranks(assigned_results)
+
+    def __randomize_results_order(self,week_results):
+        indexes = range(len(week_results))
+        random.shuffle(indexes)
+
+        random_results = []
+        for i in indexes:
+            random_results.append(week_results[i])
+
+        return random_results
+
+    def __verify_ranks(self,results):
+        for result in results:
+            self.assertEqual(result.rank,result.expected_rank)
+
+    def __verify_projected_ranks(self,results):
+        for result in results:
+            self.assertEqual(result.projected_rank,result.expected_rank)

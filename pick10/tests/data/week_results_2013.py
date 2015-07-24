@@ -8,7 +8,7 @@ class WeekResults2013:
 
     def week1(self):
         results = []
-        self.utils.add_week_result(results,rank=1,projected_rank=1,player_name='Murphy, William A',wins=9,losses=1,win_pct=0.900000,projected_wins=9,possible_wins=9,winner='Murphy, William A')
+        self.utils.add_week_result(results,rank=1,projected_rank=1,player_name='Murphy, William A',wins=9,losses=1,win_pct=0.900000,projected_wins=9,possible_wins=9,winner='WINNER')
         self.utils.add_week_result(results,rank=2,projected_rank=2,player_name='Neeley, Amber Remote',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8)
         self.utils.add_week_result(results,rank=2,projected_rank=2,player_name='Sams, David',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8)
         self.utils.add_week_result(results,rank=2,projected_rank=2,player_name='White, Jarred',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8)
@@ -67,7 +67,7 @@ class WeekResults2013:
 
     def week2(self):
         results = []
-        self.utils.add_week_result(results,rank=1,projected_rank=1,player_name='Hendrick, Matt R',wins=10,losses=0,win_pct=1.000000,projected_wins=10,possible_wins=10,winner='Hendrick, Matt R')
+        self.utils.add_week_result(results,rank=1,projected_rank=1,player_name='Hendrick, Matt R',wins=10,losses=0,win_pct=1.000000,projected_wins=10,possible_wins=10,winner='WINNER')
         self.utils.add_week_result(results,rank=2,projected_rank=2,player_name='Marsh, Alexander Remote',wins=9,losses=1,win_pct=0.900000,projected_wins=9,possible_wins=9)
         self.utils.add_week_result(results,rank=3,projected_rank=3,player_name='Shuey, Jeffrey M',wins=7,losses=3,win_pct=0.700000,projected_wins=7,possible_wins=7)
         self.utils.add_week_result(results,rank=3,projected_rank=3,player_name='Locklear, Dave Remote',wins=7,losses=3,win_pct=0.700000,projected_wins=7,possible_wins=7)
@@ -126,7 +126,7 @@ class WeekResults2013:
 
     def week3(self):
         results = []
-        self.utils.add_week_result(results,rank=1,projected_rank=1,player_name='Steel, Van Remote',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8,winner='Steel, Van Remote')
+        self.utils.add_week_result(results,rank=1,projected_rank=1,player_name='Steel, Van Remote',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8,winner='WINNER')
         self.utils.add_week_result(results,rank=2,projected_rank=2,player_name='Emptage, Nick',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8)
         self.utils.add_week_result(results,rank=3,projected_rank=3,player_name='Neeley, Michael',wins=7,losses=3,win_pct=0.700000,projected_wins=7,possible_wins=7)
         self.utils.add_week_result(results,rank=3,projected_rank=3,player_name='Farren, Kevin M',wins=7,losses=3,win_pct=0.700000,projected_wins=7,possible_wins=7)
@@ -185,7 +185,7 @@ class WeekResults2013:
 
     def week4(self):
         results = []
-        self.utils.add_week_result(results,rank=1,projected_rank=1,player_name='Shuey, Jeffrey M',wins=7,losses=3,win_pct=0.700000,projected_wins=7,possible_wins=7,winner='Shuey, Jeffrey M')
+        self.utils.add_week_result(results,rank=1,projected_rank=1,player_name='Shuey, Jeffrey M',wins=7,losses=3,win_pct=0.700000,projected_wins=7,possible_wins=7,winner='WINNER')
         self.utils.add_week_result(results,rank=2,projected_rank=2,player_name='Fonville, Chris',wins=7,losses=3,win_pct=0.700000,projected_wins=7,possible_wins=7)
         self.utils.add_week_result(results,rank=2,projected_rank=2,player_name='Reams, Byron L',wins=7,losses=3,win_pct=0.700000,projected_wins=7,possible_wins=7)
         self.utils.add_week_result(results,rank=2,projected_rank=2,player_name='Desetto, Daniel',wins=7,losses=3,win_pct=0.700000,projected_wins=7,possible_wins=7)
@@ -244,7 +244,7 @@ class WeekResults2013:
 
     def week5(self):
         results = []
-        self.utils.add_week_result(results,rank=1,projected_rank=1,player_name='Nguyen, Thai',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8,winner='Nguyen, Thai')
+        self.utils.add_week_result(results,rank=1,projected_rank=1,player_name='Nguyen, Thai',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8,winner='WINNER')
         self.utils.add_week_result(results,rank=2,projected_rank=2,player_name='Neeley, Amber Remote',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8)
         self.utils.add_week_result(results,rank=3,projected_rank=3,player_name='Ferguson, Scott Remote',wins=7,losses=3,win_pct=0.700000,projected_wins=7,possible_wins=7)
         self.utils.add_week_result(results,rank=3,projected_rank=3,player_name='Steel, Van Remote',wins=7,losses=3,win_pct=0.700000,projected_wins=7,possible_wins=7)
@@ -303,7 +303,7 @@ class WeekResults2013:
 
     def week6(self):
         results = []
-        self.utils.add_week_result(results,rank=1,projected_rank=1,player_name='Nguyen, Thai',wins=9,losses=1,win_pct=0.900000,projected_wins=9,possible_wins=9,winner='Nguyen, Thai')
+        self.utils.add_week_result(results,rank=1,projected_rank=1,player_name='Nguyen, Thai',wins=9,losses=1,win_pct=0.900000,projected_wins=9,possible_wins=9,winner='WINNER')
         self.utils.add_week_result(results,rank=2,projected_rank=2,player_name='Marsh, Alexander Remote',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8)
         self.utils.add_week_result(results,rank=2,projected_rank=2,player_name='Christiansen, Amos H',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8)
         self.utils.add_week_result(results,rank=2,projected_rank=2,player_name='Shuey, Jeffrey M',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8)
@@ -362,7 +362,7 @@ class WeekResults2013:
 
     def week7(self):
         results = []
-        self.utils.add_week_result(results,rank=1,projected_rank=1,player_name='Locklear, Dave Remote',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8,winner='Locklear, Dave Remote')
+        self.utils.add_week_result(results,rank=1,projected_rank=1,player_name='Locklear, Dave Remote',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8,winner='WINNER')
         self.utils.add_week_result(results,rank=2,projected_rank=2,player_name='Neeley, Michael',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8)
         self.utils.add_week_result(results,rank=3,projected_rank=3,player_name='Steel, Van Remote',wins=7,losses=3,win_pct=0.700000,projected_wins=7,possible_wins=7)
         self.utils.add_week_result(results,rank=3,projected_rank=3,player_name='Bowers, Martin L',wins=7,losses=3,win_pct=0.700000,projected_wins=7,possible_wins=7)
@@ -421,7 +421,7 @@ class WeekResults2013:
 
     def week8(self):
         results = []
-        self.utils.add_week_result(results,rank=1,projected_rank=1,player_name='Hendrick, Matt R',wins=7,losses=3,win_pct=0.700000,projected_wins=7,possible_wins=7,winner='Hendrick, Matt R')
+        self.utils.add_week_result(results,rank=1,projected_rank=1,player_name='Hendrick, Matt R',wins=7,losses=3,win_pct=0.700000,projected_wins=7,possible_wins=7,winner='WINNER')
         self.utils.add_week_result(results,rank=2,projected_rank=2,player_name='Robbins, Dale',wins=7,losses=3,win_pct=0.700000,projected_wins=7,possible_wins=7)
         self.utils.add_week_result(results,rank=3,projected_rank=3,player_name='Steel, Van Remote',wins=6,losses=4,win_pct=0.600000,projected_wins=6,possible_wins=6)
         self.utils.add_week_result(results,rank=3,projected_rank=3,player_name='Farren, Leslie Remote',wins=6,losses=4,win_pct=0.600000,projected_wins=6,possible_wins=6)
@@ -480,7 +480,7 @@ class WeekResults2013:
 
     def week9(self):
         results = []
-        self.utils.add_week_result(results,rank=1,projected_rank=1,player_name='Wells, Seth Remote',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8,winner='Wells, Seth Remote')
+        self.utils.add_week_result(results,rank=1,projected_rank=1,player_name='Wells, Seth Remote',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8,winner='WINNER')
         self.utils.add_week_result(results,rank=2,projected_rank=2,player_name='Holden, Brent',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8)
         self.utils.add_week_result(results,rank=2,projected_rank=2,player_name='Gregory, Adam J',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8)
         self.utils.add_week_result(results,rank=4,projected_rank=4,player_name='Ferguson, Scott Remote',wins=7,losses=3,win_pct=0.700000,projected_wins=7,possible_wins=7)
@@ -539,7 +539,7 @@ class WeekResults2013:
 
     def week10(self):
         results = []
-        self.utils.add_week_result(results,rank=1,projected_rank=1,player_name='Robbins, Dale',wins=9,losses=1,win_pct=0.900000,projected_wins=9,possible_wins=9,winner='Robbins, Dale')
+        self.utils.add_week_result(results,rank=1,projected_rank=1,player_name='Robbins, Dale',wins=9,losses=1,win_pct=0.900000,projected_wins=9,possible_wins=9,winner='WINNER')
         self.utils.add_week_result(results,rank=2,projected_rank=2,player_name='Hendrick, Matt R',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8)
         self.utils.add_week_result(results,rank=2,projected_rank=2,player_name='Brunt, DavidRemote',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8)
         self.utils.add_week_result(results,rank=2,projected_rank=2,player_name='Carter, Chris',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8)
@@ -598,7 +598,7 @@ class WeekResults2013:
 
     def week11(self):
         results = []
-        self.utils.add_week_result(results,rank=1,projected_rank=1,player_name='Edwards, Christopher S',wins=7,losses=3,win_pct=0.700000,projected_wins=7,possible_wins=7,winner='Edwards, Christopher S')
+        self.utils.add_week_result(results,rank=1,projected_rank=1,player_name='Edwards, Christopher S',wins=7,losses=3,win_pct=0.700000,projected_wins=7,possible_wins=7,winner='WINNER')
         self.utils.add_week_result(results,rank=2,projected_rank=2,player_name='Hendrick, Matt R',wins=6,losses=4,win_pct=0.600000,projected_wins=6,possible_wins=6)
         self.utils.add_week_result(results,rank=2,projected_rank=2,player_name='Sams, David',wins=6,losses=4,win_pct=0.600000,projected_wins=6,possible_wins=6)
         self.utils.add_week_result(results,rank=2,projected_rank=2,player_name='Holden, Brent',wins=6,losses=4,win_pct=0.600000,projected_wins=6,possible_wins=6)
@@ -657,7 +657,7 @@ class WeekResults2013:
 
     def week12(self):
         results = []
-        self.utils.add_week_result(results,rank=1,projected_rank=1,player_name='Farren, Kevin M',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8,winner='Farren, Kevin M')
+        self.utils.add_week_result(results,rank=1,projected_rank=1,player_name='Farren, Kevin M',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8,winner='WINNER')
         self.utils.add_week_result(results,rank=2,projected_rank=2,player_name='Neeley, Michael',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8)
         self.utils.add_week_result(results,rank=2,projected_rank=2,player_name='Locklear, Dave Remote',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8)
         self.utils.add_week_result(results,rank=4,projected_rank=4,player_name='Edwards, Christopher S',wins=7,losses=3,win_pct=0.700000,projected_wins=7,possible_wins=7)
@@ -716,7 +716,7 @@ class WeekResults2013:
 
     def week13(self):
         results = []
-        self.utils.add_week_result(results,rank=1,projected_rank=1,player_name='Chan, Simon',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8,winner='Chan, Simon')
+        self.utils.add_week_result(results,rank=1,projected_rank=1,player_name='Chan, Simon',wins=8,losses=2,win_pct=0.800000,projected_wins=8,possible_wins=8,winner='WINNER')
         self.utils.add_week_result(results,rank=2,projected_rank=2,player_name='Neeley, Michael',wins=7,losses=3,win_pct=0.700000,projected_wins=7,possible_wins=7)
         self.utils.add_week_result(results,rank=2,projected_rank=2,player_name='Robbins, Dale',wins=7,losses=3,win_pct=0.700000,projected_wins=7,possible_wins=7)
         self.utils.add_week_result(results,rank=2,projected_rank=2,player_name='Ferguson, Scott Remote',wins=7,losses=3,win_pct=0.700000,projected_wins=7,possible_wins=7)
