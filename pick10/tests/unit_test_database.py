@@ -158,6 +158,40 @@ class UnitTestDatabase:
         self.setup_player_picks(kevin,games,number_of_wins=1)
         self.setup_player_default(john,games)
 
+    def setup_week_in_progress_games_in_progress(self,year=1978,week_number=9):
+        week = self.setup_week(year,week_number)
+        games = [None]*10
+        games[0] = self.setup_game_with_winner(week,1,"Georgia Tech","Clemson",state=FINAL,winner=TEAM1)
+        games[1] = self.setup_game_with_winner(week,2,"Duke","North Carolina",state=FINAL,winner=TEAM1)
+        games[2] = self.setup_game_with_winner(week,3,"Virginia","Virginia Tech",state=FINAL,winner=TEAM1)
+        games[3] = self.setup_game_with_winner(week,4,"Indiana","Maryland",state=FINAL,winner=TEAM2)
+        games[4] = self.setup_game_with_winner(week,5,"South Carolina","Georgia",state=FINAL,winner=TEAM2)
+        games[5] = self.setup_game_with_winner(week,6,"Tennessee","Vanderbilt",state=FINAL,winner=TEAM2)
+        games[6] = self.setup_game_with_winner(week,7,"Auburn","Alabama",state=IN_PROGRESS,winner=TEAM1)
+        games[7] = self.setup_game_with_winner(week,8,"Southern California","UCLA",state=IN_PROGRESS,winner=TEAM2)
+        games[8] = self.setup_game_with_winner(week,9,"Army","Navy",state=IN_PROGRESS,winner=TEAM1)
+        games[9] = self.setup_game(week,10,"Notre Dame","Florida State",state=NOT_STARTED)
+        brent = self.setup_player(year,'Brent')
+        byron = self.setup_player(year,'Byron')
+        alice = self.setup_player(year,'Alice')
+        joan = self.setup_player(year,'Joan')
+        bill = self.setup_player(year,'Bill')
+        david = self.setup_player(year,'David')
+        amy = self.setup_player(year,'Amy')
+        annie = self.setup_player(year,'Annie')
+        kevin = self.setup_player(year,'Kevin')
+        john = self.setup_player(year,'John')
+        self.setup_player_picks_projected(brent,games,wins=6,projected=9)
+        self.setup_player_picks_projected(byron,games,wins=6,projected=8)
+        self.setup_player_picks_projected(alice,games,wins=5,projected=8)
+        self.setup_player_picks_projected(joan,games,wins=5,projected=6)
+        self.setup_player_picks_projected(bill,games,wins=4,projected=7)
+        self.setup_player_picks_projected(david,games,wins=4,projected=5)
+        self.setup_player_picks_projected(amy,games,wins=3,projected=5)
+        self.setup_player_picks_projected(annie,games,wins=3,projected=4)
+        self.setup_player_picks_projected(kevin,games,wins=1,projected=2)
+        self.setup_player_default(john,games)
+
     def setup_week(self,year,week_number):
         year_model = populate_year(year)
         week = add_week(year,week_number)
@@ -194,6 +228,11 @@ class UnitTestDatabase:
     def setup_player_default(self,player,games):
         for game in games:
             self.setup_pick(player,game,winner=0)
+
+    def setup_player_picks_projected(self,player,games,wins=0,projected=0):
+        not_started = sum([ 1 for g in games if g.game_state == NOT_STARTED ])
+        ahead = projected - wins - not_started
+        self.setup_player_picks(player,games,number_of_wins=wins,number_ahead=ahead)
 
     def setup_player_picks(self,player,games,number_of_wins=0,number_ahead=0):
         wins_left = number_of_wins

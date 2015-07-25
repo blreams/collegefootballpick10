@@ -3,6 +3,7 @@ from pick10.tests.data.week_results_2013 import *
 from pick10.tests.data.week_not_started_results import *
 from pick10.tests.data.week_not_started_with_defaulters_results import *
 from pick10.tests.data.week_in_progress_results import *
+from pick10.tests.data.week_in_progress_games_in_progress_results import *
 from pick10.tests.data.utils import *
 from pick10.database import *
 from pick10.calculate_week_results import *
@@ -18,6 +19,7 @@ class CalculateWeekResultsTests(TestCase):
         test_db.setup_week_not_started(1978,6)
         test_db.setup_week_not_started_with_defaulters(1978,7)
         test_db.setup_week_in_progress(1978,8)
+        test_db.setup_week_in_progress_games_in_progress(1978,9)
         super(CalculateWeekResultsTests, cls).setUpClass()
 
     @classmethod
@@ -96,11 +98,9 @@ class CalculateWeekResultsTests(TestCase):
 
     def test_t4_get_week_results_week_in_progress(self):
         self.__t4_week_in_progress()
-        return
         self.__t4_week_in_progress_with_games_in_progress()
 
     def test_t5_get_week_state(self):
-        return
         self.__t5_week_not_started()
         self.__t5_week_in_progress()
         self.__t5_week_final()
@@ -507,11 +507,21 @@ class CalculateWeekResultsTests(TestCase):
         self.__test_week_results(1978,8,wip.week_results())
 
     def __t4_week_in_progress_with_games_in_progress(self):
-        testdata = WeekInProgressGamesInProgress(leave_objects_in_datastore=False)
-        testdata.setup()
-        self.__test_get_week_results(testdata.year,testdata.week_number,testdata.get_expected_results())
-        testdata.cleanup()
+        players = self.__get_players(1978)
+        wip = WeekInProgressGamesInProgressResults(players)
+        self.__test_week_results(1978,9,wip.week_results())
 
+    def __t5_week_not_started(self):
+        state = CalculateWeekResults(1978,6).get_week_state()
+        self.assertEqual(state,NOT_STARTED)
+
+    def __t5_week_in_progress(self):
+        state = CalculateWeekResults(1978,8).get_week_state()
+        self.assertEqual(state,IN_PROGRESS)
+
+    def __t5_week_final(self):
+        state = CalculateWeekResults(2013,1).get_week_state()
+        self.assertEqual(state,FINAL)
 
     def __test_week_results(self,year,week_number,expected_results,private_names=False):
         results = CalculateWeekResults(year,week_number,private_names).get_results()

@@ -14,13 +14,16 @@ class CalculateWeekResults:
     def get_results(self):
         return self.__results
 
+    def get_week_state(self):
+        return self.__week_state
+
     def __calculate_week_results(self):
         database = Database()
         week_data = database.load_week_data(self.year,self.week_number)
 
         calc = CalculateResults(week_data)
         winner = WeekWinner(self.year,self.week_number,week_data)
-        week_state = calc.get_summary_state_of_all_games()
+        self.__week_state = calc.get_summary_state_of_all_games()
 
         results = []
         for player_id in week_data.players:
