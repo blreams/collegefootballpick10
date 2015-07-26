@@ -1,0 +1,219 @@
+#final-week-state {
+   color: black;
+   background-color: white;
+   font-size: 10pt;
+   font-family: Helvetica;
+   font-weight: 500;
+   white-space: nowrap;
+   text-align: left;
+   padding: 0px 4px;
+}
+
+#in-progress-week-state {
+   color: red;
+   background-color: white;
+   font-size: 10pt;
+   font-family: Helvetica;
+   font-weight: 500;
+   white-space: nowrap;
+   text-align: left;
+   padding: 0px 4px;
+}
+
+#not-started-week-state {
+   color: gray;
+   background-color: white;
+   font-size: 10pt;
+   font-family: Helvetica;
+   font-weight: 300;
+   text-align: left;
+   white-space: nowrap;
+   padding: 0px 4px;
+}
+
+#game-link-column {
+   font-size: 10pt;
+   text-align: left;
+   white-space: nowrap;
+   padding: 0px 4px;
+}
+
+.results-header {
+   color: #E6E6FF;
+   background-color: #0000E6;
+   font-size: 8pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   font-weight: 100;
+}
+
+#header {
+   text-align: center;
+   padding: 1px 4px;
+   white-space: nowrap;
+}
+
+#link-header {
+   text-align: center;
+   padding: 1px 4px;
+   color: #E6E6FF;
+   background-color: #0000E6;
+   font-size: 8pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   font-weight: 100;
+}
+
+#content {
+   color: black;
+   background-color: white;
+   font-size: 10pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   font-weight: 100;
+   white-space: nowrap;
+   text-align: center;
+}
+
+#player-content {
+   color: black;
+   background-color: lightyellow;
+   font-size: 10pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   font-weight: 100;
+   white-space: nowrap;
+   text-align: left;
+   width : 15em;
+}
+
+#player-link {
+   color: black;
+   background-color: lightyellow;
+   font-size: 10pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   font-weight: 100;
+   white-space: nowrap;
+   text-align: left;
+}
+
+#game-link {
+   color: blue;
+   background-color: white;
+   font-size: 10pt;
+   font-family: Helvetica;
+   font-weight: 500;
+   white-space: nowrap;
+   text-align: left;
+   padding: 0px 4px;
+}
+
+#highlight-content {
+   color: black;
+   background-color: lightgray;
+   font-size: 10pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   font-weight: 100;
+   white-space: nowrap;
+   text-align: center;
+}
+
+#table-line {
+   border-bottom: 1px solid lightgray;
+   padding: 0 0 0 0;
+}
+
+#winner-header {
+   background-color: white;
+}
+
+#not-winner {
+   background-color: white;
+}
+
+#official-winner {
+   color: red;
+   background-color: white;
+   font-size: 8pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   font-weight: 500;
+   white-space: nowrap;
+   text-align: center;
+}
+#unofficial-winner {
+   color: red;
+   background-color: white;
+   font-size: 8pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   font-weight: 500;
+   white-space: nowrap;
+   text-align: center;
+}
+#projected-winner {
+   color: red;
+   background-color: white;
+   font-size: 8pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   font-weight: 500;
+   white-space: nowrap;
+   text-align: center;
+}
+#official-winner-link {
+   color: red;
+   background-color: white;
+   font-size: 8pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   font-weight: 500;
+   white-space: nowrap;
+   text-align: center;
+   text-decoration: underline;
+}
+#unofficial-winner-link {
+   color: red;
+   background-color: white;
+   font-size: 8pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   font-weight: 500;
+   white-space: nowrap;
+   text-align: center;
+   text-decoration: underline;
+}
+#projected-winner-link {
+   color: red;
+   background-color: white;
+   font-size: 8pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   font-weight: 500;
+   white-space: nowrap;
+   text-align: center;
+   text-decoration: underline;
+}
+#winner-link {
+   color: red;
+   background-color: white;
+   font-size: 8pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   font-weight: 500;
+   white-space: nowrap;
+   text-align: center;
+   text-decoration: underline;
+}
+#winner {
+   color: red;
+   background-color: white;
+   font-size: 8pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   font-weight: 500;
+   white-space: nowrap;
+   text-align: center;
+}
