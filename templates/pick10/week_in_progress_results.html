@@ -1,0 +1,39 @@
+    <table>
+        <tr>
+            <td id="in-progress-week-state">week is in progress</td>
+            <td id="game-link-column"><a id="game-link" href="games">update game scores</a></td>
+        </tr>
+    </table>
+    <table>
+        <thead class="results-header">
+            <td id="header">Rank</td>
+            <td id="header"><a id="link-header" href="javascript:void" onclick="change_content('players')">Player</a></td>
+            <td id="header"><a id="link-header" href="javascript:void" onclick="change_content('wins')">Wins</a></td>
+            <td id="header"><a id="link-header" href="javascript:void" onclick="change_content('losses')">Losses</a></td>
+            <td id="header">Win Pct.</td>
+            <td id="header"><a id="link-header" href="javascript:void" onclick="change_content('projected_wins')">Projected</a></td>
+            <td id="header"><a id="link-header" href="javascript:void" onclick="change_content('possible_wins')">Possible</a></td>
+            <td id="winner-header"></td>
+        </thead>
+        {% for result in results %}
+            <tr>
+                {% if use_projected_rank %}
+                    <td id="content">{{result.projected_rank}}</td>
+                {% else %}
+                    <td id="content">{{result.rank}}</td>
+                {% endif %}
+                <td id="player-content"><a id="player-link" href="player/{{result.player_id}}/results">{{result.player_name}}</a></td>
+                <td id="{{wins_id}}">{{result.wins}}</td>
+                <td id="{{losses_id}}">{{result.losses}}</td>
+                <td id="content">{{result.win_pct}}</td>
+                <td id="{{projected_id}}">{{result.projected_wins}}</td>
+                <td id="{{possible_id}}">{{result.possible_wins}}</td>
+                {% if winner.num_tied_for_first == 1 %}
+                    <td id="winner">{{result.winner}}</td>
+                {% else %}
+                    <td id="winner"><a id="winner-link" href="tiebreak">{{result.winner}}</a></td>
+                {% endif %}
+            </tr>
+            <tr><td id="table-line" colspan="7"></td></tr>
+        {% endfor %}
+    </table>
