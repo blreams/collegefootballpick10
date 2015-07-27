@@ -202,7 +202,7 @@ class WeekResultsView:
 
         content = render_to_string(self.__render_file,params)
         html_str = self.escape_string(content)
-        return compress_html(html_str)
+        return self.compress_html(html_str)
 
     def __highlight_no_columns(self):
         return self.__highlight_column(None)
