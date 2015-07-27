@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 from pick10.models import *
 from pick10.calculate_week_results import *
+import string
+import re
 
 class WeekResultsView:
 
@@ -33,21 +35,21 @@ class WeekResultsView:
         params['week_number'] = week_number
         #params['weeks_in_year'] = weeks_in_year
         params['content'] = self.__initial_content(results,winner_info)
-        #params['sorted_by_wins'] = self.__sort_by_wins(results,winner_info)
-        #params['sorted_by_wins_reversed'] = self.__sort_by_wins_reversed(results,winner_info)
-        #params['sorted_by_losses'] = self.__sort_by_losses(results,winner_info)
-        #params['sorted_by_losses_reversed'] = self.__sort_by_losses_reversed(results,winner_info)
-        #params['sorted_by_players'] = self.__sort_by_players(results,winner_info)
-        #params['sorted_by_players_reversed'] = self.__sort_by_players_reversed(results,winner_info)
+        params['sorted_by_wins'] = self.__sort_by_wins(results,winner_info)
+        params['sorted_by_wins_reversed'] = self.__sort_by_wins_reversed(results,winner_info)
+        params['sorted_by_losses'] = self.__sort_by_losses(results,winner_info)
+        params['sorted_by_losses_reversed'] = self.__sort_by_losses_reversed(results,winner_info)
+        params['sorted_by_players'] = self.__sort_by_players(results,winner_info)
+        params['sorted_by_players_reversed'] = self.__sort_by_players_reversed(results,winner_info)
 
-        #if week_state == "in_progress":
-            #params['sorted_by_projected_wins'] = self.__sort_by_projected_wins(results,winner_info)
-            #params['sorted_by_projected_wins_reversed'] = self.__sort_by_projected_wins_reversed(results,winner_info)
-            #params['sorted_by_possible_wins'] = self.__sort_by_possible_wins(results,winner_info)
-            #params['sorted_by_possible_wins_reversed'] = self.__sort_by_possible_wins_reversed(results,winner_info)
-        #elif week_state == "not_started":
-            #params['sorted_by_possible_wins'] = self.__sort_by_possible_wins(results,winner_info)
-            #params['sorted_by_possible_wins_reversed'] = self.__sort_by_possible_wins_reversed(results,winner_info)
+        if week_state == IN_PROGRESS:
+            params['sorted_by_projected_wins'] = self.__sort_by_projected_wins(results,winner_info)
+            params['sorted_by_projected_wins_reversed'] = self.__sort_by_projected_wins_reversed(results,winner_info)
+            params['sorted_by_possible_wins'] = self.__sort_by_possible_wins(results,winner_info)
+            params['sorted_by_possible_wins_reversed'] = self.__sort_by_possible_wins_reversed(results,winner_info)
+        elif week_state == NOT_STARTED:
+            params['sorted_by_possible_wins'] = self.__sort_by_possible_wins(results,winner_info)
+            params['sorted_by_possible_wins_reversed'] = self.__sort_by_possible_wins_reversed(results,winner_info)
 
         return render(request,"pick10/week_results.html",params)
 
@@ -66,11 +68,142 @@ class WeekResultsView:
         params.update(highlight)
 
         content = render_to_string(self.__render_file,params)
-        import pdb; pdb.set_trace()
         if escape:
             html_str = self.escape_string(content)
             return self.compress_html(html_str)
         return content
+
+    def __sort_by_wins_reversed(self,results,winner_info):
+        sorted_by_players = sorted(results,key=lambda result:result.player_name,reverse=True)
+        sorted_by_wins = sorted(sorted_by_players,key=lambda result:result.rank,reverse=True)
+        self.__move_winner_to_bottom(sorted_by_wins,results)
+        highlight = self.__highlight_column('wins')
+
+        params = dict()
+        params['results'] = sorted_by_wins
+        params['winner'] = winner_info
+        params.update(highlight)
+
+        content = render_to_string(self.__render_file,params)
+        html_str = self.escape_string(content)
+        return self.compress_html(html_str)
+
+    def __sort_by_losses(self,results,winner_info):
+        sorted_by_players = sorted(results,key=lambda result:result.player_name,reverse=False)
+        sorted_by_losses = sorted(sorted_by_players,key=lambda result:result.rank,reverse=True)
+        highlight = self.__highlight_column('losses')
+
+        params = dict()
+        params['results'] = sorted_by_losses
+        params['winner'] = winner_info
+        params.update(highlight)
+
+        content = render_to_string(self.__render_file,params)
+        html_str = self.escape_string(content)
+        return self.compress_html(html_str)
+
+    def __sort_by_losses_reversed(self,results,winner_info):
+        sorted_by_players = sorted(results,key=lambda result:result.player_name,reverse=True)
+        sorted_by_losses = sorted(sorted_by_players,key=lambda result:result.rank)
+        highlight = self.__highlight_column('losses')
+
+        params = dict()
+        params['results'] = sorted_by_losses
+        params['winner'] = winner_info
+        params.update(highlight)
+
+        content = render_to_string(self.__render_file,params)
+        html_str = self.escape_string(content)
+        return self.compress_html(html_str)
+
+    def __sort_by_players(self,results,winner_info):
+        sorted_by_players = sorted(results,key=lambda result:result.player_name)
+        highlight = self.__highlight_no_columns()
+
+        params = dict()
+        params['results'] = sorted_by_players
+        params['winner'] = winner_info
+        params.update(highlight)
+
+        content = render_to_string(self.__render_file,params)
+        html_str = self.escape_string(content)
+        return self.compress_html(html_str)
+
+    def __sort_by_players_reversed(self,results,winner_info):
+        sorted_by_players = sorted(results,key=lambda result:result.player_name,reverse=True)
+        highlight = self.__highlight_no_columns()
+
+        params = dict()
+        params['results'] = sorted_by_players
+        params['winner'] = winner_info
+        params.update(highlight)
+
+        content = render_to_string(self.__render_file,params)
+        html_str = self.escape_string(content)
+        return self.compress_html(html_str)
+
+    def __sort_by_projected_wins(self,results,winner_info):
+        sorted_by_players = sorted(results,key=lambda result:result.player_name,reverse=False)
+        sorted_by_wins = sorted(sorted_by_players,key=lambda result:result.projected_rank)
+        self.__move_winner_to_top(sorted_by_wins,results,use_projected_rank=True)
+        highlight = self.__highlight_column('projected_wins')
+
+        params = dict()
+        params['results'] = sorted_by_wins
+        params['winner'] = winner_info
+        params['use_projected_rank'] = True
+        params.update(highlight)
+
+        content = render_to_string(self.__render_file,params)
+        html_str = self.escape_string(content)
+        return self.compress_html(html_str)
+
+    def __sort_by_projected_wins_reversed(self,results,winner_info):
+        sorted_by_players = sorted(results,key=lambda result:result.player_name,reverse=True)
+        sorted_by_wins = sorted(results,key=lambda result:result.projected_rank,reverse=True)
+        self.__move_winner_to_bottom(sorted_by_wins,results,use_projected_rank=True)
+        highlight = self.__highlight_column('projected_wins')
+
+        params = dict()
+        params['results'] = sorted_by_wins
+        params['winner'] = winner_info
+        params['use_projected_rank'] = True
+        params.update(highlight)
+
+        content = render_to_string(self.__render_file,params)
+        html_str = self.escape_string(content)
+        return self.compress_html(html_str)
+
+    def __sort_by_possible_wins(self,results,winner_info):
+        sorted_by_players = sorted(results,key=lambda result:result.player_name,reverse=False)
+        sorted_by_wins = sorted(sorted_by_players,key=lambda result:result.possible_wins,reverse=True)
+        highlight = self.__highlight_column('possible_wins')
+
+        params = dict()
+        params['results'] = sorted_by_wins
+        params['winner'] = winner_info
+        params.update(highlight)
+
+        content = render_to_string(self.__render_file,params)
+        html_str = self.escape_string(content)
+        return self.compress_html(html_str)
+
+    def __sort_by_possible_wins_reversed(self,results,winner_info):
+        sorted_by_players = sorted(results,key=lambda result:result.player_name,reverse=True)
+        sorted_by_wins = sorted(sorted_by_players,key=lambda result:result.possible_wins)
+        highlight = self.__highlight_column('possible_wins')
+
+        params = dict()
+        params['results'] = sorted_by_wins
+        params['winner'] = winner_info
+        params.update(highlight)
+
+        content = render_to_string(self.__render_file,params)
+        html_str = self.escape_string(content)
+        return compress_html(html_str)
+
+    def __highlight_no_columns(self):
+        return self.__highlight_column(None)
 
     def __move_winner_to_top(self,sorted_data,results,use_projected_rank=False):
         for result in results:
@@ -84,6 +217,19 @@ class WeekResultsView:
                 index = self.__find_player_id(result.player_id,sorted_data)
                 item = sorted_data.pop(index)
                 sorted_data.insert(0,item)
+
+    def __move_winner_to_bottom(self,sorted_data,results,use_projected_rank=False):
+        for result in results:
+            if use_projected_rank and result.projected_rank != 1:
+                continue
+
+            if use_projected_rank == False and result.rank != 1:
+                continue
+
+            if result.winner != None and result.winner != "":
+                index = self.__find_player_id(result.player_id,sorted_data)
+                item = sorted_data.pop(index)
+                sorted_data.append(item)
 
     def __bad_year_or_week_number(self,year,week_number):
         try:
