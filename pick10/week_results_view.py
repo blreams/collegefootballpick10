@@ -16,7 +16,9 @@ class WeekResultsView:
         year = int(year)
         week_number = int(week_number)
 
-        cwr = CalculateWeekResults(year,week_number)
+        use_private_names = request.user.is_authenticated()
+
+        cwr = CalculateWeekResults(year,week_number,use_private_names)
         results = cwr.get_results()
         week_state = cwr.get_week_state()
         winner_info = cwr.get_winner_info()
