@@ -2,17 +2,17 @@
 
 {% block header_text %}College Football Pick 10{% endblock %}
 
-{% block content %}
+{% block body_block %}
 <link href="/static/error.css" rel="stylesheet" type="text/css" media="all">
 <hr>
     {% if error == "bad_id" %}
-        <div>Cannot find player {{player_id}} in the database.</div>
+        <div id="error-msg">Cannot find player {{player_id}} in the database.</div>
     {% endif %}
     {% if error == "bad_year" %}
-        <div>Player {{player_id}} is not participating in the {{year}} pool.</div>
+        <div id="error-msg">Player {{player_id}} is not participating in the {{year}} pool.</div>
     {% endif %}
     {% if error == "before_pick_deadline" %}
         <div><span id="date-label">Pick Deadline: </span><span id="date">{{deadline}}</span></div><br>
-        <div>Player results for other players cannot be accessed until after the pick deadline has passed.</div>
+        <div id="error-msg">Player results for other players cannot be accessed until after the pick deadline has passed.</div>
     {% endif %}
 {% endblock %}

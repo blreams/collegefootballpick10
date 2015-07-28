@@ -14,9 +14,8 @@ class PlayerResultsView:
             return render(request,"pick10/bad_week.html",data)
 
         if not(self.__is_player_id_valid(player_id)):
-            data={'year':year,'player_id':player_id,'error':'bad_id'}
-            render("bad_player.html",data)
-            return
+            data={'player_id':player_id,'error':'bad_id'}
+            return render(request,"pick10/bad_player.html",data)
 
         year = int(year)
         week_number = int(week_number)
@@ -26,8 +25,7 @@ class PlayerResultsView:
 
         if not(self.__is_player_in_year(player_id,year)):
             data={'year':year,'player_id':player_id,'error':'bad_year'}
-            render("bad_player.html",data)
-            return
+            return render(request,"pick10/bad_player.html",data)
 
     def __bad_year_or_week_number(self,year,week_number):
         try:
