@@ -31,11 +31,11 @@ class CalculatePlayerResults:
     def __calculate_player_summary(self):
         summary = PlayerSummary()
         summary.player_id = self.player_id
-        summary.wins = self.__calc.get_number_of_wins(player)
-        summary.losses = self.__calc.get_number_of_losses(player)
-        summary.win_pct = self.__calc.get_win_percent_string(player)
-        summary.possible_wins = self.__calc.get_number_of_possible_wins(player)
-        summary.projected_wins = self.__calc.get_number_of_projected_wins(player)
+        summary.wins = self.__calc.get_number_of_wins(self.__player)
+        summary.losses = self.__calc.get_number_of_losses(self.__player)
+        summary.win_pct = self.__calc.get_win_percent_string(self.__player)
+        summary.possible_wins = self.__calc.get_number_of_possible_wins(self.__player)
+        summary.projected_wins = self.__calc.get_number_of_projected_wins(self.__player)
         summary.week_state = self.__calc.get_summary_state_of_all_games()
 
         if self.__use_private_names:

@@ -21,11 +21,41 @@ class PlayerResultsView:
         week_number = int(week_number)
         player_id = int(player_id)
 
-        use_private_names = request.user.is_authenticated()
-
         if not(self.__is_player_in_year(player_id,year)):
             data={'year':year,'player_id':player_id,'error':'bad_year'}
             return render(request,"pick10/bad_player.html",data)
+
+        # TODO check pick deadline
+        #if self.__hide_player_results(player_key,year,week_number,database):
+            #pick_deadline_utc = database.get_pick_deadline(year,week_number)
+            #pick_deadline = self.__format_pick_deadline(pick_deadline_utc)
+            #self.error(400)
+            #self.render("bad_player.html",year=year,error="before_pick_deadline",deadline=pick_deadline);
+            #return
+
+        use_private_names = request.user.is_authenticated()
+
+        calc = CalculatePlayerResults(year,week_number,player_id,use_private_names)
+        summary = calc.get_player_summary()
+        results = calc.get_results()
+
+        params = dict()
+        params['year'] = year
+        params['week_number'] = week_number
+        #params['weeks_in_year'] = database.get_week_numbers(year)
+        params['summary'] = summary
+        params['results'] = results
+        params['FINAL'] = FINAL
+        params['IN_PROGRESS'] = IN_PROGRESS
+        params['NOT_STARTED'] = NOT_STARTED
+
+        # TODO set timezone for kickoff date
+        timezone = 'US/Eastern'
+
+        import pdb; pdb.set_trace()
+        self.set_game_status_params(params,results,timezone)
+
+        return render(request,"pick10/player_results.html",params)
 
     def __bad_year_or_week_number(self,year,week_number):
         try:
@@ -48,3 +78,87 @@ class PlayerResultsView:
         d = Database()
         players_in_year = d.load_players(year)
         return player_id in players_in_year
+
+    def set_game_status_params(self,params,results,timezone):
+        top_ids = []
+        top_statuses = []
+        bottom_ids = []
+        bottom_statuses = []
+
+        for result in results:
+            top_status,bottom_status,top_id,bottom_id = self.get_game_status(result,timezone)
+
+            top_ids.append(top_id)
+            top_statuses.append(top_status)
+            bottom_ids.append(bottom_id)
+            bottom_statuses.append(bottom_status)
+
+        params['top_status_id'] = top_ids
+        params['top_status'] = top_statuses
+        params['bottom_status_id'] = bottom_ids
+        params['bottom_status'] = bottom_statuses
+
+    def get_game_status(self,result,timezone):
+        if result.game_state == NOT_STARTED:
+            return self.__game_not_started_status(result,timezone)
+        elif result.game_state == IN_PROGRESS:
+            return self.__game_in_progress_status(result)
+        elif result.game_state == FINAL:
+            return self.__game_final_status()
+        raise AssertionError,"bad game state: %s" % (result.game_state)
+
+    def __game_not_started_status(self,user,result):
+        if result.game_date == None:
+            top_status = ""
+            bottom_status = ""
+            top_id = "status-empty"
+            bottom_id = "status-empty"
+        else:
+            local_game_date = self.__get_local_time(result.game_date,timezone)
+            weekday_month_day = "%a %m/%d"
+            hour_minutes_ampm_timezone = "%I:%M %p %Z"
+            top_status = local_game_date.strftime(weekday_month_day)
+            bottom_status = local_game_date.strftime(hour_minutes_ampm_timezone)
+            top_id = "game-time"
+            bottom_id = "game-time"
+        return top_status,bottom_status,top_id,bottom_id
+
+    def __get_local_time(self,naive_date,timezone):
+        utc_date = pytz.utc.localize(naive_date)
+        local_date = utc_date.astimezone(pytz.timezone(timezone))
+        return local_date
+
+    def __game_in_progress_status(self,result):
+        quarter_missing = not(result.game_quarter) or result.game_quarter == ""
+        time_left_missing = not(result.game_time_left) or result.game_time_left == ""
+
+        if quarter_missing and time_left_missing:
+            top_status = ""
+            bottom_status = "in progress"
+            top_id = "status-empty"
+            bottom_id = "game-in-progress"
+        elif quarter_missing and not(time_left_missing):
+            top_status = ""
+            bottom_status = result.game_time_left
+            top_id = "status-empty"
+            bottom_id = "game-time-in-progress"
+        elif not(quarter_missing) and time_left_missing:
+            top_status = ""
+            bottom_status = result.game_quarter
+            top_id = "status-empty"
+            bottom_id = "game-quarter"
+        else:
+            top_status = result.game_quarter 
+            bottom_status = result.game_time_left
+            top_id = "game-quarter"
+            bottom_id = "game-time-in-progress"
+
+        return top_status,bottom_status,top_id,bottom_id
+
+    def __game_final_status(self):
+        top_status = ""
+        bottom_status = "final"
+        top_id = "status-empty"
+        bottom_id = "game-final"
+
+        return top_status,bottom_status,top_id,bottom_id
