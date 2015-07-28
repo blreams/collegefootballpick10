@@ -1,0 +1,16 @@
+body {
+   color: red;
+   font-family: Helvetica;
+   font-size: 12pt;
+   font-weight: 100;
+}
+#date-label {
+   color : gray;
+   font-size: 10pt;
+   font-weight: 500;
+}
+#date {
+   color : gray;
+   font-size: 10pt;
+   padding: 4px 4px;
+}
