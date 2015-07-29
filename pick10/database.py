@@ -101,11 +101,11 @@ class Database:
         raise AssertionError,"Not implemented"
 
     def __before_pick_deadline(self,week):
-        # TODO tests
         if week.lock_picks == None:
             return False
         current_time = datetime.datetime.utcnow()
-        return current_time <= week.lock_picks
+        current_time_tz = pytz.timezone('UTC').localize(current_time)
+        return current_time_tz <= week.lock_picks
 
     def update_games_cache(self,year,week_number,data):
         raise AssertionError,"Not implemented"

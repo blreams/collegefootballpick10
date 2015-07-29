@@ -29,7 +29,8 @@ class PlayerResultsView:
         timezone = 'US/Eastern'
 
         if self.__hide_player_results(request.user,player_id,year,week_number):
-            pick_deadline_utc = database.get_pick_deadline(year,week_number)
+            d = Database()
+            pick_deadline_utc = d.get_pick_deadline(year,week_number)
             pick_deadline = self.__format_pick_deadline(pick_deadline_utc,timezone)
             data={'year':year,'player_id':player_id,'error':'before_pick_deadline','deadline':pick_deadline}
             return render(request,"pick10/bad_player.html",data)
@@ -104,7 +105,7 @@ class PlayerResultsView:
             return self.__game_final_status()
         raise AssertionError,"bad game state: %s" % (result.game_state)
 
-    def __game_not_started_status(self,user,result):
+    def __game_not_started_status(self,result,timezone):
         if result.game_date == None:
             top_status = ""
             bottom_status = ""
@@ -120,10 +121,9 @@ class PlayerResultsView:
             bottom_id = "game-time"
         return top_status,bottom_status,top_id,bottom_id
 
-    def __get_local_time(self,naive_date,timezone):
-        utc_date = pytz.utc.localize(naive_date)
-        local_date = utc_date.astimezone(pytz.timezone(timezone))
-        return local_date
+    def __get_local_time(self,utc_date,timezone_name):
+        tz = pytz.timezone(timezone_name)
+        return utc_date.astimezone(tz)
 
     def __game_in_progress_status(self,result):
         quarter_missing = not(result.game_quarter) or result.game_quarter == ""

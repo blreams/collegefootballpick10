@@ -77,8 +77,8 @@ class CalculatePlayerResults:
             result.game_quarter = game.quarter
             result.game_time_left = game.time_left
         elif game.game_state == NOT_STARTED:
-            result.team1_actual_points = ''
-            result.team2_actual_points = ''
+            result.team1_score = ''
+            result.team2_score = ''
         else:
             raise AssertionError,"Game state %s is not valid" % (game.game_state)
 
