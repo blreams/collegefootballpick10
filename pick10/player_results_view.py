@@ -25,13 +25,14 @@ class PlayerResultsView:
             data={'year':year,'player_id':player_id,'error':'bad_year'}
             return render(request,"pick10/bad_player.html",data)
 
-        # TODO check pick deadline
-        #if self.__hide_player_results(player_key,year,week_number,database):
-            #pick_deadline_utc = database.get_pick_deadline(year,week_number)
-            #pick_deadline = self.__format_pick_deadline(pick_deadline_utc)
-            #self.error(400)
-            #self.render("bad_player.html",year=year,error="before_pick_deadline",deadline=pick_deadline);
-            #return
+        # TODO set timezone for kickoff date and lock picks time
+        timezone = 'US/Eastern'
+
+        if self.__hide_player_results(request.user,player_id,year,week_number):
+            pick_deadline_utc = database.get_pick_deadline(year,week_number)
+            pick_deadline = self.__format_pick_deadline(pick_deadline_utc,timezone)
+            data={'year':year,'player_id':player_id,'error':'before_pick_deadline','deadline':pick_deadline}
+            return render(request,"pick10/bad_player.html",data)
 
         use_private_names = request.user.is_authenticated()
 
@@ -49,10 +50,6 @@ class PlayerResultsView:
         params['IN_PROGRESS'] = IN_PROGRESS
         params['NOT_STARTED'] = NOT_STARTED
 
-        # TODO set timezone for kickoff date
-        timezone = 'US/Eastern'
-
-        import pdb; pdb.set_trace()
         self.set_game_status_params(params,results,timezone)
 
         return render(request,"pick10/player_results.html",params)
@@ -162,3 +159,26 @@ class PlayerResultsView:
         bottom_id = "game-final"
 
         return top_status,bottom_status,top_id,bottom_id
+
+    def __hide_player_results(self,user,player_id,year,week_number):
+
+        show_results = False
+        hide_results = True
+
+        # TODO:  possible bug getting user profile, so need to implement this later
+        # check that player_id == user.profile.player.id
+        player_id_matches_logged_in_user = False
+        if player_id_matches_logged_in_user:
+            return show_results
+
+        d = Database()
+
+        if d.before_pick_deadline(year,week_number):
+            return hide_results
+        else:
+            return show_results
+
+    def __format_pick_deadline(self,pick_deadline_utc,timezone):
+        pick_deadline = self.__get_local_time(pick_deadline_utc,timezone)
+        date_format = "%a %m/%d/%Y %I:%M %p %Z"
+        return pick_deadline.strftime(date_format)

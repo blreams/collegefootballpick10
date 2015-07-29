@@ -1,5 +1,6 @@
 from week_data import WeekData
 from pick10.models import *
+import datetime
 
 class Database:
 
@@ -23,11 +24,15 @@ class Database:
     def is_week_valid(self,week,year,update=False):
         raise AssertionError,"Not implemented"
 
-    def before_pick_deadline(self,year,week_number,update=False):
-        raise AssertionError,"Not implemented"
+    def before_pick_deadline(self,year,week_number):
+        # TODO tests
+        week = self.__get_week_in_database(year,week_number)
+        return self.__before_pick_deadline(week)
 
-    def get_pick_deadline(self,year,week_number,update=False):
-        raise AssertionError,"Not implemented"
+    def get_pick_deadline(self,year,week_number):
+        # TODO tests
+        week = self.__get_week_in_database(year,week_number)
+        return week.lock_picks
 
     def get_next_year_week_for_create_week(self,update=False):
         raise AssertionError,"Not implemented"
@@ -96,7 +101,11 @@ class Database:
         raise AssertionError,"Not implemented"
 
     def __before_pick_deadline(self,week):
-        raise AssertionError,"Not implemented"
+        # TODO tests
+        if week.lock_picks == None:
+            return False
+        current_time = datetime.datetime.utcnow()
+        return current_time <= week.lock_picks
 
     def update_games_cache(self,year,week_number,data):
         raise AssertionError,"Not implemented"

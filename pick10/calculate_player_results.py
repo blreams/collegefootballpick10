@@ -12,7 +12,7 @@ class CalculatePlayerResults:
         self.__calculate_player_results()
 
     def get_player_summary(self):
-        return self.__results
+        return self.__summary
 
     def get_results(self):
         return self.__results
