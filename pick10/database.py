@@ -37,8 +37,9 @@ class Database:
     def get_next_year_week_for_create_week(self,update=False):
         raise AssertionError,"Not implemented"
 
-    def get_week_numbers(self,year,update=False):
-        raise AssertionError,"Not implemented"
+    def get_week_numbers(self,year):
+        weeks_and_years = self.load_weeks_and_years()
+        return sorted(weeks_and_years[year])
 
     def get_years(self,update=False):
         raise AssertionError,"Not implemented"
@@ -50,7 +51,8 @@ class Database:
         raise AssertionError,"Not implemented"
 
     def load_weeks_and_years(self,update=False):
-        raise AssertionError,"Not implemented"
+        weeks_and_years = self.__load_week_numbers_and_years()
+        return weeks_and_years
 
     def load_players(self,year):
         year_obj = Year.objects.get(yearnum=year)
@@ -98,7 +100,18 @@ class Database:
         return { p.id:p for p in picks }
 
     def __load_week_numbers_and_years(self):
-        raise AssertionError,"Not implemented"
+        week_numbers_and_years = dict()
+        weeks = Week.objects.all()
+
+        for week in weeks:
+            year = week.year.yearnum
+            week_number = week.weeknum
+
+            if year not in week_numbers_and_years:
+                week_numbers_and_years[year] = []
+
+            week_numbers_and_years[year].append(week_number)
+        return week_numbers_and_years
 
     def __before_pick_deadline(self,week):
         if week.lock_picks == None:

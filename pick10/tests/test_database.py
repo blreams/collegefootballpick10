@@ -10,6 +10,7 @@ class LoadWeekDataTest(TestCase):
     def setUpClass(cls):
         test_db = UnitTestDatabase()
         test_db.setup_simple_week(2014,1)
+        test_db.load_historical_data_for_year(2013)
         super(LoadWeekDataTest, cls).setUpClass()
 
     @classmethod
@@ -104,3 +105,20 @@ class LoadWeekDataTest(TestCase):
             for pick in player_picks:
                 self.assertEqual(pick.player.id,player_id)
                 self.assertEqual(pick.game.week,data.week)
+
+    def test_get_week_numbers(self):
+        self.__get_weeks_test(2013,[1,2,3,4,5,6,7,8,9,10,11,12,13])
+
+    def test_get_week_numbers_bad_year(self):
+        self.__get_weeks_invalid_year_test()
+
+    def __get_weeks_test(self,year,expected_weeks):
+        d = Database()
+        weeks = d.get_week_numbers(year)
+        self.assertIsNotNone(weeks)
+        self.assertEqual(weeks,expected_weeks)
+
+    def __get_weeks_invalid_year_test(self):
+        d = Database()
+        with self.assertRaises(Exception):
+            weeks = d.get_week_numbers(1900)
