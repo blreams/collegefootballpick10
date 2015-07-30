@@ -1,11 +1,13 @@
 from django.test import TestCase
 from unit_test_database import *
+from pick10.calculate_overall_results import *
 
 class CalculateOverallResultsTests(TestCase):
 
     @classmethod
     def setUpClass(cls):
         test_db = UnitTestDatabase()
+        test_db.load_historical_data_for_year(2013)
         super(CalculateOverallResultsTests, cls).setUpClass()
 
     @classmethod
@@ -13,6 +15,11 @@ class CalculateOverallResultsTests(TestCase):
         test_db = UnitTestDatabase()
         test_db.delete_database()
         super(CalculateOverallResultsTests, cls).tearDownClass()
+
+    def test_get_results(self):
+        c = CalculateOverallResults(2013)
+        results = c.get_results()
+        self.assertIsNotNone(results)
 
     def test_t10_assign_overall_rank(self):
         return

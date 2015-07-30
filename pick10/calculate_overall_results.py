@@ -1,6 +1,7 @@
 from calculator import *
 from database import *
 from calculate_week_results import *
+from overall_results import *
 
 class CalculateOverallResults:
 
@@ -38,7 +39,6 @@ class CalculateOverallResults:
         overall_results = self.__sort_by_rank(overall_results)
 
         self.__results = overall_results
-
 
     def __setup_overall_results(self):
         players = self.__database.load_players(self.year)
