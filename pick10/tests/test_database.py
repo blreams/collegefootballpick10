@@ -122,3 +122,4 @@ class LoadWeekDataTest(TestCase):
         d = Database()
         with self.assertRaises(Exception):
             weeks = d.get_week_numbers(1900)
+
