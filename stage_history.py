@@ -114,6 +114,8 @@ def populate_week(yearnum, weeknum):
 
 def populate_team(teamname):
     mascot, conference, division = team_mascot_conference_division[teamname].split(':')
+    if division == '':
+        division = None
     confobj, create = Conference.objects.get_or_create(conf_name=conference, div_name=division)
     teamobj, create = Team.objects.get_or_create(team_name=teamname, mascot=mascot, conference=confobj)
     return teamobj
@@ -146,7 +148,12 @@ def populate_picks_for_year_week(yearnum, weeknum):
             continue
         playerobj = ss_names_player_dict[pick.player_name]
         gameobj = Game.objects.get(week=weekobj, gamenum=pick.game_number)
-        winner = 1 if pick.winner == 'team1' else 2
+
+        if poolspreadsheet.did_player_default(pick.player_name,weeknum):
+            winner = 0
+        else:
+            winner = 1 if pick.winner == 'team1' else 2
+
         pickobj, created = Pick.objects.get_or_create(player=playerobj, game=gameobj)
         if created:
             pickobj.winner = winner
