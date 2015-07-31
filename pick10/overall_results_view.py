@@ -30,12 +30,12 @@ class OverallResultsView:
 
         results = CalculateOverallResults(year,use_private_names).get_results()
 
-
         content_params = dict()
         content_params['year'] = year
         content_params['weeks_in_year'] = weeks_in_year
         content_params['pool_state'] = pool_state
         content_params['results'] = results
+        content_params['last_week_number'] = weeks_in_year[-1]
 
         if pool_state == "enter_picks":
             self.__render_file = "pick10/overall_enter_picks_results.html"
@@ -91,6 +91,7 @@ class OverallResultsView:
         params = dict()
         params['year'] = content_params['year']
         params['weeks_in_year'] = content_params['weeks_in_year']
+        params['last_week_number'] = content_params['last_week_number']
         params['pool_state'] = content_params['pool_state']
         params['results'] = sorted_by_overall
 
@@ -109,6 +110,7 @@ class OverallResultsView:
         params = dict()
         params['year'] = content_params['year']
         params['weeks_in_year'] = content_params['weeks_in_year']
+        params['last_week_number'] = content_params['last_week_number']
         params['pool_state'] = content_params['pool_state']
         params['results'] = sorted_by_overall_reversed
 
@@ -125,6 +127,7 @@ class OverallResultsView:
         params = dict()
         params['year'] = content_params['year']
         params['weeks_in_year'] = content_params['weeks_in_year']
+        params['last_week_number'] = content_params['last_week_number']
         params['pool_state'] = content_params['pool_state']
         params['results'] = sorted_by_players
 
@@ -141,6 +144,7 @@ class OverallResultsView:
         params = dict()
         params['year'] = content_params['year']
         params['weeks_in_year'] = content_params['weeks_in_year']
+        params['last_week_number'] = content_params['last_week_number']
         params['pool_state'] = content_params['pool_state']
         params['results'] = sorted_by_players_reversed
 
@@ -156,6 +160,7 @@ class OverallResultsView:
         params = dict()
         params['year'] = content_params['year']
         params['weeks_in_year'] = content_params['weeks_in_year']
+        params['last_week_number'] = content_params['last_week_number']
         params['pool_state'] = content_params['pool_state']
         params['results'] = sorted_by_overall_projected
         params['rank'] = "projected"
@@ -175,6 +180,7 @@ class OverallResultsView:
         params = dict()
         params['year'] = content_params['year']
         params['weeks_in_year'] = content_params['weeks_in_year']
+        params['last_week_number'] = content_params['last_week_number']
         params['pool_state'] = content_params['pool_state']
         params['results'] = sorted_by_overall_projected_reversed
         params['rank'] = "projected"
@@ -191,6 +197,7 @@ class OverallResultsView:
         params = dict()
         params['year'] = content_params['year']
         params['weeks_in_year'] = content_params['weeks_in_year']
+        params['last_week_number'] = content_params['last_week_number']
         params['pool_state'] = content_params['pool_state']
         params['results'] = sorted_by_overall_possible
 
@@ -209,6 +216,7 @@ class OverallResultsView:
         params = dict()
         params['year'] = content_params['year']
         params['weeks_in_year'] = content_params['weeks_in_year']
+        params['last_week_number'] = content_params['last_week_number']
         params['pool_state'] = content_params['pool_state']
         params['results'] = sorted_by_overall_possible_reversed
 

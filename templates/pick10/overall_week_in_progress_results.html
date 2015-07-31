@@ -1,4 +1,4 @@
-<div id="weekinprogress-pool-state">week {{weeks_in_year[-1]}} in progress</div>
+<div id="weekinprogress-pool-state">week {{last_week_number}} in progress</div>
 <table>
     <thead class="results-header">
         <td id="header">Rank</td>
@@ -10,8 +10,8 @@
         {% for wk_num in weeks_in_year %}
             <td id="header">Wk{{wk_num}}</td>
         {% endfor %}
-        <td id="header">Wk{{weeks_in_year[-1]}} Projected</td>
-        <td id="header">Wk{{weeks_in_year[-1]}} Possible</td>
+        <td id="header">Wk{{last_week_number}} Projected</td>
+        <td id="header">Wk{{last_week_number}} Possible</td>
     </thead>
     {% for result in results %}
         <tr>
