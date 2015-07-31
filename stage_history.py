@@ -133,7 +133,7 @@ def populate_games_for_year_week(yearnum, weeknum):
         winner = 1
         if (favored == 1 and (team1actualpoints - team2actualpoints) < spread) or (favored == 2 and (team2actualpoints - team1actualpoints) > spread):
             winner = 2
-        gameobj = Game.objects.get_or_create(week=weekobj, gamenum=gamenum, team1=team1obj, team2=team2obj, team1_actual_points=team1actualpoints, team2_actual_points=team2actualpoints, favored=favored, spread=spread, winner=winner)
+        gameobj = Game.objects.get_or_create(week=weekobj, gamenum=gamenum, team1=team1obj, team2=team2obj, team1_actual_points=team1actualpoints, team2_actual_points=team2actualpoints, favored=favored, spread=spread, winner=winner,game_state=3)
 
 def populate_picks_for_year_week(yearnum, weeknum):
     yearobj = Year.objects.get(yearnum=yearnum)
