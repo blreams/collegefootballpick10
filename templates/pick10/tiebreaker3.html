@@ -1,0 +1,34 @@
+<br>
+<br>
+
+<table class="tiebreaker-title">
+    <tr>
+        <td id="tiebreaker-number">Tiebreaker 3 Details</td>
+        <td id="tiebreaker-description">Person who enters their picks the earliest.</td>
+    </tr>
+    <tr><td id="table-line-gray" colspan="2"></td></tr>
+</table>
+
+{% if tiebreaker3_summary.valid == False %}
+<div id="tiebreaker-invalid">Not enough information in database to determine the winner.</div>
+<div id="tiebreaker-invalid">The following times may not be valid.</div>
+{% endif %}
+
+<br>
+
+<table>
+    <thead class="tiebreaker-header">
+        <td id="header">Player</td>
+        <td id="header">Result</td>
+        <td id="header">Pick Entry Time</td>
+    </thead>
+    {% for entry in tiebreaker3_details %}
+        <tr>
+            <td id="player-content">{{entry.player_name}}</td>
+            <td id="{{entry.result_id}}">{{entry.result}}</td>
+            <td id="content">{{entry.pick_entry_time}}</td>
+        </tr>
+        <tr><td id="table-line-gray" colspan="3"></td></tr>
+    {% endfor %}
+</table>
+<br>

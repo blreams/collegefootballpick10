@@ -1,0 +1,60 @@
+<br>
+<br>
+
+<table class="tiebreaker-title">
+    <tr>
+        <td id="tiebreaker-number">Tiebreaker 2 Details</td>
+        <td id="tiebreaker-description">Pick the score total closest to the game 10 score total.</td>
+    </tr>
+    <tr><td id="table-line-gray" colspan="2"></td></tr>
+</table>
+
+<table>
+    <thead class="game-header">
+        <td id="teams-header"> Game 10 Result</td>
+        <td id="score-header"> Score</td>
+    </thead>
+    <tr class="game-content">
+        <td id="team-name"> {{tiebreaker2_summary.team1}}</td>
+        <td id="team-score">{{tiebreaker2_summary.team1_score}}</td>
+    </tr>
+    <tr class="game-content">
+        <td id="team-name">{{tiebreaker2_summary.team2}}</td>
+        <td id="team-score">{{tiebreaker2_summary.team2_score}}</td>
+    </tr>
+    <tr>
+        <td id="table-line" colspan="2"></td>
+    </tr>
+    <tr class="game-content">
+        <td id="game-type-label">Result Total</td>
+        <td id="game-value">{{tiebreaker2_summary.result_total}}</td>
+    </tr>
+    <tr>
+        <td id="table-line",colspan="2">
+    </tr>
+</table>
+<br>
+<table>
+    <thead class="tiebreaker-header">
+        <td id="header">Player</td>
+        <td id="header">Result</td>
+        <td id="header">{{tiebreaker2_summary.team1}}</td>
+        <td id="header">{{tiebreaker2_summary.team2}}</td>
+        <td id="header">Pick Total</td>
+        <td id="header">Result Total</td>
+        <td id="header">Difference</td>
+    </thead>
+    {% for entry in tiebreaker2_details %}
+        <tr>
+            <td id="player-content">{{entry.player_name}}</td>
+            <td id="{{entry.result_id}}">{{entry.result}}</td>
+            <td id="content">{{entry.team1_score}}</td>
+            <td id="content">{{entry.team2_score}}</td>
+            <td id="content">{{entry.pick_total}}</td>
+            <td id="content">{{tiebreaker2_summary.result_total}}</td>
+            <td id="content">{{entry.difference}}</td>
+        </tr>
+        <tr><td id="table-line-gray" colspan="7"></td></tr>
+    {% endfor %}
+</table>
+<br>
