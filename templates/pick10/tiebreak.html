@@ -20,7 +20,7 @@
             <td id="tiebreaker-description"></td>
         </tr>
         <tr><td id="table-line-gray" colspan="2"></td></tr>
-    </table>
+    </table><br>
     <table>
         <thead class="tiebreaker-header">
             <td id="header">Player</td>
@@ -41,16 +41,16 @@
         {% endfor %}
     </table>
     {% if tiebreaker0_valid %}
-        {% include "tiebreaker0.html" %}
+        {% include "pick10/tiebreaker0.html" %}
     {% endif %}
     {% if tiebreaker1_valid %}
-        {% include "tiebreaker1.html" %}
+        {% include "pick10/tiebreaker1.html" %}
     {% endif %}
     {% if tiebreaker2_valid %}
-        {% include "tiebreaker2.html" %}
+        {% include "pick10/tiebreaker2.html" %}
     {% endif %}
     {% if tiebreaker3_valid %}
-        {% include "tiebreaker3.html" %}
+        {% include "pick10/tiebreaker3.html" %}
     {% endif %}
   {% endif %}
 {% endblock %}

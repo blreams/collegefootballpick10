@@ -84,9 +84,9 @@ class CalculateTiebreak:
                 result = self.__get_tiebreak_result("win")
                 css_id = self.__get_tiebreak_id(result)
 
-                details[playerid].tiebreak0 = result
-                details[playerid].tiebreak0_id = css_id
-                details[playerid].number_of_tiebreaks += 1
+                details[player_id].tiebreak0 = result
+                details[player_id].tiebreak0_id = css_id
+                details[player_id].number_of_tiebreaks += 1
 
         if t0_players_lost != None:
             for player_id in t0_players_lost:
@@ -244,6 +244,8 @@ class CalculateTiebreak:
         players = self.__winners.get_players_that_lost_tiebreak_1()
         if players != None:
             for player_id in players:
+                player = self.__week_data.players[player_id]
+
                 result = self.__get_tiebreak_result("loss")
                 css_id = self.__get_tiebreak_id(result)
     
