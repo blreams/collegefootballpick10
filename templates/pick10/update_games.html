@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block header_text %}Week {{week_number}} Update Games{% endblock %}
+
+{% block body_block %}
+    <link href="/static/update_games.css" rel="stylesheet" type="text/css" media="all">
+    <script src="/static/instructions.js"></script>
+    <div id="page-title">Week {{week_number}} Games</div><br>
+    <form action="games" method="post">
+    <br>
+    <a id="instr-link" href="#" onclick="expand_instr()">[+]</a>
+    <span id="instr-title">Instructions</span>
+    <br><br>
+    <span id="instr-content"></span>
+    {% if locked %}
+        <div id="locked-text">The scores are locked and cannot be edited. </div><br>
+    {% endif %}
+    {% for game in games %}
+        <table>
+            <thead class="game-header">
+                <td></td>
+                <td id="teams-header">Teams</td>
+                <td id="score-header">Score</td>
+                <td></td>
+                <td id="status-header"></td>
+            </thead>
+            <tr class="game-content">
+                <td id="vs"></td>
+                <td id="team-name">{{game.team1}}</td>
+                <td id="team-score">
+                    <input type="text" name="team1_score_{{game.number}}" size="2" value="{{game.team1_score}}"></input>
+                </td>
+                <td id="game-qtr">Qtr
+                    <input type="text" name="quarter_{{game.number}}" size="7" value="{{game.quarter}}"></input>
+                </td>
+                <td id="game-status"></td>
+            </tr>
+            <tr class="game-content">
+                <td id="vs">vs.</td>
+                <td id="team-name">{{game.team2}}</td>
+                <td id="team-score">
+                    <input type="text" name="team2_score_{{game.number}}" size="2" value="{{game.team2_score}}"></input>
+                </td>
+                <td id="game-time">Time
+                    <input type="text" name="time_{{game.number}}" size="7" value="{{game.time_left}}"></input>
+                </td>
+                <td id="game-status">
+                {% if game.state == "final" %}
+                <input type="checkbox" name="final_{{game.number}}" checked="checked" value="checked"></input> Final
+                {% else %}
+                <input type="checkbox" name="final_{{game.number}}" value="checked"></input> Final
+                {% endif %}
+                </td>
+            </tr>
+        </table>
+        <br>
+    {% endfor %}
+    {% if locked %}
+        <table>
+            <tr>
+                <td>
+                    <input type="submit" name="cancel_form" value="Cancel">
+                </td>
+                <td id="locked-text">
+                    The scores are locked and cannot be edited.
+                </td>
+            </tr>
+        </table>
+    {% else %}
+        <table>
+            <tr>
+                <td>
+                    <input type="submit" name="submit_form" value="Submit">
+                </td>
+                <td>
+                    <input type="submit" name="cancel_form" value="Cancel">
+                </td>
+            </tr>
+        </table>
+    {% endif %}
+    </form>
+{% endblock %}
