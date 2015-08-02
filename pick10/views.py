@@ -4,6 +4,7 @@ from overall_results_view import *
 from week_results_view import *
 from player_results_view import *
 from tiebreak_view import *
+from update_games_view import *
 
 @login_required
 def home(request):
@@ -26,4 +27,11 @@ def player_results(request,year,week_number,player_id):
 
 def tiebreak(request,year,week_number):
     response = TiebreakView().get(request,year,week_number)
+    return response
+
+def update_games(request,year,week_number):
+    if request.method == "GET":
+        response = UpdateGamesView().get(request,year,week_number)
+    elif request.method == "POST":
+        response = UpdateGamesView().post(request,year,week_number)
     return response
