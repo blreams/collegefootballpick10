@@ -7,6 +7,7 @@
     <script src="/static/instructions.js"></script>
     <div id="page-title">Week {{week_number}} Games</div><br>
     <form action="games" method="post">
+    {% csrf_token %}
     <br>
     <a id="instr-link" href="#" onclick="expand_instr()">[+]</a>
     <span id="instr-title">Instructions</span>
@@ -45,7 +46,7 @@
                     <input type="text" name="time_{{game.number}}" size="7" value="{{game.time_left}}"></input>
                 </td>
                 <td id="game-status">
-                {% if game.state == "final" %}
+                {% if game.state == FINAL %}
                 <input type="checkbox" name="final_{{game.number}}" checked="checked" value="checked"></input> Final
                 {% else %}
                 <input type="checkbox" name="final_{{game.number}}" value="checked"></input> Final

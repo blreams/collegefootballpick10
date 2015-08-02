@@ -1,5 +1,7 @@
 from game_data import *
 from database import *
+from models import *
+from calculator import *
 
 class UpdateGames:
 
@@ -26,3 +28,30 @@ class UpdateGames:
             games.append(data)
 
         return sorted(games,key=lambda game:game.number)
+
+    def update_games(self,games):
+        for game_info in games:
+            game = get_game(self.year,self.week_number,game_info.number)
+            game.team1_actual_points = game_info.team1_score
+            game.team2_actual_points = game_info.team2_score
+            game.quarter = game_info.quarter
+            game.time_left = game_info.time_left
+
+            game_state = game_info.state
+            if game_state == "not_started":
+                game.game_state = NOT_STARTED
+            elif game_state == "in_progress":
+                game.game_state = IN_PROGRESS
+            elif game_state == "final":
+                game.game_state = FINAL
+            else:
+                raise AssertionError,"Unexpected game state value: %s" % (game_state)
+
+            if game_state == "final":
+                game.winner = CalculateResults(None).get_pool_game_winner(game)
+            else:
+                game.winner = 0
+
+            game.save()
+
+            # TODO set kickoff here?  or set kickoff when creating games?
