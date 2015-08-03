@@ -122,6 +122,7 @@ class UpdateGamesView:
         if not_started:
             data['state'] = "not_started"
             data['quarter'] = ""
+            data['time_left'] = ""
             data['team1_score'] = ""
             data['team2_score'] = ""
         elif in_progress:
