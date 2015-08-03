@@ -10,8 +10,7 @@ function get_instr() {
         "<div class=\"instructions\">Game Not Started Instructions</div>" +
         "<div id=\"instructions-content\">" +
             "1. uncheck final<br>" +
-            "2. the scores should be blank<br>" +
-            "3. fill in the game start time (hours:minutes am/pm)</div><br><br>";
+            "2. the scores should be blank<div><br><br>";
     return s;
 }
 

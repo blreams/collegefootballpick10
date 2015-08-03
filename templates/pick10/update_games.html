@@ -73,6 +73,11 @@
                 <td>
                     <input type="submit" name="submit_form" value="Submit">
                 </td>
+                {% if admin %}
+                    <td>
+                        <input type="submit" name="lock_form" value="Lock Scores">
+                    </td>
+                {% endif %}
                 <td>
                     <input type="submit" name="cancel_form" value="Cancel">
                 </td>

@@ -19,11 +19,11 @@ class UpdateGames:
             data.number = game.gamenum
             data.team1 = game.team1.team_name
             data.team2 = game.team2.team_name
-            data.team1_score = game.team1_actual_points if game.team1_actual_points != None else ""
-            data.team2_score = game.team2_actual_points if game.team2_actual_points != None else ""
+            data.team1_score = self.__get_team1_score(game)
+            data.team2_score = self.__get_team2_score(game)
             data.state = game.game_state
-            data.quarter = game.quarter if game.quarter != None else ""
-            data.time_left = game.time_left if game.time_left != None else ""
+            data.quarter = self.__get_quarter(game)
+            data.time_left = self.__get_time_left(game)
             data.date = game.kickoff
             games.append(data)
 
@@ -54,4 +54,22 @@ class UpdateGames:
 
             game.save()
 
-            # TODO set kickoff here?  or set kickoff when creating games?
+    def __get_team1_score(self,game):
+        valid_score = game.team1_actual_points != None and game.team1_actual_points >= 0
+        return game.team1_actual_points if valid_score else ""
+
+    def __get_team2_score(self,game):
+        valid_score = game.team2_actual_points != None and game.team2_actual_points >= 0
+        return game.team2_actual_points if valid_score else ""
+
+    def __get_quarter(self,game):
+        if game.game_state == IN_PROGRESS:
+            return game.quarter if game.quarter != None else ""
+        else:
+            return ""
+
+    def __get_time_left(self,game):
+        if game.game_state == IN_PROGRESS:
+            return game.time_left if game.time_left != None else ""
+        else:
+            return ""
