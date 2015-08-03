@@ -77,7 +77,7 @@ class PlayerYear(models.Model):
 
 class Conference(models.Model):
     conf_name = models.CharField(max_length=40)                            # Conference name, 'Southeastern'
-    div_name = models.CharField(max_length=40, null=True, blank=True)      # Division name, 'East'
+    div_name = models.CharField(max_length=40, null=True, blank=True, default='')      # Division name, 'East'
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
 
@@ -167,7 +167,7 @@ def add_user(username, email, firstname, lastname):
         u.save()
     return u
 
-def add_conference(conf_name, div_name=None):
+def add_conference(conf_name, div_name=''):
     c = Conference.objects.get_or_create(conf_name=conf_name, div_name=div_name)[0]
     return c
 
