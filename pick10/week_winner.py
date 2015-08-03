@@ -99,6 +99,12 @@ class WeekWinner:
 
     def get_projected_winner(self):
         if self.__data.featured_game.game_state == IN_PROGRESS:
+
+            multiple_winners = type(self.calculated_winner) == list and len(self.calculated_winner) > 1
+            if multiple_winners:
+                players = [ self.__players[w] for w in self.calculated_winner ]
+                return players
+
             player = self.__players[self.calculated_winner]
             return player
         return None

@@ -54,6 +54,13 @@ class UpdateGames:
 
             game.save()
 
+            # TODO not entirely sure about this, but if the update games page gets submitted,
+            # change the Week.winner field to None since it will no longer be accurate
+            # if any scores were changed
+            week = get_week(self.year,self.week_number)
+            week.winner = None
+            week.save()
+
     def __get_team1_score(self,game):
         valid_score = game.team1_actual_points != None and game.team1_actual_points >= 0
         return game.team1_actual_points if valid_score else ""
