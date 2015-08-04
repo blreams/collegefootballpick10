@@ -50,6 +50,22 @@ class UpdateGamesView:
         if cancel_clicked:
             return redirect("week_results",year=year,week_number=week_number)
 
+        if request.user.is_superuser:
+
+            unlocked_clicked = request.POST.get("unlock_form")
+            if unlocked_clicked:
+                w = get_week(year,week_number)
+                w.lock_scores = False
+                w.save()
+                return redirect("update_games",year=year,week_number=week_number)
+
+            locked_clicked = request.POST.get("lock_form")
+            if locked_clicked:
+                w = get_week(year,week_number)
+                w.lock_scores = True
+                w.save()
+                return redirect("update_games",year=year,week_number=week_number)
+
         submit_clicked = request.POST.get("submit_form")
         if not submit_clicked:
             errmsg = "Unexpected Error!  Expected submit button to be clicked but wasn't"

@@ -14,7 +14,11 @@
     <br><br>
     <span id="instr-content"></span>
     {% if locked %}
-        <div id="locked-text">The scores are locked and cannot be edited. </div><br>
+        <div id="locked-text">The scores are locked and cannot be edited. </div>
+        {% if user.is_superuser %}
+            <input type="submit" name="unlock_form" value="Unlock"> Admin Use Only<br>
+        {% endif %}
+        <br>
     {% endif %}
     {% for game in games %}
         <table>
@@ -73,7 +77,7 @@
                 <td>
                     <input type="submit" name="submit_form" value="Submit">
                 </td>
-                {% if admin %}
+                {% if user.is_superuser %}
                     <td>
                         <input type="submit" name="lock_form" value="Lock Scores">
                     </td>
