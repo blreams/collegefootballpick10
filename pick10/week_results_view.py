@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from pick10.models import *
+from pick10.database import *
 from pick10.calculate_week_results import *
 import string
 import re
@@ -15,6 +16,9 @@ class WeekResultsView:
 
         year = int(year)
         week_number = int(week_number)
+
+        d = Database()
+        weeks_in_year = d.get_week_numbers(year)
 
         use_private_names = request.user.is_authenticated()
 
@@ -35,7 +39,7 @@ class WeekResultsView:
         params = dict()
         params['year'] = year
         params['week_number'] = week_number
-        #params['weeks_in_year'] = weeks_in_year
+        params['weeks_in_year'] = weeks_in_year
         params['content'] = self.__initial_content(results,winner_info)
         params['sorted_by_wins'] = self.__sort_by_wins(results,winner_info)
         params['sorted_by_wins_reversed'] = self.__sort_by_wins_reversed(results,winner_info)

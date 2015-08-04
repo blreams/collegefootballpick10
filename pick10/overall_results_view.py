@@ -51,6 +51,7 @@ class OverallResultsView:
         params = dict()
         params['year'] = year
         params['weeks_in_year'] = weeks_in_year
+        params['last_week_number'] = weeks_in_year[-1]
         params['pool_state'] = pool_state
         params['results'] = results
         params['content'] = self.__initial_content(content_params)
