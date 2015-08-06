@@ -16,6 +16,7 @@ class TiebreakView:
         year = int(year)
         week_number = int(week_number)
         weeks_in_year = d.get_week_numbers(year)
+        years_in_pool = sorted(d.get_years(),reverse=True)
 
         use_private_names = request.user.is_authenticated()
 
@@ -25,6 +26,7 @@ class TiebreakView:
         params['year'] = year
         params['week_number'] = week_number
         params['weeks_in_year'] = weeks_in_year
+        params['years_in_pool'] = years_in_pool
         params['winner_valid'] = tiebreak.was_able_to_determine_winner()
         params['featured_game_state'] = tiebreak.get_featured_game_state()
         params['summary'] = tiebreak.get_tiebreaker_summary()

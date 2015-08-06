@@ -43,8 +43,9 @@ class Database:
         weeks_and_years = self.load_weeks_and_years()
         return sorted(weeks_and_years[year])
 
-    def get_years(self,update=False):
-        raise AssertionError,"Not implemented"
+    def get_years(self):
+        weeks_and_years = self.load_weeks_and_years()
+        return sorted(weeks_and_years.keys())
 
     def get_pool_state(self,year):
         if not(self.is_year_valid(year)):

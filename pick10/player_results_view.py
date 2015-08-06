@@ -45,6 +45,7 @@ class PlayerResultsView:
         params['year'] = year
         params['week_number'] = week_number
         params['weeks_in_year'] = d.get_week_numbers(year)
+        params['years_in_pool'] = sorted(d.get_years(),reverse=True)
         params['summary'] = summary
         params['results'] = results
         params['FINAL'] = FINAL

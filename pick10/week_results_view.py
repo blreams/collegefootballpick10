@@ -19,6 +19,7 @@ class WeekResultsView:
 
         d = Database()
         weeks_in_year = d.get_week_numbers(year)
+        years_in_pool = sorted(d.get_years(),reverse=True)
 
         use_private_names = request.user.is_authenticated()
 
@@ -40,6 +41,7 @@ class WeekResultsView:
         params['year'] = year
         params['week_number'] = week_number
         params['weeks_in_year'] = weeks_in_year
+        params['years_in_pool'] = years_in_pool
         params['content'] = self.__initial_content(results,winner_info)
         params['sorted_by_wins'] = self.__sort_by_wins(results,winner_info)
         params['sorted_by_wins_reversed'] = self.__sort_by_wins_reversed(results,winner_info)

@@ -2,6 +2,9 @@
 
 {% block header_text %}Week {{week_number}} Player {{summary.player_name}} Results{% endblock %}
 
+{% block side_block %}
+    {% include "pick10/year_sidebar.html" %}
+{% endblock %}
 
 {% block body_block %}
 <link href="/static/title_bar.css" rel="stylesheet" type="text/css" media="all">
