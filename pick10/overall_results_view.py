@@ -5,10 +5,12 @@ from pick10.database import *
 from pick10.calculate_overall_results import *
 import string
 import re
+from django.core.cache import *
+from django.http import HttpResponse
 
 class OverallResultsView:
 
-    def get(self,request,year):
+    def get(self,year,use_private_names=False,use_memcache=True):
 
         year = int(year)
 
@@ -16,16 +18,32 @@ class OverallResultsView:
 
         if not(d.is_year_valid(year)):
             data={'year':year}
-            return render(request,"pick10/bad_year.html",data)
+            html = render_to_string("pick10/bad_year.html",data)
+            return HttpResponse(html)
+
+        # setup memcache parameters
+        cache = get_cache('default')
+        if use_private_names:
+            cache_key = "overall_private_%d" % (year)
+        else:
+            cache_key = "overall_public_%d" % (year)
+
+        # look for hit in the memcache
+        if use_memcache:
+            html = cache.get(cache_key)
+            memcache_hit = html != None
+            if memcache_hit:
+                return HttpResponse(html)
 
         pool_state = d.get_pool_state(year)
 
         if pool_state == "not_started":
             players = d.load_players(year)
             data={'year':year, 'num_players':len(players)}
-            return render(request,"pick10/overall_not_started.html",data)
+            html = render_to_string("pick10/overall_not_started.html",data)
+            cache.set(cache_key,html)
+            return HttpResponse(html)
 
-        use_private_names = request.user.is_authenticated()
         weeks_in_year = d.get_week_numbers(year)
         years_in_pool = sorted(d.get_years(),reverse=True)
 
@@ -83,7 +101,9 @@ class OverallResultsView:
             params['sorted_by_possible'] = ""
             params['sorted_by_possible_reversed'] = ""
 
-        return render(request,"pick10/overall_results.html",params)
+        html = render_to_string("pick10/overall_results.html",params)
+        cache.set(cache_key,html)
+        return HttpResponse(html)
 
     def __initial_content(self,content_params):
         return self.__sort_by_overall(content_params,escape=False)

@@ -2,23 +2,38 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 from pick10.calculate_tiebreak import *
 from calculator import *
+from django.core.cache import *
+from django.http import HttpResponse
 
 class TiebreakView:
 
-    def get(self,request,year,week_number):
+    def get(self,year,week_number,use_private_names=False,use_memcache=True):
 
         if self.__bad_year_or_week_number(year,week_number):
             data={'year':year,'week_number':week_number}
-            return render(request,"pick10/bad_week.html",data)
-
-        d = Database()
+            html = render_to_string("pick10/bad_week.html",data)
+            return HttpResponse(html)
 
         year = int(year)
         week_number = int(week_number)
+
+        # setup memcache parameters
+        cache = get_cache('default')
+        if use_private_names:
+            cache_key = "tiebreak_private_%d_%d" % (year,week_number)
+        else:
+            cache_key = "tiebreak_public_%d_%d" % (year,week_number)
+
+        # look for hit in the memcache
+        if use_memcache:
+            html = cache.get(cache_key)
+            memcache_hit = html != None
+            if memcache_hit:
+                return HttpResponse(html)
+
+        d = Database()
         weeks_in_year = d.get_week_numbers(year)
         years_in_pool = sorted(d.get_years(),reverse=True)
-
-        use_private_names = request.user.is_authenticated()
 
         tiebreak = CalculateTiebreak(year,week_number,use_private_names)
 
@@ -46,7 +61,9 @@ class TiebreakView:
         params['IN_PROGRESS'] = IN_PROGRESS
         params['FINAL'] = FINAL
 
-        return render(request,"pick10/tiebreak.html",params)
+        html = render_to_string("pick10/tiebreak.html",params)
+        cache.set(cache_key,html)
+        return HttpResponse(html)
 
     def __bad_year_or_week_number(self,year,week_number):
         try:
