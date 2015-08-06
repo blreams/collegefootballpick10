@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block header_text %}Week {{week_number}} Page Update{% endblock %}
+
+{% block body_block %}
+{% csrf_token %}
+<script src="/static/jquery-1.10.2.min.js"></script>
+<script>
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i=0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                if (cookie.substring(0,name.length+1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length+1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+    function csrfSafeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    function change_status(page,message,color) {
+        $("#status_" + page).attr("style","color:" + color + ";");
+        $("#status_" + page).html(message);
+    }
+    function post_complete(page,status) {
+        if (status == "success") {
+            message = "done";
+            color = "#339900";
+        } else {
+            message = "error: " + status;
+            color = "red";
+        }
+        change_status(page,message,color);
+    }
+    function update_overall_results() {
+        change_status("overall_results","updating...","#339900");
+        var posting = $.post("{% url 'update_overall' year  %}");
+
+        posting.done(function(data,status) {
+            post_complete("overall_results",status);
+        });
+
+        posting.fail(function(jqxhr,status,error_message) {
+            post_complete("overall_results",error_message);
+        });
+    }
+    function update_tiebreak() {
+        change_status("tiebreak","updating...","#339900");
+        var posting = $.post("{% url 'tiebreak' year week_number  %}");
+
+        posting.done(function(data,status) {
+            post_complete("tiebreak",status);
+            update_overall_results();
+        });
+
+        posting.fail(function(jqxhr,status,error_message) {
+            post_complete("tiebreak",error_message);
+        });
+    }
+    function update_week_results() {
+        change_status("week_results","updating...","#339900");
+        var posting = $.post("{% url 'week_results' year week_number  %}");
+
+        posting.done(function(data,status) {
+            post_complete("week_results",status);
+            update_tiebreak();
+        });
+
+        posting.fail(function(jqxhr,status,error_message) {
+            post_complete("week_results",error_message);
+        });
+    }
+    $(document).ready(function() {
+        $.ajaxSetup({
+            beforeSend: function(xhr,settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken",csrftoken);
+                }
+            }
+        });
+        change_status('week_results','Waiting...','gray');
+        change_status('tiebreak','Waiting...','gray');
+        change_status('overall_results','Waiting...','gray');
+        update_week_results();
+    });
+</script>
+    <table>
+        <tr><td>Week Results Page</td><td id="status_week_results"></td></tr>
+        <tr><td>Tiebreak Page</td><td id="status_tiebreak"></td></tr>
+        <tr><td>Overall Results Page</td><td id="status_overall_results"></td></tr>
+    </table>
+{% endblock %}

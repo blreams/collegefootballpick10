@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from overall_results_view import *
 from week_results_view import *
 from player_results_view import *
+from update_view import *
 from tiebreak_view import *
 from update_games_view import *
 from django.core.cache import *
@@ -35,4 +36,20 @@ def update_games(request,year,week_number):
         response = UpdateGamesView().get(request,year,week_number)
     elif request.method == "POST":
         response = UpdateGamesView().post(request,year,week_number)
+    return response
+
+def update_pages(request,year,week_number):
+    response = UpdatePageView().get(year,week_number)
+    return response
+
+def update_overall(request,year):
+    response = UpdatePageView().update_overall(year)
+    return response
+
+def update_week(request,year,week_number):
+    response = UpdatePageView().update_week(year,week_number)
+    return response
+
+def update_tiebreak(request,year,week_number):
+    response = UpdatePageView().update_tiebreak(year,week_number)
     return response
