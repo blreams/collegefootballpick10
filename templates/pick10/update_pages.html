@@ -5,6 +5,7 @@
 {% block body_block %}
 {% csrf_token %}
 <script src="/static/jquery-1.10.2.min.js"></script>
+<link href="/static/update_page.css" rel="stylesheet" type="text/css" media="all">
 <script>
     function getCookie(name) {
         var cookieValue = null;
@@ -39,11 +40,12 @@
         change_status(page,message,color);
     }
     function update_overall_results() {
-        change_status("overall_results","updating...","#339900");
+        change_status("overall_results","updating...","blue");
         var posting = $.post("{% url 'update_overall' year  %}");
 
         posting.done(function(data,status) {
             post_complete("overall_results",status);
+            window.location.assign("{% url 'week_results' year week_number %}");  // redirect to week results page
         });
 
         posting.fail(function(jqxhr,status,error_message) {
@@ -51,7 +53,7 @@
         });
     }
     function update_tiebreak() {
-        change_status("tiebreak","updating...","#339900");
+        change_status("tiebreak","updating...","blue");
         var posting = $.post("{% url 'tiebreak' year week_number  %}");
 
         posting.done(function(data,status) {
@@ -64,7 +66,7 @@
         });
     }
     function update_week_results() {
-        change_status("week_results","updating...","#339900");
+        change_status("week_results","updating...","blue");
         var posting = $.post("{% url 'week_results' year week_number  %}");
 
         posting.done(function(data,status) {
@@ -90,9 +92,18 @@
         update_week_results();
     });
 </script>
+<div id="update-message">The following pages will be updated with the new scores</div><br>
     <table>
-        <tr><td>Week Results Page</td><td id="status_week_results"></td></tr>
-        <tr><td>Tiebreak Page</td><td id="status_tiebreak"></td></tr>
-        <tr><td>Overall Results Page</td><td id="status_overall_results"></td></tr>
+        <thead>
+            <td class="status">Status</td>
+            <td>Page</td>
+        </thead>
+        <tr><td id="table-line" colspan="2"></td></tr>
+        <tr><td class="status" id="status_week_results"></td><td>Week Results Page</td></tr>
+        <tr><td id="table-line" colspan="2"></td></tr>
+        <tr><td class="status" id="status_tiebreak"></td><td>Tiebreak Page</td></tr>
+        <tr><td id="table-line" colspan="2"></td></tr>
+        <tr><td class="status" id="status_overall_results"></td><td>Overall Results Page (may take 1 minute)</td></tr>
+        <tr><td id="table-line" colspan="2"></td></tr>
     </table>
 {% endblock %}

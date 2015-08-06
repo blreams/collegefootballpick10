@@ -1,0 +1,26 @@
+body {
+   color: black;
+   font-family: Helvetica;
+   font-size: 12pt;
+   font-weight: 100;
+}
+
+thead {
+   color: gray;
+   font-family: Helvetica;
+   font-size: 10pt;
+   font-weight: 100;
+}
+
+.status {
+    text-align:center;
+}
+
+#table-line {
+   border-bottom: 1px solid lightgray;
+   padding: 0 0 0 0;
+}
+
+#update-message {
+   color: blue;
+}

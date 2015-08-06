@@ -97,7 +97,7 @@ class UpdateGamesView:
             return render(request,"pick10/error_message.html",message=e.errmsg)
 
         u.update_games(week_games)
-        return redirect("week_results",year=year,week_number=week_number)
+        return redirect("update_pages",year=year,week_number=week_number)
 
     def __bad_year_or_week_number(self,year,week_number):
         try:
