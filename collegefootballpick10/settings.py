@@ -124,6 +124,7 @@ LOGIN_URL = '/accounts/login/'       # The page users are directed to if they ar
 
 # The following settins are specific to sending email:
 EMAIL_USE_TLS = True
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'collegefootballpick10'
