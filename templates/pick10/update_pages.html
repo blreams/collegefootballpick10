@@ -4,7 +4,7 @@
 
 {% block body_block %}
 {% csrf_token %}
-<script src="/static/jquery-1.10.2.min.js"></script>
+<script src="http://code.jquery.com/jquery.min.js"></script>
 <link href="/static/update_page.css" rel="stylesheet" type="text/css" media="all">
 <script>
     function getCookie(name) {
@@ -31,7 +31,7 @@
     }
     function post_complete(page,status) {
         if (status == "success") {
-            message = "done";
+            message = "DONE";
             color = "#339900";
         } else {
             message = "error: " + status;
@@ -92,18 +92,22 @@
         update_week_results();
     });
 </script>
-<div id="update-message">The following pages will be updated with the new scores</div><br>
+<hr>
+<div id="update-message">The following pages are being updated with the new scores</div>
+<div id="redirect-message">The page should redirect when finished.</div><br>
     <table>
         <thead>
             <td class="status">Status</td>
-            <td>Page</td>
+            <td class="page-name">Page</td>
         </thead>
         <tr><td id="table-line" colspan="2"></td></tr>
-        <tr><td class="status" id="status_week_results"></td><td>Week Results Page</td></tr>
+        <tr><td class="status" id="status_week_results"></td><td class="page-name">Week Results Page</td></tr>
         <tr><td id="table-line" colspan="2"></td></tr>
-        <tr><td class="status" id="status_tiebreak"></td><td>Tiebreak Page</td></tr>
+        <tr><td class="status" id="status_tiebreak"></td><td class="page-name">Tiebreak Page</td></tr>
         <tr><td id="table-line" colspan="2"></td></tr>
-        <tr><td class="status" id="status_overall_results"></td><td>Overall Results Page (may take 1 minute)</td></tr>
+        <tr><td class="status" id="status_overall_results"></td><td class="page-name">Overall Results Page (may take 1 minute)</td></tr>
         <tr><td id="table-line" colspan="2"></td></tr>
-    </table>
+    </table><br>
+<div id="error-message">If you encounter an error, try refreshing this page or <a href="{% url 'update_games' year week_number %}">update games</a>&nbsp;again.</div>
+<div id="redirect-link">If you are not redirected, click <a href="{% url 'week_results' year week_number %}">here</a>.</div>
 {% endblock %}

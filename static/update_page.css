@@ -6,14 +6,23 @@ body {
 }
 
 thead {
-   color: gray;
+   color: white;
+   background-color: gray;
    font-family: Helvetica;
    font-size: 10pt;
    font-weight: 100;
 }
 
 .status {
-    text-align:center;
+   text-align:center;
+   font-size: 10pt;
+   padding: 0px 4px;
+}
+
+.page-name {
+   text-align:left;
+   font-size: 10pt;
+   padding: 0px 4px;
 }
 
 #table-line {
@@ -23,4 +32,24 @@ thead {
 
 #update-message {
    color: blue;
+}
+#redirect-message {
+   color: gray;
+}
+#error-message {
+   color: gray;
+   font-size: 10pt;
+}
+#redirect-link {
+   color: gray;
+   font-size: 10pt;
+}
+#page-title {
+   color: gray;
+   font-size: 14pt;
+   font-family: Helvetica;
+   font-weight: 500;
+   text-align: left;
+   white-space: nowrap;
+   padding: 0px 4px;
 }
