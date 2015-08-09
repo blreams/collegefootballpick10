@@ -6,6 +6,7 @@ from player_results_view import *
 from update_view import *
 from tiebreak_view import *
 from update_games_view import *
+from enter_picks_view import *
 from django.core.cache import *
 from django.http import HttpResponseNotFound
 

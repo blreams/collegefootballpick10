@@ -1,7 +1,7 @@
 from pick_data import *
 from database import *
 
-class PickGames:
+class EnterPicks:
 
     def __init__(self,year,week_number,player_id):
         self.year = year
@@ -14,7 +14,7 @@ class PickGames:
 
         player_already_picked = self.player_id in week_data.player_picks
         if player_already_picked:
-            picks = { pick.game.gamenum:pick for pick in week_data[self.player_id] }
+            picks = { pick.game.gamenum:pick for pick in week_data.player_picks[self.player_id] }
 
         game_picks = []
         for game in week_data.games.values():

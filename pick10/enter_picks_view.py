@@ -10,7 +10,7 @@ class EnterPicksView:
 
     def get(self,request,year,week_number,player_id):
 
-        if self.__bad_year_or_week_number(year,week_number,player_id):
+        if self.__bad_year_or_week_number(year,week_number):
             data={'year':year,'week_number':week_number}
             return render(request,"pick10/bad_week.html",data)
 
