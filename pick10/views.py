@@ -49,6 +49,15 @@ def update_games(request,year,week_number):
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')
 
+def enter_picks(request,year,week_number,player_id):
+    if request.method == "GET":
+        response = EnterPicksView().get(request,year,week_number,player_id)
+        return response
+    elif request.method == "POST":
+        response = EnterPicksView().post(request,year,week_number,player_id)
+        return response
+    return HttpResponseNotFound('<h1>Page not found</h1>')
+
 def update_pages(request,year,week_number):
     if request.method == "GET":
         response = UpdatePageView().get(year,week_number)
