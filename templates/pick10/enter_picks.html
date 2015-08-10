@@ -8,9 +8,9 @@
 
 {% block body_block %}
 <link href="/static/title_bar.css" rel="stylesheet" type="text/css" media="all">
-<link href="/static/update_games.css" rel="stylesheet" type="text/css" media="all">
+<link href="/static/enter_picks.css" rel="stylesheet" type="text/css" media="all">
     <script src="/static/instructions.js"></script>
-    <div id="page-title">Week {{week_number}} Games</div>
+    <div id="page-title">Week {{week_number}} Picks</div>
 
 <hr>
     <table>
@@ -28,8 +28,46 @@
     </table>
     <br>
 
-    <form action="picks" method="post">
+<form action="picks" method="post">
     {% csrf_token %}
+    <div class="col-md-4">
+        {% for pick in picks %}
+
+    <table class="table table-hover">
+        <thead>
+            <td class="game-number">Game {{pick.number}}</td>
+            <td></td>
+        </thead>
+        <tr>
+            <td><label class="radio-inline"><input type="radio" name="pick_{{pick.number}}" value="team1">{{pick.team1}}</label></td>
+            <td>{{pick.team1_spread}}</td>
+        </tr>
+        <tr>
+            <td><label class="radio-inline"><input type="radio" name="pick_{{pick.number}}" value="team1">{{pick.team2}}</label></td>
+            <td>{{pick.team2_spread}}</td>
+        </tr>
+        <tr><td></td><td></td></tr>
+    </table>
+    <br>
+
+        {% comment %}
+    <table class="table table-hover">
+        <thead>
+            <td class="game-number">Game {{pick.number}}</td>
+        </thead>
+        <tr>
+            <td class="col-md-1"><input type="radio" name="pick_{{pick.number}}" value="team1"></td>
+            <td class="col-md-1">{{pick.team1}}</td>
+        </tr>
+        <tr>
+            <td class="col-md-1"><input type="radio" name="pick_{{pick.number}}" value="team2"></td>
+            <td class="col-md-1">{{pick.team2}}</td>
+        </tr>
+    </table>
+    <br>
+    {% endcomment %}
+{% endfor %}
+</div>
 </form>
 
 {% endblock %}

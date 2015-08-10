@@ -28,6 +28,15 @@ class EnterPicks:
             else:
                 data.pick = 0
 
+            if game.favored == TEAM1:
+                data.team1_spread = game.spread
+                data.team2_spread = ""
+            elif game.favored == TEAM2:
+                data.team1_spread = ""
+                data.team2_spread = game.spread
+            else:
+                raise AssertionError,"Invalid favored value"
+
             if game.gamenum == 10:
                 if player_already_picked:
                     data.team1_predicted_points = picks[game.gamenum].team1_predicted_points

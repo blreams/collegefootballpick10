@@ -3,6 +3,8 @@ class PickData:
     team1 = None
     team2 = None
     pick = None
+    team1_spread = None
+    team2_spread = None
     team1_predicted_points = None
     team2_predicted_points = None
 
