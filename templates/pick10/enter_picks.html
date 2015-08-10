@@ -69,23 +69,11 @@
     </table>
     <br>
 
-        {% comment %}
-    <table class="table table-hover">
-        <thead>
-            <td class="game-number">Game {{pick.number}}</td>
-        </thead>
-        <tr>
-            <td class="col-md-1"><input type="radio" name="pick_{{pick.number}}" value="team1"></td>
-            <td class="col-md-1">{{pick.team1}}</td>
-        </tr>
-        <tr>
-            <td class="col-md-1"><input type="radio" name="pick_{{pick.number}}" value="team2"></td>
-            <td class="col-md-1">{{pick.team2}}</td>
-        </tr>
-    </table>
-    <br>
-    {% endcomment %}
 {% endfor %}
+<div>
+    <button class="btn btn-success" type="submit" name="submit_form">Submit Picks</button>
+    <button class="btn" type="submit" name="cancel_form">Cancel</button>
+</div>
 </div>
 </form>
 
