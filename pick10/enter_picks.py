@@ -23,10 +23,13 @@ class EnterPicks:
             data.team1 = game.team1.team_name
             data.team2 = game.team2.team_name
 
+            data.team1_pick = ""
+            data.team2_pick = ""
             if player_already_picked:
-                data.pick = picks[game.gamenum].winner
-            else:
-                data.pick = 0
+                if picks[game.gamenum].winner == TEAM1:
+                    data.team1_pick = "checked"
+                elif picks[game.gamenum].winner == TEAM2:
+                    data.team2_pick = "checked"
 
             if game.favored == TEAM1:
                 data.team1_spread = game.spread
@@ -42,8 +45,8 @@ class EnterPicks:
                     data.team1_predicted_points = picks[game.gamenum].team1_predicted_points
                     data.team2_predicted_points = picks[game.gamenum].team2_predicted_points
                 else:
-                    data.team1_predicted_points = -1
-                    data.team2_predicted_points = -1
+                    data.team1_predicted_points = ""
+                    data.team2_predicted_points = ""
 
             game_picks.append(data)
 

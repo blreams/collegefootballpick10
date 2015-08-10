@@ -36,17 +36,36 @@
     <table class="table table-hover">
         <thead>
             <td class="game-number">Game {{pick.number}}</td>
-            <td></td>
+            <td class="header-light">spread</td>
+            {% if pick.number == 10 %}
+                <td class="header-light">score</td>
+            {% endif %}
         </thead>
-        <tr>
-            <td><label class="radio-inline"><input type="radio" name="pick_{{pick.number}}" value="team1">{{pick.team1}}</label></td>
+        <tr id="team1_row_{{pick.number}}">
+            <td><label class="radio-inline">
+                    <input type="radio" name="pick_{{pick.number}}" value="team1" onclick="highlightTeam1({{pick.number}})" {{pick.team1_pick}}>
+                {{pick.team1}}</label>
+            </td>
             <td>{{pick.team1_spread}}</td>
+            {% if pick.number == 10 %}
+                <td><input type="text" size="3" name="team1-score" value="{{pick.team1_predicted_points}}"></input></td>
+            {% endif %}
         </tr>
-        <tr>
-            <td><label class="radio-inline"><input type="radio" name="pick_{{pick.number}}" value="team1">{{pick.team2}}</label></td>
+        <tr id="team2_row_{{pick.number}}">
+            <td><label class="radio-inline">
+                    <input type="radio" name="pick_{{pick.number}}" value="team2" onclick="highlightTeam2({{pick.number}})" {{pick.team2_pick}}>
+                    {{pick.team2}}</label>
+            </td>
             <td>{{pick.team2_spread}}</td>
+            {% if pick.number == 10 %}
+                <td><input type="text" size="3" name="team2-score" value="{{pick.team2_predicted_points}}"></input></td>
+            {% endif %}
         </tr>
-        <tr><td></td><td></td></tr>
+        {% if pick.number == 10 %}
+            <tr><td></td><td></td><td></td></tr>
+        {% else %}
+            <tr><td></td><td></td></tr>
+        {% endif %}
     </table>
     <br>
 
@@ -70,4 +89,17 @@
 </div>
 </form>
 
+{% endblock %}
+
+{% block script_block %}
+    <script>
+        function highlightTeam1(pick_number) {
+            $("#team1_row_" + pick_number).addClass("info");
+            $("#team2_row_" + pick_number).removeClass("info");
+        }
+        function highlightTeam2(pick_number) {
+            $("#team1_row_" + pick_number).removeClass("info");
+            $("#team2_row_" + pick_number).addClass("info");
+        }
+    </script>
 {% endblock %}

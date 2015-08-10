@@ -1,7 +1,13 @@
+body {
+   font-size: 10pt;
+   font-family: Helvetica;
+}
 .game-number {
    color: black;
    background-color: white;
-   font-size: 10pt;
-   font-family: Helvetica;
    font-weight: bold;
+}
+.header-light {
+   color: lightgray;
+   background-color: white;
 }
