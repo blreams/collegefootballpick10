@@ -35,7 +35,11 @@ class EnterPicksView:
         params['week_number'] = week_number
         params['weeks_in_year'] = weeks_in_year
         params['years_in_pool'] = years_in_pool
-        params['picks'] = EnterPicks(year,week_number,player_id).get_game_picks()
+
+        picks = EnterPicks(year,week_number,player_id).get_game_picks()
+        self.__setup_pick_team_rows(picks)
+
+        params['picks'] = picks
 
         return render(request,"pick10/enter_picks.html",params)
 
@@ -63,3 +67,21 @@ class EnterPicksView:
         d = Database()
         players_in_year = d.load_players(year)
         return player_id in players_in_year
+
+    def __setup_pick_team_rows(self,picks):
+        for i,pick_info in enumerate(picks):
+            if pick_info.pick == TEAM1:
+                picks[i].team1_row_class = "info"
+                picks[i].team1_checked = "checked"
+                picks[i].team2_row_class = ""
+                picks[i].team2_checked = ""
+            elif pick_info.pick == TEAM2:
+                picks[i].team1_row_class = ""
+                picks[i].team1_checked = ""
+                picks[i].team2_row_class = "info"
+                picks[i].team2_checked = "checked"
+            else:
+                picks[i].team1_row_class = ""
+                picks[i].team1_checked = ""
+                picks[i].team2_row_class = ""
+                picks[i].team2_checked = ""

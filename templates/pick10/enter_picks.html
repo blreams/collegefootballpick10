@@ -41,9 +41,9 @@
                 <td class="header-light">score</td>
             {% endif %}
         </thead>
-        <tr id="team1_row_{{pick.number}}">
+        <tr class="{{pick.team1_row_class}}" id="team1_row_{{pick.number}}">
             <td><label class="radio-inline">
-                    <input type="radio" name="pick_{{pick.number}}" value="team1" onclick="highlightTeam1({{pick.number}})" {{pick.team1_pick}}>
+                    <input type="radio" name="pick_{{pick.number}}" value="team1" onclick="highlightTeam1({{pick.number}})" {{pick.team1_checked}}>
                 {{pick.team1}}</label>
             </td>
             <td>{{pick.team1_spread}}</td>
@@ -51,9 +51,9 @@
                 <td><input type="text" size="3" name="team1-score" value="{{pick.team1_predicted_points}}"></input></td>
             {% endif %}
         </tr>
-        <tr id="team2_row_{{pick.number}}">
+        <tr class="{{pick.team2_row_class}}" id="team2_row_{{pick.number}}">
             <td><label class="radio-inline">
-                    <input type="radio" name="pick_{{pick.number}}" value="team2" onclick="highlightTeam2({{pick.number}})" {{pick.team2_pick}}>
+                    <input type="radio" name="pick_{{pick.number}}" value="team2" onclick="highlightTeam2({{pick.number}})" {{pick.team2_checked}}>
                     {{pick.team2}}</label>
             </td>
             <td>{{pick.team2_spread}}</td>
