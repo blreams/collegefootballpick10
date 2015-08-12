@@ -3,9 +3,27 @@
 {% block header_text %}Week {{week_number}} Update Games{% endblock %}
 
 {% block body_block %}
-    <link href="/static/update_games.css" rel="stylesheet" type="text/css" media="all">
+<link href="/static/title_bar.css" rel="stylesheet" type="text/css" media="all">
+<link href="/static/update_games.css" rel="stylesheet" type="text/css" media="all">
     <script src="/static/instructions.js"></script>
-    <div id="page-title">Week {{week_number}} Games</div><br>
+    <div id="page-title">Week {{week_number}} Games</div>
+
+<hr>
+    <table>
+        <td><a id="link-bar-overall-link" href="{% url 'overall_results' year %}">OVERALL</a></td>
+        <td id="link-bar-label">
+            <a id="link-bar-week-link" href="{% url 'week_results' year week_number %}">WEEK</a>
+            {% for wk_num in weeks_in_year %}
+                {% if wk_num == week_number %}
+                    <a id="link-bar-week-number-highlight" href="{% url 'week_results' year wk_num %}">{{wk_num}}</a>
+                {% else %}
+                    <a id="link-bar-week-number-link" href="{% url 'week_results' year wk_num %}">{{wk_num}}</a>
+                {% endif %}
+            {% endfor %}
+        </td>
+    </table>
+    <br>
+
     <form action="games" method="post">
     {% csrf_token %}
     <br>

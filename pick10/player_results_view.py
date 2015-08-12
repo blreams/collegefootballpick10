@@ -20,6 +20,7 @@ class PlayerResultsView:
         year = int(year)
         week_number = int(week_number)
         player_id = int(player_id)
+        d = Database()
 
         if not(self.__is_player_in_year(player_id,year)):
             data={'year':year,'player_id':player_id,'error':'bad_year'}
@@ -29,7 +30,6 @@ class PlayerResultsView:
         timezone = 'US/Eastern'
 
         if self.__hide_player_results(request.user,player_id,year,week_number):
-            d = Database()
             pick_deadline_utc = d.get_pick_deadline(year,week_number)
             pick_deadline = self.__format_pick_deadline(pick_deadline_utc,timezone)
             data={'year':year,'player_id':player_id,'error':'before_pick_deadline','deadline':pick_deadline}
@@ -44,7 +44,7 @@ class PlayerResultsView:
         params = dict()
         params['year'] = year
         params['week_number'] = week_number
-        #params['weeks_in_year'] = database.get_week_numbers(year)
+        params['weeks_in_year'] = d.get_week_numbers(year)
         params['summary'] = summary
         params['results'] = results
         params['FINAL'] = FINAL

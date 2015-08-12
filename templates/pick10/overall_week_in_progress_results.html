@@ -26,7 +26,7 @@
             <td id="{{possible_id}}">{{result.possible}}</td>
             <td id="content">{{result.win_pct}}</td>
             {% for week_points in result.week_points %}
-                <td id="content"><a id="week-link" href="/{{year}}/week/{{forloop.counter}}/player/{{result.player_id}}/results">{{week_points}}</a></td>
+                <td id="content"><a id="week-link" href="{% url 'player_results' year forloop.counter result.player_id %}">{{week_points}}</a></td>
             {% endfor %}
             <td id="content">{{result.last_week_projected}}</td>
             <td id="content">{{result.last_week_possible}}</td>
