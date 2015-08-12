@@ -1,0 +1,22 @@
+#year-not-started {
+   color: red;
+   font-family: Helvetica;
+   font-size: 12pt;
+   font-weight: 100;
+}
+#signup-message {
+   color: black;
+   font-family: Helvetica;
+   font-size: 12pt;
+   font-weight: 100;
+}
+
+#page-title {
+   color: gray;
+   font-size: 14pt;
+   font-family: Helvetica;
+   font-weight: 500;
+   text-align: left;
+   white-space: nowrap;
+   padding: 0px 4px;
+}

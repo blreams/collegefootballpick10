@@ -1,0 +1,38 @@
+<div id="weekinprogress-pool-state">week {{last_week_number}} in progress</div>
+<table>
+    <thead class="results-header">
+        <td id="header">Rank</td>
+        <td id="header"><a id="link-header" href="javascript:void" onclick="change_content('players')">Player</a></td>
+        <td id="header"><a id="link-header" href="javascript:void" onclick="change_content('overall')">Overall</a></td>
+        <td id="header"><a id="link-header" href="javascript:void" onclick="change_content('projected')">Projected</a></td>
+        <td id="header"><a id="link-header" href="javascript:void" onclick="change_content('possible')">Possible</a></td>
+        <td id="header">Win Pct.</td>
+        {% for wk_num in weeks_in_year %}
+            <td id="header">Wk{{wk_num}}</td>
+        {% endfor %}
+        <td id="header">Wk{{last_week_number}} Projected</td>
+        <td id="header">Wk{{last_week_number}} Possible</td>
+    </thead>
+    {% for result in results %}
+        <tr>
+            {% if rank == "projected" %}
+                <td id="content">{{result.projected_rank}}</td>
+            {% else %}
+                <td id="content">{{result.rank}}</td>
+            {% endif %}
+            <td id="player-content">{{result.player_name}}</td>
+            <td id="{{overall_id}}">{{result.overall}}</td>
+            <td id="{{projected_id}}">{{result.projected}}</td>
+            <td id="{{possible_id}}">{{result.possible}}</td>
+            <td id="content">{{result.win_pct}}</td>
+            {% for week_points in result.week_points %}
+                <td id="content"><a id="week-link" href="/{{year}}/week/{{forloop.counter}}/player/{{result.player_id}}/results">{{week_points}}</a></td>
+            {% endfor %}
+            <td id="content">{{result.last_week_projected}}</td>
+            <td id="content">{{result.last_week_possible}}</td>
+        </tr>
+        <tr>
+            <td id="table-line" colspan="{{result.week_points|length|add:"8"}}"></td>
+        </tr>
+    {% endfor %}
+</table>

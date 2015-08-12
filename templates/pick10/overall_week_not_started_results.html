@@ -1,0 +1,28 @@
+<div id="weeknotstarted-pool-state">week {{last_week_number}} pick entry deadline has passed, no games have started</div>
+<table>
+    <thead class="results-header">
+        <td id="header">Rank</td>
+        <td id="header"><a id="link-header" href="javascript:void" onclick="change_content('players')">Player</a></td>
+        <td id="header"><a id="link-header" href="javascript:void" onclick="change_content('overall')">Overall</a></td>
+        <td id="header"><a id="link-header" href="javascript:void" onclick="change_content('possible')">Possible</a></td>
+        <td id="header">Win Pct.</td>
+        {% for wk_num in weeks_in_year %}
+            <td id="header">Wk{{wk_num}}</td>
+        {% endfor %}
+    </thead>
+    {% for result in results %}
+        <tr>
+            <td id="content">{{result.rank}}</td>
+            <td id="player-content">{{result.player_name}}</td>
+            <td id="{{overall_id}}">{{result.overall}}</td>
+            <td id="{{possible_id}}">{{result.possible}}</td>
+            <td id="content">{{result.win_pct}}</td>
+            {% for week_points in result.week_points %}
+                <td id="content"><a id="week-link" href="/{{year}}/week/{{forloop.counter}}/player/{{result.player_id}}/results">{{week_points}}</a></td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <td id="table-line" colspan="{{result.week_points|length|add:"5"}}"></td>
+        </tr>
+    {% endfor %}
+</table>

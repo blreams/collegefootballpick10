@@ -87,6 +87,13 @@ class WeekWinner:
         if self.__data.featured_game.game_state == NOT_STARTED:
             return None
 
+        if self.is_tiebreaker_3_indeterminate():
+            players = [ self.__players[player_id] for player_id in self.calculated_winner ]
+            return players
+
+        if not self.is_winner_valid():
+            return None
+
         player = self.__players[self.calculated_winner]
         return player
 
@@ -134,7 +141,6 @@ class WeekWinner:
         return self.__winner_valid
 
     def __calculate_winner(self):
-
         self.__winner_valid = True
 
         if self.is_tiebreaker_3_valid():
@@ -143,6 +149,10 @@ class WeekWinner:
                 self.__winner_valid = False
                 return
             self.calculated_winner = self.players_won_tiebreak3[0]
+            return
+        elif self.is_tiebreaker_3_indeterminate():
+            self.__winner_valid = False
+            self.calculated_winner = self.players_won_tiebreak3
             return
         else:
             unable_to_determine_winner = self.players_won_tiebreak2 != None and len(self.players_won_tiebreak2) > 1
@@ -313,7 +323,7 @@ class WeekWinner:
         entry_times = [ value for value in self.__data.player_submit_times.values() if value != None ]
         if len(entry_times) == 0:
             self.__tiebreaker_3_indeterminate = True
-            for player_key in players:
+            for player_id in players:
                 self.players_won_tiebreak3.append(player_id)
             return
 
@@ -350,6 +360,9 @@ class WeekWinner:
     #        If Picks.created or Picks.modified gets corrupted, submit time won't be valid
     def is_tiebreaker_3_valid(self):
         return self.__tiebreaker_3_valid
+
+    def is_tiebreaker_3_indeterminate(self):
+        return self.__tiebreaker_3_indeterminate
 
     def __get_players_to_use(self,tiebreaker_number):
         # tiebreak0:  use players tied for first
