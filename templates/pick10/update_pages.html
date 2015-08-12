@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block header_text %}Week {{week_number}} Page Update{% endblock %}
+
+{% block body_block %}
+{% csrf_token %}
+<hr>
+<div id="update-message">The following pages are being updated with the new scores</div>
+<div id="redirect-message">The page should redirect when finished.</div><br>
+    <table>
+        <thead>
+            <td class="status">Status</td>
+            <td class="page-name">Page</td>
+        </thead>
+        <tr><td id="table-line" colspan="2"></td></tr>
+        <tr><td class="status" id="status_week_results"></td><td class="page-name">Week Results Page</td></tr>
+        <tr><td id="table-line" colspan="2"></td></tr>
+        <tr><td class="status" id="status_tiebreak"></td><td class="page-name">Tiebreak Page</td></tr>
+        <tr><td id="table-line" colspan="2"></td></tr>
+        <tr><td class="status" id="status_overall_results"></td><td class="page-name">Overall Results Page (may take 1 minute)</td></tr>
+        <tr><td id="table-line" colspan="2"></td></tr>
+    </table><br>
+<div id="error-message">If you encounter an error, try refreshing this page or <a href="{% url 'update_games' year week_number %}">update games</a>&nbsp;again.</div>
+<div id="redirect-link">If you are not redirected, click <a href="{% url 'week_results' year week_number %}">here</a>.</div>
+{% endblock %}
+
+{% block script_block %}
+<link href="/static/update_page.css" rel="stylesheet" type="text/css" media="all">
+<script>
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i=0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                if (cookie.substring(0,name.length+1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length+1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+    function csrfSafeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    function change_status(page,message,color) {
+        $("#status_" + page).attr("style","color:" + color + ";");
+        $("#status_" + page).html(message);
+    }
+    function post_complete(page,status) {
+        if (status == "success") {
+            message = "DONE";
+            color = "#339900";
+        } else {
+            message = "error: " + status;
+            color = "red";
+        }
+        change_status(page,message,color);
+    }
+    function update_overall_results() {
+        change_status("overall_results","updating...","blue");
+        var posting = $.post("{% url 'update_overall' year  %}");
+
+        posting.done(function(data,status) {
+            post_complete("overall_results",status);
+            window.location.assign("{% url 'week_results' year week_number %}");  // redirect to week results page
+        });
+
+        posting.fail(function(jqxhr,status,error_message) {
+            post_complete("overall_results",error_message);
+        });
+    }
+    function update_tiebreak() {
+        change_status("tiebreak","updating...","blue");
+        var posting = $.post("{% url 'update_tiebreak' year week_number  %}");
+
+        posting.done(function(data,status) {
+            post_complete("tiebreak",status);
+            update_overall_results();
+        });
+
+        posting.fail(function(jqxhr,status,error_message) {
+            post_complete("tiebreak",error_message);
+        });
+    }
+    function update_week_results() {
+        change_status("week_results","updating...","blue");
+        var posting = $.post("{% url 'update_week' year week_number  %}");
+
+        posting.done(function(data,status) {
+            post_complete("week_results",status);
+            update_tiebreak();
+        });
+
+        posting.fail(function(jqxhr,status,error_message) {
+            post_complete("week_results",error_message);
+        });
+    }
+    $(document).ready(function() {
+        $.ajaxSetup({
+            beforeSend: function(xhr,settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken",csrftoken);
+                }
+            }
+        });
+        change_status('week_results','Waiting...','gray');
+        change_status('tiebreak','Waiting...','gray');
+        change_status('overall_results','Waiting...','gray');
+        update_week_results();
+    });
+</script>
+{% endblock %}

@@ -2,6 +2,7 @@ from .base import FunctionalTest
 from django.core.urlresolvers import reverse
 from pick10.tests.unit_test_database import *
 import unittest
+from django.core.cache import *
 
 class WeekResultsTest(FunctionalTest):
 
@@ -20,6 +21,11 @@ class WeekResultsTest(FunctionalTest):
         #test_db = UnitTestDatabase()
         #test_db.delete_database()
         #super(WeekResultsTest, cls).tearDownClass()
+
+    def setUp(self):
+        cache = get_cache('default')
+        cache.clear()
+        super(WeekResultsTest, self).setUp()
 
     def test_page_up(self):
         test_db = UnitTestDatabase()

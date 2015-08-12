@@ -9,4 +9,8 @@ urlpatterns = patterns('',
     url(r'^(?P<year>[0-9]{4})/week/(?P<week_number>[0-9]{1,2})/tiebreak$', views.tiebreak, name='tiebreak'),
     url(r'^(?P<year>[0-9]{4})/week/(?P<week_number>[0-9]{1,2})/games$', views.update_games, name='update_games'),
     url(r'^(?P<year>[0-9]{4})/week/(?P<week_number>[0-9]{1,2})/player/(?P<player_id>[0-9]+)/results$', views.player_results, name='player_results'),
+    url(r'^(?P<year>[0-9]{4})/week/(?P<week_number>[0-9]{1,2})/update$', views.update_pages, name='update_pages'),
+    url(r'^(?P<year>[0-9]{4})/week/(?P<week_number>[0-9]{1,2})/update/week$', views.update_week, name='update_week'),
+    url(r'^(?P<year>[0-9]{4})/week/(?P<week_number>[0-9]{1,2})/update/tiebreak$', views.update_tiebreak, name='update_tiebreak'),
+    url(r'^(?P<year>[0-9]{4})/update/overall$', views.update_overall, name='update_overall'),
 )

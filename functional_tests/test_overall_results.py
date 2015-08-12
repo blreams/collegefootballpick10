@@ -4,8 +4,14 @@ from pick10.tests.unit_test_database import *
 import unittest
 import datetime as dt
 import pytz
+from django.core.cache import *
 
 class OverallResultsTest(FunctionalTest):
+
+    def setUp(self):
+        cache = get_cache('default')
+        cache.clear()
+        super(OverallResultsTest, self).setUp()
 
     def test_page_up(self):
         test_db = UnitTestDatabase()
