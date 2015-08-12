@@ -1,0 +1,247 @@
+/* css help?  http://kyleschaeffer.com/development/css-font-size-em-vs-px-vs-pt-vs/ */
+
+#table-line {
+   width: 100%;
+   border-bottom: 1px solid lightgray;
+   padding: 0 0 0 0;
+}
+
+.results-header {
+   color: #E6E6FF;
+   background-color: #0000E6;
+   font-size: 8pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   font-weight: 100;
+}
+
+#pick-header {
+   text-align: center;
+   padding: 1px 4px;
+}
+
+#result-header {
+   text-align: center;
+   padding: 1px 4px;
+}
+
+#game-header {
+   text-align: left;
+   padding: 1px 4px;
+}
+
+#spread-header {
+   text-align: left;
+   padding: 1px 4px;
+}
+
+.summary-content {
+   font-size: 12pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   font-weight: 300;
+   white-space: nowrap;
+}
+
+#summary-label {
+   color: blue;
+   background-color: white;
+   text-align: right;
+   padding: 1px 4px;
+}
+
+#summary-value {
+   color: gray;
+   background-color: white;
+   text-align: center;
+   padding: 1px 4px;
+}
+
+#pick-content {
+   color: blue;
+   text-align: center;
+   padding: 1px 4px;
+   font-family: Helvetica;
+   font-weight: 300;
+   font-size: 10pt;
+   white-space: nowrap;
+}
+
+#result-content {
+   font-family: Helvetica;
+   font-weight: 500;
+   font-size: 8pt;
+   color: black;
+   text-align: center;
+   padding: 1px 4px;
+   white-space: nowrap;
+}
+
+#win-result-content {
+   font-family: Helvetica;
+   font-weight: 200;
+   font-size: 8pt;
+   color: yellow;
+   background-color: red;
+   text-align: center;
+   padding: 8px 4px;
+}
+
+#loss-result-content {
+   font-family: Helvetica;
+   font-weight: 500;
+   font-size: 8pt;
+   color: gray;
+   background-color: white;
+   text-align: center;
+   padding: 8px 4px;
+}
+
+#behind-result-content {
+   font-family: Helvetica;
+   font-weight: 500;
+   font-size: 8pt;
+   color: black;
+   background-color: yellow;
+   text-align: center;
+   padding: 8px 4px;
+}
+
+#ahead-result-content {
+   font-family: Helvetica;
+   font-weight: 500;
+   font-size: 8pt;
+   color: yellow;
+   background-color: green;
+   text-align: center;
+   padding: 8px 4px;
+}
+
+#team-content {
+   font-family: Helvetica;
+   font-weight: 300;
+   font-size: 10pt;
+   color: black;
+   text-align: left;
+   background-color: lightyellow;
+   padding: 1px 4px;
+   width: 15em;
+   white-space: nowrap;
+}
+
+#score-content {
+   font-family: Helvetica;
+   font-weight: 100;
+   font-size: 10pt;
+   color: black;
+   text-align: center;
+   background-color: lightyellow;
+   padding: 1px 4px;
+   width: 1em;
+}
+
+#spread-label {
+   font-family: Helvetica;
+   font-weight: 300;
+   font-size: 10pt;
+   color: blue;
+   text-align: right;
+   background-color: white;
+   padding: 1px 4px;
+   white-space: nowrap;
+}
+
+#spread-team {
+   font-family: Helvetica;
+   font-weight: 300;
+   font-size: 10pt;
+   color: black;
+   text-align: left;
+   background-color: #EDEDED;
+   padding: 1px 4px;
+   width: 15em;
+   white-space: nowrap;
+}
+
+#spread-value {
+   font-family: Helvetica;
+   font-weight: 100;
+   font-size: 10pt;
+   color: black;
+   text-align: right;
+   background-color: #EDEDED;
+   padding: 1px 4px;
+   width: 2em;
+}
+
+#game-final {
+   color: black;
+   background-color: white;
+   padding: 1px 4px;
+   font-family: Helvetica;
+   font-weight: 100;
+   font-size: 10pt;
+   text-align: left;
+   white-space: nowrap;
+}
+
+#game-in-progress {
+   color: red;
+   background-color: white;
+   padding: 1px 4px;
+   font-family: Helvetica;
+   font-weight: 100;
+   font-size: 10pt;
+   text-align: left;
+   white-space: nowrap;
+}
+#game-quarter {
+   color: red;
+   background-color: white;
+   padding: 1px 4px;
+   font-family: Helvetica;
+   font-weight: 100;
+   font-size: 10pt;
+   text-align: left;
+   white-space: nowrap;
+}
+#game-time-in-progress {
+   color: red;
+   background-color: white;
+   padding: 1px 4px;
+   font-family: Helvetica;
+   font-weight: 100;
+   font-size: 10pt;
+   text-align: left;
+   white-space: nowrap;
+}
+#game-time {
+   color: gray;
+   background-color: white;
+   padding: 1px 4px;
+   font-family: Helvetica;
+   font-weight: 100;
+   font-size: 8pt;
+   text-align: left;
+   white-space: nowrap;
+}
+#game-link {
+   color: darkgray;
+   background-color: white;
+   font-size: 10pt;
+   font-family: Helvetica;
+   font-weight: 500;
+   white-space: nowrap;
+   text-align: left;
+   padding: 0px 4px;
+}
+
+#page-title {
+   color: gray;
+   font-size: 14pt;
+   font-family: Helvetica;
+   font-weight: 500;
+   text-align: left;
+   white-space: nowrap;
+   padding: 0px 4px;
+}

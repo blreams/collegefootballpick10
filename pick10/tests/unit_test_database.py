@@ -194,7 +194,7 @@ class UnitTestDatabase:
 
     def setup_week(self,year,week_number):
         year_model = populate_year(year)
-        week = add_week(year,week_number)
+        week, created = Week.objects.get_or_create(year=year_model, weeknum=week_number)
         return week
 
     def setup_game(self,week,game_number,team1_name,team2_name,favored=2,spread=0.5,state=FINAL,team1_score=-1,team2_score=-1):
