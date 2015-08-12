@@ -1,0 +1,26 @@
+<div id="enterpicks-pool-state">currently entering picks for week {{last_week_number}}</div>
+<table>
+    <thead class="results-header">
+        <td id="header">Rank</td>
+        <td id="header"><a id="link-header" href="javascript:void" onclick="change_content('players')">Player</a></td>
+        <td id="header"><a id="link-header" href="javascript:void" onclick="change_content('overall')">Overall</a></td>
+        <td id="header">Win Pct.</td>
+        {% for wk_num in weeks_in_year %}
+            <td id="header">Wk{{wk_num}}</td>
+        {% endfor %}
+    </thead>
+    {% for result in results %}
+        <tr>
+            <td id="content">{{result.rank}}</td>
+            <td id="player-content">{{result.player_name}}</td>
+            <td id="{{overall_id}}">{{result.overall}}</td>
+            <td id="content">{{result.win_pct}}</td>
+            {% for week_points in result.week_points %}
+                <td id="content"><a id="week-link" href="{% url 'player_results' year forloop.counter result.player_id %}">{{week_points}}</a></td>
+            {% endfor %}
+        </tr>
+        <tr>
+            <td id="table-line" colspan="{{result.week_points|length|add:"4"}}"></td>
+        </tr>
+    {% endfor %}
+</table>

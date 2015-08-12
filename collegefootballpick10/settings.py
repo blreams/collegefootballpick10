@@ -132,3 +132,11 @@ EMAIL_HOST_PASSWORD = os.environ.get('COLLEGEFOOTBALLPICK10_GMAIL_PASSWORD')
 DEFAULT_FROM_EMAIL = 'collegefootballpick10@gmail.com'
 DEFAULT_TO_EMAIL = 'fluffgazer@hotmail.com'
 
+# The following sets up the memcache to use
+CACHES = {
+    'default': {
+         'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+         'LOCATION': 'memcache_table',
+         'TIMEOUT':None
+    }
+}

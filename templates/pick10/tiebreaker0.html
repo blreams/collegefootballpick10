@@ -1,0 +1,32 @@
+<br>
+<br>
+
+<table class="tiebreaker-title">
+    <tr>
+        <td id="tiebreaker-number">Tiebreaker 0 Details</td>
+        <td id="tiebreaker-description">Pick the winner of game 10.</td>
+    </tr>
+    <tr><td id="table-line-gray" colspan="2"></td></tr>
+</table><br>
+
+<table>
+    <thead class="tiebreaker-header">
+        <td id="header">Player</td>
+        <td id="header">Result</td>
+        <td id="header">Player Pick</td>
+        {% if featured_game_state == IN_PROGRESS %}
+            <td id="header">Team Ahead</td>
+        {% else %}
+            <td id="header">Game Winner</td>
+        {% endif %}
+    </thead>
+    {% for entry in tiebreaker0_details %}
+        <tr>
+            <td id="player-content">{{entry.player_name}}</td>
+            <td id="{{entry.result_id}}">{{entry.result}}</td>
+            <td id="content">{{entry.player_pick}}</td>
+            <td id="content">{{entry.featured_game_winner}}</td>
+        </tr>
+        <tr><td id="table-line-gray" colspan="5"></td></tr>
+    {% endfor %}
+</table>

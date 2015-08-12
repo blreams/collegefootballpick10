@@ -1,0 +1,132 @@
+.title-bar {
+   color: gray;
+   background-color: white;
+   width: 100%;
+   padding: 1px 4px;
+   font-size: 16pt;
+   font-family: Helvetica;
+   font-weight: 500;
+}
+
+#pool-title {
+   color: blue;
+   text-align: left;
+   width: 1em;
+   white-space: nowrap;
+}
+
+#page-title {
+   color: gray;
+   text-align: left;
+   padding: 1px 12pt;
+}
+
+#link-bar-highlighted {
+   color: white;
+   background-color: gray;
+   font-size: 12pt;
+   padding: 2px 4px;
+   font-family: Helvetica;
+   white-space: nowrap;
+   text-align: center;
+   width: 5em;
+}
+
+#link-bar-label {
+   color: gray;
+   background-color: white;
+   font-size: 12pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   white-space: nowrap;
+   width: 5em;
+   text-align: center;
+}
+
+#link-bar-week-number {
+   color: gray;
+   background-color: white;
+   font-size: 12pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   white-space: nowrap;
+   width: 1em;
+   text-align: center;
+}
+
+#link-bar-week-number-link {
+   color: gray;
+   background-color: white;
+   font-size: 12pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   white-space: nowrap;
+   text-align: center;
+   text-decoration:none;
+}
+
+#link-bar-week-number-highlight {
+   color: white;
+   background-color: gray;
+   font-size: 12pt;
+   padding: 2px 8px;
+   font-family: Helvetica;
+   white-space: nowrap;
+   width: 1em;
+   text-align: center;
+   text-decoration:none;
+}
+
+#link-bar-overall-link {
+   color: gray;
+   background-color: white;
+   font-size: 12pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   white-space: nowrap;
+   width: 5em;
+   text-align: center;
+   text-decoration:none;
+}
+
+#link-bar-week-link {
+   color: gray;
+   background-color: white;
+   font-size: 12pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   white-space: nowrap;
+   width: 5em;
+   text-align: center;
+   text-decoration:none;
+}
+
+.title-bar-div {
+   width: 100%;
+   padding: 1px;
+   background-color: gray;
+}
+
+#player-profile {
+   color: gray;
+   background-color: white;
+   font-size: 12pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   white-space: nowrap;
+   width: 100%;
+   text-align: right;
+}
+
+#player-profile-link {
+   color: gray;
+   background-color: white;
+   font-size: 12pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   white-space: nowrap;
+   width: 100%;
+   text-align: right;
+   text-decoration:none;
+}
+

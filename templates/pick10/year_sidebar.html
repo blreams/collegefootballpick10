@@ -1,0 +1,9 @@
+<ul class="nav nav-pills nav-stacked">
+    {% for year_num in years_in_pool %}
+        {% if year == year_num %}
+            <li class="active"><a href="{% url 'overall_results' year_num %}">{{year_num}}</a></li>
+        {% else %}
+            <li><a href="{% url 'overall_results' year_num %}">{{year_num}}</a></li>
+        {% endif %}
+    {% endfor %}
+</ul>
