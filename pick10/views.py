@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from overall_results_view import *
 from week_results_view import *
 from player_results_view import *
+from tiebreak_view import *
 
 @login_required
 def home(request):
@@ -21,4 +22,8 @@ def week_results(request,year,week_number):
 
 def player_results(request,year,week_number,player_id):
     response = PlayerResultsView().get(request,year,week_number,player_id)
+    return response
+
+def tiebreak(request,year,week_number):
+    response = TiebreakView().get(request,year,week_number)
     return response
