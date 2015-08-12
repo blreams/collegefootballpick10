@@ -27,6 +27,7 @@ class OverallResultsView:
 
         use_private_names = request.user.is_authenticated()
         weeks_in_year = d.get_week_numbers(year)
+        years_in_pool = sorted(d.get_years(),reverse=True)
 
         results = CalculateOverallResults(year,use_private_names).get_results()
 
@@ -51,6 +52,7 @@ class OverallResultsView:
         params = dict()
         params['year'] = year
         params['weeks_in_year'] = weeks_in_year
+        params['years_in_pool'] = years_in_pool
         params['last_week_number'] = weeks_in_year[-1]
         params['pool_state'] = pool_state
         params['results'] = results

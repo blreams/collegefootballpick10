@@ -21,11 +21,13 @@ class UpdateGamesView:
         year = int(year)
         week_number = int(week_number)
         weeks_in_year = d.get_week_numbers(year)
+        years_in_pool = sorted(d.get_years(),reverse=True)
 
         params = dict()
         params['year'] = year
         params['week_number'] = week_number
         params['weeks_in_year'] = weeks_in_year
+        params['years_in_pool'] = years_in_pool
         params['games'] = UpdateGames(year,week_number).get_games()
         params['locked'] = self.__is_week_scores_locked(year,week_number)
         params['FINAL'] = FINAL
