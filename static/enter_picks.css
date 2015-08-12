@@ -11,3 +11,9 @@ body {
    color: lightgray;
    background-color: white;
 }
+.pick-error {
+   color: #b94a48;
+   background-color: #f2dede;
+   border-color: #eed3d7;
+   padding: 4px 4px;
+}

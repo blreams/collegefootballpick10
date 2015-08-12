@@ -13,4 +13,5 @@ class PickData:
     team2_row_class = None
     team1_checked = None
     team2_checked = None
+    error_message = None
 

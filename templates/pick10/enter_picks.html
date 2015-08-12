@@ -9,8 +9,7 @@
 {% block body_block %}
 <link href="/static/title_bar.css" rel="stylesheet" type="text/css" media="all">
 <link href="/static/enter_picks.css" rel="stylesheet" type="text/css" media="all">
-    <script src="/static/instructions.js"></script>
-    <div id="page-title">Week {{week_number}} Picks</div>
+<div id="page-title">Week {{week_number}} Picks</div>
 
 <hr>
     <table>
@@ -33,6 +32,9 @@
     <div class="col-md-4">
         {% for pick in picks %}
 
+    {% if pick.error_message %}
+        <div class="pick-error"><strong>ERROR!</strong>&nbsp;&nbsp;{{pick.error_message}}</div>
+    {% endif %}
     <table class="table table-hover">
         <thead>
             <td class="game-number">Game {{pick.number}}</td>
@@ -71,8 +73,8 @@
 
 {% endfor %}
 <div>
-    <button class="btn btn-success" type="submit" name="submit_form">Submit Picks</button>
-    <button class="btn" type="submit" name="cancel_form">Cancel</button>
+    <button class="btn btn-success" type="submit" name="submit_form" value="Submit">Submit Picks</button>
+    <button class="btn" type="submit" name="cancel_form" value="Cancel">Cancel</button>
 </div>
 </div>
 </form>

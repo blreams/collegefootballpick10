@@ -71,7 +71,7 @@ class UpdateGamesView:
         submit_clicked = request.POST.get("submit_form")
         if not submit_clicked:
             errmsg = "Unexpected Error!  Expected submit button to be clicked but wasn't"
-            return render("pick10/error_message.html",message=errmsg)
+            return render(request,"pick10/error_message.html",message=errmsg)
 
         if self.__is_week_scores_locked(year,week_number):
             errmsg = "The scores for %d Week %d are locked." % (year,week_number)

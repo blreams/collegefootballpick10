@@ -34,7 +34,9 @@ class EnterPicksTest(FunctionalTest):
         pass
 
     def test_no_picks_yet(self):
-        pass
+        test_db = UnitTestDatabase()
+        test_db.setup_week_not_started(1978,1)
+        #self.__open_page(year=1978,week_number=1)
 
     def test_picks_already_made(self):
         pass
@@ -51,8 +53,32 @@ class EnterPicksTest(FunctionalTest):
     def test_week_final(self):
         pass
 
-    def test_invalid_user(self):
+    def test_GET_invalid_user(self):
         pass
 
-    def test_user_not_logged_in(self):
+    def test_GET_user_not_logged_in(self):
+        pass
+
+    def test_GET_invalid_year(self):
+        pass
+
+    def test_GET_invalid_week(self):
+        pass
+
+    def test_GET_invalid_player(self):
+        pass
+
+    def test_POST_invalid_user(self):
+        pass
+
+    def test_POST_user_not_logged_in(self):
+        pass
+
+    def test_POST_invalid_year(self):
+        pass
+
+    def test_POST_invalid_week(self):
+        pass
+
+    def test_POST_invalid_player(self):
         pass
