@@ -21,7 +21,12 @@ class WeekResultsView:
         week_number = int(week_number)
 
         # setup memcache parameters
-        cache,body_key,sidebar_key = self.__setup_memcache(use_private_names)
+        cache = get_cache('default')
+        if use_private_names:
+            body_key = "week_private_%d_%d" % (year,week_number)
+        else:
+            body_key = "week_public_%d_%d" % (year,week_number)
+        sidebar_key = "week_year_sidebar"
 
         # look for hit in the memcache
         if use_memcache:
@@ -298,18 +303,6 @@ class WeekResultsView:
             if player_id == item.player_id:
                 return i
         raise AssertionError
-
-    def __setup_memcache(self,use_private_names):
-        cache = get_cache('default')
-
-        if use_private_names:
-            cache_body_key = "week_private_%d_%d" % (year,week_number)
-        else:
-            cache_body_key = "week_public_%d_%d" % (year,week_number)
-
-        cache_sidebar_key = "week_year_sidebar"
-
-        return cache, cache_body_key, cache_sidebar_key
 
     def escape_string(self,s):
         return string.replace(s,'"','\\\"')

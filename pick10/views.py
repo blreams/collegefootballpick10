@@ -57,18 +57,18 @@ def update_pages(request,year,week_number):
 
 def update_overall(request,year):
     if request.method == "POST":
-        response = UpdatePageView().update_overall(year)
+        response = UpdatePageView().update_overall(request,year)
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')
 
 def update_week(request,year,week_number):
-    if request.method == "POST":
-        response = UpdatePageView().update_week(year,week_number)
+    if True or request.method == "POST":
+        response = UpdatePageView().update_week(request,year,week_number)
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')
 
 def update_tiebreak(request,year,week_number):
     if request.method == "POST":
-        response = UpdatePageView().update_tiebreak(year,week_number)
+        response = UpdatePageView().update_tiebreak(request,year,week_number)
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')
