@@ -24,7 +24,7 @@ def overall_results(request,year):
 
 def week_results(request,year,week_number):
     if request.method == "GET":
-        response = WeekResultsView().get(year,week_number)
+        response = WeekResultsView().get(request,year,week_number)
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')
 
