@@ -18,8 +18,7 @@ class OverallResultsView:
 
         if not(d.is_year_valid(year)):
             data={'year':year}
-            html = render_to_string("pick10/bad_year.html",data)
-            return HttpResponse(html)
+            return render(request,"pick10/bad_year.html",data,status=400)
 
         # setup memcache parameters
         cache = get_cache('default')

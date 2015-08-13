@@ -11,8 +11,7 @@ class TiebreakView:
 
         if self.__bad_year_or_week_number(year,week_number):
             data={'year':year,'week_number':week_number}
-            html = render_to_string("pick10/bad_week.html",data)
-            return HttpResponse(html)
+            return render(request,"pick10/bad_week.html",data,status=400)
 
         year = int(year)
         week_number = int(week_number)
