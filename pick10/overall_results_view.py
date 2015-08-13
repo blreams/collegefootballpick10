@@ -38,16 +38,22 @@ class OverallResultsView:
                 return render(request,"pick10/overall_results.html",data)
 
         pool_state = d.get_pool_state(year)
+        weeks_in_year = d.get_week_numbers(year)
+        years_in_pool = sorted(d.get_years(),reverse=True)
+
 
         if pool_state == "not_started":
             players = d.load_players(year)
-            data={'year':year, 'num_players':len(players)}
-            html = render_to_string("pick10/overall_not_started.html",data)
-            cache.set(cache_key,html)
-            return HttpResponse(html)
 
-        weeks_in_year = d.get_week_numbers(year)
-        years_in_pool = sorted(d.get_years(),reverse=True)
+            data={'year':year, 'num_players':len(players)}
+            body = render_to_string("pick10/overall_not_started.html",data)
+            sidebar = render_to_string("pick10/year_sidebar.html",{'years_in_pool':years_in_pool})
+
+            cache.set(body_key,body)
+            cache.set(sidebar_key,sidebar)
+
+            data = {'body_content':body,'side_block_content':sidebar }
+            return render(request,"pick10/overall_results.html",data)
 
         results = CalculateOverallResults(year,use_private_names).get_results()
 
