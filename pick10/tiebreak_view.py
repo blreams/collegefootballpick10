@@ -7,7 +7,7 @@ from django.http import HttpResponse
 
 class TiebreakView:
 
-    def get(self,year,week_number,use_private_names=False,use_memcache=True):
+    def get(self,request,year,week_number,use_private_names=False,use_memcache=True):
 
         if self.__bad_year_or_week_number(year,week_number):
             data={'year':year,'week_number':week_number}
@@ -20,16 +20,19 @@ class TiebreakView:
         # setup memcache parameters
         cache = get_cache('default')
         if use_private_names:
-            cache_key = "tiebreak_private_%d_%d" % (year,week_number)
+            body_key = "tiebreak_private_%d_%d" % (year,week_number)
         else:
-            cache_key = "tiebreak_public_%d_%d" % (year,week_number)
+            body_key = "tiebreak_public_%d_%d" % (year,week_number)
+        sidebar_key = "tiebreak_year_sidebar"
 
         # look for hit in the memcache
         if use_memcache:
-            html = cache.get(cache_key)
-            memcache_hit = html != None
+            body = cache.get(body_key)
+            sidebar = cache.get(sidebar_key)
+            memcache_hit = body != None and sidebar != None
             if memcache_hit:
-                return HttpResponse(html)
+                data = {'body_content':body,'side_block_content':sidebar }
+                return render(request,"pick10/tiebreak.html",data)
 
         d = Database()
         weeks_in_year = d.get_week_numbers(year)
@@ -61,9 +64,14 @@ class TiebreakView:
         params['IN_PROGRESS'] = IN_PROGRESS
         params['FINAL'] = FINAL
 
-        html = render_to_string("pick10/tiebreak.html",params)
-        cache.set(cache_key,html)
-        return HttpResponse(html)
+        body = render_to_string("pick10/tiebreak_body.html",params)
+        sidebar = render_to_string("pick10/year_sidebar.html",params)
+
+        cache.set(body_key,body)
+        cache.set(sidebar_key,sidebar)
+
+        data = {'body_content':body,'side_block_content':sidebar }
+        return render(request,"pick10/tiebreak.html",data)
 
     def __bad_year_or_week_number(self,year,week_number):
         try:

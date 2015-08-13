@@ -3,94 +3,9 @@
 {% block header_text %}{{year}} Leaderboard{% endblock %}
 
 {% block side_block %}
-    {% include "pick10/year_sidebar.html" %}
+    {{ side_block_content|safe }}
 {% endblock %}
 
 {% block body_block %}
-    <link href="/static/title_bar.css" rel="stylesheet" type="text/css" media="all">
-    <link href="/static/overall_results.css" rel="stylesheet" type="text/css" media="all">
-    <script>
-        var results_sorted_by_overall = "{{sorted_by_overall|safe}}";
-        var results_sorted_by_overall_reversed = "{{sorted_by_overall_reversed|safe}}";
-        var results_sorted_by_players = "{{sorted_by_players|safe}}";
-        var results_sorted_by_players_reversed = "{{sorted_by_players_reversed|safe}}";
-        var results_sorted_by_projected = "{{sorted_by_projected|safe}}";
-        var results_sorted_by_projected_reversed = "{{sorted_by_projected_reversed|safe}}";
-        var results_sorted_by_possible = "{{sorted_by_possible|safe}}";
-        var results_sorted_by_possible_reversed = "{{sorted_by_possible_reversed|safe}}";
-
-        var reverse_overall = true;
-        var reverse_players = false;
-        var reverse_projected = false;
-        var reverse_possible = false;
-
-        function change_content(content_name) {
-            var content_element = document.getElementById('results');
-
-            if (content_name == "overall" && !reverse_overall) {
-                content_element.innerHTML = results_sorted_by_overall;
-                reverse_overall = true;
-                reverse_players = false;
-                reverse_projected = false;
-                reverse_possible = false;
-            } else if (content_name == "overall" && reverse_overall) {
-                content_element.innerHTML = results_sorted_by_overall_reversed;
-                reverse_overall = false;
-                reverse_players = false;
-                reverse_projected = false;
-                reverse_possible = false;
-            } else if (content_name == "players" && !reverse_players) {
-                content_element.innerHTML = results_sorted_by_players;
-                reverse_overall = false;
-                reverse_players = true;
-                reverse_projected = false;
-                reverse_possible = false;
-            } else if (content_name == "players" && reverse_players) {
-                content_element.innerHTML = results_sorted_by_players_reversed;
-                reverse_overall = false;
-                reverse_players = false;
-                reverse_projected = false;
-                reverse_possible = false;
-            } else if (content_name == "projected" && !reverse_projected) {
-                content_element.innerHTML = results_sorted_by_projected;
-                reverse_overall = false;
-                reverse_players = false;
-                reverse_projected = true;
-                reverse_possible = false;
-            } else if (content_name == "projected" && reverse_projected) {
-                content_element.innerHTML = results_sorted_by_projected_reversed;
-                reverse_overall = false;
-                reverse_players = false;
-                reverse_projected = false;
-                reverse_possible = false;
-            } else if (content_name == "possible" && !reverse_possible) {
-                content_element.innerHTML = results_sorted_by_possible;
-                reverse_overall = false;
-                reverse_players = false;
-                reverse_projected = false;
-                reverse_possible = true;
-            } else if (content_name == "possible" && reverse_possible) {
-                content_element.innerHTML = results_sorted_by_possible_reversed;
-                reverse_overall = false;
-                reverse_players = false;
-                reverse_projected = false;
-                reverse_possible = false;
-            }
-        }
-    </script>
-<div id="page-title">{{year}} Leaderboard</div>
-<hr>
-    <table>
-        <td id="link-bar-highlighted">OVERALL</td>
-        <td id="link-bar-label">
-            <a id="link-bar-week-link" href="{% url 'week_results' year last_week_number %}">WEEK</a>
-            {% for wk_num in weeks_in_year %}
-                <a id="link-bar-week-number-link" href="{% url 'week_results' year wk_num %}">{{wk_num}}</a>
-            {% endfor %}
-        </td>
-    </table>
-    <br>
-<div id="results">
-    {{ content|safe }}
-</div>
+    {{ body_content|safe }}
 {% endblock %}

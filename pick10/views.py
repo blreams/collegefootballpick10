@@ -18,7 +18,7 @@ def index(request):
 
 def overall_results(request,year):
     if request.method == "GET":
-        response = OverallResultsView().get(year)
+        response = OverallResultsView().get(request,year)
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')
 
@@ -36,7 +36,7 @@ def player_results(request,year,week_number,player_id):
 
 def tiebreak(request,year,week_number):
     if request.method == "GET":
-        response = TiebreakView().get(year,week_number)
+        response = TiebreakView().get(request,year,week_number)
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')
 
@@ -62,7 +62,7 @@ def update_overall(request,year):
     return HttpResponseNotFound('<h1>Page not found</h1>')
 
 def update_week(request,year,week_number):
-    if True or request.method == "POST":
+    if request.method == "POST":
         response = UpdatePageView().update_week(request,year,week_number)
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')

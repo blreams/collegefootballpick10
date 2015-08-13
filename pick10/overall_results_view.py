@@ -10,7 +10,7 @@ from django.http import HttpResponse
 
 class OverallResultsView:
 
-    def get(self,year,use_private_names=False,use_memcache=True):
+    def get(self,request,year,use_private_names=False,use_memcache=True):
 
         year = int(year)
 
@@ -24,16 +24,19 @@ class OverallResultsView:
         # setup memcache parameters
         cache = get_cache('default')
         if use_private_names:
-            cache_key = "overall_private_%d" % (year)
+            body_key = "overall_private_%d" % (year)
         else:
-            cache_key = "overall_public_%d" % (year)
+            body_key = "overall_public_%d" % (year)
+        sidebar_key = "overall_year_sidebar"
 
         # look for hit in the memcache
         if use_memcache:
-            html = cache.get(cache_key)
-            memcache_hit = html != None
+            body = cache.get(body_key)
+            sidebar = cache.get(sidebar_key)
+            memcache_hit = body != None and sidebar != None
             if memcache_hit:
-                return HttpResponse(html)
+                data = {'body_content':body,'side_block_content':sidebar }
+                return render(request,"pick10/overall_results.html",data)
 
         pool_state = d.get_pool_state(year)
 
@@ -100,10 +103,15 @@ class OverallResultsView:
             params['sorted_by_projected_reversed'] = ""
             params['sorted_by_possible'] = ""
             params['sorted_by_possible_reversed'] = ""
+        
+        body = render_to_string("pick10/overall_results_body.html",params)
+        sidebar = render_to_string("pick10/year_sidebar.html",params)
 
-        html = render_to_string("pick10/overall_results.html",params)
-        cache.set(cache_key,html)
-        return HttpResponse(html)
+        cache.set(body_key,body)
+        cache.set(sidebar_key,sidebar)
+
+        data = {'body_content':body,'side_block_content':sidebar }
+        return render(request,"pick10/overall_results.html",data)
 
     def __initial_content(self,content_params):
         return self.__sort_by_overall(content_params,escape=False)
