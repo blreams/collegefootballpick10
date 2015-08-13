@@ -34,7 +34,7 @@ class OverallResultsView:
             sidebar = cache.get(sidebar_key)
             memcache_hit = body != None and sidebar != None
             if memcache_hit:
-                data = {'body_content':body,'side_block_content':sidebar }
+                data = {'body_content':body,'side_block_content':sidebar,'year':year }
                 return render(request,"pick10/overall_results.html",data)
 
         pool_state = d.get_pool_state(year)
@@ -52,7 +52,7 @@ class OverallResultsView:
             cache.set(body_key,body)
             cache.set(sidebar_key,sidebar)
 
-            data = {'body_content':body,'side_block_content':sidebar }
+            data = {'body_content':body,'side_block_content':sidebar,'year':year }
             return render(request,"pick10/overall_results.html",data)
 
         results = CalculateOverallResults(year,use_private_names).get_results()
@@ -115,7 +115,7 @@ class OverallResultsView:
         cache.set(body_key,body)
         cache.set(sidebar_key,sidebar)
 
-        data = {'body_content':body,'side_block_content':sidebar }
+        data = {'body_content':body,'side_block_content':sidebar,'year':year }
         return render(request,"pick10/overall_results.html",data)
 
     def __initial_content(self,content_params):

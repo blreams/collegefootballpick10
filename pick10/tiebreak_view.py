@@ -30,7 +30,7 @@ class TiebreakView:
             sidebar = cache.get(sidebar_key)
             memcache_hit = body != None and sidebar != None
             if memcache_hit:
-                data = {'body_content':body,'side_block_content':sidebar }
+                data = {'body_content':body,'side_block_content':sidebar,'week_number':week_number }
                 return render(request,"pick10/tiebreak.html",data)
 
         d = Database()
@@ -69,7 +69,7 @@ class TiebreakView:
         cache.set(body_key,body)
         cache.set(sidebar_key,sidebar)
 
-        data = {'body_content':body,'side_block_content':sidebar }
+        data = {'body_content':body,'side_block_content':sidebar,'week_number':week_number }
         return render(request,"pick10/tiebreak.html",data)
 
     def __bad_year_or_week_number(self,year,week_number):
