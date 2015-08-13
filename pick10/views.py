@@ -51,7 +51,7 @@ def update_games(request,year,week_number):
 
 def update_pages(request,year,week_number):
     if request.method == "GET":
-        response = UpdatePageView().get(year,week_number)
+        response = UpdatePageView().get(request,year,week_number)
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')
 
