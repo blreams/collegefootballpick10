@@ -1,18 +1,24 @@
 {% extends 'base.html' %}
 
 {% block body_block %}
-    {% if form.errors %}
-        <p style="color: red;">
-            Please correct the error{{ form.errors|pluralize }} below.
-        </p>
-    {% endif %}
+<link href="http://getbootstrap.com/examples/signin/signin.css" rel="stylesheet">
 
-    <form action="" method="post">
+    <form id="profile_form" class="form-signin" role="form" action="" method="post">
         {% csrf_token %}
-        <table>
-            {{ form.as_table }}
-        </table>
-        <input type="submit" value="Submit">
+        <label for="id_company">Company</label>
+        <input class="form-control" id="id_company" maxlength="100" name="company" type="text" value="{{ userprofile.company }}"required autofocus="" />
+        <label for="id_preferredtz">Preferred Timezone</label>
+        <select class="form-control" id="id_preferredtz" name="preferredtz">
+            {% for choice in choices %}
+                {% if choice == userprofile.preferredtz %}
+                    <option selected>{{ choice }}</option>
+                {% else %}
+                    <option>{{ choice }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" value="Submit">Submit</button>
     </form>
+
 {% endblock %}
 
