@@ -18,31 +18,16 @@ class EnterPicksView:
             data={'player_id':player_id,'error':'bad_id'}
             return render(request,"pick10/bad_player.html",data)
 
-        d = Database()
-
         year = int(year)
         week_number = int(week_number)
         player_id = int(player_id)
-        weeks_in_year = d.get_week_numbers(year)
-        years_in_pool = sorted(d.get_years(),reverse=True)
 
         if not(self.__is_player_in_year(player_id,year)):
             data={'year':year,'player_id':player_id,'error':'bad_year'}
             return render(request,"pick10/bad_player.html",data)
 
-        params = dict()
-        params['year'] = year
-        params['week_number'] = week_number
-        params['weeks_in_year'] = weeks_in_year
-        params['years_in_pool'] = years_in_pool
-
         picks = EnterPicks(year,week_number,player_id).get_game_picks()
-        self.__setup_pick_team_rows(picks)
-        self.__setup_pick_error_messages(picks)
-
-        params['picks'] = picks
-
-        return render(request,"pick10/enter_picks.html",params)
+        return self.__render_form_from_data(request,year,week_number,player_id,picks)
 
     def post(self,request,year,week_number,player_id):
 
@@ -71,10 +56,34 @@ class EnterPicksView:
             errmsg = "Unexpected Error!  Expected submit button to be clicked but wasn't"
             return render(request,"pick10/error_message.html",message=errmsg)
 
-        picks = EnterPicks(year,week_number,player_id).get_game_picks()
-        self.__verify_post_data(request,picks)
+        enter_picks = EnterPicks(year,week_number,player_id)
 
-        return HttpResponseNotFound('<h1>Page not found</h1>')
+        picks = enter_picks.get_game_picks()
+        error_found = self.__get_and_verify_post_data(request,picks)
+        if error_found:
+            return self.__render_form_from_data(request,year,week_number,player_id,picks)
+
+        enter_picks.save_picks(picks)
+        return redirect("player_results",year=year,week_number=week_number,player_id=player_id)
+
+    def __render_form_from_data(self,request,year,week_number,player_id,picks):
+        d = Database()
+
+        weeks_in_year = d.get_week_numbers(year)
+        years_in_pool = sorted(d.get_years(),reverse=True)
+
+        params = dict()
+        params['year'] = year
+        params['week_number'] = week_number
+        params['weeks_in_year'] = weeks_in_year
+        params['years_in_pool'] = years_in_pool
+
+        self.__setup_pick_team_rows(picks)
+        self.__setup_pick_error_messages(picks)
+
+        params['picks'] = picks
+
+        return render(request,"pick10/enter_picks.html",params)
 
     def __bad_year_or_week_number(self,year,week_number):
         try:
@@ -120,7 +129,7 @@ class EnterPicksView:
         for i in range(len(picks)):
             picks[i].error_message = None
 
-    def __verify_post_data(self,request,picks):
+    def __get_and_verify_post_data(self,request,picks):
         error_found = False
 
         for game_number in range(1,11):
@@ -138,4 +147,26 @@ class EnterPicksView:
                 error_found = True
 
             if game_number == 10:
-                pass # get scores
+                team1_score = self.__get_score('team1-score')
+                team2_score = self.__get_score('team2-score')
+                if team1_score == None or team2_score == None:
+                    error_found = True
+                    picks[index].error_message = "Team score is invalid"
+                    picks[index].team1_predicted_points = ""
+                    picks[index].team2_predicted_points = ""
+                else:
+                    picks[index].team1_predicted_points = team1_score
+                    picks[index].team2_predicted_points = team2_score
+
+        return error_found
+
+    def __get_score(self,input_name):
+        try:
+            score_string = request.POST.get(input_name)
+            score = int(score_string)
+            if score < 0:
+                return None
+            return score
+        except:
+            return None
+        

@@ -49,3 +49,36 @@ class EnterPicks:
 
         return sorted(game_picks,key=lambda pick:pick.number)
 
+    def save_picks(self,picks):
+        self.__picks_sanity_check(picks)
+
+        player = Player.objects.get(id=self.player_id)
+
+        for pick in picks:
+            game_number = pick.number
+            game = get_game(self.year,self.week_number,game_number)
+
+            if game_number == 10:
+                p = add_pick(player,game,pick.pick,pick.team1_predicted_points,pick.team2_predicted_points)
+            else:
+                p = add_pick(player,game,pick.pick)
+
+    def __picks_sanity_check(self,picks):
+        assert len(picks) == 10
+
+        # verify pick for each game number
+        picks_by_game = { pick.number:pick for pick in picks }
+        game_numbers = sorted(picks_by_game.keys())
+        assert game_numbers == [1,2,3,4,5,6,7,8,9,10]
+
+        # verify game 10 has a score entered
+        game10 = picks_by_game[10]
+        assert type(game10.team1_predicted_points) == int
+        assert type(game10.team2_predicted_points) == int
+        assert game10.team1_predicted_points > 0
+        assert game10.team2_predicted_points > 0
+
+        # verify each game has a pick of TEAM1 or TEAM2
+        for game_pick in picks:
+            assert type(game_pick.pick) == int
+            assert game_pick == 1 or game_pick == 2 
