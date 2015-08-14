@@ -7,9 +7,6 @@ class ProfileView:
 
     def get(self,request):
         user = request.user
-        if not user.is_active:
-            return HttpResponseNotFound('<h1>You are not logged in </h1>')
-
         userprofile, created = UserProfile.objects.get_or_create(user=user)
         form = UserProfileForm(instance=userprofile)
         choices = [choice[0] for choice in form.fields['preferredtz'].choices]

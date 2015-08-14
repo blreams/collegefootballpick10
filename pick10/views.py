@@ -17,6 +17,7 @@ def home(request):
 def index(request):
     return render(request, 'pick10/index.html')
 
+@login_required
 def profile(request):
     if request.method == 'GET':
         response = ProfileView().get(request)
