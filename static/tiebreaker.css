@@ -1,0 +1,240 @@
+.tiebreaker-header {
+   color: #E6E6FF;
+   background-color: #0000E6;
+   font-size: 8pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   font-weight: 100;
+}
+#header {
+   text-align: center;
+   padding: 1px 8px;
+   white-space: nowrap;
+}
+
+#player-content {
+   color: black;
+   background-color: lightyellow;
+   font-size: 10pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   font-weight: 100;
+   white-space: nowrap;
+   text-align: left;
+   width : 15em;
+}
+#tiebreak-won {
+   color: yellow;
+   background-color: red;
+   font-size: 8pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   font-weight: 100;
+   white-space: nowrap;
+   text-align: center;
+}
+#tiebreak-lost {
+   color: gray;
+   background-color: white;
+   font-size: 8pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   font-weight: 100;
+   white-space: nowrap;
+   text-align: center;
+}
+#tiebreak-ahead {
+   color: yellow;
+   background-color: green;
+   font-size: 8pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   font-weight: 100;
+   white-space: nowrap;
+   text-align: center;
+}
+#tiebreak-behind {
+   color: gray;
+   background-color: white;
+   font-size: 8pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   font-weight: 100;
+   white-space: nowrap;
+   text-align: center;
+}
+#tiebreak-blank {
+   color: white;
+   background-color: white;
+   font-size: 8pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   font-weight: 100;
+   white-space: nowrap;
+   text-align: center;
+}
+#table-line {
+   border-bottom: 1px solid lightgray;
+   padding: 0 0 0 0;
+}
+#table-line-blue {
+   border-bottom: 1px solid blue;
+   padding: 0 0 0 0;
+}
+#table-line-gray {
+   border-bottom: 1px solid gray;
+   padding: 0 0 0 0;
+}
+.tiebreaker-title {
+   color: lightgray;
+   background-color: white;
+   width: 100%;
+   padding: 1px 4px;
+   font-size: 12pt;
+   font-family: Helvetica;
+   font-weight: 500;
+   white-space: nowrap;
+}
+#tiebreaker-number {
+   color: gray;
+   text-align: left;
+   width: 1em;
+   white-space: nowrap;
+}
+#tiebreaker-description {
+   color: gray;
+   text-align: left;
+   padding: 1px 10px;
+   font-size: 10pt;
+   font-weight: 100;
+}
+#content {
+   color: gray;
+   background-color: white;
+   font-size: 8pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   font-weight: 100;
+   white-space: nowrap;
+   text-align: center;
+}
+#content-highlight {
+   color: black;
+   background-color: lightgray;
+   font-size: 8pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   font-weight: 100;
+   white-space: nowrap;
+   text-align: center;
+}
+.game-header {
+   color: #E6E6FF;
+   background-color: #0000E6;
+   font-size: 8pt;
+   padding: 0px 4px;
+}
+.game-content {
+   color: black;
+   background-color: lightyellow;
+}
+
+#teams-header {
+   text-align: left;
+   padding: 1px 4px;
+   font-family: Helvetica;
+   font-weight: 100;
+}
+
+#score-header {
+   padding: 1px 8px;
+   font-family: Helvetica;
+   font-weight: 100;
+   width: 1em;
+   white-space: nowrap;
+   text-align: center;
+}
+#team-name {
+   width: 15em;
+   font-family: Helvetica;
+   font-size: 10pt;
+   padding: 1px 4px;
+   white-space: nowrap;
+   font-weight: 300;
+}
+
+#team-score {
+   color: black;
+   background-color: lightyellow;
+   width: 1em;
+   padding: 1px 4px;
+   font-size: 10pt;
+   font-family: Helvetica;
+   font-weight: 100;
+   white-space: nowrap;
+   text-align: center;
+}
+
+#game-type-label {
+   color: gray;
+   background-color: white;
+   width: 15em;
+   padding: 1px 4px;
+   font-size: 10pt;
+   font-family: Helvetica;
+   font-weight: 100;
+   white-space: nowrap;
+   text-align: left;
+}
+#game-value {
+   color: gray;
+   background-color: white;
+   width: 1em;
+   padding: 1px 4px;
+   font-size: 10pt;
+   font-family: Helvetica;
+   font-weight: 100;
+   text-align: center;
+   white-space: nowrap;
+}
+.under-construction {
+   color: black;
+   background-color: orange;
+   width: 100%;
+   padding: 1px 4px;
+   font-size: 10pt;
+   font-family: Helvetica;
+   font-weight: 500;
+   text-align: center;
+   white-space: nowrap;
+}
+#tiebreaker3-text {
+   color: blue;
+   background-color: white;
+   padding: 1px 4px;
+   font-size: 10pt;
+   font-family: Helvetica;
+   font-weight: 100;
+   text-align: left;
+   white-space: nowrap;
+}
+#tiebreaker-invalid {
+   color: red;
+   background-color: white;
+   font-size: 10pt;
+   padding: 0px 4px;
+   font-family: Helvetica;
+   font-weight: 100;
+   white-space: nowrap;
+   text-align: left;
+}
+
+#page-title {
+   color: gray;
+   font-size: 14pt;
+   font-family: Helvetica;
+   font-weight: 500;
+   text-align: left;
+   white-space: nowrap;
+   padding: 0px 4px;
+}

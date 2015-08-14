@@ -6,22 +6,23 @@ from pick10.tiebreak_view import *
 
 class UpdatePageView:
 
-    def get(self,year,week_number):
+    def get(self,request,year,week_number):
         data={'year':year,'week_number':week_number}
-        html = render_to_string("pick10/update_pages.html",data)
-        return HttpResponse(html)
+        return render(request, "pick10/update_pages.html", data)
+        #html = render_to_string("pick10/update_pages.html",data)
+        #return HttpResponse(html)
 
-    def update_overall(self,year):
-        response = OverallResultsView().get(year,use_private_names=False,use_memcache=False)
-        response = OverallResultsView().get(year,use_private_names=True,use_memcache=False)
+    def update_overall(self,request,year):
+        response = OverallResultsView().get(request,year,use_private_names=False,use_memcache=False)
+        response = OverallResultsView().get(request,year,use_private_names=True,use_memcache=False)
         return HttpResponse("<html>success</html>")
 
-    def update_week(self,year,week_number):
-        response = WeekResultsView().get(year,week_number,use_private_names=False,use_memcache=False)
-        response = WeekResultsView().get(year,week_number,use_private_names=True,use_memcache=False)
+    def update_week(self,request,year,week_number):
+        response = WeekResultsView().get(request,year,week_number,use_private_names=False,use_memcache=False)
+        response = WeekResultsView().get(request,year,week_number,use_private_names=True,use_memcache=False)
         return HttpResponse("<html>success</html>")
 
-    def update_tiebreak(self,year,week_number):
-        response = TiebreakView().get(year,week_number,use_private_names=False,use_memcache=False)
-        response = TiebreakView().get(year,week_number,use_private_names=True,use_memcache=False)
+    def update_tiebreak(self,request,year,week_number):
+        response = TiebreakView().get(request,year,week_number,use_private_names=False,use_memcache=False)
+        response = TiebreakView().get(request,year,week_number,use_private_names=True,use_memcache=False)
         return HttpResponse("<html>success</html>")

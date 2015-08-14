@@ -114,8 +114,6 @@ def populate_week(yearnum, weeknum):
 
 def populate_team(teamname):
     mascot, conference, division = team_mascot_conference_division[teamname].split(':')
-    if division == '':
-        division = None
     confobj, create = Conference.objects.get_or_create(conf_name=conference, div_name=division)
     teamobj, create = Team.objects.get_or_create(team_name=teamname, mascot=mascot, conference=confobj)
     return teamobj

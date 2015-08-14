@@ -19,13 +19,13 @@ def index(request):
 
 def overall_results(request,year):
     if request.method == "GET":
-        response = OverallResultsView().get(year)
+        response = OverallResultsView().get(request,year)
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')
 
 def week_results(request,year,week_number):
     if request.method == "GET":
-        response = WeekResultsView().get(year,week_number)
+        response = WeekResultsView().get(request,year,week_number)
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')
 
@@ -37,7 +37,7 @@ def player_results(request,year,week_number,player_id):
 
 def tiebreak(request,year,week_number):
     if request.method == "GET":
-        response = TiebreakView().get(year,week_number)
+        response = TiebreakView().get(request,year,week_number)
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')
 
@@ -61,24 +61,24 @@ def enter_picks(request,year,week_number,player_id):
 
 def update_pages(request,year,week_number):
     if request.method == "GET":
-        response = UpdatePageView().get(year,week_number)
+        response = UpdatePageView().get(request,year,week_number)
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')
 
 def update_overall(request,year):
     if request.method == "POST":
-        response = UpdatePageView().update_overall(year)
+        response = UpdatePageView().update_overall(request,year)
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')
 
 def update_week(request,year,week_number):
     if request.method == "POST":
-        response = UpdatePageView().update_week(year,week_number)
+        response = UpdatePageView().update_week(request,year,week_number)
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')
 
 def update_tiebreak(request,year,week_number):
     if request.method == "POST":
-        response = UpdatePageView().update_tiebreak(year,week_number)
+        response = UpdatePageView().update_tiebreak(request,year,week_number)
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')

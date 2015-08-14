@@ -11,11 +11,11 @@ class PlayerResultsView:
 
         if self.__bad_year_or_week_number(year,week_number):
             data={'year':year,'week_number':week_number}
-            return render(request,"pick10/bad_week.html",data)
+            return render(request,"pick10/bad_week.html",data,status=400)
 
         if not(self.__is_player_id_valid(player_id)):
             data={'player_id':player_id,'error':'bad_id'}
-            return render(request,"pick10/bad_player.html",data)
+            return render(request,"pick10/bad_player.html",data,status=400)
 
         year = int(year)
         week_number = int(week_number)
@@ -24,7 +24,7 @@ class PlayerResultsView:
 
         if not(self.__is_player_in_year(player_id,year)):
             data={'year':year,'player_id':player_id,'error':'bad_year'}
-            return render(request,"pick10/bad_player.html",data)
+            return render(request,"pick10/bad_player.html",data,status=400)
 
         # TODO set timezone for kickoff date and lock picks time
         timezone = 'US/Eastern'

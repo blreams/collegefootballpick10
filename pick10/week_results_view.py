@@ -10,12 +10,11 @@ from django.http import HttpResponse
 
 class WeekResultsView:
 
-    def get(self,year,week_number,use_private_names=False,use_memcache=True):
+    def get(self,request,year,week_number,use_private_names=False,use_memcache=True):
 
         if self.__bad_year_or_week_number(year,week_number):
             data={'year':year,'week_number':week_number}
-            html = render_to_string("pick10/bad_week.html",data)
-            return HttpResponse(html)
+            return render(request,"pick10/bad_week.html",data,status=400)
 
         year = int(year)
         week_number = int(week_number)
@@ -23,16 +22,19 @@ class WeekResultsView:
         # setup memcache parameters
         cache = get_cache('default')
         if use_private_names:
-            cache_key = "week_private_%d_%d" % (year,week_number)
+            body_key = "week_private_%d_%d" % (year,week_number)
         else:
-            cache_key = "week_public_%d_%d" % (year,week_number)
+            body_key = "week_public_%d_%d" % (year,week_number)
+        sidebar_key = "week_year_sidebar"
 
         # look for hit in the memcache
         if use_memcache:
-            html = cache.get(cache_key)
-            memcache_hit = html != None
+            body = cache.get(body_key)
+            sidebar = cache.get(sidebar_key)
+            memcache_hit = body != None and sidebar != None
             if memcache_hit:
-                return HttpResponse(html)
+                data = {'body_content':body,'side_block_content':sidebar,'week_number':week_number }
+                return render(request,"pick10/week_results.html",data)
 
         d = Database()
         weeks_in_year = d.get_week_numbers(year)
@@ -74,9 +76,14 @@ class WeekResultsView:
             params['sorted_by_possible_wins'] = self.__sort_by_possible_wins(results,winner_info)
             params['sorted_by_possible_wins_reversed'] = self.__sort_by_possible_wins_reversed(results,winner_info)
 
-        html = render_to_string("pick10/week_results.html",params)
-        cache.set(cache_key,html)
-        return HttpResponse(html)
+        body = render_to_string("pick10/week_results_body.html",params)
+        sidebar = render_to_string("pick10/year_sidebar.html",params)
+
+        cache.set(body_key,body)
+        cache.set(sidebar_key,sidebar)
+
+        data = {'body_content':body,'side_block_content':sidebar,'week_number':week_number }
+        return render(request,"pick10/week_results.html",data)
 
     def __initial_content(self,results,winner_info):
         return self.__sort_by_wins(results,winner_info,escape=False)

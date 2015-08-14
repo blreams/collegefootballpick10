@@ -3,72 +3,9 @@
 {% block header_text %}Week {{week_number}} Tiebreaker{% endblock %}
 
 {% block side_block %}
-    {% include "pick10/year_sidebar.html" %}
+    {{ side_block_content|safe }}
 {% endblock %}
 
 {% block body_block %}
-<link href="/static/title_bar.css" rel="stylesheet" type="text/css" media="all">
-<link href="/static/tiebreaker.css" rel="stylesheet" type="text/css" media="all">
-<div id="page-title">Week {{week_number}} Tiebreaker</div>
-<hr>
-    <table>
-        <td><a id="link-bar-overall-link" href="{% url 'overall_results' year %}">OVERALL</a></td>
-        <td id="link-bar-label">
-            <a id="link-bar-week-link" href="{% url 'week_results' year week_number %}">WEEK</a>
-            {% for wk_num in weeks_in_year %}
-                {% if wk_num == week_number %}
-                    <a id="link-bar-week-number-highlight" href="{% url 'week_results' year wk_num %}">{{wk_num}}</a>
-                {% else %}
-                    <a id="link-bar-week-number-link" href="{% url 'week_results' year wk_num %}">{{wk_num}}</a>
-                {% endif %}
-            {% endfor %}
-        </td>
-    </table>
-    <br><br>
-
-  {% if featured_game_state == NOT_STARTED %}    
-        <div>The featured game has not started yet.</div>
-  {% else %}
-    {% if tiebreaker_required == False %}
-        <div>No tiebreaker is required.</div><br>
-    {% endif %}
-    <table class="tiebreaker-title">
-        <tr>
-            <td id="tiebreaker-number">Summary</td>
-            <td id="tiebreaker-description"></td>
-        </tr>
-        <tr><td id="table-line-gray" colspan="2"></td></tr>
-    </table><br>
-    <table>
-        <thead class="tiebreaker-header">
-            <td id="header">Player</td>
-            <td id="header">Tiebreak 0</td>
-            <td id="header">Tiebreak 1</td>
-            <td id="header">Tiebreak 2</td>
-            <td id="header">Tiebreak 3</td>
-        </thead>
-        {% for entry in summary %}
-            <tr>
-                <td id="player-content">{{entry.player_name}}</td>
-                <td id="{{entry.tiebreak0_id}}">{{entry.tiebreak0}}</td>
-                <td id="{{entry.tiebreak1_id}}">{{entry.tiebreak1}}</td>
-                <td id="{{entry.tiebreak2_id}}">{{entry.tiebreak2}}</td>
-                <td id="{{entry.tiebreak3_id}}">{{entry.tiebreak3}}</td>
-            </tr>
-            <tr><td id="table-line" colspan="5"></td></tr>
-        {% endfor %}
-    </table>
-    {% if tiebreaker0_valid %}
-        {% include "pick10/tiebreaker0.html" %}
-    {% endif %}
-    {% if tiebreaker1_valid %}
-        {% include "pick10/tiebreaker1.html" %}
-    {% endif %}
-    {% if tiebreaker2_valid %}
-        {% include "pick10/tiebreaker2.html" %}
-    {% endif %}
-    {% if tiebreaker3_valid %}
-        {% include "pick10/tiebreaker3.html" %}
-    {% endif %}
-  {% endif %}
+    {{ body_content|safe }}
 {% endblock %}

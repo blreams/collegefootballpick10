@@ -66,7 +66,7 @@
         </table>
     {% endif %}
     <br>
-    <a id="game-link" href="/{{year}}/week/{{week_number}}/games">update game scores</a>
+    <a id="game-link" href="{% url 'update_games' year week_number %}">update game scores</a>
     <br>
     <table>
         <thead class="results-header">

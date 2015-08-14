@@ -22,12 +22,12 @@ def get_default_pick_deadline():
 
 
 class UserProfile(models.Model):
-    tz_choices = [(tz, tz) for tz in pytz.all_timezones if tz.startswith('US')]
+    tz_choices = [(tz, tz) for tz in pytz.all_timezones if tz.startswith('US')] + [(tz, tz) for tz in pytz.all_timezones if not tz.startswith('US')]
     user = models.OneToOneField(User)
     player = models.OneToOneField('Player', blank=True, null=True)
     company = models.CharField(max_length=50, blank=True)
     # You can customize this with whatever fields you want to extend User.
-    preferredtz = models.CharField(max_length=100, null=True, blank=True, choices=tz_choices)
+    preferredtz = models.CharField(max_length=100, null=True, blank=True, choices=tz_choices, default='US/Eastern')
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
 
@@ -77,7 +77,7 @@ class PlayerYear(models.Model):
 
 class Conference(models.Model):
     conf_name = models.CharField(max_length=40)                            # Conference name, 'Southeastern'
-    div_name = models.CharField(max_length=40, null=True, blank=True)      # Division name, 'East'
+    div_name = models.CharField(max_length=40, null=True, blank=True, default='')      # Division name, 'East'
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
 
@@ -129,8 +129,8 @@ class Game(models.Model):
     spread = models.DecimalField(default=0.0, decimal_places=1, max_digits=4) # Point spread added to underdog's score to determine winner
     kickoff = models.DateTimeField(null=True, blank=True)                   # Kickoff date/time
     game_state = models.IntegerField(default=0)                             # Enum (0=invalid, 1=not_started, 2=in_progress, 3=final)
-    quarter = models.CharField(max_length=3, default='1st')                 # Used to indicate game progress ('1st', '2nd', '3rd', '4th', 'OT')
-    time_left = models.CharField(max_length=10, default='15:00')            # Time left in the quarter (MM:SS)
+    quarter = models.CharField(max_length=3, default='')                    # Used to indicate game progress ('1st', '2nd', '3rd', '4th', 'OT')
+    time_left = models.CharField(max_length=10, default='')                 # Time left in the quarter (MM:SS)
     winner = models.IntegerField(default=0)                                 # Winner according to spread
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
@@ -167,7 +167,7 @@ def add_user(username, email, firstname, lastname):
         u.save()
     return u
 
-def add_conference(conf_name, div_name=None):
+def add_conference(conf_name, div_name=''):
     c = Conference.objects.get_or_create(conf_name=conf_name, div_name=div_name)[0]
     return c
 
