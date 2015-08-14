@@ -1,6 +1,7 @@
 # This class is intended to contain some utility
 # functions for functional tests in one place
 from pick10.models import *
+from pick10.database import *
 from django.core.urlresolvers import reverse
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -28,24 +29,48 @@ class Utils:
         self.browser.get(address)
 
     def tiebreak_page(self,year,week):
-        address = self.server_url + reverse('tiebreak',args=(year,week))
+        address = self.server_url + reverse('tiebreak',args=(year,week,))
+        self.browser.get(address)
+
+    def enter_picks_page(self,year,week,player_id):
+        address = self.server_url + reverse('enter_picks',args=(year,week,player_id,))
         self.browser.get(address)
 
     def wait_for_page(self,title,timeout=10):
         WebDriverWait(self.browser,timeout,1.0).until(EC.title_is(title))
+
+    def get_player_from_public_name(self,year,name):
+        players = Database().load_players(year)
+        for player_id in players:
+            player = players[player_id]
+            if player and player.public_name == name:
+                return player
+        raise AssertionError,"Could not find player %d" % (name)
+
+    def get_player_from_private_name(self,year,name):
+        players = Database().load_players(year)
+        for player_id in players:
+            player = players[player_id]
+            if player and player.private_name == name:
+                return player
+        raise AssertionError,"Could not find player %d" % (name)
+
+    def get_player_from_ss_name(self,year,name):
+        players = Database().load_players(year)
+        for player_id in players:
+            player = players[player_id]
+            if player and player.ss_name == name:
+                return player
+        raise AssertionError,"Could not find player %d" % (name)
 
     def login_unassigned_user(self,name='user1',password='1234'):
         self.create_user(name,password)
         self.login(name,password)
 
     def login_assigned_user(self,name='puser1',password='1234',player=None):
-        return self.login_unassigned_user(name,password)
-
-        # TODO need to implement after UserProfile is working
         user = self.create_user(name,password)
-        user_profile = user.get_profile()
-        user_profile.player = player
-        user_profile.save()
+        assert player != None,'Create player not supported yet'
+        user_profile = UserProfile.objects.create(user=user,player=player)
         self.login(name,password)
 
     def login_superuser(self,name='suser1',password='1234'):

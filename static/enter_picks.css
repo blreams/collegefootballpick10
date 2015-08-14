@@ -17,3 +17,12 @@ body {
    border-color: #eed3d7;
    padding: 4px 4px;
 }
+#page-title {
+   color: gray;
+   font-size: 14pt;
+   font-family: Helvetica;
+   font-weight: 500;
+   text-align: left;
+   white-space: nowrap;
+   padding: 0px 4px;
+}
