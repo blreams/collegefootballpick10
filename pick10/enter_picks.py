@@ -1,5 +1,6 @@
 from pick_data import *
 from database import *
+from django.core.exceptions import ObjectDoesNotExist
 
 class EnterPicks:
 
@@ -58,10 +59,12 @@ class EnterPicks:
             game_number = pick.number
             game = get_game(self.year,self.week_number,game_number)
 
-            if game_number == 10:
-                p = add_pick(player,game,pick.pick,pick.team1_predicted_points,pick.team2_predicted_points)
+            existing_pick = self.__get_existing_pick(player,game)
+
+            if existing_pick != None:
+                self.__edit_pick(game_number,existing_pick,pick)
             else:
-                p = add_pick(player,game,pick.pick)
+                self.__create_pick(player,game,pick)
 
     def __picks_sanity_check(self,picks):
         assert len(picks) == 10
@@ -82,3 +85,31 @@ class EnterPicks:
         for game_pick in picks:
             assert type(game_pick.pick) == int
             assert game_pick.pick == 1 or game_pick.pick == 2 
+
+    def __get_existing_pick(self,player,game):
+        try:
+            return Pick.objects.get(player=player,game=game)
+        except ObjectDoesNotExist:
+            return None
+
+    def __edit_pick(self,game_number,pick_model,pick):
+        if pick_model.winner != pick.pick:
+            pick_model.winner = pick.pick
+            change = True
+
+        if game_number == 10:
+            if pick_model.team1_predicted_points != pick.team1_predicted_points:
+                pick_model.team1_predicted_points = pick.team1_predicted_points
+                change = True
+            if pick_model.team2_predicted_points != pick.team2_predicted_points:
+                pick_model.team2_predicted_points = pick.team2_predicted_points
+                change = True
+
+        if change:
+            pick_model.save()
+
+    def __create_pick(self,player,game,pick):
+        if game.gamenum == 10:
+            p = add_pick(player,game,pick.pick,pick.team1_predicted_points,pick.team2_predicted_points)
+        else:
+            p = add_pick(player,game,pick.pick)

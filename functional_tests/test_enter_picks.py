@@ -30,6 +30,7 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
+    @unittest.skip('debug other tests')
     def test_submit_picks(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -61,7 +62,46 @@ class EnterPicksTest(FunctionalTest):
 
         self.utils.click_button('Submit Picks')
 
+        # verify picks in database
+        expected = [ TEAM1, TEAM2, TEAM1, TEAM2, TEAM1, TEAM2, TEAM1, TEAM2, TEAM1, TEAM2 ]
+        self.__verify_picks(player,1978,1,expected,team1_score=10,team2_score=20)
+
         test_db.delete_database()
+
+    def test_team_set_correctly_for_each_pick(self):
+        test_db = UnitTestDatabase()
+        test_db.setup_week_not_started_no_picks(1978,1)
+
+        # login a user and open the picks page
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
+
+        # verify can choose team1 for each game
+        for game_number in range(1,11):
+
+            # set 1 game to TEAM1 and the rest to TEAM2
+            # this ensures game with TEAM1 only changes the pick for that game
+            picks = [TEAM2] * 10
+            picks[game_number-1] = TEAM1
+
+            self.__run_test(1978,1,player,picks,team1_score=0,team2_score=0)
+
+        # verify can choose team2 for each game
+        for game_number in range(1,11):
+
+            # set 1 game to TEAM2 and the rest to TEAM1
+            # this ensures game with TEAM2 only changes the pick for that game
+            picks = [TEAM1] * 10
+            picks[game_number-1] = TEAM2
+
+            self.__run_test(1978,1,player,picks,team1_score=0,team2_score=0)
+
+        test_db.delete_database()
+
+    @unittest.skip('not implemented yet')
+    def test_no_change_to_picks(self):
+        pass
+        # verify submit time hasn't changed
 
     @unittest.skip('not implemented yet')
     def test_wrong_player(self):
@@ -160,3 +200,55 @@ class EnterPicksTest(FunctionalTest):
     @unittest.skip('not implemented yet')
     def test_POST_invalid_player(self):
         pass
+
+    def __verify_picks(self,player,year,week_number,expected_picks,team1_score,team2_score):
+        week_db = get_week(year,week_number) 
+        picks_db = Pick.objects.filter(game__week=week_db,player=player)
+
+        assert len(picks_db) == 10
+        assert len(expected_picks) == 10
+
+        # verify pick for each game number in db
+        picks_by_game = { pick.game.gamenum:pick for pick in picks_db }
+        game_numbers = sorted(picks_by_game.keys())
+        assert game_numbers == [1,2,3,4,5,6,7,8,9,10]
+
+        # verify picks match expected
+        for game_number in range(1,11):
+            pick_db = picks_by_game[game_number]
+            index = game_number - 1
+            self.assertEqual(pick_db.winner,expected_picks[index])
+
+        game10 = picks_by_game[10]
+        self.assertEqual(game10.team1_predicted_points,team1_score)
+        self.assertEqual(game10.team2_predicted_points,team2_score)
+
+    def __run_test(self,year,week,player,picks,team1_score,team2_score):
+
+        self.utils.enter_picks_page(year=year,week=week,player_id=player.id)
+
+        # check for title
+        title = self.browser.find_element_by_id('page-title').text
+        self.assertIn('%s Week 1 Picks' % (player.private_name),title)
+
+        # make picks
+        for game_number in range(1,11):
+            index = game_number - 1
+            if picks[index] == TEAM1:
+                value = 'team1'
+            elif picks[index] == TEAM2:
+                value = 'team2'
+            else:
+                raise AssertionError,"Invalid pick value"
+
+            name = 'pick_%d' % (game_number)
+            self.utils.click_radio_button(name,value)
+
+        # set pick score
+        self.browser.find_element_by_name("team1-score").send_keys(str(team1_score))
+        self.browser.find_element_by_name("team2-score").send_keys(str(team2_score))
+
+        self.utils.click_button('Submit Picks')
+
+        # verify picks in database
+        self.__verify_picks(player,year,week,picks,team1_score,team2_score)
