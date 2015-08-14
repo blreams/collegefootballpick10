@@ -12,6 +12,9 @@ class EnterPicksTest(FunctionalTest):
     def test_page_up(self):
         pass
 
+    def test_wrong_player(self):
+        pass
+
     def test_pick_team1(self):
         pass
 

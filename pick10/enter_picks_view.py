@@ -77,6 +77,7 @@ class EnterPicksView:
         params['week_number'] = week_number
         params['weeks_in_year'] = weeks_in_year
         params['years_in_pool'] = years_in_pool
+        params['player_name'] = self.__get_player_name(player_id)
 
         self.__setup_pick_team_rows(picks)
         self.__setup_pick_error_messages(picks)
@@ -169,4 +170,8 @@ class EnterPicksView:
             return score
         except:
             return None
+
+    def __get_player_name(self,player_id):
+        player = Player.objects.get(id=player_id)
+        return player.private_name
         
