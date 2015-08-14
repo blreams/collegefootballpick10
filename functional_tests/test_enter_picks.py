@@ -14,6 +14,7 @@ class EnterPicksTest(FunctionalTest):
         super(EnterPicksTest, self).setUp()
         self.utils = Utils(self.browser,self.server_url)
 
+    @unittest.skip('debug other tests')
     def test_page_up(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -26,6 +27,39 @@ class EnterPicksTest(FunctionalTest):
         # check for title
         title = self.browser.find_element_by_id('page-title').text
         self.assertIn('Brent Week 1 Picks',title)
+
+        test_db.delete_database()
+
+    def test_submit_picks(self):
+        test_db = UnitTestDatabase()
+        test_db.setup_week_not_started_no_picks(1978,1)
+
+        # login a user and open the picks page
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
+        self.utils.enter_picks_page(year=1978,week=1,player_id=player.id)
+
+        # check for title
+        title = self.browser.find_element_by_id('page-title').text
+        self.assertIn('Brent Week 1 Picks',title)
+
+        # make picks
+        self.utils.click_radio_button('pick_1','team1')
+        self.utils.click_radio_button('pick_2','team2')
+        self.utils.click_radio_button('pick_3','team1')
+        self.utils.click_radio_button('pick_4','team2')
+        self.utils.click_radio_button('pick_5','team1')
+        self.utils.click_radio_button('pick_6','team2')
+        self.utils.click_radio_button('pick_7','team1')
+        self.utils.click_radio_button('pick_8','team2')
+        self.utils.click_radio_button('pick_9','team1')
+        self.utils.click_radio_button('pick_10','team2')
+
+        # set pick score
+        self.browser.find_element_by_name("team1-score").send_keys("10")
+        self.browser.find_element_by_name("team2-score").send_keys("20")
+
+        self.utils.click_button('Submit Picks')
 
         test_db.delete_database()
 

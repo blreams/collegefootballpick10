@@ -148,8 +148,8 @@ class EnterPicksView:
                 error_found = True
 
             if game_number == 10:
-                team1_score = self.__get_score('team1-score')
-                team2_score = self.__get_score('team2-score')
+                team1_score = self.__get_score(request,'team1-score')
+                team2_score = self.__get_score(request,'team2-score')
                 if team1_score == None or team2_score == None:
                     error_found = True
                     picks[index].error_message = "Team score is invalid"
@@ -161,7 +161,7 @@ class EnterPicksView:
 
         return error_found
 
-    def __get_score(self,input_name):
+    def __get_score(self,request,input_name):
         try:
             score_string = request.POST.get(input_name)
             score = int(score_string)

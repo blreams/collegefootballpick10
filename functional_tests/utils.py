@@ -114,3 +114,11 @@ class Utils:
 
     def click_input_button(self,name):
         self.browser.find_element_by_name(name).click()
+
+    def click_radio_button(self,name,value):
+        elements = self.browser.find_elements_by_name(name)
+        for e in elements:
+            if e.get_attribute('value') == value:
+                e.click()
+                return
+        raise AssertionError,"Could not find radio button"

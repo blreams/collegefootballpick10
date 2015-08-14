@@ -75,10 +75,10 @@ class EnterPicks:
         game10 = picks_by_game[10]
         assert type(game10.team1_predicted_points) == int
         assert type(game10.team2_predicted_points) == int
-        assert game10.team1_predicted_points > 0
-        assert game10.team2_predicted_points > 0
+        assert game10.team1_predicted_points >= 0
+        assert game10.team2_predicted_points >= 0
 
         # verify each game has a pick of TEAM1 or TEAM2
         for game_pick in picks:
             assert type(game_pick.pick) == int
-            assert game_pick == 1 or game_pick == 2 
+            assert game_pick.pick == 1 or game_pick.pick == 2 
