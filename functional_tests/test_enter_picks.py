@@ -148,6 +148,7 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
+    @unittest.skip('debug other functions')
     def test_no_picks(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -169,6 +170,82 @@ class EnterPicksTest(FunctionalTest):
             self.assertEqual(error_text,'ERROR!  Please pick a team')
 
         test_db.delete_database()
+
+    @unittest.skip('debug other functions')
+    def test_missing_one_pick(self):
+        test_db = UnitTestDatabase()
+        test_db.setup_week_not_started_no_picks(1978,1)
+
+        # login a user and open the picks page and submit a blank page
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
+
+        # fill in all picks except one and verify error message
+        # do this for each pick
+        for game_number in range(1,11):
+
+            # set 1 game to 0 which will prevent pick from being made
+            picks = [TEAM1] * 10
+            picks[game_number-1] = 0
+
+            self.__run_test(1978,1,player,picks,team1_score=0,team2_score=0,verify=False)
+
+            # check for title
+            title = self.browser.find_element_by_id('page-title').text
+            self.assertIn('Brent Week 1 Picks',title)
+
+            # only one pick should have an error message
+            for pick_number in range(1,11):
+
+                if game_number == pick_number:
+                    error_text = self.browser.find_element_by_id('pick_%d_error' % (game_number)).text
+                    self.assertEqual(error_text,'ERROR!  Please pick a team')
+                else:  # error message element should be missing
+                    try:
+                        element = self.browser.find_element_by_id('pick_%d_error' % (pick_number))
+                        self.fail('Should not have found element')
+                    except:
+                        pass
+
+        test_db.delete_database()
+
+    @unittest.skip('debug other functions')
+    def test_missing_score(self):
+        test_db = UnitTestDatabase()
+        test_db.setup_week_not_started_no_picks(1978,1)
+
+        # login a user and open the picks page and submit a blank page
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
+
+        picks = [TEAM1] * 10
+
+        # test both scores missing
+        self.__run_test(1978,1,player,picks,team1_score=None,team2_score=None,verify=False)
+
+        title = self.browser.find_element_by_id('page-title').text
+        self.assertIn('Brent Week 1 Picks',title)
+
+        error_text = self.browser.find_element_by_id('pick_10_error').text
+        self.assertEqual(error_text,'ERROR!  Team score is invalid')
+
+        # test team1 score missing
+        self.__run_test(1978,1,player,picks,team1_score=None,team2_score=10,verify=False)
+
+        title = self.browser.find_element_by_id('page-title').text
+        self.assertIn('Brent Week 1 Picks',title)
+
+        error_text = self.browser.find_element_by_id('pick_10_error').text
+        self.assertEqual(error_text,'ERROR!  Team score is invalid')
+
+        # test team2 score missing
+        self.__run_test(1978,1,player,picks,team1_score=10,team2_score=None,verify=False)
+
+        title = self.browser.find_element_by_id('page-title').text
+        self.assertIn('Brent Week 1 Picks',title)
+
+        error_text = self.browser.find_element_by_id('pick_10_error').text
+        self.assertEqual(error_text,'ERROR!  Team score is invalid')
 
     @unittest.skip('not implemented yet')
     def test_wrong_player(self):
@@ -274,7 +351,7 @@ class EnterPicksTest(FunctionalTest):
         self.assertEqual(game10.team1_predicted_points,team1_score)
         self.assertEqual(game10.team2_predicted_points,team2_score)
 
-    def __run_test(self,year,week,player,picks,team1_score,team2_score):
+    def __run_test(self,year,week,player,picks,team1_score,team2_score,verify=True):
 
         self.utils.enter_picks_page(year=year,week=week,player_id=player.id)
 
@@ -289,20 +366,25 @@ class EnterPicksTest(FunctionalTest):
                 value = 'team1'
             elif picks[index] == TEAM2:
                 value = 'team2'
-            else:
+            elif picks[index] != 0:
                 raise AssertionError,"Invalid pick value"
 
-            name = 'pick_%d' % (game_number)
-            self.utils.click_radio_button(name,value)
+            # skip the pick if it is set to 0
+            if picks[index] != 0:
+                name = 'pick_%d' % (game_number)
+                self.utils.click_radio_button(name,value)
 
         # set pick score
-        self.utils.set_input_text('team1-score',str(team1_score))
-        self.utils.set_input_text('team2-score',str(team2_score))
+        if team1_score != None:
+            self.utils.set_input_text('team1-score',str(team1_score))
+        if team2_score != None:
+            self.utils.set_input_text('team2-score',str(team2_score))
 
         self.utils.click_button('Submit Picks')
 
         # verify picks in database
-        self.__verify_picks(player,year,week,picks,team1_score,team2_score)
+        if verify:
+            self.__verify_picks(player,year,week,picks,team1_score,team2_score)
 
     def __get_pick_submit_time(self,year,week,player):
         database = Database()
