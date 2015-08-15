@@ -26,6 +26,12 @@ class EnterPicksView:
             data={'year':year,'player_id':player_id,'error':'bad_year'}
             return render(request,"pick10/bad_player.html",data)
 
+        if not(self.__does_logged_in_user_match_player(request,player_id)):
+            data = self.__setup_basic_params(year,week_number)
+            data['player_id'] = player_id
+            data['error'] = 'user_player_mismatch'
+            return render(request,"pick10/enter_picks_error.html",data)
+
         picks = EnterPicks(year,week_number,player_id).get_game_picks()
         self.__setup_pick_error_messages(picks)
         return self.__render_form_from_data(request,year,week_number,player_id,picks)
@@ -181,4 +187,25 @@ class EnterPicksView:
     def __get_player_name(self,player_id):
         player = Player.objects.get(id=player_id)
         return player.private_name
+
+    def __does_logged_in_user_match_player(self,request,player_id):
+        try:
+            profile = UserProfile.objects.get(player__id=player_id)
+            return profile.user == request.user
+        except:
+            return False
+    
+    def __setup_basic_params(self,year,week_number):
+        d = Database()
+
+        weeks_in_year = d.get_week_numbers(year)
+        years_in_pool = sorted(d.get_years(),reverse=True)
+
+        params = dict()
+        params['year'] = year
+        params['week_number'] = week_number
+        params['weeks_in_year'] = weeks_in_year
+        params['years_in_pool'] = years_in_pool
+
+        return params
         

@@ -1,0 +1,14 @@
+    <table>
+        <td><a id="link-bar-overall-link" href="{% url 'overall_results' year %}">OVERALL</a></td>
+        <td id="link-bar-label">
+            <a id="link-bar-week-link" href="{% url 'week_results' year week_number %}">WEEK</a>
+            {% for wk_num in weeks_in_year %}
+                {% if wk_num == week_number %}
+                    <a id="link-bar-week-number-highlight" href="{% url 'week_results' year wk_num %}">{{wk_num}}</a>
+                {% else %}
+                    <a id="link-bar-week-number-link" href="{% url 'week_results' year wk_num %}">{{wk_num}}</a>
+                {% endif %}
+            {% endfor %}
+        </td>
+    </table>
+    <br>

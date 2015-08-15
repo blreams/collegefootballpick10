@@ -247,8 +247,70 @@ class EnterPicksTest(FunctionalTest):
         error_text = self.browser.find_element_by_id('pick_10_error').text
         self.assertEqual(error_text,'ERROR!  Team score is invalid')
 
+        test_db.delete_database()
+
+    @unittest.skip('debug other functions')
+    def test_bad_score(self):
+        test_db = UnitTestDatabase()
+        test_db.setup_week_not_started_no_picks(1978,1)
+
+        # login a user and open the picks page and submit a blank page
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
+
+        picks = [TEAM1] * 10
+
+        # test team1 score not integer
+        self.__run_test(1978,1,player,picks,team1_score='AA',team2_score=10,verify=False)
+
+        title = self.browser.find_element_by_id('page-title').text
+        self.assertIn('Brent Week 1 Picks',title)
+
+        error_text = self.browser.find_element_by_id('pick_10_error').text
+        self.assertEqual(error_text,'ERROR!  Team score is invalid')
+
+        # test team2 score not integer
+        self.__run_test(1978,1,player,picks,team1_score=10,team2_score='BB',verify=False)
+
+        title = self.browser.find_element_by_id('page-title').text
+        self.assertIn('Brent Week 1 Picks',title)
+
+        error_text = self.browser.find_element_by_id('pick_10_error').text
+        self.assertEqual(error_text,'ERROR!  Team score is invalid')
+
+        test_db.delete_database()
+
+    def test_wrong_player_without_user_profile(self):
+        test_db = UnitTestDatabase()
+        test_db.setup_week_not_started_no_picks(1978,1)
+
+        # login a user and open the picks page and submit a blank page
+        brent = self.utils.get_player_from_public_name(1978,'Brent')
+        byron = self.utils.get_player_from_public_name(1978,'Byron')
+        self.utils.login_assigned_user(name='Brent',player=brent)
+
+        # access Brent's page
+        self.utils.enter_picks_page(year=1978,week=1,player_id=brent.id)
+        title = self.browser.find_element_by_id('page-title').text
+        self.assertIn('Brent Week 1 Picks',title)
+
+        # access Bryon's page
+        self.utils.enter_picks_page(year=1978,week=1,player_id=byron.id)
+
+        # verify error message
+        elements = self.browser.find_elements_by_id('error-msg')
+
+        expected1 = 'Player %d does not match the logged in user.' % (byron.id)
+        expected2 = 'A user can only access their own enter picks page.'
+
+        self.assertEqual(len(elements),2)
+        self.assertTrue(expected1 in elements[0].text or expected1 in elements[1].text)
+        self.assertTrue(expected2 in elements[0].text or expected2 in elements[1].text)
+
+        test_db.delete_database()
+
     @unittest.skip('not implemented yet')
-    def test_wrong_player(self):
+    def test_wrong_player_with_user_profile(self):
         pass
 
     @unittest.skip('not implemented yet')
@@ -256,22 +318,8 @@ class EnterPicksTest(FunctionalTest):
         pass
 
     @unittest.skip('not implemented yet')
-    def test_no_score(self):
-        pass
-
-    @unittest.skip('not implemented yet')
-    def test_bad_score(self):
-        pass
-
-    @unittest.skip('not implemented yet')
     def test_cancel_button(self):
         pass
-
-    @unittest.skip('not implemented yet')
-    def test_no_picks_yet(self):
-        test_db = UnitTestDatabase()
-        test_db.setup_week_not_started(1978,1)
-        #self.__open_page(year=1978,week_number=1)
 
     @unittest.skip('not implemented yet')
     def test_picks_already_made(self):
