@@ -33,7 +33,7 @@
         {% for pick in picks %}
 
     {% if pick.error_message %}
-        <div class="pick-error"><strong>ERROR!</strong>&nbsp;&nbsp;{{pick.error_message}}</div>
+    <div class="pick-error" id="pick_{{pick.number}}_error"><strong>ERROR!</strong>&nbsp;&nbsp;{{pick.error_message}}</div>
     {% endif %}
     <table class="table table-hover">
         <thead>

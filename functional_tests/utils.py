@@ -122,3 +122,7 @@ class Utils:
                 e.click()
                 return
         raise AssertionError,"Could not find radio button"
+
+    def set_input_text(self,name,text):
+        self.browser.find_element_by_name(name).clear()
+        self.browser.find_element_by_name(name).send_keys(text)

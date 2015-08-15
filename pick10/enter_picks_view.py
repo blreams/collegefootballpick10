@@ -27,6 +27,7 @@ class EnterPicksView:
             return render(request,"pick10/bad_player.html",data)
 
         picks = EnterPicks(year,week_number,player_id).get_game_picks()
+        self.__setup_pick_error_messages(picks)
         return self.__render_form_from_data(request,year,week_number,player_id,picks)
 
     def post(self,request,year,week_number,player_id):
@@ -59,6 +60,7 @@ class EnterPicksView:
         enter_picks = EnterPicks(year,week_number,player_id)
 
         picks = enter_picks.get_game_picks()
+        self.__setup_pick_error_messages(picks)
         error_found = self.__get_and_verify_post_data(request,picks)
         if error_found:
             return self.__render_form_from_data(request,year,week_number,player_id,picks)
@@ -80,7 +82,6 @@ class EnterPicksView:
         params['player_name'] = self.__get_player_name(player_id)
 
         self.__setup_pick_team_rows(picks)
-        self.__setup_pick_error_messages(picks)
 
         params['picks'] = picks
 
@@ -152,7 +153,13 @@ class EnterPicksView:
                 team2_score = self.__get_score(request,'team2-score')
                 if team1_score == None or team2_score == None:
                     error_found = True
-                    picks[index].error_message = "Team score is invalid"
+
+                    # give priority to the missing pick error message
+                    # over the invalid team score message
+                    pick_valid = picks[index].error_message == None
+                    if pick_valid:
+                        picks[index].error_message = "Team score is invalid"
+
                     picks[index].team1_predicted_points = ""
                     picks[index].team2_predicted_points = ""
                 else:

@@ -93,6 +93,8 @@ class EnterPicks:
             return None
 
     def __edit_pick(self,game_number,pick_model,pick):
+        change = False
+
         if pick_model.winner != pick.pick:
             pick_model.winner = pick.pick
             change = True

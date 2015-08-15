@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from pick10.tests.unit_test_database import *
 from pick10.models import *
 from pick10.calculator import *
+from pick10.database import *
 import unittest
 from django.contrib.auth.models import User
 from django.test.client import Client
@@ -68,6 +69,7 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
+    @unittest.skip('debug other functions')
     def test_team_set_correctly_for_each_pick(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -98,29 +100,82 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('not implemented yet')
+    @unittest.skip('debug other functions')
+    def test_team_score(self):
+        test_db = UnitTestDatabase()
+        test_db.setup_week_not_started_no_picks(1978,1)
+
+        # login a user and open the picks page
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
+
+        # try different scores
+        picks = [TEAM1]*10
+        self.__run_test(1978,1,player,picks,team1_score=0,team2_score=10)
+        self.__run_test(1978,1,player,picks,team1_score=10,team2_score=0)
+        self.__run_test(1978,1,player,picks,team1_score=5,team2_score=5)
+        self.__run_test(1978,1,player,picks,team1_score=45,team2_score=12)
+        self.__run_test(1978,1,player,picks,team1_score=12,team2_score=45)
+
+        test_db.delete_database()
+
+    @unittest.skip('debug other functions')
     def test_no_change_to_picks(self):
-        pass
-        # verify submit time hasn't changed
+        test_db = UnitTestDatabase()
+        test_db.setup_week_not_started_no_picks(1978,1)
+
+        # login a user and open the picks page
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
+
+        picks = [TEAM1]*10
+
+        # verify submit time hasn't changed when inputing same data
+        self.__run_test(1978,1,player,picks,team1_score=25,team2_score=10)
+        submit1_time = self.__get_pick_submit_time(1978,1,player)
+        self.__run_test(1978,1,player,picks,team1_score=25,team2_score=10)
+        submit2_time = self.__get_pick_submit_time(1978,1,player)
+
+        # verify submit time changes if make a change
+        self.__run_test(1978,1,player,picks,team1_score=5,team2_score=15)
+        submit3_time = self.__get_pick_submit_time(1978,1,player)
+
+        self.assertIsNotNone(submit1_time)
+        self.assertIsNotNone(submit2_time)
+        self.assertIsNotNone(submit3_time)
+        self.assertEqual(submit1_time,submit2_time)
+        self.assertNotEqual(submit1_time,submit3_time)
+
+        test_db.delete_database()
+
+    def test_no_picks(self):
+        test_db = UnitTestDatabase()
+        test_db.setup_week_not_started_no_picks(1978,1)
+
+        # login a user and open the picks page and submit a blank page
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
+        self.utils.enter_picks_page(year=1978,week=1,player_id=player.id)
+
+        self.utils.click_button('Submit Picks')
+
+        # check for title
+        title = self.browser.find_element_by_id('page-title').text
+        self.assertIn('Brent Week 1 Picks',title)
+
+        # each pick should have an error message
+        for game_number in range(1,11):
+            error_text = self.browser.find_element_by_id('pick_%d_error' % (game_number)).text
+            self.assertEqual(error_text,'ERROR!  Please pick a team')
+
+        test_db.delete_database()
 
     @unittest.skip('not implemented yet')
     def test_wrong_player(self):
         pass
 
     @unittest.skip('not implemented yet')
-    def test_pick_team1(self):
-        pass
-
-    @unittest.skip('not implemented yet')
-    def test_pick_team2(self):
-        pass
-
-    @unittest.skip('not implemented yet')
-    def test_pick_score(self):
-        pass
-
-    @unittest.skip('not implemented yet')
-    def test_no_picks(self):
+    def test_start_with_defaults(self):
         pass
 
     @unittest.skip('not implemented yet')
@@ -143,10 +198,6 @@ class EnterPicksTest(FunctionalTest):
 
     @unittest.skip('not implemented yet')
     def test_picks_already_made(self):
-        pass
-
-    @unittest.skip('not implemented yet')
-    def test_no_change_to_picks(self):
         pass
 
     @unittest.skip('not implemented yet')
@@ -245,10 +296,17 @@ class EnterPicksTest(FunctionalTest):
             self.utils.click_radio_button(name,value)
 
         # set pick score
-        self.browser.find_element_by_name("team1-score").send_keys(str(team1_score))
-        self.browser.find_element_by_name("team2-score").send_keys(str(team2_score))
+        self.utils.set_input_text('team1-score',str(team1_score))
+        self.utils.set_input_text('team2-score',str(team2_score))
 
         self.utils.click_button('Submit Picks')
 
         # verify picks in database
         self.__verify_picks(player,year,week,picks,team1_score,team2_score)
+
+    def __get_pick_submit_time(self,year,week,player):
+        database = Database()
+        week_data = database.load_week_data(year,week)
+        calc = CalculateResults(week_data)
+        submit_time = calc.get_player_submit_time(player)
+        return submit_time
