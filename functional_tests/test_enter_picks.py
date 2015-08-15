@@ -280,6 +280,7 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
+    @unittest.skip('debug other functions')
     def test_wrong_player_without_user_profile(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -309,17 +310,66 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('not implemented yet')
+    @unittest.skip('debug other functions')
     def test_wrong_player_with_user_profile(self):
-        pass
+        test_db = UnitTestDatabase()
+        test_db.setup_week_not_started_no_picks(1978,1)
 
-    @unittest.skip('not implemented yet')
+        # login a user and open the picks page and submit a blank page
+        brent = self.utils.get_player_from_public_name(1978,'Brent')
+        byron = self.utils.get_player_from_public_name(1978,'Byron')
+        self.utils.login_assigned_user(name='Brent',player=brent)
+        self.utils.create_user_with_profile(name='Byron',player=byron)
+
+        # access Brent's page
+        self.utils.enter_picks_page(year=1978,week=1,player_id=brent.id)
+        title = self.browser.find_element_by_id('page-title').text
+        self.assertIn('Brent Week 1 Picks',title)
+
+        # access Bryon's page
+        self.utils.enter_picks_page(year=1978,week=1,player_id=byron.id)
+
+        # verify error message
+        elements = self.browser.find_elements_by_id('error-msg')
+
+        expected1 = 'Player %d does not match the logged in user.' % (byron.id)
+        expected2 = 'A user can only access their own enter picks page.'
+
+        self.assertEqual(len(elements),2)
+        self.assertTrue(expected1 in elements[0].text or expected1 in elements[1].text)
+        self.assertTrue(expected2 in elements[0].text or expected2 in elements[1].text)
+
+        test_db.delete_database()
+
+    @unittest.skip('debug other functions')
     def test_start_with_defaults(self):
-        pass
+        # this test reflects the expected state of the database
+        # when picks are made for the first time in a week
+        test_db = UnitTestDatabase()
+        test_db.setup_week_not_started_all_picks_default(1978,1)
 
-    @unittest.skip('not implemented yet')
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
+
+        picks = [TEAM1] * 10
+        self.__run_test(1978,1,player,picks,team1_score=33,team2_score=3)
+
+        test_db.delete_database()
+
     def test_cancel_button(self):
-        pass
+        test_db = UnitTestDatabase()
+        test_db.setup_week_not_started_no_picks(1978,1)
+
+        # login a user and open the picks page
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
+        self.utils.enter_picks_page(year=1978,week=1,player_id=player.id)
+
+        self.utils.click_button('Cancel')
+
+        # should have redirected to week results page
+        title = self.browser.find_element_by_id('page-title').text
+        self.assertIn('Week 1 Leaderboard',title)
 
     @unittest.skip('not implemented yet')
     def test_picks_already_made(self):

@@ -251,6 +251,41 @@ class UnitTestDatabase:
         kevin = self.setup_player(year,'Kevin')
         john = self.setup_player(year,'John')
 
+    def setup_week_not_started_all_picks_default(self,year=1978,week_number=12):
+        week = self.setup_week(year,week_number)
+        games = [None]*10
+        games[0] = self.setup_game(week,1,"Georgia Tech","Clemson",state=NOT_STARTED)
+        games[1] = self.setup_game(week,2,"Duke","North Carolina",state=NOT_STARTED)
+        games[2] = self.setup_game(week,3,"Virginia","Virginia Tech",state=NOT_STARTED)
+        games[3] = self.setup_game(week,4,"Indiana","Maryland",state=NOT_STARTED)
+        games[4] = self.setup_game(week,5,"South Carolina","Georgia",state=NOT_STARTED)
+        games[5] = self.setup_game(week,6,"Tennessee","Vanderbilt",state=NOT_STARTED)
+        games[6] = self.setup_game(week,7,"Auburn","Alabama",state=NOT_STARTED)
+        games[7] = self.setup_game(week,8,"Southern California","UCLA",state=NOT_STARTED)
+        games[8] = self.setup_game(week,9,"Army","Navy",state=NOT_STARTED)
+        games[9] = self.setup_game(week,10,"Notre Dame","Florida State",state=NOT_STARTED)
+        brent = self.setup_player(year,'Brent')
+        byron = self.setup_player(year,'Byron')
+        alice = self.setup_player(year,'Alice')
+        joan = self.setup_player(year,'Joan')
+        bill = self.setup_player(year,'Bill')
+        david = self.setup_player(year,'David')
+        amy = self.setup_player(year,'Amy')
+        annie = self.setup_player(year,'Annie')
+        kevin = self.setup_player(year,'Kevin')
+        john = self.setup_player(year,'John')
+        for game in games:
+            self.setup_pick(brent,game,winner=0)
+            self.setup_pick(byron,game,winner=0)
+            self.setup_pick(alice,game,winner=0)
+            self.setup_pick(joan,game,winner=0)
+            self.setup_pick(bill,game,winner=0)
+            self.setup_pick(david,game,winner=0)
+            self.setup_pick(amy,game,winner=0)
+            self.setup_pick(annie,game,winner=0)
+            self.setup_pick(kevin,game,winner=0)
+            self.setup_pick(john,game,winner=0)
+
     # pool not started has no games yet
     def setup_pool_not_started(self,year=1975):
         week = self.setup_week(year,week_number=1)

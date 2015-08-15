@@ -101,6 +101,12 @@ class Utils:
         user = User.objects.create_user(name,email,password)
         return user
 
+    def create_user_with_profile(self,name='user1',email='user1@abc.com',password='1234',player=None):
+        user = self.create_user(name,email,password)
+        assert player != None,'Create player not supported yet'
+        user_profile = UserProfile.objects.create(user=user,player=player)
+        return user,user_profile
+
     def create_superuser(self,name='suser1',email='suser1@abc.com',password='1234'):
         user = User.objects.create_superuser(name,email,password)
         return user
