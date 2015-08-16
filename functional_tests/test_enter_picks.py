@@ -603,9 +603,34 @@ class EnterPicksTest(FunctionalTest):
         expected = 'Cannot find 1978 week 2 in the database.'
         self.assertIn(expected,body)
 
-    @unittest.skip('not implemented yet')
-    def test_GET_invalid_player(self):
-        pass
+    def test_invalid_player(self):
+        test_db = UnitTestDatabase()
+        test_db.setup_week_not_started_no_picks(1978,1)
+
+        # find an invalid player id
+        # player ids usually ordered starting at 1
+        # so number of players + 1 should be invalid
+        # just in case, try the next 100 numbers
+        players = Database().load_players(1978)
+        num_players = len(players)
+        player_id = -1
+        for num in range(num_players+1,num_players+100):
+            if num not in players:
+                player_id = num
+                break
+        self.assertNotEqual(player_id,-1)  # did not find invalid number
+
+        # login
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
+
+        # invalid id
+        self.utils.enter_picks_page(year=1978,week=1,player_id=player_id)
+
+        # check error message
+        body = self.browser.find_element_by_tag_name('body').text
+        expected = 'Cannot find player %d in the database.' % (player_id)
+        self.assertIn(expected,body)
 
     @unittest.skip('not implemented yet')
     def test_POST_invalid_user(self):
