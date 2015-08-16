@@ -5,6 +5,7 @@ from pick10.database import *
 from django.core.urlresolvers import reverse
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import datetime as dt
 
 class Utils:
 
@@ -132,3 +133,19 @@ class Utils:
     def set_input_text(self,name,text):
         self.browser.find_element_by_name(name).clear()
         self.browser.find_element_by_name(name).send_keys(text)
+
+    def set_pick_deadline_to_expired(self,year,week_number):
+        week = get_week(year,week_number)
+        naive_dt_now = dt.datetime.now()
+        naive_dt_deadline = dt.datetime(naive_dt_now.year, naive_dt_now.month, naive_dt_now.day, 16, 0, 0) - timedelta(days=1)
+        deadline = pytz.timezone('US/Eastern').localize(naive_dt_deadline)
+        week.lock_picks = deadline
+        week.save()
+
+    def set_pick_deadline_not_expired(self,year,week_number,days_until_expired=1):
+        week = get_week(year,week_number)
+        naive_dt_now = dt.datetime.now()
+        naive_dt_deadline = dt.datetime(naive_dt_now.year, naive_dt_now.month, naive_dt_now.day, 16, 0, 0) + timedelta(days=days_until_expired)
+        deadline = pytz.timezone('US/Eastern').localize(naive_dt_deadline)
+        week.lock_picks = deadline
+        week.save()

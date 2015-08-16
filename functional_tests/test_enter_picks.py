@@ -356,6 +356,7 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
+    @unittest.skip('debug other functions')
     def test_cancel_button(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -371,12 +372,44 @@ class EnterPicksTest(FunctionalTest):
         title = self.browser.find_element_by_id('page-title').text
         self.assertIn('Week 1 Leaderboard',title)
 
-    @unittest.skip('not implemented yet')
+    @unittest.skip('debug other functions')
     def test_picks_already_made(self):
+        # this test reflects the expected state of the database
+        # when picks are made for the first time in a week
+        test_db = UnitTestDatabase()
+        test_db.setup_week_not_started(1978,1)
+
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
+
+        picks = [TEAM1,TEAM2,TEAM1,TEAM2,TEAM1,TEAM2,TEAM1,TEAM2,TEAM1,TEAM2]
+        self.__run_test(1978,1,player,picks,team1_score=33,team2_score=3)
+
+        test_db.delete_database()
+
+    def test_after_pick_deadline(self):
+        test_db = UnitTestDatabase()
+        test_db.setup_week_not_started_no_picks(1978,1)
+
+        self.utils.set_pick_deadline_to_expired(1978,1)
+
+        # login a user and open the picks page
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
+        self.utils.enter_picks_page(year=1978,week=1,player_id=player.id)
+
+        body = self.browser.find_element_by_tag_name('body').text
+        expected = "The pick deadline has expired. Picks can no longer be entered."
+        self.assertIn(expected,body)
+
+        test_db.delete_database()
+
+    @unittest.skip('not implemented yet')
+    def test_no_pick_deadline(self):
         pass
 
     @unittest.skip('not implemented yet')
-    def test_after_pick_deadline(self):
+    def test_before_pick_deadline(self):
         pass
 
     @unittest.skip('not implemented yet')
@@ -425,6 +458,18 @@ class EnterPicksTest(FunctionalTest):
 
     @unittest.skip('not implemented yet')
     def test_POST_invalid_player(self):
+        pass
+
+    @unittest.skip('not implemented yet')
+    def test_POST_after_pick_deadline(self):
+        pass
+
+    @unittest.skip('not implemented yet')
+    def test_POST_before_pick_deadline(self):
+        pass
+
+    @unittest.skip('not implemented yet')
+    def test_POST_no_pick_deadline(self):
         pass
 
     def __verify_picks(self,player,year,week_number,expected_picks,team1_score,team2_score):

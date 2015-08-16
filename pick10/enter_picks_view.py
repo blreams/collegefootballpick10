@@ -5,6 +5,7 @@ from enter_picks import *
 from calculator import *
 from database import *
 from django.http import HttpResponseNotFound
+import pytz
 
 class EnterPicksView:
 
@@ -30,6 +31,12 @@ class EnterPicksView:
             data = self.__setup_basic_params(year,week_number)
             data['player_id'] = player_id
             data['error'] = 'user_player_mismatch'
+            return render(request,"pick10/enter_picks_error.html",data)
+
+        if self.__is_after_pick_deadline(year,week_number):
+            data = self.__setup_basic_params(year,week_number)
+            data['error'] = 'after_pick_deadline'
+            data['deadline'] = self.__get_pick_deadline(year,week_number,player_id)
             return render(request,"pick10/enter_picks_error.html",data)
 
         picks = EnterPicks(year,week_number,player_id).get_game_picks()
@@ -208,4 +215,22 @@ class EnterPicksView:
         params['years_in_pool'] = years_in_pool
 
         return params
+
+    def __is_after_pick_deadline(self,year,week_number):
+        d = Database()
+        return d.after_pick_deadline(year,week_number)
+
+    def __get_pick_deadline(self,year,week_number,player_id):
+        profile = UserProfile.objects.get(player__id=player_id)
+        deadline = Database().get_pick_deadline(year,week_number)
+        return self.__format_pick_deadline(deadline,profile.preferredtz)
+
+    def __get_local_time(self,utc_date,timezone_name):
+        tz = pytz.timezone(timezone_name)
+        return utc_date.astimezone(tz)
+
+    def __format_pick_deadline(self,pick_deadline_utc,timezone):
+        pick_deadline = self.__get_local_time(pick_deadline_utc,timezone)
+        date_format = "%a %m/%d/%Y %I:%M %p %Z"
+        return pick_deadline.strftime(date_format)
         
