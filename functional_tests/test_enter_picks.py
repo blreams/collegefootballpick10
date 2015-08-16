@@ -561,6 +561,7 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
+    @unittest.skip('debug other functions')
     def test_user_not_logged_in(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -573,13 +574,34 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('not implemented yet')
-    def test_GET_invalid_year(self):
-        pass
+    @unittest.skip('debug other functions')
+    def test_invalid_year(self):
+        # login
+        test_db = UnitTestDatabase()
+        player = test_db.setup_player(1980,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
 
-    @unittest.skip('not implemented yet')
-    def test_GET_invalid_week(self):
-        pass
+        # access invalid year
+        self.utils.enter_picks_page(year=1978,week=1,player_id=1)
+        body = self.browser.find_element_by_tag_name('body').text
+        expected = 'Cannot find 1978 week 1 in the database.'
+        self.assertIn(expected,body)
+
+    def test_invalid_week(self):
+        test_db = UnitTestDatabase()
+        test_db.setup_week_not_started_no_picks(1978,1)
+
+        # login
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
+
+        # access invalid week
+        self.utils.enter_picks_page(year=1978,week=2,player_id=1)
+
+        # check error message
+        body = self.browser.find_element_by_tag_name('body').text
+        expected = 'Cannot find 1978 week 2 in the database.'
+        self.assertIn(expected,body)
 
     @unittest.skip('not implemented yet')
     def test_GET_invalid_player(self):
