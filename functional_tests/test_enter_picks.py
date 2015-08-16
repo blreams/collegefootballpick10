@@ -387,6 +387,7 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
+    @unittest.skip('debug other functions')
     def test_after_pick_deadline(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -404,29 +405,173 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('not implemented yet')
-    def test_no_pick_deadline(self):
-        pass
-
-    @unittest.skip('not implemented yet')
+    @unittest.skip('debug other functions')
     def test_before_pick_deadline(self):
-        pass
+        test_db = UnitTestDatabase()
+        test_db.setup_week_not_started_no_picks(1978,1)
 
-    @unittest.skip('not implemented yet')
-    def test_week_in_progress(self):
-        pass
+        self.utils.set_pick_deadline_not_expired(1978,1)
 
-    @unittest.skip('not implemented yet')
-    def test_week_final(self):
-        pass
+        # login a user and open the picks page
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
+        self.utils.enter_picks_page(year=1978,week=1,player_id=player.id)
 
-    @unittest.skip('not implemented yet')
-    def test_GET_invalid_user(self):
-        pass
+        # Ensure pick pages shows up
+        title = self.browser.find_element_by_id('page-title').text
+        self.assertIn('Brent Week 1 Picks',title)
 
-    @unittest.skip('not implemented yet')
-    def test_GET_user_not_logged_in(self):
-        pass
+        body = self.browser.find_element_by_tag_name('body').text
+        self.assertIn('Game 10',body)
+        self.assertIn('spread',body)
+
+        test_db.delete_database()
+
+    @unittest.skip('debug other functions')
+    def test_no_pick_deadline_week_not_started(self):
+        test_db = UnitTestDatabase()
+        test_db.setup_week_not_started_no_picks(1978,1)
+
+        # verify week lock picks is None
+        week = get_week(1978,1) 
+        self.assertIsNone(week.lock_picks)
+
+        # login a user and open the picks page
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
+        self.utils.enter_picks_page(year=1978,week=1,player_id=player.id)
+
+        # Ensure pick pages shows up
+        title = self.browser.find_element_by_id('page-title').text
+        self.assertIn('Brent Week 1 Picks',title)
+
+        body = self.browser.find_element_by_tag_name('body').text
+        self.assertIn('Game 10',body)
+        self.assertIn('spread',body)
+
+        test_db.delete_database()
+
+    @unittest.skip('debug other functions')
+    def test_no_pick_deadline_week_in_progress(self):
+        test_db = UnitTestDatabase()
+        test_db.setup_week_in_progress(1978,1)
+
+        # verify week lock picks is None
+        week = get_week(1978,1) 
+        self.assertIsNone(week.lock_picks)
+
+        # login a user and open the picks page
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
+        self.utils.enter_picks_page(year=1978,week=1,player_id=player.id)
+
+        body = self.browser.find_element_by_tag_name('body').text
+        expected = "The week is currently in progress. No picks can be made."
+        self.assertIn(expected,body)
+
+        test_db.delete_database()
+
+    @unittest.skip('debug other functions')
+    def test_no_pick_deadline_week_final(self):
+        test_db = UnitTestDatabase()
+        test_db.setup_week_final(1978,1)
+
+        # verify week lock picks is None
+        week = get_week(1978,1) 
+        self.assertIsNone(week.lock_picks)
+
+        # login a user and open the picks page
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
+        self.utils.enter_picks_page(year=1978,week=1,player_id=player.id)
+
+        body = self.browser.find_element_by_tag_name('body').text
+        expected = "The week is final. No picks can be made."
+        self.assertIn(expected,body)
+
+        test_db.delete_database()
+
+    @unittest.skip('debug other functions')
+    def test_after_deadline_week_in_progress(self):
+        test_db = UnitTestDatabase()
+        test_db.setup_week_in_progress(1978,1)
+
+        self.utils.set_pick_deadline_to_expired(1978,1)
+
+        # login a user and open the picks page
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
+        self.utils.enter_picks_page(year=1978,week=1,player_id=player.id)
+
+        body = self.browser.find_element_by_tag_name('body').text
+        expected = "The week is currently in progress. No picks can be made."
+        self.assertIn(expected,body)
+
+        test_db.delete_database()
+
+    @unittest.skip('debug other functions')
+    def test_after_deadline_week_final(self):
+        test_db = UnitTestDatabase()
+        test_db.setup_week_final(1978,1)
+
+        self.utils.set_pick_deadline_to_expired(1978,1)
+
+        # login a user and open the picks page
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
+        self.utils.enter_picks_page(year=1978,week=1,player_id=player.id)
+
+        body = self.browser.find_element_by_tag_name('body').text
+        expected = "The week is final. No picks can be made."
+        self.assertIn(expected,body)
+
+        test_db.delete_database()
+
+    @unittest.skip('debug other functions')
+    def test_user_without_player(self):
+        test_db = UnitTestDatabase()
+        test_db.setup_week_not_started_no_picks(1978,1)
+
+        self.utils.create_user_with_profile(name='user1',password='1234',player=None)
+        self.utils.login('user1','1234')
+        brent = self.utils.get_player_from_public_name(1978,'Brent')
+
+        self.utils.enter_picks_page(year=1978,week=1,player_id=brent.id)
+
+        body = self.browser.find_element_by_tag_name('body').text
+        expected = 'User user1 is not a participant in the pool.' 
+        self.assertIn(expected,body)
+
+        test_db.delete_database()
+
+    @unittest.skip('debug other functions')
+    def test_user_without_userprofile(self):
+        test_db = UnitTestDatabase()
+        test_db.setup_week_not_started_no_picks(1978,1)
+
+        self.utils.create_user(name='user1',password='1234')
+        self.utils.login('user1','1234')
+        brent = self.utils.get_player_from_public_name(1978,'Brent')
+
+        self.utils.enter_picks_page(year=1978,week=1,player_id=brent.id)
+
+        body = self.browser.find_element_by_tag_name('body').text
+        expected = 'User user1 is not a participant in the pool.' 
+        self.assertIn(expected,body)
+
+        test_db.delete_database()
+
+    def test_user_not_logged_in(self):
+        test_db = UnitTestDatabase()
+        test_db.setup_week_not_started_no_picks(1978,1)
+
+        brent = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.enter_picks_page(year=1978,week=1,player_id=brent.id)
+
+        body = self.browser.find_element_by_tag_name('body').text
+        self.assertIn('Please log in',body)
+
+        test_db.delete_database()
 
     @unittest.skip('not implemented yet')
     def test_GET_invalid_year(self):

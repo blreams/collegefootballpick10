@@ -11,6 +11,9 @@
 <link href="/static/error.css" rel="stylesheet" type="text/css" media="all">
 <hr>
 {% include "pick10/week_navbar.html" %}
+    {% if error == "user_not_participant" %}
+        <div id="error-msg">User {{user.username}} is not a participant in the pool.</div>
+    {% endif %}
     {% if error == "user_player_mismatch" %}
         <div id="error-msg">Player {{player_id}} does not match the logged in user.</div>
         <div id="error-msg">A user can only access their own enter picks page.</div>
@@ -18,5 +21,11 @@
     {% if error == "after_pick_deadline" %}
         <div id="error-msg">Pick deadline: {{deadline}}.</div><br>
         <div id="error-msg">The pick deadline has expired.  Picks can no longer be entered.</div>
+    {% endif %}
+    {% if error == "week_in_progress" %}
+        <div id="error-msg">The week is currently in progress. No picks can be made.</div>
+    {% endif %}
+    {% if error == "week_final" %}
+        <div id="error-msg">The week is final. No picks can be made.</div>
     {% endif %}
 {% endblock %}

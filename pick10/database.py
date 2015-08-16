@@ -84,6 +84,8 @@ class Database:
         elif week_state == FINAL:
             return "week_final"
 
+    def get_week_state(self,year,week_number):
+        return self.__get_week_state(year,week_number)
 
     def __get_week_state(self,year,week_number):
         week_data = WeekData()
