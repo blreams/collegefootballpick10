@@ -78,6 +78,35 @@ class EnterPicksView:
             data={'year':year,'player_id':player_id,'error':'bad_year'}
             return render(request,"pick10/bad_player.html",data)
 
+        if self.__user_is_not_participant(request.user):
+            data = self.__setup_basic_params(year,week_number)
+            data['error'] = 'user_not_participant'
+            return render(request,"pick10/enter_picks_error.html",data)
+
+        if not(self.__does_logged_in_user_match_player(request,player_id)):
+            data = self.__setup_basic_params(year,week_number)
+            data['player_id'] = player_id
+            data['error'] = 'user_player_mismatch'
+            return render(request,"pick10/enter_picks_error.html",data)
+
+        week_state = Database().get_week_state(year,week_number)
+
+        if week_state == IN_PROGRESS:
+            data = self.__setup_basic_params(year,week_number)
+            data['error'] = 'week_in_progress'
+            return render(request,"pick10/enter_picks_error.html",data)
+
+        if week_state == FINAL:
+            data = self.__setup_basic_params(year,week_number)
+            data['error'] = 'week_final'
+            return render(request,"pick10/enter_picks_error.html",data)
+
+        if self.__is_after_pick_deadline(year,week_number):
+            data = self.__setup_basic_params(year,week_number)
+            data['error'] = 'after_pick_deadline'
+            data['deadline'] = self.__get_pick_deadline(year,week_number,player_id)
+            return render(request,"pick10/enter_picks_error.html",data)
+
         cancel_clicked = request.POST.get("cancel_form")
         if cancel_clicked:
             return redirect("week_results",year=year,week_number=week_number)

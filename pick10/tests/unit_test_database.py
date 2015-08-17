@@ -403,6 +403,8 @@ class UnitTestDatabase:
         Week.objects.all().delete()
         Game.objects.all().delete()
         Pick.objects.all().delete()
+        UserProfile.objects.all().delete()
+        User.objects.all().delete()
 
     def __compute_game_winner(self,winner):
         favored = winner
