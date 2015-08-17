@@ -10,10 +10,10 @@ from update_games_view import *
 from django.core.cache import *
 from django.http import HttpResponseNotFound
 
-@login_required
 def home(request):
     return render(request, 'pick10/home.html')
 
+@login_required
 def index(request):
     return render(request, 'pick10/index.html')
 
