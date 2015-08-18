@@ -15,7 +15,6 @@ class EnterPicksTest(FunctionalTest):
         super(EnterPicksTest, self).setUp()
         self.utils = Utils(self.browser,self.server_url)
 
-    @unittest.skip('debug other tests')
     def test_page_up(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -31,7 +30,6 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('debug other tests')
     def test_submit_picks(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -69,7 +67,6 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('debug other functions')
     def test_team_set_correctly_for_each_pick(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -100,7 +97,6 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('debug other functions')
     def test_team_score(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -119,7 +115,6 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('debug other functions')
     def test_no_change_to_picks(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -148,7 +143,6 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('debug other functions')
     def test_no_picks(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -171,7 +165,6 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('debug other functions')
     def test_missing_one_pick(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -209,7 +202,6 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('debug other functions')
     def test_missing_score(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -249,7 +241,6 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('debug other functions')
     def test_bad_score(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -280,7 +271,6 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('debug other functions')
     def test_wrong_player_without_user_profile(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -310,7 +300,6 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('debug other functions')
     def test_wrong_player_with_user_profile(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -341,7 +330,6 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('debug other functions')
     def test_start_with_defaults(self):
         # this test reflects the expected state of the database
         # when picks are made for the first time in a week
@@ -356,7 +344,6 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('debug other functions')
     def test_cancel_button(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -372,7 +359,8 @@ class EnterPicksTest(FunctionalTest):
         title = self.browser.find_element_by_id('page-title').text
         self.assertIn('Week 1 Leaderboard',title)
 
-    @unittest.skip('debug other functions')
+        test_db.delete_database()
+
     def test_picks_already_made(self):
         # this test reflects the expected state of the database
         # when picks are made for the first time in a week
@@ -387,7 +375,6 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('debug other functions')
     def test_after_pick_deadline(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -405,7 +392,6 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('debug other functions')
     def test_before_pick_deadline(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -427,7 +413,6 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('debug other functions')
     def test_no_pick_deadline_week_not_started(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -451,7 +436,6 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('debug other functions')
     def test_no_pick_deadline_week_in_progress(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_in_progress(1978,1)
@@ -471,7 +455,6 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('debug other functions')
     def test_no_pick_deadline_week_final(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_final(1978,1)
@@ -491,7 +474,6 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('debug other functions')
     def test_after_deadline_week_in_progress(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_in_progress(1978,1)
@@ -509,7 +491,6 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('debug other functions')
     def test_after_deadline_week_final(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_final(1978,1)
@@ -527,7 +508,6 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('debug other functions')
     def test_user_without_player(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -544,7 +524,6 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('debug other functions')
     def test_user_without_userprofile(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -561,7 +540,6 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('debug other functions')
     def test_user_not_logged_in(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -574,7 +552,6 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('debug other functions')
     def test_invalid_year(self):
         # login
         test_db = UnitTestDatabase()
@@ -589,7 +566,6 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('debug other functions')
     def test_invalid_week(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -608,7 +584,6 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('debug other functions')
     def test_invalid_player(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -656,6 +631,10 @@ class EnterPicksTest(FunctionalTest):
         test_db.delete_database()
 
     @unittest.skip('not implemented yet')
+    def test_POST_invalid_year(self):
+        pass
+
+    @unittest.skip('not implemented yet')
     def test_POST_after_pick_deadline(self):
         pass
 
@@ -693,10 +672,6 @@ class EnterPicksTest(FunctionalTest):
 
     @unittest.skip('not implemented yet')
     def test_POST_user_not_logged_in(self):
-        pass
-
-    @unittest.skip('not implemented yet')
-    def test_POST_invalid_year(self):
         pass
 
     @unittest.skip('not implemented yet')
