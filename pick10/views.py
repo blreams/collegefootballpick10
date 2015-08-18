@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from profile import *
+from profile import ProfileView
+from create_week import CreateWeekView
 from overall_results_view import *
 from week_results_view import *
 from player_results_view import *
@@ -9,6 +10,7 @@ from tiebreak_view import *
 from update_games_view import *
 from django.core.cache import *
 from django.http import HttpResponseNotFound
+from django.contrib.admin.views.decorators import staff_member_required
 
 def home(request):
     return render(request, 'pick10/home.html')
@@ -26,6 +28,11 @@ def profile(request):
         response = ProfileView().post(request)
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')
+
+@staff_member_required
+def create_week(request):
+    response = CreateWeekView().get(request)
+    return response
 
 def overall_results(request,year):
     if request.method == "GET":

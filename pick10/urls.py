@@ -5,6 +5,7 @@ urlpatterns = patterns('',
     # Examples:
     url(r'^$', views.index, name='index'),
     url(r'^profile$', views.profile, name='profile'),
+    url(r'^commissioner/createweek$', views.create_week, name='create_week'),
     url(r'^(?P<year>[0-9]{4})/results$', views.overall_results, name='overall_results'),
     url(r'^(?P<year>[0-9]{4})/week/(?P<week_number>[0-9]{1,2})/results$', views.week_results, name='week_results'),
     url(r'^(?P<year>[0-9]{4})/week/(?P<week_number>[0-9]{1,2})/tiebreak$', views.tiebreak, name='tiebreak'),
