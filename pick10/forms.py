@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django import forms
-from models import UserProfile, get_yearlist, get_createweek_year_week
+from models import UserProfile, get_yearlist, get_createweek_year_week, get_teamlist
 from datetime import datetime
 
 import pytz
@@ -33,4 +33,11 @@ class CreateWeekForm(forms.Form):
         self.initial['week'] = defaultweek
         self.fields['year'] = forms.ChoiceField(choices=year_choices())
         self.fields['week'] = forms.ChoiceField(choices=week_choices)
+
+team_choices = tuple((t, t) for t in get_teamlist())
+class EditWeekForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super(EditWeekForm, self).__init__(*args, **kwargs)
+        self.fields['game1_team1'] = forms.ChoiceField(choices=team_choices)
+        self.fields['game1_team2'] = forms.ChoiceField(choices=team_choices)
 

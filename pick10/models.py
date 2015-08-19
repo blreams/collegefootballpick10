@@ -266,3 +266,6 @@ def get_createweek_year_week():
     else:
         return (lastpoolyear, latestweek + 1)
 
+def get_teamlist():
+    return sorted([t.team_name for t in Team.objects.all()])
+
