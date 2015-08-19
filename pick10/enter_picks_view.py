@@ -6,6 +6,7 @@ from calculator import *
 from database import *
 from django.http import HttpResponseNotFound
 import pytz
+from pick10.week_navbar import *
 
 class EnterPicksView:
 
@@ -30,12 +31,14 @@ class EnterPicksView:
         if self.__user_is_not_participant(request.user):
             data = self.__setup_basic_params(year,week_number)
             data['error'] = 'user_not_participant'
+            WeekNavbar(year,week_number,'enter_picks',request.user).add_parameters(data)
             return render(request,"pick10/enter_picks_error.html",data)
 
         if not(self.__does_logged_in_user_match_player(request,player_id)):
             data = self.__setup_basic_params(year,week_number)
             data['player_id'] = player_id
             data['error'] = 'user_player_mismatch'
+            WeekNavbar(year,week_number,'enter_picks',request.user).add_parameters(data)
             return render(request,"pick10/enter_picks_error.html",data)
 
         week_state = Database().get_week_state(year,week_number)
@@ -43,17 +46,20 @@ class EnterPicksView:
         if week_state == IN_PROGRESS:
             data = self.__setup_basic_params(year,week_number)
             data['error'] = 'week_in_progress'
+            WeekNavbar(year,week_number,'enter_picks',request.user).add_parameters(data)
             return render(request,"pick10/enter_picks_error.html",data)
 
         if week_state == FINAL:
             data = self.__setup_basic_params(year,week_number)
             data['error'] = 'week_final'
+            WeekNavbar(year,week_number,'enter_picks',request.user).add_parameters(data)
             return render(request,"pick10/enter_picks_error.html",data)
 
         if self.__is_after_pick_deadline(year,week_number):
             data = self.__setup_basic_params(year,week_number)
             data['error'] = 'after_pick_deadline'
             data['deadline'] = self.__get_pick_deadline(year,week_number,player_id)
+            WeekNavbar(year,week_number,'enter_picks',request.user).add_parameters(data)
             return render(request,"pick10/enter_picks_error.html",data)
 
         picks = EnterPicks(year,week_number,player_id).get_game_picks()
@@ -144,6 +150,7 @@ class EnterPicksView:
 
         params['picks'] = picks
 
+        WeekNavbar(year,week_number,'enter_picks',request.user).add_parameters(params)
         return render(request,"pick10/enter_picks.html",params)
 
     def __bad_year_or_week_number(self,year,week_number):

@@ -1,4 +1,5 @@
 from pick10.database import *
+from pick10.calculator import *
 from django.core.urlresolvers import reverse
 
 class PageLink:
@@ -47,12 +48,19 @@ class WeekNavbar:
         week_results.active = True if self.page == "week_results" else False
         page_links.append(week_results)
 
-        if self.player_id != None:
+        if self.__show_player_results():
             player_results = PageLink()
             player_results.name = "Player Results"
             player_results.link = reverse('player_results',args=(self.year,self.week_number,self.player_id,))
             player_results.active = True if self.page == "player_results" else False
             page_links.append(player_results)
+
+        if self.__show_enter_picks():
+            enter_picks = PageLink()
+            enter_picks.name = "Enter Picks"
+            enter_picks.link = reverse('enter_picks',args=(self.year,self.week_number,self.player_id,))
+            enter_picks.active = True if self.page == "enter_picks" else False
+            page_links.append(enter_picks)
 
         return page_links
 
@@ -79,3 +87,15 @@ class WeekNavbar:
             return
 
         self.player_id = None
+
+    def __show_player_results(self):
+        return self.player_id != None
+
+    def __show_enter_picks(self):
+        user_linked_to_player_in_year =  self.player_id != None
+        week_state = Database().get_week_state(self.year,self.week_number)
+
+        # enter picks page link still shows up if pick deadline has expired
+        # this is so that the user can know that the deadline has expired
+
+        return user_linked_to_player_in_year and week_state == NOT_STARTED
