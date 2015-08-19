@@ -1,14 +1,25 @@
-    <table>
-        <td><a id="link-bar-overall-link" href="{% url 'overall_results' year %}">OVERALL</a></td>
-        <td id="link-bar-label">
-            <a id="link-bar-week-link" href="{% url 'week_results' year week_number %}">WEEK</a>
-            {% for wk_num in weeks_in_year %}
-                {% if wk_num == week_number %}
-                    <a id="link-bar-week-number-highlight" href="{% url 'week_results' year wk_num %}">{{wk_num}}</a>
-                {% else %}
-                    <a id="link-bar-week-number-link" href="{% url 'week_results' year wk_num %}">{{wk_num}}</a>
-                {% endif %}
-            {% endfor %}
-        </td>
-    </table>
-    <br>
+<nav>
+    <ul class="pagination">
+        <li><a href="{% url 'week_results' year week_number %}">
+            <span style="color:gray;background-color:white;">WEEK</span>
+        </a></li>
+        {% for wk_num in weeks_in_year %}
+            {% if wk_num == week_number %}
+                <li class="active"><a href="{% url 'week_results' year wk_num %}">{{wk_num}}</a></li>
+            {% else %}
+                <li><a href="{% url 'week_results' year wk_num %}">
+                    <span style="color:gray;background-color:white;">{{wk_num}}</span>
+                </a></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</nav>
+<ul class="nav nav-tabs">
+    {% for page in navbar_pages %}
+        {% if page.active %}
+            <li role="presentation" class="active"><a href="{{page.link}}">{{page.name}}</a></li>
+        {% else %}
+            <li role="presentation"><a href="{{page.link}}">{{page.name}}</a></li>
+        {% endif %}
+    {% endfor %}
+</ul>
