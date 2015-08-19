@@ -247,3 +247,22 @@ def query_picks(email, yearnum, weeknum):
     picks = Pick.objects.filter(pick_user__email=u, game__week__year__yearnum=yearnum, game__week__weeknum=weeknum).order_by('game__gamenum')
     return picks
 
+def get_yearlist():
+    return sorted([y.yearnum for y in Year.objects.all()])
+
+def get_weeklist(year):
+    yearobj = Year.objects.filter(yearnum=year)
+    return [w.weeknum for w in Week.objects.filter(year=yearobj)]
+
+def get_createweek_year_week():
+    thisyear = datetime.now().year
+    try:
+        lastpoolyear = get_yearlist()[-1]
+    except:
+        return (thisyear, 1)
+    latestweek = get_weeklist(lastpoolyear)[-1]
+    if latestweek == 13:
+        return (thisyear, 1)
+    else:
+        return (lastpoolyear, latestweek + 1)
+

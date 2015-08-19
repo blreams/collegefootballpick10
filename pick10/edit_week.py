@@ -4,11 +4,11 @@ from datetime import datetime
 from models import Year, Week
 from forms import CreateWeekForm
 
-class CreateWeekView:
+class EditWeekView:
 
-    def get(self,request):
-        form = CreateWeekForm()
-        return render(request, 'pick10/create_week_form.html', {'form': form})
+    def get(self,request, year, week_number):
+        context = {}
+        return render(request,"pick10/edit_week_form.html", context)
 
     def post(self, request):
         form = CreateWeekForm(request.POST)
@@ -16,6 +16,6 @@ class CreateWeekView:
             cd = form.cleaned_data
             year = cd.get('year')
             week = cd.get('week')
-            return redirect('/pick10/commissioner/editweek/' + str(year) + '/week/' + str(week))
-        return render(request, 'pick10/create_week_form.html', {'form': form})
+            return redirect('/pick10/commissioner/editweek/' + str(year) + '/week/' + str(week) + '/')
+        return redirect('/pick10/commissioner/createweek/')
 

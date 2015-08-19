@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from profile import ProfileView
 from create_week import CreateWeekView
+from edit_week import EditWeekView
 from overall_results_view import *
 from week_results_view import *
 from player_results_view import *
@@ -31,7 +32,15 @@ def profile(request):
 
 @staff_member_required
 def create_week(request):
-    response = CreateWeekView().get(request)
+    if request.method == 'GET':
+        response = CreateWeekView().get(request)
+    elif request.method == 'POST':
+        response = CreateWeekView().post(request)
+    return response
+
+@staff_member_required
+def edit_week(request, year, week_number):
+    response = EditWeekView().get(request, year, week_number)
     return response
 
 def overall_results(request,year):

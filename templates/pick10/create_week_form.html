@@ -5,7 +5,11 @@
 <p>This page will eventually be the form to create a new week of the pool
 (commissioners-only).</p>
 
-<p>Default created week is: year={{year}}, week={{week}}</p>
+<form id="create_week_form" action="{% url 'create_week' %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit" />
+</form>
 
 {% endblock %}
 
