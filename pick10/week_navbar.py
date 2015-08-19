@@ -16,6 +16,7 @@ class WeekNavbar:
         self.week_number = week
         self.page = page
         self.user = user
+        self.__determine_player_id()
         self.__calculate_parameters()
 
     def add_parameters(self,params):
@@ -46,6 +47,35 @@ class WeekNavbar:
         week_results.active = True if self.page == "week_results" else False
         page_links.append(week_results)
 
+        if self.player_id != None:
+            player_results = PageLink()
+            player_results.name = "Player Results"
+            player_results.link = reverse('player_results',args=(self.year,self.week_number,self.player_id,))
+            player_results.active = True if self.page == "player_results" else False
+            page_links.append(player_results)
+
         return page_links
 
-    # pages: overall, week results, player results, enter picks 
+    def __get_user_profile(self):
+        try:
+            profile = UserProfile.objects.get(user=self.user)
+            return profile
+        except:
+            return None
+
+    def __is_player_in_year(self,player_id,year):
+        d = Database()
+        players_in_year = d.load_players(year)
+        return player_id in players_in_year
+
+    def __determine_player_id(self):
+        profile = self.__get_user_profile()
+
+        profile_linked_to_player = profile != None and profile.player != None
+
+        if profile_linked_to_player and\
+           self.__is_player_in_year(profile.player.id,self.year):
+            self.player_id = profile.player.id
+            return
+
+        self.player_id = None

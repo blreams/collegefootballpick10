@@ -4,6 +4,7 @@ from pick10.models import *
 from pick10.calculate_player_results import *
 import string
 import re
+from pick10.week_navbar import *
 
 class PlayerResultsView:
 
@@ -53,6 +54,7 @@ class PlayerResultsView:
         params['NOT_STARTED'] = NOT_STARTED
 
         self.set_game_status_params(params,results,timezone)
+        WeekNavbar(year,week_number,'player_results',request.user).add_parameters(params)
 
         return render(request,"pick10/player_results.html",params)
 
