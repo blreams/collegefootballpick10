@@ -62,6 +62,13 @@ class WeekNavbar:
             enter_picks.active = True if self.page == "enter_picks" else False
             page_links.append(enter_picks)
 
+        if self.__show_update_games():
+            update_games = PageLink()
+            update_games.name = "Game Scores"
+            update_games.link = reverse('update_games',args=(self.year,self.week_number,))
+            update_games.active = True if self.page == "update_games" else False
+            page_links.append(update_games)
+
         return page_links
 
     def __get_user_profile(self):
@@ -99,3 +106,19 @@ class WeekNavbar:
         # this is so that the user can know that the deadline has expired
 
         return user_linked_to_player_in_year and week_state == NOT_STARTED
+
+    def __show_update_games(self):
+        d = Database()
+
+        user_not_linked_to_player = self.player_id == None
+
+        if user_not_linked_to_player:
+            return False
+
+        if d.before_pick_deadline(self.year,self.week_number):
+            return False
+
+        if d.is_week_scores_locked(self.year,self.week_number):
+            return False
+
+        return True

@@ -26,6 +26,10 @@ class Database:
     def is_week_valid(self,week,year,update=False):
         raise AssertionError,"Not implemented"
 
+    def is_week_scores_locked(self,year,week_number):
+        week = self.__get_week_in_database(year,week_number)
+        return week.lock_scores
+
     def before_pick_deadline(self,year,week_number):
         # TODO tests
         week = self.__get_week_in_database(year,week_number)

@@ -3,6 +3,7 @@ from django.template.loader import render_to_string
 from pick10.models import *
 from update_games import *
 from calculator import *
+from pick10.week_navbar import *
 
 class BadInputException(Exception):
     def __init__(self,errmsg):
@@ -33,6 +34,8 @@ class UpdateGamesView:
         params['FINAL'] = FINAL
         params['IN_PROGRESS'] = IN_PROGRESS
         params['NOT_STARTED'] = NOT_STARTED
+
+        WeekNavbar(year,week_number,'update_games',request.user).add_parameters(params)
 
         return render(request,"pick10/update_games.html",params)
 
