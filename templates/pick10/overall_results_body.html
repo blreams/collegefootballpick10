@@ -69,18 +69,6 @@
             }
         }
     </script>
-<div id="page-title">{{year}} Leaderboard</div>
-<hr>
-    <table>
-        <td id="link-bar-highlighted">OVERALL</td>
-        <td id="link-bar-label">
-            <a id="link-bar-week-link" href="{% url 'week_results' year last_week_number %}">WEEK</a>
-            {% for wk_num in weeks_in_year %}
-                <a id="link-bar-week-number-link" href="{% url 'week_results' year wk_num %}">{{wk_num}}</a>
-            {% endfor %}
-        </td>
-    </table>
-    <br>
 <div id="results">
     {{ content|safe }}
 </div>
