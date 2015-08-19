@@ -11,12 +11,12 @@ class EditWeekView:
         context = {'form': form, 'year': year, 'week_number': week_number}
         return render(request,"pick10/edit_week_form.html", context)
 
-    def post(self, request):
-        form = CreateWeekForm(request.POST)
+    def post(self, request, year, week_number):
+        form = EditWeekForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            #year = cd.get('year')
-            #week = cd.get('week')
-            return redirect('/pick10/commissioner/editweek/' + str(year) + '/week/' + str(week) + '/')
-        return redirect('/pick10/commissioner/createweek/')
+            game1_team1 = cd['game1_team1']
+            game1_team2 = cd['game1_team2']
+            return redirect('/pick10/')
+        return redirect('edit_week', year=year, week_number=week_number)
 

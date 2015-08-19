@@ -7,7 +7,9 @@ the pool (commissioners-only).</p>
 
 <form id="edit_week_form" action="{% url 'edit_week' year week_number %}" method="post">
     {% csrf_token %}
-    {{ form }}
+    <table>
+        {{ form.as_table }}
+    </table>
     <input type="submit" value="Submit" />
 </form>
 

@@ -40,7 +40,10 @@ def create_week(request):
 
 @staff_member_required
 def edit_week(request, year, week_number):
-    response = EditWeekView().get(request, year, week_number)
+    if request.method == 'GET':
+        response = EditWeekView().get(request, year, week_number)
+    elif request.method == 'POST':
+        response = EditWeekView().post(request, year, week_number)
     return response
 
 def overall_results(request,year):

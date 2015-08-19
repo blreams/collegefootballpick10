@@ -38,6 +38,10 @@ team_choices = tuple((t, t) for t in get_teamlist())
 class EditWeekForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(EditWeekForm, self).__init__(*args, **kwargs)
+        hard_code_sc = get_teamlist()[64]
+        hard_code_nc = get_teamlist()[50]
+        self.initial['game1_team1'] = hard_code_sc
+        self.initial['game1_team2'] = hard_code_nc
         self.fields['game1_team1'] = forms.ChoiceField(choices=team_choices)
         self.fields['game1_team2'] = forms.ChoiceField(choices=team_choices)
 
