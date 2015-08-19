@@ -16,8 +16,8 @@ class BasicModelTest(TestCase):
     def setUp(self):
         players = Player.objects.all()
         if len(players) == 0:
-            # This will load the test database with data for 2 players, 1 week
-            shmain(years=2014, playersperyear=2, weeks=1)
+            # This will load the test database with data for all players, 1 week
+            shmain(years=2014, weeks=1)
 
     def test_conference_model(self):
         confs = Conference.objects.all()

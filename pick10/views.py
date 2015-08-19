@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from profile import *
 from overall_results_view import *
 from week_results_view import *
 from player_results_view import *
@@ -10,12 +11,22 @@ from enter_picks_view import *
 from django.core.cache import *
 from django.http import HttpResponseNotFound
 
-@login_required
 def home(request):
     return render(request, 'pick10/home.html')
 
+@login_required
 def index(request):
     return render(request, 'pick10/index.html')
+
+@login_required
+def profile(request):
+    if request.method == 'GET':
+        response = ProfileView().get(request)
+        return response
+    elif request.method == 'POST':
+        response = ProfileView().post(request)
+        return response
+    return HttpResponseNotFound('<h1>Page not found</h1>')
 
 def overall_results(request,year):
     if request.method == "GET":

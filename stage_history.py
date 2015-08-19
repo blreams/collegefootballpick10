@@ -57,7 +57,7 @@ def delete_year_from_db(yearnum):
         years.delete()
 
 
-def populate_year(yearnum):
+def populate_year(yearnum, verbose=False):
     yearobj, created = Year.objects.get_or_create(yearnum=yearnum)
     return yearobj
 
@@ -91,17 +91,15 @@ def populate_player_year(yearnum, ssplayername):
         playerobj.save()
     playeryearobj, created = PlayerYear.objects.get_or_create(player=playerobj, year=yearobj)
 
-def populate_player_count(yearnum, playersperyear):
+def populate_player_count(yearnum, verbose=False):
     yearobj = Year.objects.get(yearnum=yearnum)
     poolspreadsheet = get_poolspreadsheet(yearnum)
     ss_names = poolspreadsheet.get_player_names()
-    if playersperyear > 0:
-        ss_name_set = set(ss_names)
-        ss_names = [ss_name_set.pop() for i in range(playersperyear)]
     for ss_name in ss_names:
+        if verbose: print("populate_player_year(%d, %s)" % (yearnum, ss_name,))
         populate_player_year(yearnum, ss_name)
 
-def populate_week(yearnum, weeknum):
+def populate_week(yearnum, weeknum, verbose=False):
     yearobj = Year.objects.get(yearnum=yearnum)
     weekobj, created = Week.objects.get_or_create(year=yearobj, weeknum=weeknum)
     if created:
@@ -110,6 +108,7 @@ def populate_week(yearnum, weeknum):
         populate_player_year(yearnum, winner_ss_name)
         playerobj = Player.objects.get(ss_name=winner_ss_name)
         weekobj.winner = playerobj
+        if verbose: print("Week(%d, %d).save()" % (yearnum, weeknum,))
         weekobj.save()
 
 def populate_team(teamname):
@@ -118,7 +117,7 @@ def populate_team(teamname):
     teamobj, create = Team.objects.get_or_create(team_name=teamname, mascot=mascot, conference=confobj)
     return teamobj
 
-def populate_games_for_year_week(yearnum, weeknum):
+def populate_games_for_year_week(yearnum, weeknum, verbose=False):
     yearobj = Year.objects.get(yearnum=yearnum)
     weekobj = Week.objects.get(year=yearobj, weeknum=weeknum)
     poolspreadsheet = get_poolspreadsheet(yearnum)
@@ -133,14 +132,16 @@ def populate_games_for_year_week(yearnum, weeknum):
         winner = 1
         if (favored == 1 and (team1actualpoints - team2actualpoints) < spread) or (favored == 2 and (team2actualpoints - team1actualpoints) > spread):
             winner = 2
+        if verbose: print("Game(%d, %d, %d).save()" % (yearnum, weeknum, gamenum,))
         gameobj = Game.objects.get_or_create(week=weekobj, gamenum=gamenum, team1=team1obj, team2=team2obj, team1_actual_points=team1actualpoints, team2_actual_points=team2actualpoints, favored=favored, spread=spread, winner=winner,game_state=3)
 
-def populate_picks_for_year_week(yearnum, weeknum):
+def populate_picks_for_year_week(yearnum, weeknum, verbose=False):
     yearobj = Year.objects.get(yearnum=yearnum)
     weekobj = Week.objects.get(year=yearobj, weeknum=weeknum)
     poolspreadsheet = get_poolspreadsheet(yearnum)
     picks = poolspreadsheet.get_picks(weeknum)
-    ss_names_player_dict = {p.ss_name: p for p in Player.objects.all()}
+    playeryearobjs = PlayerYear.objects.filter(year=yearobj)
+    ss_names_player_dict = {py.player.ss_name: py.player for py in playeryearobjs}
     for pick in picks:
         if pick.player_name not in ss_names_player_dict:
             continue
@@ -158,10 +159,11 @@ def populate_picks_for_year_week(yearnum, weeknum):
             if pick.team1_score is not None:
                 pickobj.team1_predicted_points = pick.team1_score
                 pickobj.team2_predicted_points = pick.team2_score
+            if verbose: print("Pick(%s, %d, %d, %d).save()" % (pick.player_name, yearnum, weeknum, pick.game_number,))
             pickobj.save()
 
 
-def main(years=None, playersperyear=0, weeks=None):
+def main(years=None, weeks=None, verbose=False):
     if years is None:
         years = range(beginyear, endyear + 1)
     elif isinstance(years, (int, long)):
@@ -169,18 +171,24 @@ def main(years=None, playersperyear=0, weeks=None):
 
     for yearnum in years:
         poolspreadsheet = get_poolspreadsheet(yearnum)
-        populate_year(yearnum)
-        populate_player_count(yearnum, playersperyear)
+        if verbose: print("populate_year(%d)" % (yearnum,))
+        populate_year(yearnum, verbose)
+        if verbose: print("populate_player_count(%d)" % (yearnum,))
+        populate_player_count(yearnum, verbose)
 
         if weeks is None:
             weeks = poolspreadsheet.get_week_numbers()
         elif isinstance(weeks, (int, long)):
             weeks = [weeks]
+        if verbose: print("Found %d weeks in spreadsheet..." % (len(weeks),))
 
         for weeknum in weeks:
-            populate_week(yearnum, weeknum)
-            populate_games_for_year_week(yearnum, weeknum)
-            populate_picks_for_year_week(yearnum, weeknum)
+            if verbose: print("populate_week(%d, %d)" % (yearnum, weeknum,))
+            populate_week(yearnum, weeknum, verbose)
+            if verbose: print("populate_games_for_year_week(%d, %d)" % (yearnum, weeknum,))
+            populate_games_for_year_week(yearnum, weeknum, verbose)
+            if verbose: print("populate_picks_for_year_week(%d, %d)" % (yearnum, weeknum,))
+            populate_picks_for_year_week(yearnum, weeknum, verbose)
 
 
 # Execution starts here
