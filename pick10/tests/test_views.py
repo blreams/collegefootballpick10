@@ -12,5 +12,5 @@ from unittest import skip
 class HomeViewTest(TestCase):
     def test_index_view_renders_index_template(self):
         response = self.client.get('/')
-        self.assertTemplateUsed(response, 'pick10/index.html')
+        self.assertTemplateUsed(response, 'pick10/home.html')
 

@@ -664,7 +664,7 @@ class CalculatorTests(TestCase):
         bad_player = Player()
         bad_player.id = -1
         game = self.__get_a_valid_game()
-        with self.assertRaises(KeyError):
+        with self.assertRaises(AssertionError):
             self.calc.get_team_name_player_picked_to_win(bad_player,game)
 
     def __t2_invalid_game(self):
