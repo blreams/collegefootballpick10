@@ -7,7 +7,8 @@ from forms import CreateWeekForm, EditWeekForm
 class EditWeekView:
 
     def get(self,request, year, week_number):
-        form = EditWeekForm()
+        teams = {'game1_team1': u'South Carolina', 'game1_team2': u'North Carolina'}
+        form = EditWeekForm(teams=teams)
         context = {'form': form, 'year': year, 'week_number': week_number}
         return render(request,"pick10/edit_week_form.html", context)
 
@@ -15,8 +16,7 @@ class EditWeekView:
         form = EditWeekForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            game1_team1 = cd['game1_team1']
-            game1_team2 = cd['game1_team2']
+            teams = cd
             return redirect('/pick10/')
         return redirect('edit_week', year=year, week_number=week_number)
 
