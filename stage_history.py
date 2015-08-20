@@ -1,5 +1,6 @@
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'collegefootballpick10.settings')
+from datetime import datetime, date, time
 
 import django
 django.setup()
@@ -122,6 +123,9 @@ def populate_games_for_year_week(yearnum, weeknum, verbose=False):
     weekobj = Week.objects.get(year=yearobj, weeknum=weeknum)
     poolspreadsheet = get_poolspreadsheet(yearnum)
     games_dict = poolspreadsheet.get_games(weeknum)
+    if len(games_dict) == 10:
+        weekobj.lock_picks = datetime.now()
+        weekobj.save()
     for gamenum in games_dict:
         team1obj = populate_team(games_dict[gamenum].team1)
         team2obj = populate_team(games_dict[gamenum].team2)
@@ -134,6 +138,8 @@ def populate_games_for_year_week(yearnum, weeknum, verbose=False):
             winner = 2
         if verbose: print("Game(%d, %d, %d).save()" % (yearnum, weeknum, gamenum,))
         gameobj = Game.objects.get_or_create(week=weekobj, gamenum=gamenum, team1=team1obj, team2=team2obj, team1_actual_points=team1actualpoints, team2_actual_points=team2actualpoints, favored=favored, spread=spread, winner=winner,game_state=3)
+    weekobj.lock_scores = True
+    weekobj.save()
 
 def populate_picks_for_year_week(yearnum, weeknum, verbose=False):
     yearobj = Year.objects.get(yearnum=yearnum)
