@@ -42,11 +42,12 @@ class WeekNavbar:
         overall.active = True if self.page == "overall" else False
         page_links.append(overall)
 
-        week_results = PageLink()
-        week_results.name = "Week Results"
-        week_results.link = reverse('week_results',args=(self.year,self.week_number,))
-        week_results.active = True if self.page == "week_results" else False
-        page_links.append(week_results)
+        if self.__show_week_results():
+            week_results = PageLink()
+            week_results.name = "Week Results"
+            week_results.link = reverse('week_results',args=(self.year,self.week_number,))
+            week_results.active = True if self.page == "week_results" else False
+            page_links.append(week_results)
 
         if self.__show_player_results():
             player_results = PageLink()
@@ -98,14 +99,33 @@ class WeekNavbar:
     def __show_player_results(self):
         return self.player_id != None
 
+    def __show_week_results(self):
+        # show week results once the pool has started
+        d = Database()
+        pool_state = d.get_pool_state(self.year)
+        if pool_state == "invalid" or pool_state == "not_started":
+            return False
+
+        return True
+
     def __show_enter_picks(self):
-        user_linked_to_player_in_year =  self.player_id != None
+        user_not_linked_to_player = self.player_id == None
+        if user_not_linked_to_player:
+            return False
+
+        d = Database()
+        pool_state = d.get_pool_state(self.year)
+        if pool_state == "invalid" or pool_state == "not_started":
+            return False
+
         week_state = Database().get_week_state(self.year,self.week_number)
+        if week_state == NOT_STARTED:
+            return True
 
         # enter picks page link still shows up if pick deadline has expired
         # this is so that the user can know that the deadline has expired
 
-        return user_linked_to_player_in_year and week_state == NOT_STARTED
+        return False
 
     def __show_update_games(self):
         d = Database()
