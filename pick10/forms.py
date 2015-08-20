@@ -41,7 +41,7 @@ class EditWeekForm(forms.Form):
         if 'teams' in kwargs:
             teams = kwargs.pop('teams')
         super(EditWeekForm, self).__init__(*args, **kwargs)
-        for i in range(1, 14):
+        for i in range(1, 11):
             game_team1 = 'game%d_team1' % i
             game_team2 = 'game%d_team2' % i
             self.initial[game_team1] = teams.get(game_team1)

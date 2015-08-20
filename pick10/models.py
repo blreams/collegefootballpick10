@@ -156,6 +156,10 @@ class Pick(models.Model):
     def __unicode__(self):
         return 'User=%s, Year=%d, Week=%d, Game=%d'%(self.player.private_name, self.game.week.year.yearnum, self.game.week.weeknum, self.game.gamenum,)
 
+def add_year(yearnum):
+    y, created = Year.objects.get_or_create(yearnum=yearnum)
+    return y
+
 def add_player(public_name, private_name):
     p = Player.objects.get_or_create(public_name=public_name, private_name=private_name)[0]
     return p
@@ -198,10 +202,10 @@ def update_game(yearnum, weeknum, gamenum, team1_actual_points, team2_actual_poi
 
 def add_week(yearnum, weeknum):
     year = Year.objects.get(yearnum=yearnum)
-    w = Week.objects.get_or_create(year=year, weeknum=weeknum)[0]
-    deadline = get_default_pick_deadline()
-    w.lock_picks = deadline
-    w.save()
+    w, created = Week.objects.get_or_create(year=year, weeknum=weeknum)
+    if created:
+        w.lock_picks = datetime.now()
+        w.save()
     return w
 
 def add_pick(player, game, winner, team1_predicted_points=-1, team2_predicted_points=-1):
@@ -238,6 +242,10 @@ def get_game(yearnum, weeknum, gamenum):
     g = Game.objects.get(week=week, gamenum=gamenum)
     return g
 
+def get_games(yearnum, weeknum):
+    week = Week.objects.get(year__yearnum=yearnum, weeknum=weeknum)
+    return Game.objects.filter(week=week)
+
 def get_week(yearnum, weeknum):
     year = Year.objects.get(yearnum=yearnum)
     w = Week.objects.get(year=year, weeknum=weeknum)
@@ -245,6 +253,10 @@ def get_week(yearnum, weeknum):
 
 def query_picks(email, yearnum, weeknum):
     picks = Pick.objects.filter(pick_user__email=u, game__week__year__yearnum=yearnum, game__week__weeknum=weeknum).order_by('game__gamenum')
+    return picks
+
+def query_picks_week(yearnum, weeknum):
+    picks = Pick.objects.filter(game__week__year__yearnum=yearnum, game__week__weeknum=weeknum)
     return picks
 
 def get_yearlist():
@@ -268,4 +280,29 @@ def get_createweek_year_week():
 
 def get_teamlist():
     return sorted([t.team_name for t in Team.objects.all()])
+
+def get_commish_can_post(yearnum, weeknum):
+    if query_picks_week(yearnum, weeknum):
+        return False
+    return True
+
+def get_teams_dict_for_week(yearnum, weeknum):
+    teams = {}
+    games = get_games(yearnum, weeknum)
+    for game in games:
+        teams['game%d_team1' % game.gamenum] = game.team1.team_name
+        teams['game%d_team2' % game.gamenum] = game.team2.team_name
+    return teams
+
+def set_week_lock_picks(yearnum, weeknum, value):
+    """Sets a value for Week.lock_picks.
+
+    Returns:
+      The value of Week.lock_picks when called.
+    """
+    w = get_week(yearnum, weeknum)
+    rv = w.lock_picks
+    w.lock_picks = value
+    w.save()
+    return rv
 
