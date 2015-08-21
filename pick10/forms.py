@@ -34,6 +34,8 @@ class CreateWeekForm(forms.Form):
         self.fields['year'] = forms.ChoiceField(choices=year_choices())
         self.fields['week'] = forms.ChoiceField(choices=week_choices)
 
+
+
 team_choices = tuple((t, t) for t in get_teamlist())
 favored_choices = tuple(('Team%d' % i, 'Team%d' % i) for i in range(1, 3))
 class EditWeekForm(forms.Form):
@@ -52,4 +54,38 @@ class EditWeekForm(forms.Form):
             self.fields[gamestr + 'team2'] = forms.ChoiceField(choices=team_choices)
             self.fields[gamestr + 'favored'] = forms.ChoiceField(choices=favored_choices, widget=forms.RadioSelect)
             self.fields[gamestr + 'spread'] = forms.DecimalField(decimal_places=1)
+
+    def clean(self):
+        cleaned_data = super(EditWeekForm, self).clean()
+
+        # This validates that all teams are unique
+        teamset = set()
+        duplicateteamset = set()
+        numuniqueteams = 0
+        for i in range(1, 11):
+            gamestr = 'game%d_' % i
+            teamset.add(cleaned_data[gamestr + 'team1'])
+            if len(teamset) == numuniqueteams:
+                duplicateteamset.add(cleaned_data[gamestr + 'team1'])
+            numuniqueteams = len(teamset)
+            teamset.add(cleaned_data[gamestr + 'team2'])
+            if len(teamset) == numuniqueteams:
+                duplicateteamset.add(cleaned_data[gamestr + 'team2'])
+            numuniqueteams = len(teamset)
+
+
+        # This validates spread
+        for i in range(1, 11):
+            gamestr = 'game%d_' % i
+            spread = cleaned_data.get(gamestr + 'spread')
+            if spread is not None:
+                x = int(spread * 2)
+                if x % 2 == 0:
+                    msg = 'Game %d spread must be offset by 1/2 point (ie. 0.5, 1.5, etc.)' % i
+                    self.add_error(gamestr + 'spread', msg)
+
+        if duplicateteamset:
+            raise forms.ValidationError(
+                    'Duplicate teams found: %s.' % ','.join(duplicateteamset)
+                    )
 
