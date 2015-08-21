@@ -181,9 +181,10 @@ def add_team(team_name, mascot, conference, current=True):
     t.save()
     return t
 
-def add_game(week, team1, team2, gamenum, favored=0, spread=0.0, kickoff=None):
+def add_game(week, team1, team2, gamenum, favored=0, spread=0.0, kickoff=None, allowupdate=False):
     g, created = Game.objects.get_or_create(week=week, team1=team1, team2=team2, gamenum=gamenum)
-    assert created, "Something weird with add_game()..."
+    if not allowupdate:
+        assert created, "Something weird with add_game()..."
     g.favored = favored
     g.spread = spread
     if kickoff:
@@ -273,6 +274,8 @@ def get_createweek_year_week():
     except:
         return (thisyear, 1)
     latestweek = get_weeklist(lastpoolyear)[-1]
+    if not query_picks_week(lastpoolyear, latestweek):
+        return (lastpoolyear, latestweek)
     if latestweek == 13:
         return (thisyear, 1)
     else:

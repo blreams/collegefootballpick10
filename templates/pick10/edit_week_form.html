@@ -8,7 +8,7 @@ the pool (commissioners-only).</p>
 <form id="edit_week_form" action="{% url 'edit_week' year week_number %}" method="post">
     {% csrf_token %}
     <table>
-        {{ form.as_table }}
+        {{ form.as_p }}
     </table>
     <input type="submit" {% if commish_can_post %}value="Submit"{% else %}value="Disabled" disabled="disabled"{% endif %} />
 </form>

@@ -35,6 +35,7 @@ class CreateWeekForm(forms.Form):
         self.fields['week'] = forms.ChoiceField(choices=week_choices)
 
 team_choices = tuple((t, t) for t in get_teamlist())
+favored_choices = tuple(('Team%d' % i, 'Team%d' % i) for i in range(1, 3))
 class EditWeekForm(forms.Form):
     def __init__(self, *args, **kwargs):
         teams = {}
@@ -42,10 +43,13 @@ class EditWeekForm(forms.Form):
             teams = kwargs.pop('teams')
         super(EditWeekForm, self).__init__(*args, **kwargs)
         for i in range(1, 11):
-            game_team1 = 'game%d_team1' % i
-            game_team2 = 'game%d_team2' % i
-            self.initial[game_team1] = teams.get(game_team1)
-            self.initial[game_team2] = teams.get(game_team2)
-            self.fields[game_team1] = forms.ChoiceField(choices=team_choices)
-            self.fields[game_team2] = forms.ChoiceField(choices=team_choices)
+            gamestr = 'game%d_' % i
+
+            self.initial[gamestr + 'team1'] = teams.get(gamestr + 'team1')
+            self.initial[gamestr + 'team2'] = teams.get(gamestr + 'team2')
+
+            self.fields[gamestr + 'team1'] = forms.ChoiceField(choices=team_choices)
+            self.fields[gamestr + 'team2'] = forms.ChoiceField(choices=team_choices)
+            self.fields[gamestr + 'favored'] = forms.ChoiceField(choices=favored_choices, widget=forms.RadioSelect)
+            self.fields[gamestr + 'spread'] = forms.DecimalField(decimal_places=1)
 
