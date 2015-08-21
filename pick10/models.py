@@ -205,7 +205,7 @@ def add_week(yearnum, weeknum):
     year = Year.objects.get(yearnum=yearnum)
     w, created = Week.objects.get_or_create(year=year, weeknum=weeknum)
     if created:
-        w.lock_picks = datetime.now()
+        w.lock_picks = timezone.now()
         w.save()
     return w
 
@@ -268,7 +268,7 @@ def get_weeklist(year):
     return [w.weeknum for w in Week.objects.filter(year=yearobj)]
 
 def get_createweek_year_week():
-    thisyear = datetime.now().year
+    thisyear = timezone.now().year
     try:
         lastpoolyear = get_yearlist()[-1]
     except:

@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django import forms
 from models import UserProfile, get_yearlist, get_createweek_year_week, get_teamlist
-from datetime import datetime
+from django.utils import timezone
 
 import pytz
 
@@ -19,7 +19,7 @@ class UserProfileForm(forms.ModelForm):
 
 def year_choices():
     yearlist = get_yearlist()
-    thisyear = datetime.now().year
+    thisyear = timezone.now().year
     if thisyear not in yearlist:
         yearlist.append(thisyear)
     return tuple((i, i) for i in yearlist)

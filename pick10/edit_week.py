@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseNotFound
-from datetime import datetime
+from django.utils import timezone
 from models import Year, Week
 from models import get_commish_can_post, get_games_info_for_week, set_week_lock_picks
 from models import add_game, get_week, get_team
@@ -18,7 +18,7 @@ class EditWeekView:
         form = EditWeekForm(request.POST)
         context = {'form': form, 'year': year, 'week_number': week_number, 'commish_can_post': True}
         # Need to set a LOCK that players will observe before getting/posting picks
-        saved_lock_picks = set_week_lock_picks(year, week_number, datetime.now())
+        saved_lock_picks = set_week_lock_picks(year, week_number, timezone.now())
         if not get_commish_can_post(year, week_number):
             context['commish_can_post'] = False
             set_week_lock_picks(year, week_number, saved_lock_picks)
