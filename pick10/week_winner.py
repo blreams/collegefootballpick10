@@ -305,6 +305,7 @@ class WeekWinner:
 
             if self.__pick_score_not_entered(pick):
                 self.players_lost_tiebreak2.append(player_id)
+                continue
 
             pick_total = pick.team1_predicted_points + pick.team2_predicted_points
             pick_difference = abs(result_total-pick_total)
