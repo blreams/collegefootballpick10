@@ -2,16 +2,15 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponseNotFound
 from datetime import datetime
 from models import Year, Week
-from models import get_commish_can_post, get_teams_dict_for_week, set_week_lock_picks
+from models import get_commish_can_post, get_games_info_for_week, set_week_lock_picks
 from models import add_game, get_week, get_team
 from forms import CreateWeekForm, EditWeekForm
 
 class EditWeekView:
 
     def get(self,request, year, week_number):
-        # TODO Need to get more than just teams here
-        teams = get_teams_dict_for_week(year, week_number)
-        form = EditWeekForm(teams=teams)
+        gamefields = get_games_info_for_week(year, week_number)
+        form = EditWeekForm(gamefields=gamefields)
         context = {'form': form, 'year': year, 'week_number': week_number, 'commish_can_post': get_commish_can_post(year, week_number)}
         return render(request,"pick10/edit_week_form.html", context)
 
@@ -35,6 +34,7 @@ class EditWeekView:
                         gamenum=i,
                         favored=int(cd[gamestr + 'favored'].replace('Team', '')),
                         spread=cd[gamestr + 'spread'],
+                        kickoff=cd[gamestr + 'kickoff'],
                         allowupdate=True,
                         )
 

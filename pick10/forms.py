@@ -36,24 +36,27 @@ class CreateWeekForm(forms.Form):
 
 
 
-team_choices = tuple((t, t) for t in get_teamlist())
-favored_choices = tuple(('Team%d' % i, 'Team%d' % i) for i in range(1, 3))
 class EditWeekForm(forms.Form):
     def __init__(self, *args, **kwargs):
-        teams = {}
-        if 'teams' in kwargs:
-            teams = kwargs.pop('teams')
+        gamefields = {}
+        if 'gamefields' in kwargs:
+            gamefields = kwargs.pop('gamefields')
         super(EditWeekForm, self).__init__(*args, **kwargs)
         for i in range(1, 11):
             gamestr = 'game%d_' % i
 
-            self.initial[gamestr + 'team1'] = teams.get(gamestr + 'team1')
-            self.initial[gamestr + 'team2'] = teams.get(gamestr + 'team2')
+            self.initial[gamestr + 'team1'] = gamefields.get(gamestr + 'team1')
+            self.initial[gamestr + 'team2'] = gamefields.get(gamestr + 'team2')
+            if gamefields.get(gamestr + 'favored') is not None:
+                self.initial[gamestr + 'favored'] = 'Team%d' % gamefields[gamestr + 'favored']
+            self.initial[gamestr + 'spread'] = gamefields.get(gamestr + 'spread')
+            self.initial[gamestr + 'kickoff'] = gamefields.get(gamestr + 'kickoff')
 
-            self.fields[gamestr + 'team1'] = forms.ChoiceField(choices=team_choices)
-            self.fields[gamestr + 'team2'] = forms.ChoiceField(choices=team_choices)
-            self.fields[gamestr + 'favored'] = forms.ChoiceField(choices=favored_choices, widget=forms.RadioSelect)
+            self.fields[gamestr + 'team1'] = forms.ChoiceField(choices=tuple((t, t) for t in get_teamlist()))
+            self.fields[gamestr + 'team2'] = forms.ChoiceField(choices=tuple((t, t) for t in get_teamlist()))
+            self.fields[gamestr + 'favored'] = forms.ChoiceField(widget=forms.RadioSelect, choices=tuple(('Team%d' % i, 'Team%d' % i) for i in range(1, 3)))
             self.fields[gamestr + 'spread'] = forms.DecimalField(decimal_places=1)
+            self.fields[gamestr + 'kickoff'] = forms.DateTimeField(widget=forms.DateTimeInput, required=False)
 
     def clean(self):
         cleaned_data = super(EditWeekForm, self).clean()

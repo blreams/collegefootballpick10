@@ -289,13 +289,17 @@ def get_commish_can_post(yearnum, weeknum):
         return False
     return True
 
-def get_teams_dict_for_week(yearnum, weeknum):
-    teams = {}
+def get_games_info_for_week(yearnum, weeknum):
+    gamefields = {}
     games = get_games(yearnum, weeknum)
     for game in games:
-        teams['game%d_team1' % game.gamenum] = game.team1.team_name
-        teams['game%d_team2' % game.gamenum] = game.team2.team_name
-    return teams
+        gamestr = 'game%d_' % game.gamenum
+        gamefields[gamestr + 'team1'] = game.team1.team_name
+        gamefields[gamestr + 'team2'] = game.team2.team_name
+        gamefields[gamestr + 'favored'] = game.favored
+        gamefields[gamestr + 'spread'] = game.spread
+        gamefields[gamestr + 'kickoff'] = game.kickoff
+    return gamefields
 
 def set_week_lock_picks(yearnum, weeknum, value):
     """Sets a value for Week.lock_picks.
