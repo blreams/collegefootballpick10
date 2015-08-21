@@ -6,8 +6,14 @@ from pick10.calculator import *
 import unittest
 from django.contrib.auth.models import User
 from django.test.client import Client
+from django.core.cache import *
 
 class UpdateGamesTest(FunctionalTest):
+
+    def setUp(self):
+        cache = get_cache('default')
+        cache.clear()
+        super(UpdateGamesTest, self).setUp()
 
     def test_page_up(self):
         test_db = UnitTestDatabase()
@@ -66,6 +72,8 @@ class UpdateGamesTest(FunctionalTest):
         self.__verify_game_in_database(1978,1,9,IN_PROGRESS,91,92,'','')
         self.__verify_game_in_database(1978,1,10,IN_PROGRESS,0,2,'','')
 
+        test_db.delete_database()
+
     def test_edit_quarter_and_time(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started(1978,1)
@@ -109,6 +117,8 @@ class UpdateGamesTest(FunctionalTest):
         self.__verify_game_in_database(1978,1,8,IN_PROGRESS,81,82,'','')
         self.__verify_game_in_database(1978,1,9,IN_PROGRESS,91,92,'','')
         self.__verify_game_in_database(1978,1,10,IN_PROGRESS,0,2,'','')
+
+        test_db.delete_database()
 
     def test_in_progress_view(self):
         test_db = UnitTestDatabase()
@@ -203,6 +213,7 @@ class UpdateGamesTest(FunctionalTest):
         self.__verify_game_in_database(1978,1,9,NOT_STARTED,-1,-1,'','')
         self.__verify_game_in_database(1978,1,10,NOT_STARTED,-1,-1,'','')
 
+        test_db.delete_database()
 
     def test_games_locked(self):
         test_db = UnitTestDatabase()
@@ -222,6 +233,8 @@ class UpdateGamesTest(FunctionalTest):
         self.assertIn('The scores are locked and cannot be edited.',body)
 
         self.__click_button('cancel')
+
+        test_db.delete_database()
 
     def test_lock_button_not_admin(self):
         test_db = UnitTestDatabase()
@@ -244,6 +257,8 @@ class UpdateGamesTest(FunctionalTest):
         w = get_week(1980,1)
         self.assertFalse(w.lock_scores)
 
+        test_db.delete_database()
+
     def test_lock_button_admin(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_final(1980,1)
@@ -265,6 +280,8 @@ class UpdateGamesTest(FunctionalTest):
         w = get_week(1980,1)
         self.assertTrue(w.lock_scores)
 
+        test_db.delete_database()
+
     def test_lock_button_no_user(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_final(1980,1)
@@ -284,6 +301,8 @@ class UpdateGamesTest(FunctionalTest):
 
         w = get_week(1980,1)
         self.assertFalse(w.lock_scores)
+
+        test_db.delete_database()
 
     def test_unlock_button_not_admin(self):
         test_db = UnitTestDatabase()
@@ -309,6 +328,8 @@ class UpdateGamesTest(FunctionalTest):
         w = get_week(1980,1)
         self.assertTrue(w.lock_scores)
 
+        test_db.delete_database()
+
     def test_unlock_button_admin_no_user(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_final(1980,1)
@@ -331,6 +352,8 @@ class UpdateGamesTest(FunctionalTest):
 
         w = get_week(1980,1)
         self.assertTrue(w.lock_scores)
+
+        test_db.delete_database()
 
     def test_unlock_button_admin(self):
         test_db = UnitTestDatabase()
@@ -355,6 +378,8 @@ class UpdateGamesTest(FunctionalTest):
 
         w = get_week(1980,1)
         self.assertFalse(w.lock_scores)
+
+        test_db.delete_database()
 
     def __open_page(self,year,week_number):
         address = self.server_url + reverse('update_games',args=(year,week_number,))
