@@ -32,8 +32,8 @@ class UpdateGames:
     def update_games(self,games):
         for game_info in games:
             game = get_game(self.year,self.week_number,game_info.number)
-            game.team1_actual_points = game_info.team1_score
-            game.team2_actual_points = game_info.team2_score
+            game.team1_actual_points = game_info.team1_score if game_info.team1_score != '' else -1
+            game.team2_actual_points = game_info.team2_score if game_info.team2_score != '' else -1
             game.quarter = game_info.quarter
             game.time_left = game_info.time_left
 

@@ -381,6 +381,10 @@ class UpdateGamesTest(FunctionalTest):
 
         test_db.delete_database()
 
+    # TODO:  test a blank form
+    def test_blank_form_submit(self):
+        pass
+
     def __open_page(self,year,week_number):
         address = self.server_url + reverse('update_games',args=(year,week_number,))
         self.browser.get(address)
