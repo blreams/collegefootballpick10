@@ -329,8 +329,8 @@ class UnitTestDatabase:
         player_year = PlayerYear.objects.get_or_create(player=player,year=year_model)[0]
         return player
 
-    def setup_pick(self,player,game,winner):
-        pick = add_pick(player,game,winner)
+    def setup_pick(self,player,game,winner,team1_predicted_points=0,team2_predicted_points=0):
+        pick = add_pick(player,game,winner,team1_predicted_points,team2_predicted_points)
         return pick
 
     def setup_player_default(self,player,games):
