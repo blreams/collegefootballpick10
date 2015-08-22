@@ -19,7 +19,8 @@ class UserAccessTest(FunctionalTest):
         test_db.load_historical_data_for_week(2013,1)
 
         # load and submit the update games page
-        self.utils.login_assigned_user(name="Brent",password="1234")
+        player = self.utils.get_player_from_ss_name(2013,'Holden, Brent')
+        self.utils.login_assigned_user(name="Brent",password="1234",player=player)
         self.utils.update_games_page(year=2013,week_number=1)
         self.assertEqual(self.browser.title,'Week 1 Update Games')
         self.__verify_user_logged_in("Brent")
