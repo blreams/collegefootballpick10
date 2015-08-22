@@ -10,7 +10,7 @@ from pick10.models import Team
 from unittest import skip
 
 class HomeViewTest(TestCase):
-    def test_index_view_renders_index_template(self):
+    def test_home_view_renders_home_template(self):
         response = self.client.get('/')
         self.assertTemplateUsed(response, 'pick10/home.html')
 
