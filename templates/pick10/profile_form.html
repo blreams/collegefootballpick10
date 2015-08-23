@@ -20,9 +20,9 @@
                 <select class="form-control input-lg" id="id_preferredtz" name="preferredtz">
                     {% for choice in choices %}
                         {% if choice == userprofile.preferredtz %}
-                            <option selected>{{ choice }}</option>
+                        <option value="{{choice}}" selected>{{ choice }}</option>
                         {% else %}
-                            <option>{{ choice }}</option>
+                        <option value="{{choice}}">{{ choice }}</option>
                         {% endif %}
                     {% endfor %}
                 </select>
