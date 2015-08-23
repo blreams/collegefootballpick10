@@ -9,14 +9,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="http://getbootstrap.com/favicon.ico">
+    <link rel="icon" href="{% static 'bootstrap/favicon.ico' %}">
 
     <title>{% block header_text %}College Football Pick 10{% endblock %}</title>
 
     <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
     <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <script src="{% static 'jquery/html5shiv.min.js' %}"></script>
+    <script src="{% static 'jquery/respond.min.js' %}"></script>
     <![endif]-->
 </head>
 
@@ -70,11 +70,10 @@
     <!-- Bootstrap core JavaScript
     =========================================================== -->
     <!-- Placed at the end of the document so that pages load faster -->
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
-    <script src="http://code.jquery.com/jquery.min.js"></script>
+    <script src="{% static 'jquery/jquery-1.11.3.min.js' %}"></script>
     <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="{% static 'bootstrap/js/ie10-viewport-bug-workaround.js' %}"></script>
     {% block script_block %}{% endblock %}
 </body>
 </html>
