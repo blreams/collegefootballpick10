@@ -5,6 +5,7 @@ import unittest
 import datetime as dt
 import pytz
 from django.core.cache import *
+from utils import *
 
 class OverallResultsTest(FunctionalTest):
 
@@ -12,19 +13,21 @@ class OverallResultsTest(FunctionalTest):
         cache = get_cache('default')
         cache.clear()
         super(OverallResultsTest, self).setUp()
+        self.utils = Utils(self.browser,self.server_url)
+        self.utils.login_unassigned_user()
 
     def test_page_up(self):
         test_db = UnitTestDatabase()
         test_db.load_historical_data_for_year(2013)
 
-        self.__open_results_page(year=2013)
+        self.utils.overall_results_page(year=2013)
         title = self.browser.find_element_by_id('page-title').text
         self.assertIn('2013 Leaderboard',title)
 
         test_db.delete_database()
 
     def test_bad_year(self):
-        self.__open_results_page(year=1980)
+        self.utils.overall_results_page(year=1980)
         body = self.browser.find_element_by_tag_name('body').text
         self.assertIn('Cannot find a pool for the year 1980',body)
 
@@ -32,7 +35,7 @@ class OverallResultsTest(FunctionalTest):
         test_db = UnitTestDatabase()
         test_db.load_historical_data_for_year(2013)
 
-        self.__open_results_page(year=2013)
+        self.utils.overall_results_page(year=2013)
 
         title = self.browser.find_element_by_id('page-title').text
         self.assertIn('2013 Leaderboard',title)
@@ -47,7 +50,7 @@ class OverallResultsTest(FunctionalTest):
         test_db = UnitTestDatabase()
         test_db.setup_pool_not_started(1975)
 
-        self.__open_results_page(year=1975)
+        self.utils.overall_results_page(year=1975)
 
         title = self.browser.find_element_by_id('page-title').text
         self.assertIn('1975 Leaderboard',title)
@@ -73,7 +76,7 @@ class OverallResultsTest(FunctionalTest):
         week.lock_picks = deadline
         week.save()
 
-        self.__open_results_page(year=1978)
+        self.utils.overall_results_page(year=1978)
 
         title = self.browser.find_element_by_id('page-title').text
         self.assertIn('1978 Leaderboard',title)
@@ -96,7 +99,7 @@ class OverallResultsTest(FunctionalTest):
         test_db.setup_week_final(1978,3)
         test_db.setup_week_not_started(1978,4)
 
-        self.__open_results_page(year=1978)
+        self.utils.overall_results_page(year=1978)
 
         title = self.browser.find_element_by_id('page-title').text
         self.assertIn('1978 Leaderboard',title)
@@ -114,7 +117,7 @@ class OverallResultsTest(FunctionalTest):
         test_db.setup_week_final(1978,2)
         test_db.setup_week_in_progress(1978,3)
 
-        self.__open_results_page(year=1978)
+        self.utils.overall_results_page(year=1978)
 
         title = self.browser.find_element_by_id('page-title').text
         self.assertIn('1978 Leaderboard',title)
@@ -131,7 +134,7 @@ class OverallResultsTest(FunctionalTest):
         test_db.setup_week_final(1978,1)
         test_db.setup_week_final(1978,2)
 
-        self.__open_results_page(year=1978)
+        self.utils.overall_results_page(year=1978)
 
         title = self.browser.find_element_by_id('page-title').text
         self.assertIn('1978 Leaderboard',title)
@@ -141,7 +144,3 @@ class OverallResultsTest(FunctionalTest):
         self.assertEqual(expected,header)
 
         test_db.delete_database()
-
-    def __open_results_page(self,year):
-        address = self.server_url + reverse('overall_results',args=(year,))
-        self.browser.get(address)

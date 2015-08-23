@@ -28,30 +28,35 @@ def profile(request):
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')
 
+@login_required
 def overall_results(request,year):
     if request.method == "GET":
         response = OverallResultsView().get(request,year)
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')
 
+@login_required
 def week_results(request,year,week_number):
     if request.method == "GET":
         response = WeekResultsView().get(request,year,week_number)
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')
 
+@login_required
 def player_results(request,year,week_number,player_id):
     if request.method == "GET":
         response = PlayerResultsView().get(request,year,week_number,player_id)
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')
 
+@login_required
 def tiebreak(request,year,week_number):
     if request.method == "GET":
         response = TiebreakView().get(request,year,week_number)
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')
 
+@login_required
 def update_games(request,year,week_number):
     if request.method == "GET":
         response = UpdateGamesView().get(request,year,week_number)
@@ -71,24 +76,28 @@ def enter_picks(request,year,week_number,player_id):
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')
 
+@login_required
 def update_pages(request,year,week_number):
     if request.method == "GET":
         response = UpdatePageView().get(request,year,week_number)
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')
 
+@login_required
 def update_overall(request,year):
     if request.method == "POST":
         response = UpdatePageView().update_overall(request,year)
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')
 
+@login_required
 def update_week(request,year,week_number):
     if request.method == "POST":
         response = UpdatePageView().update_week(request,year,week_number)
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')
 
+@login_required
 def update_tiebreak(request,year,week_number):
     if request.method == "POST":
         response = UpdatePageView().update_tiebreak(request,year,week_number)

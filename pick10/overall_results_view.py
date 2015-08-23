@@ -8,10 +8,11 @@ import re
 from django.core.cache import *
 from django.http import HttpResponse
 from pick10.week_navbar import *
+from pick10.user_access import *
 
 class OverallResultsView:
 
-    def get(self,request,year,use_private_names=False,use_memcache=True):
+    def get(self,request,year,use_private_names=None,use_memcache=True):
 
         year = int(year)
 
@@ -20,6 +21,8 @@ class OverallResultsView:
         if not(d.is_year_valid(year)):
             data={'year':year}
             return render(request,"pick10/bad_year.html",data,status=400)
+
+        use_private_names = self.__determine_private_access(request.user,use_private_names)
 
         # setup memcache parameters
         cache = get_cache('default')
@@ -292,3 +295,10 @@ class OverallResultsView:
     def compress_html(self,html):
         s1 = string.replace(html,'\n','')
         return re.sub(r'\s\s+',' ',s1)
+
+    def __determine_private_access(self,user,use_private_names):
+        force_public_private = use_private_names != None
+        if force_public_private:
+            return use_private_names
+
+        return UserAccess(user).is_private_user()
