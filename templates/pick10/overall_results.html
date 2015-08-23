@@ -6,6 +6,12 @@
     {{ side_block_content|safe }}
 {% endblock %}
 
+{% block body_header_block %}
+    <div id="page-title">{{year}} Leaderboard</div>
+    {% include "pick10/week_navbar.html" %}
+    <br>
+{% endblock %}
+
 {% block body_block %}
     {{ body_content|safe }}
 {% endblock %}

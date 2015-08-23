@@ -305,6 +305,7 @@ class WeekWinner:
 
             if self.__pick_score_not_entered(pick):
                 self.players_lost_tiebreak2.append(player_id)
+                continue
 
             pick_total = pick.team1_predicted_points + pick.team2_predicted_points
             pick_difference = abs(result_total-pick_total)
@@ -459,6 +460,11 @@ class WeekWinner:
             player = week_data.players[player_id]
             data.player_wins[player_id] = calc.get_number_of_wins(player)
             data.player_projected_wins[player_id] = calc.get_number_of_projected_wins(player)
-            data.player_featured_game_picks[player_id] = calc.get_player_pick_for_game(player,data.featured_game)
-            data.player_submit_times[player_id] = calc.get_player_submit_time(player,data.week)
+
+            if calc.player_did_not_pick(player,data.featured_game):
+                data.player_featured_game_picks[player_id] = None
+                data.player_submit_times[player_id] = None
+            else:
+                data.player_featured_game_picks[player_id] = calc.get_player_pick_for_game(player,data.featured_game)
+                data.player_submit_times[player_id] = calc.get_player_submit_time(player,data.week)
         return data

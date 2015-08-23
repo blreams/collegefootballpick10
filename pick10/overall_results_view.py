@@ -7,6 +7,7 @@ import string
 import re
 from django.core.cache import *
 from django.http import HttpResponse
+from pick10.week_navbar import *
 
 class OverallResultsView:
 
@@ -28,6 +29,9 @@ class OverallResultsView:
             body_key = "overall_public_%d" % (year)
         sidebar_key = "overall_year_sidebar"
 
+        weeks_in_year = d.get_week_numbers(year)
+        last_week_number = weeks_in_year[-1]
+
         # look for hit in the memcache
         if use_memcache:
             body = cache.get(body_key)
@@ -35,12 +39,11 @@ class OverallResultsView:
             memcache_hit = body != None and sidebar != None
             if memcache_hit:
                 data = {'body_content':body,'side_block_content':sidebar,'year':year }
+                WeekNavbar(year,last_week_number,'overall',request.user).add_parameters(data)
                 return render(request,"pick10/overall_results.html",data)
 
         pool_state = d.get_pool_state(year)
-        weeks_in_year = d.get_week_numbers(year)
         years_in_pool = sorted(d.get_years(),reverse=True)
-
 
         if pool_state == "not_started":
             players = d.load_players(year)
@@ -53,6 +56,7 @@ class OverallResultsView:
             cache.set(sidebar_key,sidebar)
 
             data = {'body_content':body,'side_block_content':sidebar,'year':year }
+            WeekNavbar(year,last_week_number,'overall',request.user).add_parameters(data)
             return render(request,"pick10/overall_results.html",data)
 
         results = CalculateOverallResults(year,use_private_names).get_results()
@@ -108,7 +112,7 @@ class OverallResultsView:
             params['sorted_by_projected_reversed'] = ""
             params['sorted_by_possible'] = ""
             params['sorted_by_possible_reversed'] = ""
-        
+
         body = render_to_string("pick10/overall_results_body.html",params)
         sidebar = render_to_string("pick10/year_sidebar.html",params)
 
@@ -116,6 +120,7 @@ class OverallResultsView:
         cache.set(sidebar_key,sidebar)
 
         data = {'body_content':body,'side_block_content':sidebar,'year':year }
+        WeekNavbar(year,last_week_number,'overall',request.user).add_parameters(data)
         return render(request,"pick10/overall_results.html",data)
 
     def __initial_content(self,content_params):

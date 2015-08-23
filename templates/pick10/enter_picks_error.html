@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block header_text %}College Football Pick 10{% endblock %}
+
+{% block side_block %}
+    {% include "pick10/year_sidebar.html" %}
+    {% endblock %}
+
+{% block body_header_block %}
+    {% include "pick10/week_navbar.html" %}
+    <br>
+{% endblock %}
+
+{% block body_block %}
+<link href="/static/title_bar.css" rel="stylesheet" type="text/css" media="all">
+<link href="/static/error.css" rel="stylesheet" type="text/css" media="all">
+    {% if error == "user_not_participant" %}
+        <div id="error-msg">User {{user.username}} is not a participant in the pool.</div>
+    {% endif %}
+    {% if error == "user_player_mismatch" %}
+        <div id="error-msg">Player {{player_id}} does not match the logged in user.</div>
+        <div id="error-msg">A user can only access their own enter picks page.</div>
+    {% endif %}
+    {% if error == "after_pick_deadline" %}
+        <div id="error-msg">Pick deadline: {{deadline}}.</div><br>
+        <div id="error-msg">The pick deadline has expired.  Picks can no longer be entered.</div>
+    {% endif %}
+    {% if error == "week_in_progress" %}
+        <div id="error-msg">The week is currently in progress. No picks can be made.</div>
+    {% endif %}
+    {% if error == "week_final" %}
+        <div id="error-msg">The week is final. No picks can be made.</div>
+    {% endif %}
+{% endblock %}

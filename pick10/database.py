@@ -26,10 +26,19 @@ class Database:
     def is_week_valid(self,week,year,update=False):
         raise AssertionError,"Not implemented"
 
+    def is_week_scores_locked(self,year,week_number):
+        week = self.__get_week_in_database(year,week_number)
+        return week.lock_scores
+
     def before_pick_deadline(self,year,week_number):
         # TODO tests
         week = self.__get_week_in_database(year,week_number)
         return self.__before_pick_deadline(week)
+
+    def after_pick_deadline(self,year,week_number):
+        # TODO tests
+        week = self.__get_week_in_database(year,week_number)
+        return self.__after_pick_deadline(week)
 
     def get_pick_deadline(self,year,week_number):
         # TODO tests
@@ -79,6 +88,8 @@ class Database:
         elif week_state == FINAL:
             return "week_final"
 
+    def get_week_state(self,year,week_number):
+        return self.__get_week_state(year,week_number)
 
     def __get_week_state(self,year,week_number):
         week_data = WeekData()
@@ -155,6 +166,13 @@ class Database:
         current_time = datetime.datetime.utcnow()
         current_time_tz = pytz.timezone('UTC').localize(current_time)
         return current_time_tz <= week.lock_picks
+
+    def __after_pick_deadline(self,week):
+        if week.lock_picks == None:
+            return False
+        current_time = datetime.datetime.utcnow()
+        current_time_tz = pytz.timezone('UTC').localize(current_time)
+        return current_time_tz > week.lock_picks
 
     def update_games_cache(self,year,week_number,data):
         raise AssertionError,"Not implemented"

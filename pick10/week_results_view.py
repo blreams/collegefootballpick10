@@ -7,6 +7,7 @@ import string
 import re
 from django.core.cache import *
 from django.http import HttpResponse
+from pick10.week_navbar import *
 
 class WeekResultsView:
 
@@ -34,11 +35,10 @@ class WeekResultsView:
             memcache_hit = body != None and sidebar != None
             if memcache_hit:
                 data = {'body_content':body,'side_block_content':sidebar,'week_number':week_number }
+                WeekNavbar(year,week_number,'week_results',request.user).add_parameters(data)
                 return render(request,"pick10/week_results.html",data)
 
-        d = Database()
-        weeks_in_year = d.get_week_numbers(year)
-        years_in_pool = sorted(d.get_years(),reverse=True)
+        years_in_pool = sorted(Database().get_years(),reverse=True)
 
         cwr = CalculateWeekResults(year,week_number,use_private_names)
         results = cwr.get_results()
@@ -57,7 +57,6 @@ class WeekResultsView:
         params = dict()
         params['year'] = year
         params['week_number'] = week_number
-        params['weeks_in_year'] = weeks_in_year
         params['years_in_pool'] = years_in_pool
         params['content'] = self.__initial_content(results,winner_info)
         params['sorted_by_wins'] = self.__sort_by_wins(results,winner_info)
@@ -83,6 +82,8 @@ class WeekResultsView:
         cache.set(sidebar_key,sidebar)
 
         data = {'body_content':body,'side_block_content':sidebar,'week_number':week_number }
+        WeekNavbar(year,week_number,'week_results',request.user).add_parameters(data)
+
         return render(request,"pick10/week_results.html",data)
 
     def __initial_content(self,results,winner_info):

@@ -9,6 +9,7 @@ from player_results_view import *
 from update_view import *
 from tiebreak_view import *
 from update_games_view import *
+from enter_picks_view import *
 from django.core.cache import *
 from django.http import HttpResponseNotFound
 from django.contrib.admin.views.decorators import staff_member_required
@@ -76,6 +77,16 @@ def update_games(request,year,week_number):
         return response
     elif request.method == "POST":
         response = UpdateGamesView().post(request,year,week_number)
+        return response
+    return HttpResponseNotFound('<h1>Page not found</h1>')
+
+@login_required
+def enter_picks(request,year,week_number,player_id):
+    if request.method == "GET":
+        response = EnterPicksView().get(request,year,week_number,player_id)
+        return response
+    elif request.method == "POST":
+        response = EnterPicksView().post(request,year,week_number,player_id)
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')
 

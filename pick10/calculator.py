@@ -167,6 +167,12 @@ class CalculateResults:
 
     def player_did_not_pick(self,player,game):
         assert game != None and self.__game_id_valid(game.id),"Game is not valid"
+        assert self.__player_id_valid(player.id),"Player is not valid"
+
+        no_picks = player.id not in self.__data.player_picks
+        if no_picks:
+            return True
+
         picks = self.__data.player_picks[player.id]
         pick = self.__find_player_pick_for_game(picks,game)
         if pick == None:

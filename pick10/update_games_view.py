@@ -3,6 +3,7 @@ from django.template.loader import render_to_string
 from pick10.models import *
 from update_games import *
 from calculator import *
+from pick10.week_navbar import *
 
 class BadInputException(Exception):
     def __init__(self,errmsg):
@@ -33,6 +34,8 @@ class UpdateGamesView:
         params['FINAL'] = FINAL
         params['IN_PROGRESS'] = IN_PROGRESS
         params['NOT_STARTED'] = NOT_STARTED
+
+        WeekNavbar(year,week_number,'update_games',request.user).add_parameters(params)
 
         return render(request,"pick10/update_games.html",params)
 
@@ -71,7 +74,7 @@ class UpdateGamesView:
         submit_clicked = request.POST.get("submit_form")
         if not submit_clicked:
             errmsg = "Unexpected Error!  Expected submit button to be clicked but wasn't"
-            return render("pick10/error_message.html",message=errmsg)
+            return render(request,"pick10/error_message.html",message=errmsg)
 
         if self.__is_week_scores_locked(year,week_number):
             errmsg = "The scores for %d Week %d are locked." % (year,week_number)

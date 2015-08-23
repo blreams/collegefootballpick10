@@ -15,4 +15,7 @@
         <div><span id="date-label">Pick Deadline: </span><span id="date">{{deadline}}</span></div><br>
         <div id="error-msg">Player results for other players cannot be accessed until after the pick deadline has passed.</div>
     {% endif %}
+    {% if error == "user_player_mismatch" %}
+        <div id="error-msg">Player {{player_id}} does not match the logged in user.</div>
+    {% endif %}
 {% endblock %}
