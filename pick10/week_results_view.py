@@ -8,10 +8,11 @@ import re
 from django.core.cache import *
 from django.http import HttpResponse
 from pick10.week_navbar import *
+from pick10.user_access import *
 
 class WeekResultsView:
 
-    def get(self,request,year,week_number,use_private_names=False,use_memcache=True):
+    def get(self,request,year,week_number,use_private_names=None,use_memcache=True):
 
         if self.__bad_year_or_week_number(year,week_number):
             data={'year':year,'week_number':week_number}
@@ -19,6 +20,7 @@ class WeekResultsView:
 
         year = int(year)
         week_number = int(week_number)
+        use_private_names = self.__determine_private_access(request.user,use_private_names)
 
         # setup memcache parameters
         cache = get_cache('default')
@@ -310,3 +312,10 @@ class WeekResultsView:
     def compress_html(self,html):
         s1 = string.replace(html,'\n','')
         return re.sub(r'\s\s+',' ',s1)
+
+    def __determine_private_access(self,user,use_private_names):
+        force_public_private = use_private_names != None
+        if force_public_private:
+            return use_private_names
+
+        return UserAccess(user).is_private_user()
