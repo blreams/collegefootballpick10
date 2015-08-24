@@ -51,6 +51,7 @@ class UnitTestDatabase:
         main(years=[year])
 
     def load_historical_data_for_week(self,year=2014,week_number=1):
+        import pdb;pdb.set_trace()
         main(years=[year],weeks=[week_number])
 
     def setup_week_not_started(self,year=1978,week_number=6):

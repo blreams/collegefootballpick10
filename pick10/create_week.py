@@ -18,7 +18,7 @@ class CreateWeekView:
             year = cd.get('year')
             week = cd.get('week')
             add_year(year)
-            w = add_week(year, week)
+            w = add_week(year, week, lock_picks=True)
             return redirect('/pick10/commissioner/editweek/' + str(year) + '/week/' + str(week))
         return render(request, 'pick10/create_week_form.html', {'form': form})
 
