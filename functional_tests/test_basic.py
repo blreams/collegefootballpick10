@@ -18,9 +18,9 @@ class NewVisitorTest(FunctionalTest):
         header_text = self.browser.find_element_by_id('base_id').text
         self.assertIn('College Football Pick 10', header_text)
 
-        # There should be id="index_h1" element
-        body_text = self.browser.find_element_by_id('index_h1').text
-        self.assertIn('INDEX page', body_text)
+        # There should be id="home_h1" element
+        body_text = self.browser.find_element_by_id('home_h1').text
+        self.assertIn('HOME page', body_text)
 
         # He clicks Register to see if he can get in.
         register_link = self.browser.find_element_by_link_text('Register')
@@ -55,7 +55,7 @@ class NewVisitorTest(FunctionalTest):
         logout_link = self.browser.find_element_by_link_text('Logout')
         logout_link.click()
         WebDriverWait(self.browser, 5).until(
-                EC.presence_of_element_located((By.ID, 'index_h1'))
+                EC.presence_of_element_located((By.ID, 'home_h1'))
             )
 
         # Now he clicks Login
@@ -72,11 +72,11 @@ class NewVisitorTest(FunctionalTest):
         password_box.send_keys('eodnhoj')
         password_box.submit()
 
-        # After successful login, should redirect to Home
+        # After successful login, should redirect to Index
         WebDriverWait(self.browser, 5).until(
-                EC.presence_of_element_located((By.ID, 'home_h1'))
+                EC.presence_of_element_located((By.ID, 'index_h1'))
             )
-        body_text = self.browser.find_element_by_id('home_h1').text
-        self.assertIn('HOME page', body_text)
+        body_text = self.browser.find_element_by_id('index_h1').text
+        self.assertIn('INDEX page', body_text)
 
         #self.browser.save_screenshot('aaa.png')
