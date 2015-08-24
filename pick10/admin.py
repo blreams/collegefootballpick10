@@ -24,12 +24,14 @@ def show_year_week_game(obj):
 
 class GameAdmin(admin.ModelAdmin):
     list_display = (show_year_week_game, 'team1', 'team2', 'favored', 'spread', 'winner', 'kickoff', 'created', 'updated')
+    list_filter = ('week',)
 
 class WeekAdmin(admin.ModelAdmin):
     list_display = ('year', 'weeknum', 'lock_picks', 'lock_scores', 'created', 'updated')
 
 class PickAdmin(admin.ModelAdmin):
     list_display = ('player', 'game', 'created', 'updated')
+    list_filter = ('player',)
 
 class UserProfileInline(admin.StackedInline):
     model = UserProfile

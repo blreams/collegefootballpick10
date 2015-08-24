@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block body_block %}
+
+<p>This page will eventually be the form to edit the games for week {{week_number}} of {{year}} of
+the pool (commissioners-only).</p>
+
+<form id="edit_week_form" action="{% url 'edit_week' year week_number %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" {% if commish_can_post %}value="Submit"{% else %}value="Disabled" disabled="disabled"{% endif %} />
+</form>
+
+{% endblock %}
+

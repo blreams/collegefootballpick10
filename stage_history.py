@@ -112,6 +112,10 @@ def populate_week(yearnum, weeknum, verbose=False):
         if verbose: print("Week(%d, %d).save()" % (yearnum, weeknum,))
         weekobj.save()
 
+def populate_all_teams():
+    for teamname in team_mascot_conference_division:
+        populate_team(teamname)
+
 def populate_team(teamname):
     mascot, conference, division = team_mascot_conference_division[teamname].split(':')
     confobj, create = Conference.objects.get_or_create(conf_name=conference, div_name=division)
@@ -174,6 +178,9 @@ def main(years=None, weeks=None, verbose=False):
         years = range(beginyear, endyear + 1)
     elif isinstance(years, (int, long)):
         years = [years]
+
+    if verbose: print("populate_all_teams()")
+    populate_all_teams()
 
     for yearnum in years:
         poolspreadsheet = get_poolspreadsheet(yearnum)
