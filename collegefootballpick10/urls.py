@@ -1,6 +1,11 @@
+from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
+
+registration_backend_string = 'registration.backends.simple.urls'
+if settings.REGISTRATION_BACKEND_STRING:
+    registration_backend_string = settings.REGISTRATION_BACKEND_STRING
 
 urlpatterns = patterns('',
     # Examples:
@@ -11,5 +16,5 @@ urlpatterns = patterns('',
     url(r'^reset/done/$', auth_views.password_reset_complete, name='password_reset_complete'),
     url(r'^$', 'pick10.views.home', name='home'),
     url(r'^pick10/', include('pick10.urls')),
-    url(r'^accounts/', include('registration.backends.default.urls')),
+    url(r'^accounts/', include(registration_backend_string)),
 )
