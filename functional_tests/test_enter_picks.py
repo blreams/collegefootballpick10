@@ -419,7 +419,7 @@ class EnterPicksTest(FunctionalTest):
 
         # verify week lock picks is None
         week = get_week(1978,1) 
-        self.assertIsNone(week.lock_picks)
+        self.assertFalse(week.lock_picks)
 
         # login a user and open the picks page
         player = self.utils.get_player_from_public_name(1978,'Brent')
@@ -442,7 +442,7 @@ class EnterPicksTest(FunctionalTest):
 
         # verify week lock picks is None
         week = get_week(1978,1) 
-        self.assertIsNone(week.lock_picks)
+        self.assertFalse(week.lock_picks)
 
         # login a user and open the picks page
         player = self.utils.get_player_from_public_name(1978,'Brent')
@@ -461,7 +461,7 @@ class EnterPicksTest(FunctionalTest):
 
         # verify week lock picks is None
         week = get_week(1978,1) 
-        self.assertIsNone(week.lock_picks)
+        self.assertFalse(week.lock_picks)
 
         # login a user and open the picks page
         player = self.utils.get_player_from_public_name(1978,'Brent')

@@ -70,7 +70,8 @@ class OverallResultsTest(FunctionalTest):
         naive_dt_now = dt.datetime.now()
         naive_dt_deadline = dt.datetime(naive_dt_now.year, naive_dt_now.month, naive_dt_now.day, 16, 0, 0) + timedelta(days=1)
         deadline = pytz.timezone('US/Eastern').localize(naive_dt_deadline)
-        week.lock_picks = deadline
+        week.pick_deadline = deadline
+        week.lock_picks = False
         week.save()
 
         self.__open_results_page(year=1978)
