@@ -34,7 +34,7 @@ class PlayerResultsView:
         if access.get_profile() == None:
             timezone = 'US/Eastern'
         else:
-            timezone = access.get_profile.preferredtz
+            timezone = access.get_profile().preferredtz
 
         # TODO tests
         if self.__hide_player_results(access,player_id,year,week_number):
