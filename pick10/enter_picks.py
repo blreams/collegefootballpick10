@@ -23,6 +23,8 @@ class EnterPicks:
             data.number = game.gamenum
             data.team1 = game.team1.team_name
             data.team2 = game.team2.team_name
+            data.favored = game.favored
+            data.spread = game.spread
 
             if player_already_picked:
                 data.pick = picks[game.gamenum].winner
