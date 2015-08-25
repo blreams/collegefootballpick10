@@ -27,7 +27,7 @@ class OverallResultsView:
             body_key = "overall_private_%d" % (year)
         else:
             body_key = "overall_public_%d" % (year)
-        sidebar_key = "overall_year_sidebar"
+        sidebar_key = "overall_year_sidebar_%d" % (year)
 
         weeks_in_year = d.get_week_numbers(year)
         last_week_number = weeks_in_year[-1]

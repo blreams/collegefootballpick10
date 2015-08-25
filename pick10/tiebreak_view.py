@@ -23,7 +23,7 @@ class TiebreakView:
             body_key = "tiebreak_private_%d_%d" % (year,week_number)
         else:
             body_key = "tiebreak_public_%d_%d" % (year,week_number)
-        sidebar_key = "tiebreak_year_sidebar"
+        sidebar_key = "tiebreak_year_sidebar_%d_%d" % (year,week_number)
 
         # look for hit in the memcache
         if use_memcache:
