@@ -7,6 +7,7 @@ import unittest
 from django.contrib.auth.models import User
 from django.test.client import Client
 from django.core.cache import *
+from utils import *
 
 class UpdateGamesTest(FunctionalTest):
 
@@ -14,10 +15,14 @@ class UpdateGamesTest(FunctionalTest):
         cache = get_cache('default')
         cache.clear()
         super(UpdateGamesTest, self).setUp()
+        self.utils = Utils(self.browser,self.server_url)
 
     def test_page_up(self):
         test_db = UnitTestDatabase()
         test_db.load_historical_data_for_week(2013,1)
+
+        player = self.utils.get_player_from_ss_name(2013,'Holden, Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
 
         self.__open_page(year=2013,week_number=1)
         title = self.browser.find_element_by_id('page-title').text
@@ -28,6 +33,9 @@ class UpdateGamesTest(FunctionalTest):
     def test_not_started_view(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started(1978,1)
+
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
 
         self.__open_page(year=1978,week_number=1)
 
@@ -42,6 +50,9 @@ class UpdateGamesTest(FunctionalTest):
     def test_edit_scores(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started(1978,1)
+
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
 
         self.__open_page(year=1978,week_number=1)
 
@@ -77,6 +88,9 @@ class UpdateGamesTest(FunctionalTest):
     def test_edit_quarter_and_time(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started(1978,1)
+
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
 
         self.__open_page(year=1978,week_number=1)
 
@@ -128,6 +142,9 @@ class UpdateGamesTest(FunctionalTest):
         self.__set_game_attr(1981,1,number=8,quarter='1st',time_left='11:20')
         self.__set_game_attr(1981,1,number=9,quarter='Half',time_left='')
 
+        player = self.utils.get_player_from_public_name(1981,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
+
         self.__open_page(year=1981,week_number=1)
 
         self.assertTrue(self.__page_loaded(week_number=1))
@@ -151,6 +168,9 @@ class UpdateGamesTest(FunctionalTest):
         test_db = UnitTestDatabase()
         test_db.setup_week_final(1980,1)
 
+        player = self.utils.get_player_from_public_name(1980,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
+
         self.__open_page(year=1980,week_number=1)
 
         self.assertTrue(self.__page_loaded(week_number=1))
@@ -172,6 +192,9 @@ class UpdateGamesTest(FunctionalTest):
     def test_cancel_button(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started(1978,1)
+
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
 
         self.__open_page(year=1978,week_number=1)
 
@@ -223,6 +246,9 @@ class UpdateGamesTest(FunctionalTest):
         w.lock_scores = True
         w.save()
 
+        player = self.utils.get_player_from_public_name(1980,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
+
         self.__open_page(year=1980,week_number=1)
 
         self.assertTrue(self.__page_loaded(week_number=1))
@@ -244,7 +270,9 @@ class UpdateGamesTest(FunctionalTest):
         w.lock_scores = False
         w.save()
 
-        self.__login_user()
+        player = self.utils.get_player_from_public_name(1980,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
+
         self.__open_page(year=1980,week_number=1)
 
         self.assertTrue(self.__page_loaded(week_number=1))
@@ -282,28 +310,6 @@ class UpdateGamesTest(FunctionalTest):
 
         test_db.delete_database()
 
-    def test_lock_button_no_user(self):
-        test_db = UnitTestDatabase()
-        test_db.setup_week_final(1980,1)
-
-        w = get_week(1980,1)
-        w.lock_scores = False
-        w.save()
-
-        self.__open_page(year=1980,week_number=1)
-
-        self.assertTrue(self.__page_loaded(week_number=1))
-        self.assertFalse(self.__lock_button_present())
-        self.assertTrue(self.__submit_button_present())
-        self.assertFalse(self.__unlock_button_present())
-
-        self.__click_button('cancel')
-
-        w = get_week(1980,1)
-        self.assertFalse(w.lock_scores)
-
-        test_db.delete_database()
-
     def test_unlock_button_not_admin(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_final(1980,1)
@@ -312,31 +318,8 @@ class UpdateGamesTest(FunctionalTest):
         w.lock_scores = True
         w.save()
 
-        self.__login_user()
-        self.__open_page(year=1980,week_number=1)
-
-        self.assertTrue(self.__page_loaded(week_number=1))
-        self.assertFalse(self.__lock_button_present())
-        self.assertFalse(self.__submit_button_present())
-        self.assertFalse(self.__unlock_button_present())
-
-        body = self.browser.find_element_by_tag_name('body').text
-        self.assertIn('The scores are locked and cannot be edited.',body)
-
-        self.__click_button('cancel')
-
-        w = get_week(1980,1)
-        self.assertTrue(w.lock_scores)
-
-        test_db.delete_database()
-
-    def test_unlock_button_admin_no_user(self):
-        test_db = UnitTestDatabase()
-        test_db.setup_week_final(1980,1)
-
-        w = get_week(1980,1)
-        w.lock_scores = True
-        w.save()
+        player = self.utils.get_player_from_public_name(1980,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
 
         self.__open_page(year=1980,week_number=1)
 

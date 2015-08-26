@@ -4,6 +4,7 @@ from pick10.models import *
 from update_games import *
 from calculator import *
 from pick10.week_navbar import *
+from pick10.user_access import *
 
 class BadInputException(Exception):
     def __init__(self,errmsg):
@@ -17,12 +18,31 @@ class UpdateGamesView:
             data={'year':year,'week_number':week_number}
             return render(request,"pick10/bad_week.html",data,status=400)
 
+        access = UserAccess(request.user)
+
         d = Database()
 
         year = int(year)
         week_number = int(week_number)
         weeks_in_year = d.get_week_numbers(year)
         years_in_pool = sorted(d.get_years(),reverse=True)
+
+        # check user/player privileges
+        # superuser is allowed to access page no matter what
+        if access.is_superuser() == False:
+
+            # only private player can update scores
+            if access.is_public_user():
+                data={'year':year,'error':'user_not_participant'}
+                WeekNavbar(year,week_number,'update_games',request.user).add_parameters(data)
+                return render(request,"pick10/update_games_error.html",data)
+
+            # user's player not in the pool this year
+            if access.is_player_in_year(year) == False:
+                player_id = access.get_player().id
+                data={'year':year,'player_id':player_id,'error':'bad_year'}
+                WeekNavbar(year,week_number,'update_games',request.user).add_parameters(data)
+                return render(request,"pick10/update_games_error.html",data)
 
         params = dict()
         params['year'] = year
@@ -76,9 +96,29 @@ class UpdateGamesView:
             errmsg = "Unexpected Error!  Expected submit button to be clicked but wasn't"
             return render(request,"pick10/error_message.html",message=errmsg)
 
+        # check user/player privileges
+        # superuser is allowed to access page no matter what
+        access = UserAccess(request.user)
+
+        if access.is_superuser() == False:
+
+            # only private player can update scores
+            if access.is_public_user():
+                data={'year':year,'error':'user_not_participant'}
+                WeekNavbar(year,week_number,'update_games',request.user).add_parameters(data)
+                return render(request,"pick10/update_games_error.html",data)
+
+            # user's player not in the pool this year
+            if access.is_player_in_year(year) == False:
+                player_id = access.get_player().id
+                data={'year':year,'player_id':player_id,'error':'bad_year'}
+                WeekNavbar(year,week_number,'update_games',request.user).add_parameters(data)
+                return render(request,"pick10/update_games_error.html",data)
+
         if self.__is_week_scores_locked(year,week_number):
-            errmsg = "The scores for %d Week %d are locked." % (year,week_number)
-            return render(response,"pick10/error_message.html",message=errmsg)
+            data={'year':year,'week_number':week_number,'error':'scores_locked'}
+            WeekNavbar(year,week_number,'update_games',request.user).add_parameters(data)
+            return render(response,"pick10/update_games_error.html",data)
 
         u = UpdateGames(year,week_number)
         week_games = u.get_games()

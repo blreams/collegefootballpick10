@@ -37,6 +37,10 @@ class Utils:
         address = self.server_url + reverse('enter_picks',args=(year,week,player_id,))
         self.browser.get(address)
 
+    def update_page(self,year,week):
+        address = self.server_url + reverse('update_pages',args=(year,week,))
+        self.browser.get(address)
+
     def wait_for_page(self,title,timeout=10):
         WebDriverWait(self.browser,timeout,1.0).until(EC.title_is(title))
 
@@ -148,4 +152,9 @@ class Utils:
         naive_dt_deadline = dt.datetime(naive_dt_now.year, naive_dt_now.month, naive_dt_now.day, 16, 0, 0) + timedelta(days=days_until_expired)
         deadline = pytz.timezone('US/Eastern').localize(naive_dt_deadline)
         week.lock_picks = deadline
+        week.save()
+
+    def unlock_game_scores(self,year,week_number):
+        week = get_week(year,week_number)
+        week.lock_scores = False
         week.save()
