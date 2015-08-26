@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django import forms
-from models import UserProfile, get_yearlist, get_createweek_year_week, get_teamlist
+from models import UserProfile, get_yearlist, get_createweek_year_week, get_teamlist, get_default_pick_deadline
 from django.utils import timezone
 
 import pytz
@@ -38,10 +38,15 @@ class CreateWeekForm(forms.Form):
 
 class EditWeekForm(forms.Form):
     def __init__(self, *args, **kwargs):
+        weekfields = {}
+        if 'weekfields' in kwargs:
+            weekfields = kwargs.pop('weekfields')
         gamefields = {}
         if 'gamefields' in kwargs:
             gamefields = kwargs.pop('gamefields')
         super(EditWeekForm, self).__init__(*args, **kwargs)
+        self.initial['pick_deadline'] = get_default_pick_deadline()
+        self.initial['lock_picks'] = weekfields.get('lock_picks')
         self.fields['lock_picks'] = forms.BooleanField(widget=forms.CheckboxInput)
         self.fields['pick_deadline'] = forms.DateTimeField(widget=forms.DateTimeInput)
         for i in range(1, 11):
