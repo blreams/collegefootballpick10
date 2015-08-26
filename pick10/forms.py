@@ -42,6 +42,8 @@ class EditWeekForm(forms.Form):
         if 'gamefields' in kwargs:
             gamefields = kwargs.pop('gamefields')
         super(EditWeekForm, self).__init__(*args, **kwargs)
+        self.fields['lock_picks'] = forms.BooleanField(widget=forms.CheckboxInput)
+        self.fields['pick_deadline'] = forms.DateTimeField(widget=forms.DateTimeInput)
         for i in range(1, 11):
             gamestr = 'game%d_' % i
 
