@@ -431,12 +431,12 @@ class CalculateResults:
         if week == None:
             return False
 
-        pick_deadline_not_set = week.lock_picks == None
+        pick_deadline_not_set = week.pick_deadline == None
         if pick_deadline_not_set:
             return True
 
-        picks_entered_after_pick_deadline = submit_time > week.lock_picks
-        if picks_entered_after_pick_deadline:
+        picks_entered_after_pick_deadline = submit_time > week.pick_deadline
+        if picks_entered_after_pick_deadline or week.lock_picks:
             return True
 
         return False

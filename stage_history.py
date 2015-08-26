@@ -1,6 +1,7 @@
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'collegefootballpick10.settings')
-from datetime import datetime, date, time
+#from datetime import datetime, date, time
+from django.utils import timezone
 
 import django
 django.setup()
@@ -128,7 +129,8 @@ def populate_games_for_year_week(yearnum, weeknum, verbose=False):
     poolspreadsheet = get_poolspreadsheet(yearnum)
     games_dict = poolspreadsheet.get_games(weeknum)
     if len(games_dict) == 10:
-        weekobj.lock_picks = datetime.now()
+        weekobj.pick_deadline = timezone.now()
+        weekobj.lock_picks = False
         weekobj.save()
     for gamenum in games_dict:
         team1obj = populate_team(games_dict[gamenum].team1)

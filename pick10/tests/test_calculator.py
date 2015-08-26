@@ -4,6 +4,7 @@ from pick10.calculator import *
 from pick10.models import *
 from unit_test_database import *
 import datetime as dt
+from django.utils import timezone
 
 # This class tests the calculator.py file load_week_data function
 class CalculatorTests(TestCase):
@@ -2599,47 +2600,53 @@ class CalculatorTests(TestCase):
         self.__change_player_pick_time(player,games[10],created=created_time,updated=dt.datetime(2013,8,10))
         self.assertEqual(self.calc.get_player_submit_time(player),dt.datetime(2013,8,11))
 
+    # BLR - This test may not be valid
     def __t36_week_lock_picks_not_specified(self):
         player = self.week1.get_player("Brent Holden")
         games = self.week1.games
         week = self.week1.week
-        week.lock_picks = None
+        week.lock_picks = True
+        week.pick_deadline = dt.datetime(2013,8,12)
         created_time=dt.datetime(2013,8,1)
-        self.__change_player_pick_time(player,games[1],created=created_time,updated=dt.datetime(2013,8,10))
-        self.__change_player_pick_time(player,games[2],created=created_time,updated=dt.datetime(2013,8,10))
-        self.__change_player_pick_time(player,games[3],created=created_time,updated=dt.datetime(2013,8,10))
-        self.__change_player_pick_time(player,games[4],created=created_time,updated=dt.datetime(2013,8,10))
-        self.__change_player_pick_time(player,games[5],created=created_time,updated=dt.datetime(2013,8,11))
-        self.__change_player_pick_time(player,games[6],created=created_time,updated=dt.datetime(2013,8,10))
-        self.__change_player_pick_time(player,games[7],created=created_time,updated=dt.datetime(2013,8,10))
-        self.__change_player_pick_time(player,games[8],created=created_time,updated=dt.datetime(2013,8,10))
-        self.__change_player_pick_time(player,games[9],created=created_time,updated=dt.datetime(2013,8,10))
-        self.__change_player_pick_time(player,games[10],created=created_time,updated=dt.datetime(2013,8,10))
+        updated_time=dt.datetime(2013,8,10)
+        self.__change_player_pick_time(player,games[1],created=created_time,updated=updated_time)
+        self.__change_player_pick_time(player,games[2],created=created_time,updated=updated_time)
+        self.__change_player_pick_time(player,games[3],created=created_time,updated=updated_time)
+        self.__change_player_pick_time(player,games[4],created=created_time,updated=updated_time)
+        self.__change_player_pick_time(player,games[5],created=created_time,updated=updated_time)
+        self.__change_player_pick_time(player,games[6],created=created_time,updated=updated_time)
+        self.__change_player_pick_time(player,games[7],created=created_time,updated=updated_time)
+        self.__change_player_pick_time(player,games[8],created=created_time,updated=updated_time)
+        self.__change_player_pick_time(player,games[9],created=created_time,updated=updated_time)
+        self.__change_player_pick_time(player,games[10],created=created_time,updated=updated_time)
         self.assertIsNone(self.calc.get_player_submit_time(player,week))
 
     def __t36_submit_after_week_lock(self):
         player = self.week1.get_player("Brent Holden")
         games = self.week1.games
         week = self.week1.week
-        week.lock_picks = dt.datetime(2013,8,10)
+        week.lock_picks = False
+        week.pick_deadline = dt.datetime(2013,8,9)
         created_time=dt.datetime(2013,8,1)
-        self.__change_player_pick_time(player,games[1],created=created_time,updated=dt.datetime(2013,8,10))
-        self.__change_player_pick_time(player,games[2],created=created_time,updated=dt.datetime(2013,8,10))
-        self.__change_player_pick_time(player,games[3],created=created_time,updated=dt.datetime(2013,8,10))
-        self.__change_player_pick_time(player,games[4],created=created_time,updated=dt.datetime(2013,8,10))
-        self.__change_player_pick_time(player,games[5],created=created_time,updated=dt.datetime(2013,8,11))
-        self.__change_player_pick_time(player,games[6],created=created_time,updated=dt.datetime(2013,8,10))
-        self.__change_player_pick_time(player,games[7],created=created_time,updated=dt.datetime(2013,8,10))
-        self.__change_player_pick_time(player,games[8],created=created_time,updated=dt.datetime(2013,8,10))
-        self.__change_player_pick_time(player,games[9],created=created_time,updated=dt.datetime(2013,8,10))
-        self.__change_player_pick_time(player,games[10],created=created_time,updated=dt.datetime(2013,8,10))
+        updated_time=dt.datetime(2013,8,10)
+        self.__change_player_pick_time(player,games[1],created=created_time,updated=updated_time)
+        self.__change_player_pick_time(player,games[2],created=created_time,updated=updated_time)
+        self.__change_player_pick_time(player,games[3],created=created_time,updated=updated_time)
+        self.__change_player_pick_time(player,games[4],created=created_time,updated=updated_time)
+        self.__change_player_pick_time(player,games[5],created=created_time,updated=updated_time)
+        self.__change_player_pick_time(player,games[6],created=created_time,updated=updated_time)
+        self.__change_player_pick_time(player,games[7],created=created_time,updated=updated_time)
+        self.__change_player_pick_time(player,games[8],created=created_time,updated=updated_time)
+        self.__change_player_pick_time(player,games[9],created=created_time,updated=updated_time)
+        self.__change_player_pick_time(player,games[10],created=created_time,updated=updated_time)
         self.assertIsNone(self.calc.get_player_submit_time(player,week))
 
     def __t36_submit_before_week_lock(self):
         player = self.week1.get_player("Brent Holden")
         games = self.week1.games
         week = self.week1.week
-        week.lock_picks = dt.datetime(2013,8,12)
+        week.lock_picks = False
+        week.pick_deadline = dt.datetime(2013,8,12)
         created_time=dt.datetime(2013,8,1)
         self.__change_player_pick_time(player,games[1],created=created_time,updated=dt.datetime(2013,8,10))
         self.__change_player_pick_time(player,games[2],created=created_time,updated=dt.datetime(2013,8,10))
@@ -2657,7 +2664,8 @@ class CalculatorTests(TestCase):
         player = self.week1.get_player("Brent Holden")
         games = self.week1.games
         week = self.week1.week
-        week.lock_picks = dt.datetime(2013,8,11)
+        week.lock_picks = False
+        week.pick_deadline = dt.datetime(2013,8,11)
         created_time=dt.datetime(2013,8,1)
         self.__change_player_pick_time(player,games[1],created=created_time,updated=dt.datetime(2013,8,10))
         self.__change_player_pick_time(player,games[2],created=created_time,updated=dt.datetime(2013,8,10))

@@ -21,7 +21,7 @@ class BasicModelTest(TestCase):
 
     def test_conference_model(self):
         confs = Conference.objects.all()
-        self.assertEqual(confs.count(), 11)
+        self.assertEqual(confs.count(), 18)
         confs = Conference.objects.filter(conf_name='Southeastern')
         self.assertEqual(confs[0].conf_name, 'Southeastern')
         self.assertEqual(confs.count(), 2)

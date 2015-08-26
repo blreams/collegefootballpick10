@@ -138,7 +138,8 @@ class Utils:
         naive_dt_now = dt.datetime.now()
         naive_dt_deadline = dt.datetime(naive_dt_now.year, naive_dt_now.month, naive_dt_now.day, 16, 0, 0) - timedelta(days=1)
         deadline = pytz.timezone('US/Eastern').localize(naive_dt_deadline)
-        week.lock_picks = deadline
+        week.pick_deadline = deadline
+        week.lock_picks = False
         week.save()
 
     def set_pick_deadline_not_expired(self,year,week_number,days_until_expired=1):

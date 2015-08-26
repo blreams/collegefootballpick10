@@ -107,10 +107,21 @@ class Week(models.Model):
     year = models.ForeignKey('Year')                                        # Season year corresponding to this week
     weeknum = models.IntegerField()                                         # Week number within the season
     winner = models.ForeignKey(Player, null=True, blank=True, default=None) # Link to Player who won the week
-    lock_picks = models.DateTimeField(null=True, blank=True)                # When generating a new Week, use get_default_pick_deadline()
+    pick_deadline = models.DateTimeField(null=True, blank=True)             # When generating a new Week, use get_default_pick_deadline()
+    lock_picks = models.BooleanField(default=False)                         # Commissioner sets to False once games are finalized and picks can begin
     lock_scores = models.BooleanField(default=False)                        # Commissioner sets to True, after which only commissioner can update scores
-    created = models.DateTimeField(auto_now=False, auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True, auto_now_add=True)
+    #created = models.DateTimeField(auto_now=False, auto_now_add=True)
+    #updated = models.DateTimeField(auto_now=True, auto_now_add=True)
+    created = models.DateTimeField(editable=False)
+    updated = models.DateTimeField()
+
+    def save(self, *args, **kwargs):
+        '''On save, update timestamps'''
+        rightnow = timezone.now()
+        if not self.id:
+            self.created = rightnow
+        self.updated = rightnow
+        return super(Week, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name_plural = '6. Weeks'
@@ -201,11 +212,12 @@ def update_game(yearnum, weeknum, gamenum, team1_actual_points, team2_actual_poi
     g.game_state = game_state
     g.save()
 
-def add_week(yearnum, weeknum):
+def add_week(yearnum, weeknum, lock_picks=False):
     year = Year.objects.get(yearnum=yearnum)
     w, created = Week.objects.get_or_create(year=year, weeknum=weeknum)
     if created:
-        w.lock_picks = timezone.now()
+        w.pick_deadline = timezone.now()
+        w.lock_picks = lock_picks
         w.save()
     return w
 
@@ -308,8 +320,8 @@ def set_week_lock_picks(yearnum, weeknum, value):
       The value of Week.lock_picks when called.
     """
     w = get_week(yearnum, weeknum)
-    rv = w.lock_picks
-    w.lock_picks = value
-    w.save()
-    return rv
+    lock_picks = w.lock_picks
+    if lock_picks != value:
+        w.lock_picks = value
+        w.save()
 
