@@ -6,6 +6,18 @@ from models import get_commish_can_post, get_games_info_for_week, get_week_info,
 from models import add_game, get_week, get_team
 from forms import CreateWeekForm, EditWeekForm
 
+def make_boolean(val):
+    if isinstance(val, basestring):
+        if val.lower() == 'true':
+            return True
+        else:
+            return False
+    elif isinstance(val, int):
+        if val != 0:
+            return True
+        else:
+            return False
+
 class EditWeekView:
 
     def get(self,request, year, week_number):
@@ -27,7 +39,7 @@ class EditWeekView:
         if form.is_valid():
             cd = form.cleaned_data
             weekobj=get_week(year, week_number)
-            weekobj.lock_picks = cd['lock_picks']
+            weekobj.lock_picks = make_boolean(cd['lock_picks'])
             weekobj.pick_deadline = cd['pick_deadline']
             weekobj.save()
             for i in range(1, 11):

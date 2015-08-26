@@ -47,7 +47,7 @@ class EditWeekForm(forms.Form):
         super(EditWeekForm, self).__init__(*args, **kwargs)
         self.initial['pick_deadline'] = get_default_pick_deadline()
         self.initial['lock_picks'] = weekfields.get('lock_picks')
-        self.fields['lock_picks'] = forms.BooleanField(widget=forms.CheckboxInput)
+        self.fields['lock_picks'] = forms.ChoiceField(widget=forms.RadioSelect, choices=((True, 'Yes'), (False, 'No')))
         self.fields['pick_deadline'] = forms.DateTimeField(widget=forms.DateTimeInput)
         for i in range(1, 11):
             gamestr = 'game%d_' % i
