@@ -28,7 +28,7 @@ class WeekResultsView:
             body_key = "week_private_%d_%d" % (year,week_number)
         else:
             body_key = "week_public_%d_%d" % (year,week_number)
-        sidebar_key = "week_year_sidebar"
+        sidebar_key = "week_year_sidebar_%d_%d" % (year,week_number)
 
         # look for hit in the memcache
         if use_memcache:
