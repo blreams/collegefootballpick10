@@ -53,7 +53,6 @@ class EnterPicksTest(FunctionalTest):
         self.utils.click_radio_button('pick_7','team1')
         self.utils.click_radio_button('pick_8','team2')
         self.utils.click_radio_button('pick_9','team1')
-        self.utils.click_radio_button('pick_10','team2')
 
         # set pick score
         self.browser.find_element_by_name("team1-score").send_keys("10")
@@ -83,7 +82,7 @@ class EnterPicksTest(FunctionalTest):
             picks = [TEAM2] * 10
             picks[game_number-1] = TEAM1
 
-            self.__run_test(1978,1,player,picks,team1_score=0,team2_score=0)
+            self.__run_test(1978,1,player,picks,auto_score=True)
 
         # verify can choose team2 for each game
         for game_number in range(1,11):
@@ -93,7 +92,7 @@ class EnterPicksTest(FunctionalTest):
             picks = [TEAM1] * 10
             picks[game_number-1] = TEAM2
 
-            self.__run_test(1978,1,player,picks,team1_score=0,team2_score=0)
+            self.__run_test(1978,1,player,picks,auto_score=True)
 
         test_db.delete_database()
 
@@ -107,11 +106,21 @@ class EnterPicksTest(FunctionalTest):
 
         # try different scores
         picks = [TEAM1]*10
-        self.__run_test(1978,1,player,picks,team1_score=0,team2_score=10)
-        self.__run_test(1978,1,player,picks,team1_score=10,team2_score=0)
-        self.__run_test(1978,1,player,picks,team1_score=5,team2_score=5)
-        self.__run_test(1978,1,player,picks,team1_score=45,team2_score=12)
-        self.__run_test(1978,1,player,picks,team1_score=12,team2_score=45)
+
+        picks[-1] = TEAM2
+        self.__run_test(1978,1,player,picks,team1_score=0,team2_score=10,auto_score=False)
+
+        picks[-1] = TEAM1
+        self.__run_test(1978,1,player,picks,team1_score=10,team2_score=0,auto_score=False)
+
+        picks[-1] = TEAM1
+        self.__run_test(1978,1,player,picks,team1_score=5,team2_score=5,auto_score=False)
+
+        picks[-1] = TEAM1
+        self.__run_test(1978,1,player,picks,team1_score=45,team2_score=12,auto_score=False)
+
+        picks[-1] = TEAM2
+        self.__run_test(1978,1,player,picks,team1_score=12,team2_score=45,auto_score=False)
 
         test_db.delete_database()
 
@@ -126,13 +135,14 @@ class EnterPicksTest(FunctionalTest):
         picks = [TEAM1]*10
 
         # verify submit time hasn't changed when inputing same data
-        self.__run_test(1978,1,player,picks,team1_score=25,team2_score=10)
+        self.__run_test(1978,1,player,picks,auto_score=True)
         submit1_time = self.__get_pick_submit_time(1978,1,player)
-        self.__run_test(1978,1,player,picks,team1_score=25,team2_score=10)
+        self.__run_test(1978,1,player,picks,auto_score=True)
         submit2_time = self.__get_pick_submit_time(1978,1,player)
 
         # verify submit time changes if make a change
-        self.__run_test(1978,1,player,picks,team1_score=5,team2_score=15)
+        picks[-1] = TEAM2
+        self.__run_test(1978,1,player,picks,auto_score=True)
         submit3_time = self.__get_pick_submit_time(1978,1,player)
 
         self.assertIsNotNone(submit1_time)
@@ -161,7 +171,10 @@ class EnterPicksTest(FunctionalTest):
         # each pick should have an error message
         for game_number in range(1,11):
             error_text = self.browser.find_element_by_id('pick_%d_error' % (game_number)).text
-            self.assertEqual(error_text,'ERROR!  Please pick a team')
+            if game_number == 10:
+                self.assertEqual(error_text,'ERROR!  Team score is invalid')
+            else:
+                self.assertEqual(error_text,'ERROR!  Please pick a team')
 
         test_db.delete_database()
 
@@ -181,14 +194,14 @@ class EnterPicksTest(FunctionalTest):
             picks = [TEAM1] * 10
             picks[game_number-1] = 0
 
-            self.__run_test(1978,1,player,picks,team1_score=0,team2_score=0,verify=False)
+            self.__run_test(1978,1,player,picks,verify=False,auto_score=True)
 
             # check for title
             title = self.browser.find_element_by_id('page-title').text
             self.assertIn('Brent Week 1 Picks',title)
 
             # only one pick should have an error message
-            for pick_number in range(1,11):
+            for pick_number in range(1,10):
 
                 if game_number == pick_number:
                     error_text = self.browser.find_element_by_id('pick_%d_error' % (game_number)).text
@@ -213,7 +226,7 @@ class EnterPicksTest(FunctionalTest):
         picks = [TEAM1] * 10
 
         # test both scores missing
-        self.__run_test(1978,1,player,picks,team1_score=None,team2_score=None,verify=False)
+        self.__run_test(1978,1,player,picks,team1_score=None,team2_score=None,verify=False,auto_score=False)
 
         title = self.browser.find_element_by_id('page-title').text
         self.assertIn('Brent Week 1 Picks',title)
@@ -222,7 +235,7 @@ class EnterPicksTest(FunctionalTest):
         self.assertEqual(error_text,'ERROR!  Team score is invalid')
 
         # test team1 score missing
-        self.__run_test(1978,1,player,picks,team1_score=None,team2_score=10,verify=False)
+        self.__run_test(1978,1,player,picks,team1_score=None,team2_score=10,verify=False,auto_score=False)
 
         title = self.browser.find_element_by_id('page-title').text
         self.assertIn('Brent Week 1 Picks',title)
@@ -231,7 +244,7 @@ class EnterPicksTest(FunctionalTest):
         self.assertEqual(error_text,'ERROR!  Team score is invalid')
 
         # test team2 score missing
-        self.__run_test(1978,1,player,picks,team1_score=10,team2_score=None,verify=False)
+        self.__run_test(1978,1,player,picks,team1_score=10,team2_score=None,verify=False,auto_score=False)
 
         title = self.browser.find_element_by_id('page-title').text
         self.assertIn('Brent Week 1 Picks',title)
@@ -252,7 +265,7 @@ class EnterPicksTest(FunctionalTest):
         picks = [TEAM1] * 10
 
         # test team1 score not integer
-        self.__run_test(1978,1,player,picks,team1_score='AA',team2_score=10,verify=False)
+        self.__run_test(1978,1,player,picks,team1_score='AA',team2_score=10,verify=False,auto_score=False)
 
         title = self.browser.find_element_by_id('page-title').text
         self.assertIn('Brent Week 1 Picks',title)
@@ -261,7 +274,7 @@ class EnterPicksTest(FunctionalTest):
         self.assertEqual(error_text,'ERROR!  Team score is invalid')
 
         # test team2 score not integer
-        self.__run_test(1978,1,player,picks,team1_score=10,team2_score='BB',verify=False)
+        self.__run_test(1978,1,player,picks,team1_score=10,team2_score='BB',verify=False,auto_score=False)
 
         title = self.browser.find_element_by_id('page-title').text
         self.assertIn('Brent Week 1 Picks',title)
@@ -340,7 +353,7 @@ class EnterPicksTest(FunctionalTest):
         self.utils.login_assigned_user(name='Brent',player=player)
 
         picks = [TEAM1] * 10
-        self.__run_test(1978,1,player,picks,team1_score=33,team2_score=3)
+        self.__run_test(1978,1,player,picks,auto_score=True)
 
         test_db.delete_database()
 
@@ -371,7 +384,7 @@ class EnterPicksTest(FunctionalTest):
         self.utils.login_assigned_user(name='Brent',player=player)
 
         picks = [TEAM1,TEAM2,TEAM1,TEAM2,TEAM1,TEAM2,TEAM1,TEAM2,TEAM1,TEAM2]
-        self.__run_test(1978,1,player,picks,team1_score=33,team2_score=3)
+        self.__run_test(1978,1,player,picks,auto_score=True)
 
         test_db.delete_database()
 
@@ -716,7 +729,7 @@ class EnterPicksTest(FunctionalTest):
         self.assertEqual(game10.team1_predicted_points,team1_score)
         self.assertEqual(game10.team2_predicted_points,team2_score)
 
-    def __run_test(self,year,week,player,picks,team1_score,team2_score,verify=True):
+    def __run_test(self,year,week,player,picks,team1_score=None,team2_score=None,verify=True,auto_score=True):
 
         self.utils.enter_picks_page(year=year,week=week,player_id=player.id)
 
@@ -735,9 +748,13 @@ class EnterPicksTest(FunctionalTest):
                 raise AssertionError,"Invalid pick value"
 
             # skip the pick if it is set to 0
-            if picks[index] != 0:
+            if picks[index] != 0 and game_number != 10:
                 name = 'pick_%d' % (game_number)
                 self.utils.click_radio_button(name,value)
+
+        if auto_score:
+            game10_pick = picks[9]
+            team1_score,team2_score = self.__set_game10_winner(game10_pick)
 
         # set pick score
         if team1_score != None:
@@ -757,3 +774,21 @@ class EnterPicksTest(FunctionalTest):
         calc = CalculateResults(week_data)
         submit_time = calc.get_player_submit_time(player)
         return submit_time
+
+    def __set_game10_winner(self,winner):
+        game10 = get_game(1978,1,10)
+
+        if winner == TEAM1:
+            team2_score = 0
+            team1_score = int(game10.spread) + 1
+        elif winner == TEAM2:
+            team1_score = 0
+            team2_score = int(game10.spread) + 1
+        elif winner == 0:
+            team1_score = None
+            team2_score = None 
+        else:
+            raise AssertionError,"expected TEAM1 or TEAM2"
+
+        return team1_score,team2_score
+

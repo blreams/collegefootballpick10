@@ -21,49 +21,58 @@
     <div class="col-md-4">
         {% for pick in picks %}
 
-    {% if pick.error_message %}
-    <div class="pick-error" id="pick_{{pick.number}}_error"><strong>ERROR!</strong>&nbsp;&nbsp;{{pick.error_message}}</div>
-    {% endif %}
-    <table class="table table-hover">
-        <thead>
-            <td class="game-number">Game {{pick.number}}</td>
-            <td class="header-light">spread</td>
-            {% if pick.number == 10 %}
-                <td class="header-light">score</td>
-            {% endif %}
-        </thead>
-        <tr class="{{pick.team1_row_class}}" id="team1_row_{{pick.number}}">
-            <td><label class="radio-inline">
-                    <input type="radio" name="pick_{{pick.number}}" value="team1" onclick="highlightTeam1({{pick.number}})" {{pick.team1_checked}}>
-                {{pick.team1}}</label>
-            </td>
-            <td>{{pick.team1_spread}}</td>
-            {% if pick.number == 10 %}
-                <td><input type="text" size="3" name="team1-score" value="{{pick.team1_predicted_points}}"></input></td>
-            {% endif %}
-        </tr>
-        <tr class="{{pick.team2_row_class}}" id="team2_row_{{pick.number}}">
-            <td><label class="radio-inline">
-                    <input type="radio" name="pick_{{pick.number}}" value="team2" onclick="highlightTeam2({{pick.number}})" {{pick.team2_checked}}>
-                    {{pick.team2}}</label>
-            </td>
-            <td>{{pick.team2_spread}}</td>
-            {% if pick.number == 10 %}
-                <td><input type="text" size="3" name="team2-score" value="{{pick.team2_predicted_points}}"></input></td>
-            {% endif %}
-        </tr>
-        {% if pick.number == 10 %}
-            <tr><td></td><td></td><td></td></tr>
-        {% else %}
-            <tr><td></td><td></td></tr>
+        {% if pick.error_message %}
+            <div class="pick-error" id="pick_{{pick.number}}_error"><strong>ERROR!</strong>&nbsp;&nbsp;{{pick.error_message}}</div>
         {% endif %}
-    </table>
-    <br>
 
+        {% if pick.number == 10 %}
+            <div id="game-10-error"></div>
+            <table class="table table-hover">
+                <thead>
+                    <td class="game-number">Game {{pick.number}}</td>
+                    <td class="header-light">spread</td>
+                    <td class="header-light">score</td>
+                </thead>
+                <tr class="{{pick.team1_row_class}}" id="team1_row_{{pick.number}}">
+                    <td><label>{{pick.team1}}</label></td>
+                    <td>{{pick.team1_spread}}</td>
+                    <td><input type="text" size="3" name="team1-score" value="{{pick.team1_predicted_points}}"></input></td>
+                </tr>
+                <tr class="{{pick.team2_row_class}}" id="team2_row_{{pick.number}}">
+                    <td><label>{{pick.team2}}</label></td>
+                    <td>{{pick.team2_spread}}</td>
+                    <td><input type="text" size="3" name="team2-score" value="{{pick.team2_predicted_points}}"></input></td>
+                </tr>
+            </table>
+        {% else %}
+            <table class="table table-hover">
+                <thead>
+                    <td class="game-number">Game {{pick.number}}</td>
+                    <td class="header-light">spread</td>
+                </thead>
+                <tr class="{{pick.team1_row_class}}" id="team1_row_{{pick.number}}">
+                    <td><label class="radio-inline">
+                        <input type="radio" name="pick_{{pick.number}}" value="team1" onclick="highlightTeam1({{pick.number}})" {{pick.team1_checked}}>
+                        {{pick.team1}}</label>
+                    </td>
+                <td>{{pick.team1_spread}}</td>
+                </tr>
+                <tr class="{{pick.team2_row_class}}" id="team2_row_{{pick.number}}">
+                    <td><label class="radio-inline">
+                        <input type="radio" name="pick_{{pick.number}}" value="team2" onclick="highlightTeam2({{pick.number}})" {{pick.team2_checked}}>
+                        {{pick.team2}}</label>
+                    </td>
+                    <td>{{pick.team2_spread}}</td>
+                </tr>
+            </table>
+        {% endif %}
+    <br>
 {% endfor %}
 <div>
     <button class="btn btn-success" type="submit" name="submit_form" value="Submit">Submit Picks</button>
+    &nbsp;&nbsp;
     <button class="btn" type="submit" name="cancel_form" value="Cancel">Cancel</button>
+    <br><br>
 </div>
 </div>
 </form>
@@ -80,5 +89,45 @@
             $("#team1_row_" + pick_number).removeClass("info");
             $("#team2_row_" + pick_number).addClass("info");
         }
+        function update_game10_winner() {
+            var team1_score_str = $('[name=team1-score]').val();
+            var team2_score_str = $('[name=team2-score]').val();
+            var team1_score = parseInt(team1_score_str);
+            var team2_score = parseInt(team2_score_str);
+            var bad_input = isNaN(team1_score) || isNaN(team2_score);
+
+            if (bad_input || team1_score < 0 || team2_score < 0) {
+                $("#team1_row_10").removeClass("info");
+                $("#team2_row_10").removeClass("info");
+                $("#game-10-error").text("ERROR! Team score is invalid")
+                $("#game-10-error").addClass("pick-error")
+                return;
+            }
+            $("#game-10-error").text("")
+            $("#game-10-error").removeClass("pick-error")
+
+            // calculate winner
+            var winner = 1;
+            var spread = {{game10_spread}};
+            var favored = {{game10_favored}};
+
+            if ((favored == 1 && (team1_score - team2_score) < spread) || 
+               (favored == 2 && (team2_score - team1_score) > spread)) {
+                winner = 2;
+            }
+
+            //highlight winner
+            if (winner == 1) {
+                highlightTeam1(10);
+            } else {
+                highlightTeam2(10);
+            }
+        }
+        $('[name=team1-score]').keyup(function() {
+            update_game10_winner();
+        });
+        $('[name=team2-score]').keyup(function() {
+            update_game10_winner();
+        });
     </script>
 {% endblock %}

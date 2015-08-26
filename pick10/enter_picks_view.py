@@ -147,8 +147,10 @@ class EnterPicksView:
         params['player_name'] = self.__get_player_name(player_id)
 
         self.__setup_pick_team_rows(picks)
+        self.__set_game10_params(picks,params)
 
         params['picks'] = picks
+
 
         WeekNavbar(year,week_number,'enter_picks',request.user).add_parameters(params)
         return render(request,"pick10/enter_picks.html",params)
@@ -205,32 +207,28 @@ class EnterPicksView:
 
             pick = request.POST.get('pick_%d' % (game_number))
 
-            if pick == "team1":
-                picks[index].pick = TEAM1
-            elif pick == "team2":
-                picks[index].pick = TEAM2
+            if game_number != 10:
+                if pick == "team1":
+                    picks[index].pick = TEAM1
+                elif pick == "team2":
+                    picks[index].pick = TEAM2
+                else:
+                    picks[index].pick = 0
+                    picks[index].error_message = "Please pick a team"
+                    error_found = True
             else:
-                picks[index].pick = 0
-                picks[index].error_message = "Please pick a team"
-                error_found = True
-
-            if game_number == 10:
                 team1_score = self.__get_score(request,'team1-score')
                 team2_score = self.__get_score(request,'team2-score')
+
                 if team1_score == None or team2_score == None:
                     error_found = True
-
-                    # give priority to the missing pick error message
-                    # over the invalid team score message
-                    pick_valid = picks[index].error_message == None
-                    if pick_valid:
-                        picks[index].error_message = "Team score is invalid"
-
-                    picks[index].team1_predicted_points = ""
-                    picks[index].team2_predicted_points = ""
+                    picks[index].error_message = "Team score is invalid"
+                    picks[index].team1_predicted_points = "" if team1_score == None else team1_score
+                    picks[index].team2_predicted_points = "" if team2_score == None else team2_score
                 else:
                     picks[index].team1_predicted_points = team1_score
                     picks[index].team2_predicted_points = team2_score
+                    picks[index].pick = self.__get_team_pick(picks[index],team1_score,team2_score)
 
         return error_found
 
@@ -293,3 +291,28 @@ class EnterPicksView:
             return profile.player == None
         except:
             return True
+
+    def __get_team_pick(self,data,team1_score,team2_score):
+        # setup dummy Game() required to use calculator.py function
+        game = Game()
+        game.team1_actual_points = team1_score
+        game.team2_actual_points = team2_score
+        game.spread = data.spread
+        game.favored = data.favored
+
+        # calculate winner
+        calc = CalculateResults(None)
+        if calc.is_team1_winning_pool(game):
+            return TEAM1
+        elif calc.is_team2_winning_pool(game):
+            return TEAM2
+
+        raise AssertionError,"Team1 or Team2 should be winning the game"
+
+    def __set_game10_params(self,picks,params):
+        for pick in picks:
+            if pick.number == 10:
+                params['game10_spread'] = pick.spread
+                params['game10_favored'] = pick.favored
+                return
+        raise AssertionError,'Could not find game 10'
