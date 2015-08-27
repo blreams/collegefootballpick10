@@ -161,18 +161,18 @@ class Database:
         return week_numbers_and_years
 
     def __before_pick_deadline(self,week):
-        if week.lock_picks == None or week.pick_deadline == None:
+        if week.pick_deadline == None:
             return False
         current_time = datetime.datetime.utcnow()
         current_time_tz = pytz.timezone('UTC').localize(current_time)
-        return not week.lock_picks and current_time_tz <= week.pick_deadline
+        return current_time_tz <= week.pick_deadline
 
     def __after_pick_deadline(self,week):
-        if week.lock_picks == None or week.pick_deadline == None:
+        if week.pick_deadline == None:
             return False
         current_time = datetime.datetime.utcnow()
         current_time_tz = pytz.timezone('UTC').localize(current_time)
-        return not week.lock_picks and current_time_tz > week.pick_deadline
+        return current_time_tz > week.pick_deadline
 
     def update_games_cache(self,year,week_number,data):
         raise AssertionError,"Not implemented"
