@@ -430,8 +430,9 @@ class EnterPicksTest(FunctionalTest):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
 
-        # verify week lock picks is None
+        # verify week pick deadline is None
         week = get_week(1978,1) 
+        self.assertIsNone(week.pick_deadline)
         self.assertFalse(week.lock_picks)
 
         # login a user and open the picks page
@@ -453,8 +454,9 @@ class EnterPicksTest(FunctionalTest):
         test_db = UnitTestDatabase()
         test_db.setup_week_in_progress(1978,1)
 
-        # verify week lock picks is None
+        # verify week pick deadline is None
         week = get_week(1978,1) 
+        self.assertIsNone(week.pick_deadline)
         self.assertFalse(week.lock_picks)
 
         # login a user and open the picks page
@@ -472,8 +474,9 @@ class EnterPicksTest(FunctionalTest):
         test_db = UnitTestDatabase()
         test_db.setup_week_final(1978,1)
 
-        # verify week lock picks is None
+        # verify week pick deadline is None
         week = get_week(1978,1) 
+        self.assertIsNone(week.pick_deadline)
         self.assertFalse(week.lock_picks)
 
         # login a user and open the picks page
@@ -643,8 +646,30 @@ class EnterPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
+    def test_picks_locked(self):
+        test_db = UnitTestDatabase()
+        test_db.setup_week_not_started_no_picks(1978,1)
+
+        self.utils.lock_picks(1978,1)
+
+        # login a user and open the picks page
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
+        self.utils.enter_picks_page(year=1978,week=1,player_id=player.id)
+
+        body = self.browser.find_element_by_tag_name('body').text
+        expected = "Picks are currently locked and cannot be entered."
+        self.assertIn(expected,body)
+
+        test_db.delete_database()
+
+
     @unittest.skip('not implemented yet')
     def test_POST_invalid_year(self):
+        pass
+
+    @unittest.skip('not implemented yet')
+    def test_POST_picks_locked(self):
         pass
 
     @unittest.skip('not implemented yet')
