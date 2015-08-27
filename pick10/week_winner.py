@@ -360,7 +360,7 @@ class WeekWinner:
         return self.tiebreaker_2_unnecessary() or one_player_won_tiebreak2
 
     # tiebreaker 3 is valid when: 
-    # - week.lock_picks is set (i.e a pick deadline set)
+    # - week.pick_deadline is set (i.e a pick deadline set)
     # - the picks were entered before the pick deadline
     # - the submit time makes sense (i.e. submit time year matches the week.year)
     # TODO:  consider adding a pick submit time to Picks data model?
