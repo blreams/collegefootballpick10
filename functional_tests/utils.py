@@ -151,7 +151,18 @@ class Utils:
         naive_dt_now = dt.datetime.now()
         naive_dt_deadline = dt.datetime(naive_dt_now.year, naive_dt_now.month, naive_dt_now.day, 16, 0, 0) + timedelta(days=days_until_expired)
         deadline = pytz.timezone('US/Eastern').localize(naive_dt_deadline)
-        week.lock_picks = deadline
+        week.pick_deadline = deadline
+        week.lock_picks = False
+        week.save()
+
+    def lock_picks(self,year,week_number):
+        week = get_week(year,week_number)
+        week.lock_picks = True
+        week.save()
+
+    def unlock_picks(self,year,week_number):
+        week = get_week(year,week_number)
+        week.lock_picks = False
         week.save()
 
     def unlock_game_scores(self,year,week_number):
