@@ -436,7 +436,7 @@ class CalculateResults:
             return True
 
         picks_entered_after_pick_deadline = submit_time > week.pick_deadline
-        if picks_entered_after_pick_deadline or week.lock_picks:
+        if picks_entered_after_pick_deadline:
             return True
 
         return False
