@@ -30,6 +30,10 @@ class Database:
         week = self.__get_week_in_database(year,week_number)
         return week.lock_scores
 
+    def are_picks_locked(self,year,week_number):
+        week = self.__get_week_in_database(year,week_number)
+        return week.lock_picks
+
     def before_pick_deadline(self,year,week_number):
         # TODO tests
         week = self.__get_week_in_database(year,week_number)

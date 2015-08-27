@@ -21,6 +21,9 @@
         <div id="error-msg">Player {{player_id}} does not match the logged in user.</div>
         <div id="error-msg">A user can only access their own enter picks page.</div>
     {% endif %}
+    {% if error == "picks_locked" %}
+        <div id="error-msg">Picks are currently locked and cannot be entered.</div>
+    {% endif %}
     {% if error == "after_pick_deadline" %}
         <div id="error-msg">Pick deadline: {{deadline}}.</div><br>
         <div id="error-msg">The pick deadline has expired.  Picks can no longer be entered.</div>

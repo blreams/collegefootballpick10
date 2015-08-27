@@ -41,7 +41,15 @@ class EnterPicksView:
             WeekNavbar(year,week_number,'enter_picks',request.user).add_parameters(data)
             return render(request,"pick10/enter_picks_error.html",data)
 
-        week_state = Database().get_week_state(year,week_number)
+        d = Database()
+
+        if d.are_picks_locked(year,week_number):
+            data = self.__setup_basic_params(year,week_number)
+            data['error'] = 'picks_locked'
+            WeekNavbar(year,week_number,'enter_picks',request.user).add_parameters(data)
+            return render(request,"pick10/enter_picks_error.html",data)
+
+        week_state = d.get_week_state(year,week_number)
 
         if week_state == IN_PROGRESS:
             data = self.__setup_basic_params(year,week_number)
@@ -95,7 +103,15 @@ class EnterPicksView:
             data['error'] = 'user_player_mismatch'
             return render(request,"pick10/enter_picks_error.html",data)
 
-        week_state = Database().get_week_state(year,week_number)
+        d = Database()
+
+        if d.are_picks_locked(year,week_number):
+            data = self.__setup_basic_params(year,week_number)
+            data['error'] = 'picks_locked'
+            WeekNavbar(year,week_number,'enter_picks',request.user).add_parameters(data)
+            return render(request,"pick10/enter_picks_error.html",data)
+
+        week_state = d.get_week_state(year,week_number)
 
         if week_state == IN_PROGRESS:
             data = self.__setup_basic_params(year,week_number)
