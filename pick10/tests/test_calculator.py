@@ -620,16 +620,16 @@ class CalculatorTests(TestCase):
         self.__t36_pick_updated_entry_time()
 
     def test_t36_3_get_player_submit_time(self):
-        self.__t36_week_lock_picks_not_specified()
+        self.__t36_week_pick_deadline_not_specified()
 
     def test_t36_4_get_player_submit_time(self):
-        self.__t36_submit_after_week_lock()
+        self.__t36_submit_after_week_deadline()
 
     def test_t36_5_get_player_submit_time(self):
-        self.__t36_submit_before_week_lock()
+        self.__t36_submit_before_week_deadline()
 
     def test_t36_6_get_player_submit_time(self):
-        self.__t36_submit_same_as_week_lock()
+        self.__t36_submit_same_as_week_deadline()
 
     def __t1_invalid_player(self):
         bad_player = Player()
@@ -2600,13 +2600,11 @@ class CalculatorTests(TestCase):
         self.__change_player_pick_time(player,games[10],created=created_time,updated=dt.datetime(2013,8,10))
         self.assertEqual(self.calc.get_player_submit_time(player),dt.datetime(2013,8,11))
 
-    # BLR - This test may not be valid
-    def __t36_week_lock_picks_not_specified(self):
+    def __t36_week_pick_deadline_not_specified(self):
         player = self.week1.get_player("Brent Holden")
         games = self.week1.games
         week = self.week1.week
-        week.lock_picks = True
-        week.pick_deadline = dt.datetime(2013,8,12)
+        week.pick_deadline = None
         created_time=dt.datetime(2013,8,1)
         updated_time=dt.datetime(2013,8,10)
         self.__change_player_pick_time(player,games[1],created=created_time,updated=updated_time)
@@ -2621,7 +2619,7 @@ class CalculatorTests(TestCase):
         self.__change_player_pick_time(player,games[10],created=created_time,updated=updated_time)
         self.assertIsNone(self.calc.get_player_submit_time(player,week))
 
-    def __t36_submit_after_week_lock(self):
+    def __t36_submit_after_week_deadline(self):
         player = self.week1.get_player("Brent Holden")
         games = self.week1.games
         week = self.week1.week
@@ -2641,7 +2639,7 @@ class CalculatorTests(TestCase):
         self.__change_player_pick_time(player,games[10],created=created_time,updated=updated_time)
         self.assertIsNone(self.calc.get_player_submit_time(player,week))
 
-    def __t36_submit_before_week_lock(self):
+    def __t36_submit_before_week_deadline(self):
         player = self.week1.get_player("Brent Holden")
         games = self.week1.games
         week = self.week1.week
@@ -2660,7 +2658,7 @@ class CalculatorTests(TestCase):
         self.__change_player_pick_time(player,games[10],created=created_time,updated=dt.datetime(2013,8,10))
         self.assertEqual(self.calc.get_player_submit_time(player,week),dt.datetime(2013,8,11))
 
-    def __t36_submit_same_as_week_lock(self):
+    def __t36_submit_same_as_week_deadline(self):
         player = self.week1.get_player("Brent Holden")
         games = self.week1.games
         week = self.week1.week
