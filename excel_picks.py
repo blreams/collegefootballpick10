@@ -7,6 +7,7 @@ django.setup()
 import sys
 from pick10.database import *
 from pick10.models import *
+import pandas as pd
 
 def bad_year_or_week_number(year,week_number):
     try:
@@ -60,6 +61,63 @@ def print_all_player_picks(data):
     for player_id in player_ids:
         print_player_picks(player_id,data)
 
+def get_picks_column(player_id,data):
+    player = data.players[player_id]
+    picks = { pick.game.gamenum:pick for pick in data.player_picks[player_id] }
+
+    column = []
+
+    for game_number in range(1,11):
+        pick = picks[game_number]
+
+        if pick.winner == 0:
+            column.append('')
+            column.append('')
+        elif pick.winner == 1:
+            column.append('x')
+            column.append('')
+        elif pick.winner == 2:
+            column.append('')
+            column.append('x')
+        else:
+            raise AssertionError,"invalid winner value"
+
+        if game_number == 10:
+            if pick.winner == 0:
+                column.append('')
+                column.append('')
+            else:
+                column.append(pick.team1_predicted_points)
+                column.append(pick.team2_predicted_points)
+
+    return column
+
+def get_games_column(data):
+    column = []
+    for game_number in range(1,11):
+        game = data.games[game_number]
+        column.append(game.team1.team_name)
+        column.append(game.team2.team_name)
+
+        if game_number == 10:
+            column.append("%s - score" % (game.team1.team_name))
+            column.append("%s - score" % (game.team2.team_name))
+    return column
+
+def create_picks_sheet(year,week_number,data):
+    player_names = sorted([ p.ss_name for p in data.players.values() ])
+    games = get_games_column(data)
+    picks_df = pd.DataFrame(columns=player_names,index=games)
+
+    for player_id in data.players:
+        player = data.players[player_id]
+        column_data = get_picks_column(player_id,data)
+        picks_df[player.ss_name] = column_data
+
+    filename = 'picks_%d_%d.xls' % (year,week_number)
+    sheet = 'week_%d' % (week_number)
+    picks_df.to_excel(filename,sheet)
+
 if __name__ == '__main__':
     # get input arguments and verify they are valid
     if len(sys.argv) != 3:
@@ -78,8 +136,4 @@ if __name__ == '__main__':
 
     # load the week data
     data = load_week_data(year,week_number)
-
-    print_player_names(data)
-    print_all_player_picks(data)
-
-
+    create_picks_sheet(year,week_number,data)
