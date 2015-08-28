@@ -1,0 +1,85 @@
+import os
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'collegefootballpick10.settings')
+
+import django
+django.setup()
+
+import sys
+from pick10.database import *
+from pick10.models import *
+
+def bad_year_or_week_number(year,week_number):
+    try:
+        year_int = int(year)
+        week_int = int(week_number)
+        w = get_week(year_int,week_int)
+    except Exception:
+        return True
+    return False
+
+def load_week_data(year,week_number):
+    d = Database()
+    data = d.load_week_data(year,week_number)
+    return data
+
+def print_player_names(data):
+    players = sorted(data.players.values(),key=lambda player:player.ss_name)
+    print "Players (%d)" % (len(players))
+    print "-------------------"
+    for player in players:
+        print player.ss_name
+    print ""
+
+def print_player_picks(player_id,data):
+    player = data.players[player_id]
+    picks = { pick.game.gamenum:pick for pick in data.player_picks[player_id] }
+
+    print "%s Picks" % (player.ss_name)
+    print "----------------------------"
+
+    for game_number in range(1,11):
+        pick = picks[game_number]
+
+        if pick.winner == 0:
+            pick_string = "default"
+        elif pick.winner == 1:
+            pick_string = "team1"
+        elif pick.winner == 2:
+            pick_string = "team2"
+        else:
+            pick_string = "ERROR: winner=%s" % (pick.winner)
+
+        print "Game %d: %s" % (game_number,pick_string)
+    print ""
+
+def print_all_player_picks(data):
+    # sort player id's by their ss_name
+    players = sorted(data.players.values(),key=lambda player:player.ss_name)
+    player_ids = [ p.id for p in players ]
+
+    for player_id in player_ids:
+        print_player_picks(player_id,data)
+
+if __name__ == '__main__':
+    # get input arguments and verify they are valid
+    if len(sys.argv) != 3:
+        print "usage:  python excel_picks.py <year> <week number>"
+        sys.exit(1)
+
+    year = sys.argv[1]
+    week_number = sys.argv[2]
+
+    if bad_year_or_week_number(year,week_number):
+        print "invalid year or week number"
+        sys.exit(1)
+
+    year = int(sys.argv[1])
+    week_number = int(sys.argv[2])
+
+    # load the week data
+    data = load_week_data(year,week_number)
+
+    print_player_names(data)
+    print_all_player_picks(data)
+
+
