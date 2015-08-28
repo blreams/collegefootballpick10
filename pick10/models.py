@@ -301,6 +301,14 @@ def get_commish_can_post(yearnum, weeknum):
         return False
     return True
 
+def get_week_info(yearnum, weeknum):
+    weekfields = {}
+    week = get_week(yearnum, weeknum)
+    weekfields['pick_deadline'] = week.pick_deadline
+    weekfields['lock_picks'] = week.lock_picks
+    weekfields['lock_scores'] = week.lock_scores
+    return weekfields
+
 def get_games_info_for_week(yearnum, weeknum):
     gamefields = {}
     games = get_games(yearnum, weeknum)

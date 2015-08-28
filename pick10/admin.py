@@ -12,6 +12,7 @@ class PlayerAdmin(admin.ModelAdmin):
 
 class PlayerYearAdmin(admin.ModelAdmin):
     list_display = ('player', 'year')
+    list_filter = ('year',)
 
 class ConferenceAdmin(admin.ModelAdmin):
     list_display = ('conf_name', 'div_name', 'created', 'updated')
