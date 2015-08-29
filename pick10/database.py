@@ -96,6 +96,12 @@ class Database:
         elif week_state == FINAL:
             return "week_final"
 
+    def is_week_being_setup(self,year,week_number):
+        pool_state = self.get_pool_state(year)
+        week_numbers = self.get_week_numbers(year)
+        last_week_number = week_numbers[-1]
+        return pool_state == "week_setup" and week_number == last_week_number
+
     def get_week_state(self,year,week_number):
         return self.__get_week_state(year,week_number)
 

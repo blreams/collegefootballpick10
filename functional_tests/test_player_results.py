@@ -148,8 +148,13 @@ class PlayerResultsTest(FunctionalTest):
         test_db.setup_week_with_no_games(1978,2)
 
         player = self.__get_player(year=1978,ss_name='Brent')
+
+        # make sure week 1 page is up
+        self.__open_week_results_page(year=1978,week_number=1,player_id=player.id)
+        self.__is_page_up('Brent Week 1 Results')
+
+        # check for error message on week 2
         self.__open_week_results_page(year=1978,week_number=2,player_id=player.id)
-        import pdb; pdb.set_trace()
 
         body = self.browser.find_element_by_tag_name('body').text
         self.assertIn('The week is currently being setup.',body)
@@ -172,5 +177,15 @@ class PlayerResultsTest(FunctionalTest):
             if player.ss_name == ss_name:
                 return player
         raise AssertionError,'Could not find %s' % (ss_name)
+
+    def __is_page_up(self,title):
+        body = self.browser.find_element_by_tag_name('body').text
+        self.assertIn(title,body)
+
+        summary = self.browser.find_elements_by_id('summary-label')
+        self.assertEqual(len(summary),3)
+        self.assertEqual(summary[0].text,'Wins')
+        self.assertEqual(summary[1].text,'Losses')
+        self.assertEqual(summary[2].text,'Win Pct')
 
 
