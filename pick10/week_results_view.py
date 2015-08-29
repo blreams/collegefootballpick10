@@ -20,6 +20,15 @@ class WeekResultsView:
 
         year = int(year)
         week_number = int(week_number)
+
+        d = Database()
+
+        if d.is_week_being_setup(year,week_number):
+            years_in_pool = sorted(d.get_years(),reverse=True)
+            data={'error':'week_not_setup','years_in_pool':years_in_pool,'year':year}
+            WeekNavbar(year,week_number,'week_results',request.user).add_parameters(data)
+            return render(request,"pick10/week_results_error.html",data,status=400)
+
         use_private_names = self.__determine_private_access(request.user,use_private_names)
 
         # setup memcache parameters
@@ -40,7 +49,7 @@ class WeekResultsView:
                 WeekNavbar(year,week_number,'week_results',request.user).add_parameters(data)
                 return render(request,"pick10/week_results.html",data)
 
-        years_in_pool = sorted(Database().get_years(),reverse=True)
+        years_in_pool = sorted(d.get_years(),reverse=True)
 
         cwr = CalculateWeekResults(year,week_number,use_private_names)
         results = cwr.get_results()

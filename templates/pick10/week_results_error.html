@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block header_text %}College Football Pick 10{% endblock %}
+
+{% block side_block %}
+    {% include "pick10/year_sidebar.html" %}
+    {% endblock %}
+
+{% block body_header_block %}
+    {% include "pick10/week_navbar.html" %}
+    <br>
+{% endblock %}
+
+{% block body_block %}
+<link href="/static/title_bar.css" rel="stylesheet" type="text/css" media="all">
+<link href="/static/error.css" rel="stylesheet" type="text/css" media="all">
+    {% if error == "week_not_setup" %}
+        <div id="error-msg">The week is currently being setup.</div>
+    {% endif %}
+{% endblock %}
