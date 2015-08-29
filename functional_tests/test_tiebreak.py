@@ -77,6 +77,20 @@ class TiebreakTest(FunctionalTest):
     def test_tiebreak3(self):
         pass
 
+    def test_week_no_games(self):
+        test_db = UnitTestDatabase()
+        test_db.setup_week_final(1978,1)
+        test_db.setup_week_with_no_games(1978,2)
+
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.__open_tiebreak_page(year=1978,week=2)
+        import pdb; pdb.set_trace()
+
+        body = self.browser.find_element_by_tag_name('body').text
+        self.assertIn('The week is currently being setup.',body)
+
+        test_db.delete_database()
+
     def __open_tiebreak_page(self,year,week):
         address = self.server_url + reverse('tiebreak',args=(year,week))
         self.browser.get(address)

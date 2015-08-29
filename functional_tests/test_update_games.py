@@ -364,6 +364,25 @@ class UpdateGamesTest(FunctionalTest):
 
         test_db.delete_database()
 
+    def test_week_no_games(self):
+        test_db = UnitTestDatabase()
+        test_db.setup_week_final(1978,1)
+        test_db.setup_week_with_no_games(1978,2)
+
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
+
+        self.__open_page(year=1978,week_number=2)
+
+        import pdb; pdb.set_trace()
+
+        self.assertTrue(self.__page_loaded(week_number=2))
+
+        body = self.browser.find_element_by_tag_name('body').text
+        self.assertIn('The week is currently being setup.',body)
+
+        test_db.delete_database()
+
     # TODO:  test a blank form
     def test_blank_form_submit(self):
         pass
