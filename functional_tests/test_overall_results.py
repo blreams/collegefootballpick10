@@ -152,9 +152,9 @@ class OverallResultsTest(FunctionalTest):
         test_db.setup_week_with_no_games(1978,2)
 
         self.utils.overall_results_page(year=1978)
-        import pdb; pdb.set_trace()
 
         body = self.browser.find_element_by_tag_name('body').text
-        self.assertIn('The week is currently being setup.',body)
+        self.assertIn('1978 Leaderboard',body)
+        self.assertIn('week 1 final',body)
 
         test_db.delete_database()
