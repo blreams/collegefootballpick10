@@ -75,10 +75,14 @@ class Database:
         if only_week_one_exists and week_has_no_games:
             return "not_started"
 
-        assert not(week_has_no_games),"Every week should have games except for a week 1 exception"
+        if week_has_no_games:
+            return "week_setup"
 
         if self.__before_pick_deadline(week):
-            return "enter_picks"
+            if week.lock_picks:
+                return "week_setup"
+            else:
+                return "enter_picks"
 
         week_state = self.__get_week_state(year,last_week_number)
 
