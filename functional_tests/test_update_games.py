@@ -256,6 +256,7 @@ class UpdateGamesTest(FunctionalTest):
         self.assertFalse(self.__submit_button_present())
 
         body = self.browser.find_element_by_tag_name('body').text
+        self.assertTrue(self.__page_loaded(week_number=2))
         self.assertIn('The scores are locked and cannot be edited.',body)
 
         self.__click_button('cancel')
@@ -372,11 +373,12 @@ class UpdateGamesTest(FunctionalTest):
         player = self.utils.get_player_from_public_name(1978,'Brent')
         self.utils.login_assigned_user(name='Brent',player=player)
 
+        self.__open_page(year=1978,week_number=1)
+        body = self.browser.find_element_by_tag_name('body').text
+        self.assertTrue(self.__page_loaded(week_number=1))
+        self.assertIn('Teams',body)
+
         self.__open_page(year=1978,week_number=2)
-
-        import pdb; pdb.set_trace()
-
-        self.assertTrue(self.__page_loaded(week_number=2))
 
         body = self.browser.find_element_by_tag_name('body').text
         self.assertIn('The week is currently being setup.',body)

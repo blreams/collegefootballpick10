@@ -23,4 +23,7 @@
     {% if error == "scores_locked" %}
         <div id="error-msg">The scores for {{year}} Week {{week_number}} are locked.</div>
     {% endif %}
+    {% if error == "week_not_setup" %}
+        <div id="error-msg">The week is currently being setup.</div>
+    {% endif %}
 {% endblock %}

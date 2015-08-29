@@ -33,16 +33,21 @@ class UpdateGamesView:
 
             # only private player can update scores
             if access.is_public_user():
-                data={'year':year,'error':'user_not_participant'}
+                data={'year':year,'error':'user_not_participant','years_in_pool':years_in_pool}
                 WeekNavbar(year,week_number,'update_games',request.user).add_parameters(data)
                 return render(request,"pick10/update_games_error.html",data)
 
             # user's player not in the pool this year
             if access.is_player_in_year(year) == False:
                 player_id = access.get_player().id
-                data={'year':year,'player_id':player_id,'error':'bad_year'}
+                data={'year':year,'player_id':player_id,'error':'bad_year','years_in_pool':years_in_pool}
                 WeekNavbar(year,week_number,'update_games',request.user).add_parameters(data)
                 return render(request,"pick10/update_games_error.html",data)
+
+        if d.is_week_being_setup(year,week_number):
+            data={'year':year,'error':'week_not_setup','years_in_pool':years_in_pool}
+            WeekNavbar(year,week_number,'update_games',request.user).add_parameters(data)
+            return render(request,"pick10/update_games_error.html",data)
 
         params = dict()
         params['year'] = year
@@ -105,6 +110,7 @@ class UpdateGamesView:
             # only private player can update scores
             if access.is_public_user():
                 data={'year':year,'error':'user_not_participant'}
+                data['years_in_pool'] = sorted(d.get_years(),reverse=True)
                 WeekNavbar(year,week_number,'update_games',request.user).add_parameters(data)
                 return render(request,"pick10/update_games_error.html",data)
 
@@ -112,11 +118,19 @@ class UpdateGamesView:
             if access.is_player_in_year(year) == False:
                 player_id = access.get_player().id
                 data={'year':year,'player_id':player_id,'error':'bad_year'}
+                data['years_in_pool'] = sorted(d.get_years(),reverse=True)
                 WeekNavbar(year,week_number,'update_games',request.user).add_parameters(data)
                 return render(request,"pick10/update_games_error.html",data)
 
+        if d.is_week_being_setup(year,week_number):
+            data={'year':year,'error':'week_not_setup'}
+            data['years_in_pool'] = sorted(d.get_years(),reverse=True)
+            WeekNavbar(year,week_number,'update_games',request.user).add_parameters(data)
+            return render(request,"pick10/update_games_error.html",data)
+
         if self.__is_week_scores_locked(year,week_number):
             data={'year':year,'week_number':week_number,'error':'scores_locked'}
+            data['years_in_pool'] = sorted(d.get_years(),reverse=True)
             WeekNavbar(year,week_number,'update_games',request.user).add_parameters(data)
             return render(response,"pick10/update_games_error.html",data)
 
