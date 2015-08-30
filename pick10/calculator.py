@@ -399,6 +399,10 @@ class CalculateResults:
         assert pick != None,"Could not find a pick that matches the passed in game"
         return pick
 
+    def get_player_featured_game_pick(self,player):
+        game10 = self.get_featured_game()
+        return self.get_player_pick_for_game(player,game10)
+
     def get_player_submit_time(self,player,week=None):
         picks = self.__data.player_picks[player.id]
         latest_time = None

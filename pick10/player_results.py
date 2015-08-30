@@ -48,6 +48,8 @@ class PlayerSummary:
     possible_wins = None
     projected_wins = None
     week_state = None
+    game10_predicted_team1_score = None
+    game10_predicted_team2_score = None
 
     def get_dict(self):
         d = dict()
@@ -59,4 +61,6 @@ class PlayerSummary:
         d['possible_wins'] = self.possible_wins
         d['projected_wins'] = self.projected_wins
         d['week_state'] = self.week_state
+        d['game10_predicted_team1_score'] = self.game10_predicted_team1_score
+        d['game10_predicted_team2_score'] = self.game10_predicted_team2_score
         return d
