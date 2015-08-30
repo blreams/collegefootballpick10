@@ -38,9 +38,7 @@ class CalculatePlayerResults:
         summary.projected_wins = self.__calc.get_number_of_projected_wins(self.__player)
         summary.week_state = self.__calc.get_summary_state_of_all_games()
 
-        team1_score,team2_score = self.__get_player_game10_pick_score()
-        summary.game10_predicted_team1_score = team1_score
-        summary.game10_predicted_team2_score = team2_score
+        self.__set_game10_attributes(summary)
 
         if self.__use_private_names:
             summary.player_name = self.__player.private_name
@@ -87,6 +85,15 @@ class CalculatePlayerResults:
             raise AssertionError,"Game state %s is not valid" % (game.game_state)
 
         return result
+
+    def __set_game10_attributes(self,summary):
+        team1_score,team2_score = self.__get_player_game10_pick_score()
+        summary.game10_predicted_team1_score = team1_score
+        summary.game10_predicted_team2_score = team2_score
+        
+        game10 = self.__calc.get_featured_game()
+        summary.game10_team1 = game10.team1.team_name
+        summary.game10_team2 = game10.team2.team_name
 
     def __get_player_game10_pick_score(self):
         pick10 = self.__calc.get_player_featured_game_pick(self.__player)
