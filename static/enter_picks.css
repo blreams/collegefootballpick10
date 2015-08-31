@@ -10,6 +10,8 @@ body {
 .header-light {
    color: lightgray;
    background-color: white;
+   font-weight: 100;
+   text-align: center;
 }
 .pick-error {
    color: #b94a48;
@@ -20,9 +22,24 @@ body {
 #page-title {
    color: gray;
    font-size: 14pt;
-   font-family: Helvetica;
    font-weight: 500;
    text-align: left;
    white-space: nowrap;
    padding: 0px 4px;
+}
+#team-name {
+   font-weight: 300;
+   font-size: 10pt;
+   color: black;
+   text-align: left;
+   padding: 1px 4px;
+   white-space: nowrap;
+}
+#spread {
+   font-weight: 100;
+   font-size: 10pt;
+   color: blue;
+   text-align: center;
+   vertical-align: middle;
+   padding: 1px 4px;
 }
