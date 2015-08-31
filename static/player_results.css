@@ -245,3 +245,24 @@
    white-space: nowrap;
    padding: 0px 4px;
 }
+
+#predicted-score-label {
+   color: blue;
+   background-color: white;
+   text-align: right;
+   padding: 1px 4px;
+   font-weight: 200;
+   font-size: 10pt;
+}
+#predicted-team {
+   color: black;
+   background-color: white;
+   font-weight: 200;
+   font-size: 10pt;
+}
+#predicted-score {
+   color: gray;
+   background-color: white;
+   font-weight: 200;
+   font-size: 10pt;
+}

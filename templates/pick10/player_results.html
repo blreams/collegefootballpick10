@@ -122,7 +122,14 @@
             </tr>
             <tr><td id="table-line" colspan="4"></td></tr>
         {% endfor %}
-        <tr><td colspan="4" style="text-align:center;">Predicted Game 10 Score:&nbsp;&nbsp;{{summary.game10_team1}}&nbsp;{{summary.game10_predicted_team1_score}}&nbsp;&nbsp;{{summary.game10_team2}}&nbsp;{{summary.game10_predicted_team2_score}}</td></tr>
+        <tr><td colspan="4" style="text-align:center;">
+                <span id="predicted-score-label">Predicted Game 10 Score</span>&nbsp;&nbsp;
+                <span id="predicted-team">{{summary.game10_team1}}</span>&nbsp;
+                <span id="predicted-score">{{summary.game10_predicted_team1_score}}</span>&nbsp;&nbsp;&nbsp;
+                <span id="predicted-team">{{summary.game10_team2}}</span>&nbsp;
+                <span id="predicted-score">{{summary.game10_predicted_team2_score}}</span>
+            </td>
+        </tr>
         <tr><td id="table-line" colspan="4"></td></tr>
     </table>
     <br><br>
