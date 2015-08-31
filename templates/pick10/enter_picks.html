@@ -22,7 +22,11 @@
     {% if overall_error_message %}
         <div class="pick-error" style="text-align:center;">{{overall_error_message}}</div>
         <br>
-    {% endif %}
+        {% endif %}
+    
+    <div>
+        <button class="btn btn-danger" type="button" onclick="random_picks()">Random Picks</button>
+    </div><br>
 
     <div class="col-md-4">
         {% for pick in picks %}
@@ -46,11 +50,15 @@
                     <td><label id="team-name">{{pick.team1}}</label></td>
                     <td id="spread">{{pick.team1_spread}}</td>
                     <td><input type="text" size="3" name="team1-score" value="{{pick.team1_predicted_points}}"></input></td>
+                    <td></td>
                 </tr>
                 <tr class="{{pick.team2_row_class}}" id="team2_row_{{pick.number}}">
                     <td><label id="team-name">{{pick.team2}}</label></td>
                     <td id="spread">{{pick.team2_spread}}</td>
                     <td><input type="text" size="3" name="team2-score" value="{{pick.team2_predicted_points}}"></input></td>
+                    <td>
+                        <button class="btn btn-danger" type="button" onclick="random_game10_score()">Random Score</button>
+                    </td>
                 </tr>
             </table>
         {% else %}
@@ -162,5 +170,25 @@
         $('[name=team2-score]').keyup(function() {
             update_game10_winner();
         });
+        function random_game10_score() {
+            var game10_team1_score = Math.floor(Math.random()*75);
+            var game10_team2_score = Math.floor(Math.random()*75);
+            $("[name=team1-score]").val(""+game10_team1_score);
+            $("[name=team2-score]").val(""+game10_team2_score);
+            update_game10_winner();
+        }
+        function random_picks() {
+            for (var game_number=1; game_number < 10; game_number++) {
+                var pick = Math.floor(Math.random()*2)+1;
+                var radio_name = "[name=pick_" + game_number + "]";
+
+                if (pick == 1) {
+                    $(radio_name + "[value=team1]").prop("checked",true);
+                } else {
+                    $(radio_name + "[value=team2]").prop("checked",true);
+                }
+            }
+            random_game10_score();
+        }
     </script>
 {% endblock %}
