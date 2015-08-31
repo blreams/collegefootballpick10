@@ -13,7 +13,7 @@ class RaceConditionTest(FunctionalTest):
         super(RaceConditionTest, self).setUp()
         self.utils = Utils(self.browser,self.server_url)
 
-    def test_enter_picks_game_spread_change(self):
+    def test_enter_picks_game_change(self):
         # setup data
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_no_picks(1978,1)
@@ -22,11 +22,18 @@ class RaceConditionTest(FunctionalTest):
         player = self.utils.get_player_from_public_name(1978,'Brent')
         self.utils.login_assigned_user(name='Brent',player=player)
 
+        for game_number in range(1,11):
+            self.__test_enter_picks_change_spread(game_number,player)
+
+        test_db.delete_database()
+
+    def __test_enter_picks_change_spread(self,game_number,player):
+
         # get the page
         self.utils.enter_picks_page(year=1978,week=1,player_id=player.id)
 
         # change the spread
-        game = get_game(1978,1,1)
+        game = get_game(1978,1,game_number)
         game.spread = game.spread + 5
         game.save()
 
