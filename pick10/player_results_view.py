@@ -28,6 +28,10 @@ class PlayerResultsView:
             data={'year':year,'player_id':player_id,'error':'bad_year'}
             return render(request,"pick10/bad_player.html",data,status=400)
 
+        if d.is_week_being_setup(year,week_number):
+            data={'error':'week_not_setup'}
+            return render(request,"pick10/bad_player.html",data,status=400)
+
         access = UserAccess(request.user)
 
         # get the timezone for displaying the kickoff date and pick deadline

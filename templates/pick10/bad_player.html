@@ -18,4 +18,7 @@
     {% if error == "user_player_mismatch" %}
         <div id="error-msg">Player {{player_id}} does not match the logged in user.</div>
     {% endif %}
+    {% if error == "week_not_setup" %}
+        <div id="error-msg">The week is currently being setup.</div>
+    {% endif %}
 {% endblock %}

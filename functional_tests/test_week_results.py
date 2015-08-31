@@ -82,7 +82,33 @@ class WeekResultsTest(FunctionalTest):
 
         test_db.delete_database()
 
+    def test_week_no_games(self):
+        test_db = UnitTestDatabase()
+        test_db.setup_week_final(1978,1)
+        test_db.setup_week_with_no_games(1978,2)
+
+        # make sure week 1 page is up
+        self.__open_week_results_page(year=1978,week_number=1)
+        self.__is_page_up('Week 1 Leaderboard')
+
+        # check for error message on week 2
+        self.__open_week_results_page(year=1978,week_number=2)
+
+        body = self.browser.find_element_by_tag_name('body').text
+        self.assertIn('The week is currently being setup.',body)
+
+        test_db.delete_database()
+
     def __open_week_results_page(self,year,week_number):
         address = self.server_url + reverse('week_results',args=(year,week_number))
         self.browser.get(address)
+
+    def __is_page_up(self,title):
+        page_title = self.browser.find_element_by_id('page-title').text
+        self.assertEqual(title,page_title)
+
+        body = self.browser.find_element_by_tag_name('body').text
+        self.assertIn('Rank',body)
+        self.assertIn('Player',body)
+        self.assertIn('Wins',body)
 

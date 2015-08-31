@@ -34,4 +34,7 @@
     {% if error == "week_final" %}
         <div id="error-msg">The week is final. No picks can be made.</div>
     {% endif %}
+    {% if error == "week_not_setup" %}
+        <div id="error-msg">The week is currently being setup.</div>
+    {% endif %}
 {% endblock %}

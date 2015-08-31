@@ -56,8 +56,6 @@
         </table>
     {% endif %}
     <br>
-    <a id="game-link" href="{% url 'update_games' year week_number %}">update game scores</a>
-    <br>
     <table>
         <thead class="results-header">
             <td id="pick-header">Player Pick</td>
@@ -122,6 +120,16 @@
             </tr>
             <tr><td id="table-line" colspan="4"></td></tr>
         {% endfor %}
+        <tr><td colspan="4" style="text-align:center;">
+                <span id="predicted-score-label">Predicted Game 10 Score</span>&nbsp;&nbsp;
+                <span id="predicted-team">{{summary.game10_team1}}</span>&nbsp;
+                <span id="predicted-score">{{summary.game10_predicted_team1_score}}</span>&nbsp;&nbsp;&nbsp;
+                <span id="predicted-team">{{summary.game10_team2}}</span>&nbsp;
+                <span id="predicted-score">{{summary.game10_predicted_team2_score}}</span>
+            </td>
+        </tr>
+        <tr><td id="table-line" colspan="4"></td></tr>
     </table>
+    <br><br>
 
 {% endblock %}

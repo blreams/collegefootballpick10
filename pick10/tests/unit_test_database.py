@@ -300,6 +300,20 @@ class UnitTestDatabase:
         kevin = self.setup_player(year,'Kevin')
         john = self.setup_player(year,'John')
 
+    # pool not started has no games yet
+    def setup_week_with_no_games(self,year=1978,week=13):
+        week = self.setup_week(year,week)
+        brent = self.setup_player(year,'Brent')
+        byron = self.setup_player(year,'Byron')
+        alice = self.setup_player(year,'Alice')
+        joan = self.setup_player(year,'Joan')
+        bill = self.setup_player(year,'Bill')
+        david = self.setup_player(year,'David')
+        amy = self.setup_player(year,'Amy')
+        annie = self.setup_player(year,'Annie')
+        kevin = self.setup_player(year,'Kevin')
+        john = self.setup_player(year,'John')
+
     def setup_week(self,year,week_number):
         year_model = populate_year(year)
         week, created = Week.objects.get_or_create(year=year_model, weeknum=week_number)

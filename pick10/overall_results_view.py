@@ -32,8 +32,14 @@ class OverallResultsView:
             body_key = "overall_public_%d" % (year)
         sidebar_key = "overall_year_sidebar_%d" % (year)
 
+        pool_state = d.get_pool_state(year)
+
         weeks_in_year = d.get_week_numbers(year)
         last_week_number = weeks_in_year[-1]
+
+        if pool_state == "week_setup":    # use last weeks results
+            weeks_in_year.remove(last_week_number)
+            last_week_number = last_week_number - 1
 
         # look for hit in the memcache
         if use_memcache:
@@ -41,11 +47,10 @@ class OverallResultsView:
             sidebar = cache.get(sidebar_key)
             memcache_hit = body != None and sidebar != None
             if memcache_hit:
-                data = {'body_content':body,'side_block_content':sidebar,'year':year }
+                data = {'body_content':body,'side_block_content':sidebar,'year':year,'weeks_in_year':weeks_in_year }
                 WeekNavbar(year,last_week_number,'overall',request.user).add_parameters(data)
                 return render(request,"pick10/overall_results.html",data)
 
-        pool_state = d.get_pool_state(year)
         years_in_pool = sorted(d.get_years(),reverse=True)
 
         if pool_state == "not_started":
@@ -62,16 +67,18 @@ class OverallResultsView:
             WeekNavbar(year,last_week_number,'overall',request.user).add_parameters(data)
             return render(request,"pick10/overall_results.html",data)
 
-        results = CalculateOverallResults(year,use_private_names).get_results()
+        results = CalculateOverallResults(year,use_private_names,use_weeks=weeks_in_year).get_results()
 
         content_params = dict()
         content_params['year'] = year
         content_params['weeks_in_year'] = weeks_in_year
         content_params['pool_state'] = pool_state
         content_params['results'] = results
-        content_params['last_week_number'] = weeks_in_year[-1]
+        content_params['last_week_number'] = last_week_number
 
-        if pool_state == "enter_picks":
+        if pool_state == "week_setup":
+            self.__render_file = "pick10/overall_week_final_results.html"
+        elif pool_state == "enter_picks":
             self.__render_file = "pick10/overall_enter_picks_results.html"
         elif pool_state == "week_not_started":
             self.__render_file = "pick10/overall_week_not_started_results.html"
@@ -122,7 +129,7 @@ class OverallResultsView:
         cache.set(body_key,body)
         cache.set(sidebar_key,sidebar)
 
-        data = {'body_content':body,'side_block_content':sidebar,'year':year }
+        data = {'body_content':body,'side_block_content':sidebar,'year':year,'weeks_in_year':weeks_in_year }
         WeekNavbar(year,last_week_number,'overall',request.user).add_parameters(data)
         return render(request,"pick10/overall_results.html",data)
 

@@ -115,7 +115,7 @@ class WeekNavbar:
 
         d = Database()
         pool_state = d.get_pool_state(self.year)
-        if pool_state == "invalid" or pool_state == "not_started":
+        if pool_state == "invalid" or pool_state == "not_started" or pool_state == "week_setup":
             return False
 
         week_state = Database().get_week_state(self.year,self.week_number)
@@ -130,6 +130,9 @@ class WeekNavbar:
     def __show_update_games(self):
         d = Database()
 
+        if self.user.is_superuser:
+            return True
+
         user_not_linked_to_player = self.player_id == None
 
         if user_not_linked_to_player:
@@ -139,6 +142,9 @@ class WeekNavbar:
             return False
 
         if d.is_week_scores_locked(self.year,self.week_number):
+            return False
+
+        if d.is_week_being_setup(self.year,self.week_number):
             return False
 
         return True

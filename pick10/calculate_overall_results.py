@@ -5,9 +5,10 @@ from overall_results import *
 
 class CalculateOverallResults:
 
-    def __init__(self,year,private_names=False):
+    def __init__(self,year,private_names=False,use_weeks=None):
         self.year = year
         self.__use_private_names = private_names
+        self.__week_numbers = use_weeks
         self.__calculate_overall_results()
 
     def get_results(self):
@@ -18,7 +19,7 @@ class CalculateOverallResults:
 
         overall_results = self.__setup_overall_results()
 
-        week_numbers = self.__database.get_week_numbers(self.year)
+        week_numbers = self.__get_week_numbers()
         last_week_number = week_numbers[-1]
 
         for week_number in week_numbers:
@@ -153,3 +154,8 @@ class CalculateOverallResults:
 
     def __sort_by_rank(self,results):
         return sorted(results,key=lambda result:result.rank)
+
+    def __get_week_numbers(self):
+        if self.__week_numbers == None:
+            return self.__database.get_week_numbers(self.year)
+        return self.__week_numbers

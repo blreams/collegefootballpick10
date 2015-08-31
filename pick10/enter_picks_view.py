@@ -43,6 +43,12 @@ class EnterPicksView:
 
         d = Database()
 
+        if d.is_week_being_setup(year,week_number):
+            data = self.__setup_basic_params(year,week_number)
+            data['error'] = 'week_not_setup'
+            WeekNavbar(year,week_number,'enter_picks',request.user).add_parameters(data)
+            return render(request,"pick10/enter_picks_error.html",data)
+
         if d.are_picks_locked(year,week_number):
             data = self.__setup_basic_params(year,week_number)
             data['error'] = 'picks_locked'
@@ -104,6 +110,12 @@ class EnterPicksView:
             return render(request,"pick10/enter_picks_error.html",data)
 
         d = Database()
+
+        if d.is_week_being_setup(year,week_number):
+            data = self.__setup_basic_params(year,week_number)
+            data['error'] = 'week_not_setup'
+            WeekNavbar(year,week_number,'enter_picks',request.user).add_parameters(data)
+            return render(request,"pick10/enter_picks_error.html",data)
 
         if d.are_picks_locked(year,week_number):
             data = self.__setup_basic_params(year,week_number)

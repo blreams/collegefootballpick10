@@ -75,10 +75,14 @@ class Database:
         if only_week_one_exists and week_has_no_games:
             return "not_started"
 
-        assert not(week_has_no_games),"Every week should have games except for a week 1 exception"
+        if week_has_no_games:
+            return "week_setup"
 
         if self.__before_pick_deadline(week):
-            return "enter_picks"
+            if week.lock_picks:
+                return "week_setup"
+            else:
+                return "enter_picks"
 
         week_state = self.__get_week_state(year,last_week_number)
 
@@ -91,6 +95,12 @@ class Database:
             return "week_in_progress"
         elif week_state == FINAL:
             return "week_final"
+
+    def is_week_being_setup(self,year,week_number):
+        pool_state = self.get_pool_state(year)
+        week_numbers = self.get_week_numbers(year)
+        last_week_number = week_numbers[-1]
+        return pool_state == "week_setup" and week_number == last_week_number
 
     def get_week_state(self,year,week_number):
         return self.__get_week_state(year,week_number)
