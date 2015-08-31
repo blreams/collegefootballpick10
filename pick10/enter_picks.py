@@ -1,6 +1,7 @@
 from pick_data import *
 from database import *
 from django.core.exceptions import ObjectDoesNotExist
+from pick10.utils import *
 
 class EnterPicks:
 
@@ -25,7 +26,7 @@ class EnterPicks:
             data.team2 = game.team2.team_name
             data.favored = game.favored
             data.spread = game.spread
-            data.timestamp = game.updated
+            data.timestamp = get_timestamp(game.updated)
 
             if player_already_picked:
                 data.pick = picks[game.gamenum].winner

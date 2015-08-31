@@ -7,6 +7,7 @@ from database import *
 from django.http import HttpResponseNotFound
 import pytz
 from pick10.week_navbar import *
+from utils import *
 
 class EnterPicksView:
 
@@ -153,6 +154,13 @@ class EnterPicksView:
         enter_picks = EnterPicks(year,week_number,player_id)
 
         picks = enter_picks.get_game_picks()
+
+        # check if the games were changed before the player could submit their picks
+        if self.__were_games_edited(request,picks):
+            self.__setup_pick_error_messages(picks)
+            message = "The games have changed.  Please re-enter your picks"
+            return self.__render_form_from_data(request,year,week_number,player_id,picks,message)
+
         self.__setup_pick_error_messages(picks)
         error_found = self.__get_and_verify_post_data(request,picks)
         if error_found:
@@ -161,7 +169,7 @@ class EnterPicksView:
         enter_picks.save_picks(picks)
         return redirect("player_results",year=year,week_number=week_number,player_id=player_id)
 
-    def __render_form_from_data(self,request,year,week_number,player_id,picks):
+    def __render_form_from_data(self,request,year,week_number,player_id,picks,overall_error_message=None):
         d = Database()
 
         weeks_in_year = d.get_week_numbers(year)
@@ -173,6 +181,7 @@ class EnterPicksView:
         params['weeks_in_year'] = weeks_in_year
         params['years_in_pool'] = years_in_pool
         params['player_name'] = self.__get_player_name(player_id)
+        params['overall_error_message'] = overall_error_message
 
         self.__setup_pick_team_rows(picks)
         self.__set_game10_params(picks,params)
@@ -344,3 +353,11 @@ class EnterPicksView:
                 params['game10_favored'] = pick.favored
                 return
         raise AssertionError,'Could not find game 10'
+
+    def __were_games_edited(self,request,pick_data):
+        for pick in pick_data:
+            timestamp_name = 'timestamp_%d' % (pick.number)
+            form_timestamp = float(request.POST.get(timestamp_name))
+            if form_timestamp != pick.timestamp:
+                return True
+        return False
