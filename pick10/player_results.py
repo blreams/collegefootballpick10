@@ -14,6 +14,13 @@ class PlayerResult:
     game_time_left = None
     game_date = None
 
+    # these params are HTML display
+    # of the kickoff, time_left, and quarter
+    top_id = None
+    top_status = None
+    bottom_id = None
+    bottom_status = None
+
     def __get_date_str(self,d):
         if not(d):
             return None
@@ -36,6 +43,10 @@ class PlayerResult:
         d['game_quarter'] = self.game_quarter
         d['game_time_left'] = self.game_time_left
         d['game_date'] = self.__get_date_str(self.game_date)
+        d['top_id'] = self.top_id
+        d['top_status'] = self.top_status
+        d['bottom_id'] = self.bottom_id
+        d['bottom_status'] = self.bottom_status
         return d
 
 

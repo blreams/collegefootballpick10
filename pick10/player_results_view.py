@@ -53,6 +53,8 @@ class PlayerResultsView:
         summary = calc.get_player_summary()
         results = calc.get_results()
 
+        self.set_game_status_params(results,timezone)
+
         params = dict()
         params['year'] = year
         params['week_number'] = week_number
@@ -64,7 +66,6 @@ class PlayerResultsView:
         params['IN_PROGRESS'] = IN_PROGRESS
         params['NOT_STARTED'] = NOT_STARTED
 
-        self.set_game_status_params(params,results,timezone)
         WeekNavbar(year,week_number,'player_results',request.user).add_parameters(params)
 
         return render(request,"pick10/player_results.html",params)
@@ -91,24 +92,14 @@ class PlayerResultsView:
         players_in_year = d.load_players(year)
         return player_id in players_in_year
 
-    def set_game_status_params(self,params,results,timezone):
-        top_ids = []
-        top_statuses = []
-        bottom_ids = []
-        bottom_statuses = []
-
-        for result in results:
+    def set_game_status_params(self,results,timezone):
+        for i,result in enumerate(results):
             top_status,bottom_status,top_id,bottom_id = self.get_game_status(result,timezone)
 
-            top_ids.append(top_id)
-            top_statuses.append(top_status)
-            bottom_ids.append(bottom_id)
-            bottom_statuses.append(bottom_status)
-
-        params['top_status_id'] = top_ids
-        params['top_status'] = top_statuses
-        params['bottom_status_id'] = bottom_ids
-        params['bottom_status'] = bottom_statuses
+            results[i].top_id = top_id
+            results[i].top_status = top_status
+            results[i].bottom_id = bottom_id
+            results[i].bottom_status = bottom_status
 
     def get_game_status(self,result,timezone):
         if result.game_state == NOT_STARTED:
