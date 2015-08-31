@@ -25,6 +25,7 @@ class EnterPicks:
             data.team2 = game.team2.team_name
             data.favored = game.favored
             data.spread = game.spread
+            data.timestamp = game.updated
 
             if player_already_picked:
                 data.pick = picks[game.gamenum].winner

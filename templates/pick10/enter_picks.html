@@ -25,6 +25,8 @@
             <div class="pick-error" id="pick_{{pick.number}}_error"><strong>ERROR!</strong>&nbsp;&nbsp;{{pick.error_message}}</div>
         {% endif %}
 
+        <input type="hidden" name="timestamp_{{pick.number}}" value={{pick.timestamp}}>
+
         {% if pick.number == 10 %}
             <div id="game-10-error"></div>
             <table class="table table-hover">
