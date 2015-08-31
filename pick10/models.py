@@ -285,7 +285,10 @@ def get_createweek_year_week():
         lastpoolyear = get_yearlist()[-1]
     except:
         return (thisyear, 1)
-    latestweek = get_weeklist(lastpoolyear)[-1]
+    try:
+        latestweek = get_weeklist(lastpoolyear)[-1]
+    except:
+        return (thisyear, 1)
     if not query_picks_week(lastpoolyear, latestweek):
         return (lastpoolyear, latestweek)
     if latestweek == 13:

@@ -65,23 +65,23 @@ WSGI_APPLICATION = 'collegefootballpick10.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
-mysqldb_name = 'collegefootballpick10'
-local_user = os.environ.get('USER')
-if local_user is not None:
-    mysqldb_name += '_' + local_user
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        #'ENGINE': 'django.db.backends.mysql',
-        #'NAME': mysqldb_name,
-        #'HOST': '127.0.0.1',
-        #'PORT': '3306',
-        #'USER': 'user_django',
-        #'PASSWORD': 'pass_django',
     }
 }
+if os.environ.get('COLLEGEFOOTBALLPICK10_DATABASE') == 'mysql':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'collegefootballpick10',
+            'HOST': 'localhost',
+            'PORT': '3306',
+            'USER': 'user_django',
+            'PASSWORD': 'pass_django',
+        }
+    }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
