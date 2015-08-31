@@ -130,6 +130,9 @@ class WeekNavbar:
     def __show_update_games(self):
         d = Database()
 
+        if self.user.is_superuser:
+            return True
+
         user_not_linked_to_player = self.player_id == None
 
         if user_not_linked_to_player:
