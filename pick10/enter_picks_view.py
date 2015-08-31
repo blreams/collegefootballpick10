@@ -164,7 +164,8 @@ class EnterPicksView:
         self.__setup_pick_error_messages(picks)
         error_found = self.__get_and_verify_post_data(request,picks)
         if error_found:
-            return self.__render_form_from_data(request,year,week_number,player_id,picks)
+            message = "An error was found in your picks.  Please correct and re-submit"
+            return self.__render_form_from_data(request,year,week_number,player_id,picks,message)
 
         enter_picks.save_picks(picks)
         return redirect("player_results",year=year,week_number=week_number,player_id=player_id)
