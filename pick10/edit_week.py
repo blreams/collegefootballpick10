@@ -54,6 +54,10 @@ class EditWeekView:
                         kickoff=cd[gamestr + 'kickoff'],
                         allowupdate=True,
                         )
+                gameobj.game_state = 1
+                gameobj.quarter = '1st'
+                gameobj.time_left = '15:00'
+                gameobj.save()
 
             # Need to clear the LOCK that players will observe before getting/posting picks
             if not cd['lock_picks']:
