@@ -18,15 +18,24 @@
 
 <form action="picks" method="post">
     {% csrf_token %}
+
+    {% if overall_error_message %}
+        <div class="pick-error" style="text-align:center;">{{overall_error_message}}</div>
+        <br>
+    {% endif %}
+
     <div class="col-md-4">
         {% for pick in picks %}
 
         {% if pick.error_message %}
             <div class="pick-error" id="pick_{{pick.number}}_error"><strong>ERROR!</strong>&nbsp;&nbsp;{{pick.error_message}}</div>
+        {% else %}
+            <div class="" id="pick_{{pick.number}}_error"></div>
         {% endif %}
 
+        <input type="hidden" name="timestamp_{{pick.number}}" value={{pick.timestamp}}>
+
         {% if pick.number == 10 %}
-            <div id="game-10-error"></div>
             <table class="table table-hover">
                 <thead>
                     <td class="game-number">Game {{pick.number}}</td>
@@ -89,22 +98,46 @@
             $("#team1_row_" + pick_number).removeClass("info");
             $("#team2_row_" + pick_number).addClass("info");
         }
+        function is_score_valid(score_str) {
+           return /^[0-9]+$/.test(score_str);
+        }
         function update_game10_winner() {
             var team1_score_str = $('[name=team1-score]').val();
             var team2_score_str = $('[name=team2-score]').val();
-            var team1_score = parseInt(team1_score_str);
-            var team2_score = parseInt(team2_score_str);
-            var bad_input = isNaN(team1_score) || isNaN(team2_score);
 
-            if (bad_input || team1_score < 0 || team2_score < 0) {
+            var team1_score_invalid = is_score_valid(team1_score_str) == false;
+            var team2_score_invalid = is_score_valid(team2_score_str) == false;
+            var both_invalid = team1_score_invalid && team2_score_invalid;
+
+            if (both_invalid) {
                 $("#team1_row_10").removeClass("info");
                 $("#team2_row_10").removeClass("info");
-                $("#game-10-error").text("ERROR! Team score is invalid")
-                $("#game-10-error").addClass("pick-error")
+                $("#pick_10_error").text("ERROR! Team scores are invalid")
+                $("#pick_10_error").addClass("pick-error")
                 return;
             }
-            $("#game-10-error").text("")
-            $("#game-10-error").removeClass("pick-error")
+
+            if (team1_score_invalid) {
+                $("#team1_row_10").removeClass("info");
+                $("#team2_row_10").removeClass("info");
+                $("#pick_10_error").text("ERROR! Team1 score is invalid")
+                $("#pick_10_error").addClass("pick-error")
+                return;
+            }
+
+            if (team2_score_invalid) {
+                $("#team1_row_10").removeClass("info");
+                $("#team2_row_10").removeClass("info");
+                $("#pick_10_error").text("ERROR! Team2 score is invalid")
+                $("#pick_10_error").addClass("pick-error")
+                return;
+            }
+
+            $("#pick_10_error").text("")
+            $("#pick_10_error").removeClass("pick-error")
+
+            var team1_score = parseInt(team1_score_str);
+            var team2_score = parseInt(team2_score_str);
 
             // calculate winner
             var winner = 1;
