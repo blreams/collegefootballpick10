@@ -21,19 +21,6 @@ def get_default_pick_deadline():
     return deadline
 
 
-class UserProfile(models.Model):
-    tz_choices = [(tz, tz) for tz in pytz.all_timezones if tz.startswith('US')] + [(tz, tz) for tz in pytz.all_timezones if not tz.startswith('US')]
-    user = models.OneToOneField(User)
-    player = models.OneToOneField('Player', blank=True, null=True)
-    company = models.CharField(max_length=50, blank=True)
-    # You can customize this with whatever fields you want to extend User.
-    preferredtz = models.CharField(max_length=100, null=True, blank=True, choices=tz_choices, default='US/Eastern')
-    created = models.DateTimeField(auto_now=False, auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True, auto_now_add=True)
-
-    def __unicode__(self):
-        return 'User=%s, Player=%s' % (self.user.username, self.player,)
-
 class Year(models.Model):
     yearnum = models.IntegerField()
     entry_fee = models.DecimalField(default=10.0, decimal_places=2, max_digits=6)
@@ -166,6 +153,21 @@ class Pick(models.Model):
 
     def __unicode__(self):
         return 'User=%s, Year=%d, Week=%d, Game=%d'%(self.player.private_name, self.game.week.year.yearnum, self.game.week.weeknum, self.game.gamenum,)
+
+class UserProfile(models.Model):
+    tz_choices = [(tz, tz) for tz in pytz.all_timezones if tz.startswith('US')] + [(tz, tz) for tz in pytz.all_timezones if not tz.startswith('US')]
+    fav_choices = [(team.id, team.team_name) for team in Team.objects.all()]
+    user = models.OneToOneField(User)
+    player = models.OneToOneField('Player', blank=True, null=True)
+    company = models.CharField(max_length=50, blank=True)
+    # You can customize this with whatever fields you want to extend User.
+    favorite_team = models.ForeignKey('Team', blank=True, null=True, choices=fav_choices)
+    preferredtz = models.CharField(max_length=100, null=True, blank=True, choices=tz_choices, default='US/Eastern')
+    created = models.DateTimeField(auto_now=False, auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True, auto_now_add=True)
+
+    def __unicode__(self):
+        return 'User=%s, Player=%s' % (self.user.username, self.player,)
 
 def add_year(yearnum):
     y, created = Year.objects.get_or_create(yearnum=yearnum)

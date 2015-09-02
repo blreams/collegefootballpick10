@@ -12,27 +12,29 @@ class PlayerAdmin(admin.ModelAdmin):
 
 class PlayerYearAdmin(admin.ModelAdmin):
     list_display = ('player', 'year')
-    list_filter = ('year',)
+    list_filter = ('year', 'player')
 
 class ConferenceAdmin(admin.ModelAdmin):
     list_display = ('conf_name', 'div_name', 'created', 'updated')
 
 class TeamAdmin(admin.ModelAdmin):
     list_display = ('team_name', 'mascot', 'created', 'updated')
+    list_filter = ('conference',)
 
 def show_year_week_game(obj):
     return 'Year=%d, Week=%d, Game=%d' % (obj.week.year.yearnum, obj.week.weeknum, obj.gamenum,)
 
 class GameAdmin(admin.ModelAdmin):
     list_display = (show_year_week_game, 'team1', 'team2', 'favored', 'spread', 'winner', 'kickoff', 'created', 'updated')
-    list_filter = ('week',)
+    list_filter = ('week__year', 'week__weeknum')
 
 class WeekAdmin(admin.ModelAdmin):
     list_display = ('year', 'weeknum', 'lock_picks', 'lock_scores', 'created', 'updated')
+    list_filter = ('year',)
 
 class PickAdmin(admin.ModelAdmin):
     list_display = ('player', 'game', 'created', 'updated')
-    list_filter = ('player',)
+    list_filter = ('game__week__year', 'game__week__weeknum', 'player')
 
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
