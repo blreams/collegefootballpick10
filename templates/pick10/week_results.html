@@ -14,3 +14,12 @@
 {% block body_block %}
     {{ body_content|safe }}
 {% endblock %}
+
+{% block script_block %}
+    <script>
+        var player_id = {{player_id}};
+        $(document).ready(function() {
+            highlight_player_row(player_id);
+        });
+    </script>
+{% endblock %}
