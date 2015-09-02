@@ -16,6 +16,10 @@
         var reverse_possible = false;
 
         function highlight_player_row(player_id) {
+            if (player_id == null) {
+                return;
+            }
+
             var row_id = "#player_" + player_id;
 
             // red

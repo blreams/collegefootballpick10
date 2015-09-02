@@ -319,4 +319,4 @@ class OverallResultsView:
         if player:
             data['player_id'] = player.id
             return
-        data['player_id'] = None
+        data['player_id'] = 'null'
