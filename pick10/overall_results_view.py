@@ -22,7 +22,9 @@ class OverallResultsView:
             data={'year':year}
             return render(request,"pick10/bad_year.html",data,status=400)
 
-        use_private_names = self.__determine_private_access(request.user,use_private_names)
+        access = UserAccess(request.user)
+
+        use_private_names = self.__determine_private_access(access,use_private_names)
 
         # setup memcache parameters
         cache = get_cache('default')
@@ -48,6 +50,7 @@ class OverallResultsView:
             memcache_hit = body != None and sidebar != None
             if memcache_hit:
                 data = {'body_content':body,'side_block_content':sidebar,'year':year,'weeks_in_year':weeks_in_year }
+                self.__set_player_id(access,data)
                 WeekNavbar(year,last_week_number,'overall',request.user).add_parameters(data)
                 return render(request,"pick10/overall_results.html",data)
 
@@ -130,6 +133,7 @@ class OverallResultsView:
         cache.set(sidebar_key,sidebar)
 
         data = {'body_content':body,'side_block_content':sidebar,'year':year,'weeks_in_year':weeks_in_year }
+        self.__set_player_id(access,data)
         WeekNavbar(year,last_week_number,'overall',request.user).add_parameters(data)
         return render(request,"pick10/overall_results.html",data)
 
@@ -303,9 +307,16 @@ class OverallResultsView:
         s1 = string.replace(html,'\n','')
         return re.sub(r'\s\s+',' ',s1)
 
-    def __determine_private_access(self,user,use_private_names):
+    def __determine_private_access(self,access,use_private_names):
         force_public_private = use_private_names != None
         if force_public_private:
             return use_private_names
 
-        return UserAccess(user).is_private_user()
+        return access.is_private_user()
+
+    def __set_player_id(self,access,data):
+        player = access.get_player()
+        if player:
+            data['player_id'] = player.id
+            return
+        data['player_id'] = None

@@ -16,3 +16,12 @@
     {{ body_content|safe }}
     <br><br>
 {% endblock %}
+
+{% block script_block %}
+    <script>
+        var player_id = {{player_id}};
+        $(document).ready(function() {
+            highlight_player_row(player_id);
+        });
+    </script>
+{% endblock %}
