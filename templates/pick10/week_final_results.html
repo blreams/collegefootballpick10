@@ -13,7 +13,7 @@
             <td id="winner-header"></td>
         </thead>
         {% for result in results %}
-            <tr>
+            <tr id="player_{{result.player_id}}">
                 <td id="content">{{result.rank}}</td>
                 <td id="player-content"><a id="player-link" href="player/{{result.player_id}}/results">{{result.player_name}}</a></td>
                 <td id="{{wins_id}}">{{result.wins}}</td>

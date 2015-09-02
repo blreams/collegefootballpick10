@@ -15,7 +15,7 @@
             <td id="winner-header"></td>
         </thead>
         {% for result in results %}
-            <tr>
+            <tr id="player_{{result.player_id}}">
                 {% if use_projected_rank %}
                     <td id="content">{{result.projected_rank}}</td>
                 {% else %}
