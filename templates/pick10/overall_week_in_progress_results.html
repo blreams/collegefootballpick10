@@ -14,7 +14,7 @@
         <td id="header">Wk{{last_week_number}} Possible</td>
     </thead>
     {% for result in results %}
-        <tr>
+        <tr id="player_{{result.player_id}}">
             {% if rank == "projected" %}
                 <td id="content">{{result.projected_rank}}</td>
             {% else %}

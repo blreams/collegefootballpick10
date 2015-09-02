@@ -11,7 +11,7 @@
         {% endfor %}
     </thead>
     {% for result in results %}
-        <tr>
+        <tr id="player_{{result.player_id}}">
             <td id="content">{{result.rank}}</td>
             <td id="player-content">{{result.player_name}}</td>
             <td id="{{overall_id}}">{{result.overall}}</td>
