@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django import forms
-from models import UserProfile, get_yearlist, get_createweek_year_week, get_teamlist, get_default_pick_deadline
+from models import UserProfile, Team
+from models import get_yearlist, get_createweek_year_week, get_teamlist, get_default_pick_deadline
 from django.utils import timezone
 
 import pytz
@@ -15,7 +16,11 @@ class UserForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('company', 'preferredtz')
+        fields = ('company', 'preferredtz', 'favorite_team')
+
+    def __init__(self, *args, **kwargs):
+        super(UserProfileForm, self).__init__(*args, **kwargs)
+        self.fields['favorite_team'] = forms.ModelChoiceField(queryset=Team.objects.all(), to_field_name='team_name', required=False)
 
 def year_choices():
     yearlist = get_yearlist()
