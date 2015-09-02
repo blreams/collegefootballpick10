@@ -30,10 +30,10 @@
             var color = "#b94a48";
             var bgcolor = "#f2dede";
 
-            $(row_id).find("td").css("color",color);
-            $(row_id).find("td").css("background-color",bgcolor);
-            $(row_id).find("a").css("color",color);
-            $(row_id).find("a").css("background-color",bgcolor);
+            $(row_id).find("td").not('#winner').css("color",color);
+            $(row_id).find("td").not('#winner').css("background-color",bgcolor);
+            $(row_id).find("a").not('#winner-link').css("color",color);
+            $(row_id).find("a").not('#winner-link').css("background-color",bgcolor);
         }
 
 
@@ -117,5 +117,5 @@
 <br>
 <div id="results">
     {{ content|safe }}
-    <br><br>
 </div>
+<br><br>
