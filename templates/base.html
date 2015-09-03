@@ -41,6 +41,9 @@
                     {% endif %}
                     <li><a id="home_id" href="{% url 'home' %}">Home</a></li>
                     {% if user.is_authenticated %}
+                      {% if user.is_staff %}
+                        <li><a href="{% url 'admin:index' %}?next=/">Admin</a></li>
+                      {% endif %}
                     <li><a href="{% url 'profile' %}?next=/">Profile</a></li>
                     <li><a href="{% url 'auth_logout' %}?next=/">Logout</a></li>
                     {% else %}
