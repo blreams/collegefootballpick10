@@ -35,7 +35,7 @@
                 <span class="input-group-addon">FAV</span>
                 <select class="form-control input-lg" id="id_favorite_team" name="favorite_team">
                     {% for choice in favchoices %}
-                        {% if choice == userprofile.favorite_team.team_name %}
+                        {% if choice == userprofile.favorite_team %}
                         <option value="{{choice}}" selected>{{ choice }}</option>
                         {% else %}
                         <option value="{{choice}}">{{ choice }}</option>

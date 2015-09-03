@@ -18,9 +18,12 @@ class UserProfileForm(forms.ModelForm):
         model = UserProfile
         fields = ('company', 'preferredtz', 'favorite_team')
 
-    def __init__(self, *args, **kwargs):
-        super(UserProfileForm, self).__init__(*args, **kwargs)
-        self.fields['favorite_team'] = forms.ModelChoiceField(queryset=Team.objects.all(), to_field_name='team_name', required=False)
+    def clean_favorite_team(self):
+        team_name = self.cleaned_data['favorite_team']
+        valid_team_names = [team.team_name for team in Team.objects.all()]
+        if team_name not in valid_team_names:
+            raise forms.ValidationError("Your team is not in the database")
+        return team_name
 
 def year_choices():
     yearlist = get_yearlist()
