@@ -19,6 +19,24 @@
         var reverse_projected = false;
         var reverse_possible = false;
 
+        function highlight_player_row(player_id) {
+            if (player_id == null) {
+                return;
+            }
+
+            var row_id = "#player_" + player_id;
+
+            // red
+            var color = "#b94a48";
+            var bgcolor = "#f2dede";
+
+            $(row_id).find("td").not('#winner').css("color",color);
+            $(row_id).find("td").not('#winner').css("background-color",bgcolor);
+            $(row_id).find("a").not('#winner-link').css("color",color);
+            $(row_id).find("a").not('#winner-link').css("background-color",bgcolor);
+        }
+
+
         function change_content(content_name) {
             var content_element = document.getElementById('results');
 
@@ -93,10 +111,11 @@
                 reverse_projected = false;
                 reverse_possible = false;
             }
+            highlight_player_row(player_id);
         }
     </script>
 <br>
 <div id="results">
     {{ content|safe }}
-    <br><br>
 </div>
+<br><br>

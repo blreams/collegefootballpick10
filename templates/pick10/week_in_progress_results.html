@@ -6,16 +6,16 @@
     <table>
         <thead class="results-header">
             <td id="header">Rank</td>
-            <td id="header"><a id="link-header" href="javascript:void" onclick="change_content('players')">Player</a></td>
-            <td id="header"><a id="link-header" href="javascript:void" onclick="change_content('wins')">Wins</a></td>
-            <td id="header"><a id="link-header" href="javascript:void" onclick="change_content('losses')">Losses</a></td>
+            <td id="header"><a id="link-header" href="#" onclick="change_content('players');return false;">Player</a></td>
+            <td id="header"><a id="link-header" href="#" onclick="change_content('wins');return false;">Wins</a></td>
+            <td id="header"><a id="link-header" href="#" onclick="change_content('losses');return false;">Losses</a></td>
             <td id="header">Win Pct.</td>
-            <td id="header"><a id="link-header" href="javascript:void" onclick="change_content('projected_wins')">Projected</a></td>
-            <td id="header"><a id="link-header" href="javascript:void" onclick="change_content('possible_wins')">Possible</a></td>
+            <td id="header"><a id="link-header" href="#" onclick="change_content('projected_wins');return false;">Projected</a></td>
+            <td id="header"><a id="link-header" href="#" onclick="change_content('possible_wins');return false;">Possible</a></td>
             <td id="winner-header"></td>
         </thead>
         {% for result in results %}
-            <tr>
+            <tr id="player_{{result.player_id}}">
                 {% if use_projected_rank %}
                     <td id="content">{{result.projected_rank}}</td>
                 {% else %}

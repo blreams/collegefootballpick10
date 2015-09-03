@@ -2,15 +2,15 @@
 <table>
     <thead class="results-header">
         <td id="header">Rank</td>
-        <td id="header"><a id="link-header" href="javascript:void" onclick="change_content('players')">Player</a></td>
-        <td id="header"><a id="link-header" href="javascript:void" onclick="change_content('overall')">Overall</a></td>
+        <td id="header"><a id="link-header" href="#" onclick="change_content('players');return false;">Player</a></td>
+        <td id="header"><a id="link-header" href="#" onclick="change_content('overall');return false;">Overall</a></td>
         <td id="header">Win Pct.</td>
         {% for wk_num in weeks_in_year %}
             <td id="header">Wk{{wk_num}}</td>
         {% endfor %}
     </thead>
     {% for result in results %}
-        <tr>
+    <tr id="player_{{result.player_id}}">
             <td id="content">{{result.rank}}</td>
             <td id="player-content">{{result.player_name}}</td>
             <td id="{{overall_id}}">{{result.overall}}</td>

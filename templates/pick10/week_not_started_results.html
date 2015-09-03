@@ -6,14 +6,14 @@
     <table>
         <thead class="results-header">
             <td id="header">Rank</td>
-            <td id="header"><a id="link-header" href="javascript:void" onclick="change_content('players')">Player</a></td>
-            <td id="header"><a id="link-header" href="javascript:void" onclick="change_content('wins')">Wins</a></td>
-            <td id="header"><a id="link-header" href="javascript:void" onclick="change_content('losses')">Losses</a></td>
+            <td id="header"><a id="link-header" href="#" onclick="change_content('players');return false;">Player</a></td>
+            <td id="header"><a id="link-header" href="#" onclick="change_content('wins');return false;">Wins</a></td>
+            <td id="header"><a id="link-header" href="#" onclick="change_content('losses');return false;">Losses</a></td>
             <td id="header">Win Pct.</td>
-            <td id="header"><a id="link-header" href="javascript:void" onclick="change_content('possible_wins')">Possible</a></td>
+            <td id="header"><a id="link-header" href="#" onclick="change_content('possible_wins');return false;">Possible</a></td>
         </thead>
         {% for result in results %}
-            <tr>
+            <tr id="player_{{result.player_id}}">
                 <td id="content">{{result.rank}}</td>
                 <td id="player-content"><a id="player-link" href="player/{{result.player_id}}/results">{{result.player_name}}</a></td>
                 <td id="{{wins_id}}">{{result.wins}}</td>

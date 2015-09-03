@@ -29,7 +29,9 @@ class WeekResultsView:
             WeekNavbar(year,week_number,'week_results',request.user).add_parameters(data)
             return render(request,"pick10/week_results_error.html",data,status=400)
 
-        use_private_names = self.__determine_private_access(request.user,use_private_names)
+        access = UserAccess(request.user)
+
+        use_private_names = self.__determine_private_access(access,use_private_names)
 
         # setup memcache parameters
         cache = get_cache('default')
@@ -46,6 +48,7 @@ class WeekResultsView:
             memcache_hit = body != None and sidebar != None
             if memcache_hit:
                 data = {'body_content':body,'side_block_content':sidebar,'week_number':week_number }
+                self.__set_player_id(access,data)
                 WeekNavbar(year,week_number,'week_results',request.user).add_parameters(data)
                 return render(request,"pick10/week_results.html",data)
 
@@ -93,6 +96,7 @@ class WeekResultsView:
         cache.set(sidebar_key,sidebar)
 
         data = {'body_content':body,'side_block_content':sidebar,'week_number':week_number }
+        self.__set_player_id(access,data)
         WeekNavbar(year,week_number,'week_results',request.user).add_parameters(data)
 
         return render(request,"pick10/week_results.html",data)
@@ -322,9 +326,16 @@ class WeekResultsView:
         s1 = string.replace(html,'\n','')
         return re.sub(r'\s\s+',' ',s1)
 
-    def __determine_private_access(self,user,use_private_names):
+    def __determine_private_access(self,access,use_private_names):
         force_public_private = use_private_names != None
         if force_public_private:
             return use_private_names
 
-        return UserAccess(user).is_private_user()
+        return access.is_private_user()
+
+    def __set_player_id(self,access,data):
+        player = access.get_player()
+        if player:
+            data['player_id'] = player.id
+            return
+        data['player_id'] = 'null'
