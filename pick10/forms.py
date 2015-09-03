@@ -13,16 +13,27 @@ class UserForm(forms.ModelForm):
         model = User
         fields = ('username', 'email', 'first_name', 'last_name', 'password')
 
+def team_choices():
+    teamlist = [(team.team_name, team.team_name) for team in Team.objects.all().order_by('team_name')]
+    return tuple([('--------', '--------')] + teamlist)
+
 class UserProfileForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(UserProfileForm, self).__init__(*args, **kwargs)
+        self.fields['favorite_team'] = forms.ChoiceField(choices=team_choices())
+
     class Meta:
         model = UserProfile
         fields = ('company', 'preferredtz', 'favorite_team')
 
     def clean_favorite_team(self):
         team_name = self.cleaned_data['favorite_team']
-        valid_team_names = [team.team_name for team in Team.objects.all()]
-        if team_name not in valid_team_names:
-            raise forms.ValidationError("Your team is not in the database")
+        if team_name != '--------':
+            valid_team_names = [team.team_name for team in Team.objects.all()]
+            if team_name not in valid_team_names:
+                raise forms.ValidationError("Your team is not in the database")
+        else:
+            team_name = ''
         return team_name
 
 def year_choices():

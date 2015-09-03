@@ -3,6 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
 from .models import Year, Player, PlayerYear, Conference, Team, Game, Week, Pick, UserProfile
+from .forms import UserProfileForm
 
 class YearAdmin(admin.ModelAdmin):
     list_display = ('yearnum', 'entry_fee', 'payout_week', 'payout_first', 'payout_second', 'payout_third')
@@ -36,6 +37,10 @@ class PickAdmin(admin.ModelAdmin):
     list_display = ('player', 'game', 'created', 'updated')
     list_filter = ('game__week__year', 'game__week__weeknum', 'player')
 
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'player', 'company', 'preferredtz', 'favorite_team')
+    list_filter = ('company', 'favorite_team', 'preferredtz')
+
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
@@ -52,7 +57,7 @@ admin.site.register(Team, TeamAdmin)
 admin.site.register(Game, GameAdmin)
 admin.site.register(Week, WeekAdmin)
 admin.site.register(Pick, PickAdmin)
-admin.site.register(UserProfile)
+admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 

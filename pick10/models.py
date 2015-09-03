@@ -156,12 +156,11 @@ class Pick(models.Model):
 
 class UserProfile(models.Model):
     tz_choices = [(tz, tz) for tz in pytz.all_timezones if tz.startswith('US')] + [(tz, tz) for tz in pytz.all_timezones if not tz.startswith('US')]
-    fav_choices = [(team.team_name, team.team_name) for team in Team.objects.all()]
     user = models.OneToOneField(User)
     player = models.OneToOneField('Player', blank=True, null=True)
     company = models.CharField(max_length=50, blank=True)
     # You can customize this with whatever fields you want to extend User.
-    favorite_team = models.CharField(max_length=100, blank=True, null=True, choices=fav_choices)
+    favorite_team = models.CharField(max_length=100, blank=True, null=True)
     preferredtz = models.CharField(max_length=100, null=True, blank=True, choices=tz_choices, default='US/Eastern')
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
