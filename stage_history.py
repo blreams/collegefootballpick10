@@ -64,15 +64,26 @@ def populate_year(yearnum, verbose=False):
     return yearobj
 
 def convert_to_private_name(ssplayername):
-    username = player_username[ssplayername]
-    lastname, firstname = username.split('_')
+    username = player_username.get(ssplayername)
+    if username != None:
+        lastname, firstname = username.split('_')
+    else:
+        tokens = ssplayername.split(',')
+        lastname = tokens[0]
+        firstname = tokens[1].split()[0]
     firstname = firstname.capitalize()
     lastname = lastname.capitalize()
     return ' '.join([firstname, lastname])
 
+
 def convert_to_public_name(ssplayername):
-    username = player_username[ssplayername]
-    lastname, firstname = username.split('_')
+    username = player_username.get(ssplayername)
+    if username != None:
+        lastname, firstname = username.split('_')
+    else:
+        tokens = ssplayername.split(',')
+        lastname = tokens[0]
+        firstname = tokens[1].split()[0]
     firstname = firstname.capitalize()
     lastname = lastname.capitalize()
     public_name = firstname
@@ -107,9 +118,12 @@ def populate_week(yearnum, weeknum, verbose=False):
     if created:
         poolspreadsheet = get_poolspreadsheet(yearnum)
         winner_ss_name = poolspreadsheet.get_week_winner(weeknum)
-        populate_player_year(yearnum, winner_ss_name)
-        playerobj = Player.objects.get(ss_name=winner_ss_name)
-        weekobj.winner = playerobj
+        if winner_ss_name == None:
+            weekobj.winner = None
+        else:
+            populate_player_year(yearnum, winner_ss_name)
+            playerobj = Player.objects.get(ss_name=winner_ss_name)
+            weekobj.winner = playerobj
         if verbose: print("Week(%d, %d).save()" % (yearnum, weeknum,))
         weekobj.save()
 
@@ -132,6 +146,7 @@ def populate_games_for_year_week(yearnum, weeknum, verbose=False):
         weekobj.pick_deadline = timezone.now()
         weekobj.lock_picks = False
         weekobj.save()
+    num_final = 0
     for gamenum in games_dict:
         team1obj = populate_team(games_dict[gamenum].team1)
         team2obj = populate_team(games_dict[gamenum].team2)
@@ -139,13 +154,24 @@ def populate_games_for_year_week(yearnum, weeknum, verbose=False):
         team2actualpoints = poolspreadsheet.get_game_team2_score(weeknum, gamenum)
         favored = 1 if poolspreadsheet.get_game_favored_team(weeknum, gamenum) == 'team1' else 2
         spread = poolspreadsheet.get_game_spread(weeknum, gamenum)
-        winner = 1
-        if (favored == 1 and (team1actualpoints - team2actualpoints) < spread) or (favored == 2 and (team2actualpoints - team1actualpoints) > spread):
-            winner = 2
+
+        score_entered = team1actualpoints != None and team2actualpoints != None
+        if score_entered:
+            winner = 1
+            if (favored == 1 and (team1actualpoints - team2actualpoints) < spread) or (favored == 2 and (team2actualpoints - team1actualpoints) > spread):
+                winner = 2
+            game_state = 3  # FINAL
+            num_final += 1
+        else:
+            team1actualpoints = -1
+            team2actualpoints = -1
+            winner = 0
+            game_state = 1 # NOT_STARTED
         if verbose: print("Game(%d, %d, %d).save()" % (yearnum, weeknum, gamenum,))
-        gameobj = Game.objects.get_or_create(week=weekobj, gamenum=gamenum, team1=team1obj, team2=team2obj, team1_actual_points=team1actualpoints, team2_actual_points=team2actualpoints, favored=favored, spread=spread, winner=winner,game_state=3)
-    weekobj.lock_scores = True
-    weekobj.save()
+        gameobj = Game.objects.get_or_create(week=weekobj, gamenum=gamenum, team1=team1obj, team2=team2obj, team1_actual_points=team1actualpoints, team2_actual_points=team2actualpoints, favored=favored, spread=spread, winner=winner,game_state=game_state)
+    if num_final == 10:
+        weekobj.lock_scores = True
+        weekobj.save()
 
 def populate_picks_for_year_week(yearnum, weeknum, verbose=False):
     yearobj = Year.objects.get(yearnum=yearnum)
@@ -208,5 +234,5 @@ def main(years=None, weeks=None, verbose=False):
 
 # Execution starts here
 if __name__ == '__main__':
-    main()
+    main(years=[2015])
 
