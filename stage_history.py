@@ -181,28 +181,28 @@ def main(years=None, weeks=None, verbose=False):
     elif isinstance(years, (int, long)):
         years = [years]
 
-    if verbose: print("populate_all_teams()")
+    print("populate_all_teams()")
     populate_all_teams()
 
     for yearnum in years:
         poolspreadsheet = get_poolspreadsheet(yearnum)
-        if verbose: print("populate_year(%d)" % (yearnum,))
+        print("populate_year(%d)" % (yearnum,))
         populate_year(yearnum, verbose)
-        if verbose: print("populate_player_count(%d)" % (yearnum,))
+        print("populate_player_count(%d)" % (yearnum,))
         populate_player_count(yearnum, verbose)
 
         if weeks is None:
             weeks = poolspreadsheet.get_week_numbers()
         elif isinstance(weeks, (int, long)):
             weeks = [weeks]
-        if verbose: print("Found %d weeks in spreadsheet..." % (len(weeks),))
+        print("Found %d weeks in spreadsheet..." % (len(weeks),))
 
         for weeknum in weeks:
-            if verbose: print("populate_week(%d, %d)" % (yearnum, weeknum,))
+            print("populate_week(%d, %d)" % (yearnum, weeknum,))
             populate_week(yearnum, weeknum, verbose)
-            if verbose: print("populate_games_for_year_week(%d, %d)" % (yearnum, weeknum,))
+            print("populate_games_for_year_week(%d, %d)" % (yearnum, weeknum,))
             populate_games_for_year_week(yearnum, weeknum, verbose)
-            if verbose: print("populate_picks_for_year_week(%d, %d)" % (yearnum, weeknum,))
+            print("populate_picks_for_year_week(%d, %d)" % (yearnum, weeknum,))
             populate_picks_for_year_week(yearnum, weeknum, verbose)
 
 
