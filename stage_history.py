@@ -234,5 +234,5 @@ def main(years=None, weeks=None, verbose=False):
 
 # Execution starts here
 if __name__ == '__main__':
-    main(years=[2015])
+    main()
 
