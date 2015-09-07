@@ -456,6 +456,22 @@ class NoPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
+    def test_tiebreak_0_special_case(self):
+        # login player with no picks
+        test_db = UnitTestDatabase()
+        test_db.setup_week_final(1978,1)
+        test_db.setup_week_no_picks(1978,2,FINAL)
+        self.__login_player('Brent',1978)
+
+        player_with_picks = self.utils.get_player_from_public_name(1978,'Brent')
+        player_no_picks = self.utils.get_player_from_public_name(1978,'John')
+
+        import pdb; pdb.set_trace()
+        self.utils.tiebreak_page(1978,2)
+        self.__is_page_up('Week 2 Tiebreak')
+
+        test_db.delete_database()
+
     def __login_player(self,name,year):
         player = self.utils.get_player_from_public_name(year,name)
         self.utils.login_assigned_user(name=name,player=player)

@@ -222,7 +222,10 @@ class WeekWinner:
 
         for player_id in self.players_tied_for_first:
             player_pick = self.__data.player_featured_game_picks[player_id]
-            if player_pick.winner == featured_winner:
+
+            if player_pick == None:
+                self.players_lost_tiebreak0.append(player_id)
+            elif player_pick.winner == featured_winner:
                 self.players_won_tiebreak0.append(player_id)
             else: 
                 self.players_lost_tiebreak0.append(player_id)

@@ -415,6 +415,30 @@ class UnitTestDatabase:
         kevin = self.setup_player(year,'Kevin')
         john = self.setup_player(year,'John')
 
+    def setup_week_no_picks(self,year=1975,week=2,game_state=FINAL):
+        week = self.setup_week(year,week_number=week)
+        games = [None]*10
+        games[0] = self.setup_game_with_winner(week,1,"Georgia Tech","Clemson",state=game_state,winner=TEAM1)
+        games[1] = self.setup_game_with_winner(week,2,"Duke","North Carolina",state=game_state,winner=TEAM2)
+        games[2] = self.setup_game_with_winner(week,3,"Virginia","Virginia Tech",state=game_state,winner=TEAM1)
+        games[3] = self.setup_game_with_winner(week,4,"Indiana","Maryland",state=game_state,winner=TEAM2)
+        games[4] = self.setup_game_with_winner(week,5,"South Carolina","Georgia",state=game_state,winner=TEAM1)
+        games[5] = self.setup_game_with_winner(week,6,"Tennessee","Vanderbilt",state=game_state,winner=TEAM2)
+        games[6] = self.setup_game_with_winner(week,7,"Auburn","Alabama",state=game_state,winner=TEAM1)
+        games[7] = self.setup_game_with_winner(week,8,"Southern California","UCLA",state=game_state,winner=TEAM2)
+        games[8] = self.setup_game_with_winner(week,9,"Army","Navy",state=game_state,winner=TEAM1)
+        games[9] = self.setup_game_with_winner(week,10,"Notre Dame","Florida State",state=game_state,winner=TEAM2)
+        brent = self.setup_player(year,'Brent')
+        byron = self.setup_player(year,'Byron')
+        alice = self.setup_player(year,'Alice')
+        joan = self.setup_player(year,'Joan')
+        bill = self.setup_player(year,'Bill')
+        david = self.setup_player(year,'David')
+        amy = self.setup_player(year,'Amy')
+        annie = self.setup_player(year,'Annie')
+        kevin = self.setup_player(year,'Kevin')
+        john = self.setup_player(year,'John')
+
     def setup_week(self,year,week_number):
         year_model = populate_year(year)
         week, created = Week.objects.get_or_create(year=year_model, weeknum=week_number)
