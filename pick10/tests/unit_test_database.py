@@ -226,6 +226,39 @@ class UnitTestDatabase:
         self.setup_player_picks_projected(kevin,games,wins=1,projected=2)
         self.setup_player_default(john,games)
 
+    def setup_week_in_progress_with_no_pick_defaulters(self,year=1978,week_number=8):
+        week = self.setup_week(year,week_number)
+        games = [None]*10
+        games[0] = self.setup_game_with_winner(week,1,"Georgia Tech","Clemson",state=FINAL,winner=TEAM1)
+        games[1] = self.setup_game_with_winner(week,2,"Duke","North Carolina",state=FINAL,winner=TEAM1)
+        games[2] = self.setup_game_with_winner(week,3,"Virginia","Virginia Tech",state=FINAL,winner=TEAM1)
+        games[3] = self.setup_game_with_winner(week,4,"Indiana","Maryland",state=FINAL,winner=TEAM2)
+        games[4] = self.setup_game_with_winner(week,5,"South Carolina","Georgia",state=FINAL,winner=TEAM2)
+        games[5] = self.setup_game_with_winner(week,6,"Tennessee","Vanderbilt",state=FINAL,winner=TEAM2)
+        games[6] = self.setup_game(week,7,"Auburn","Alabama",state=NOT_STARTED)
+        games[7] = self.setup_game(week,8,"Southern California","UCLA",state=NOT_STARTED)
+        games[8] = self.setup_game(week,9,"Army","Navy",state=NOT_STARTED)
+        games[9] = self.setup_game(week,10,"Notre Dame","Florida State",state=NOT_STARTED)
+        brent = self.setup_player(year,'Brent')
+        byron = self.setup_player(year,'Byron')
+        alice = self.setup_player(year,'Alice')
+        joan = self.setup_player(year,'Joan')
+        bill = self.setup_player(year,'Bill')
+        david = self.setup_player(year,'David')
+        amy = self.setup_player(year,'Amy')
+        annie = self.setup_player(year,'Annie')
+        kevin = self.setup_player(year,'Kevin')
+        john = self.setup_player(year,'John')
+        self.setup_player_picks(brent,games,number_of_wins=6)
+        self.setup_player_picks(byron,games,number_of_wins=6)
+        self.setup_player_picks(alice,games,number_of_wins=5)
+        self.setup_player_picks(joan,games,number_of_wins=5)
+        self.setup_player_picks(bill,games,number_of_wins=4)
+        self.setup_player_picks(david,games,number_of_wins=4)
+        self.setup_player_picks(amy,games,number_of_wins=3)
+        self.setup_player_picks(annie,games,number_of_wins=3)
+        # no picks for john, kevin
+
     def setup_week_final(self,year=1978,week_number=10):
         week = self.setup_week(year,week_number)
         games = [None]*10
