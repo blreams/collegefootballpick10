@@ -15,7 +15,6 @@ class NoPicksTest(FunctionalTest):
         super(NoPicksTest, self).setUp()
         self.utils = Utils(self.browser,self.server_url)
 
-    @unittest.skip('tested')
     def test_week_results_week1_not_started(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_not_started_with_no_pick_defaulters(1978,1)
@@ -44,7 +43,6 @@ class NoPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('tested')
     def test_week_results_week2_not_started(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_final(1978,1)
@@ -89,7 +87,6 @@ class NoPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('tested')
     def test_week_results_week1_not_started_player2(self):
         # login player with no picks
         test_db = UnitTestDatabase()
@@ -120,7 +117,6 @@ class NoPicksTest(FunctionalTest):
         test_db.delete_database()
 
 
-    @unittest.skip('tested')
     def test_week_results_week2_not_started_player2(self):
         # login player with no picks
         test_db = UnitTestDatabase()
@@ -166,7 +162,6 @@ class NoPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('tested')
     def test_week_results_week1_in_progress(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_in_progress_with_no_pick_defaulters(1978,1)
@@ -195,7 +190,6 @@ class NoPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('tested')
     def test_week_results_week2_in_progress(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_final(1978,1)
@@ -240,7 +234,6 @@ class NoPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('tested')
     def test_week_results_week1_in_progress_player2(self):
         # login player with no picks
         test_db = UnitTestDatabase()
@@ -271,7 +264,6 @@ class NoPicksTest(FunctionalTest):
         test_db.delete_database()
 
 
-    @unittest.skip('tested')
     def test_week_results_week2_in_progress_player2(self):
         # login player with no picks
         test_db = UnitTestDatabase()
@@ -317,7 +309,6 @@ class NoPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('tested')
     def test_week_results_week1_final(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_final_with_no_pick_defaulters(1978,1)
@@ -346,7 +337,6 @@ class NoPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('tested')
     def test_week_results_week2_final(self):
         test_db = UnitTestDatabase()
         test_db.setup_week_final(1978,1)
@@ -391,7 +381,6 @@ class NoPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    @unittest.skip('tested')
     def test_week_results_week1_final_player2(self):
         # login player with no picks
         test_db = UnitTestDatabase()
@@ -432,7 +421,6 @@ class NoPicksTest(FunctionalTest):
         player_with_picks = self.utils.get_player_from_public_name(1978,'Brent')
         player_no_picks = self.utils.get_player_from_public_name(1978,'John')
 
-        import pdb; pdb.set_trace()
         self.utils.week_results_page(1978,1)
         self.__is_page_up('Week 1 Leaderboard')
 
