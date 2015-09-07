@@ -456,7 +456,7 @@ class NoPicksTest(FunctionalTest):
 
         test_db.delete_database()
 
-    def test_tiebreak_0_special_case(self):
+    def test_tiebreak_special_case(self):
         # login player with no picks
         test_db = UnitTestDatabase()
         test_db.setup_week_final(1978,1)
