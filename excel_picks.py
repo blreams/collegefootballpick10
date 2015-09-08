@@ -63,6 +63,12 @@ def print_all_player_picks(data):
 
 def get_picks_column(player_id,data):
     player = data.players[player_id]
+
+    no_picks = player.id not in data.player_picks
+    if no_picks:
+        column = [''] * 12
+        return column
+
     picks = { pick.game.gamenum:pick for pick in data.player_picks[player_id] }
 
     column = []
