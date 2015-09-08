@@ -118,7 +118,7 @@ def populate_week(yearnum, weeknum, verbose=False):
     if created:
         poolspreadsheet = get_poolspreadsheet(yearnum)
         winner_ss_name = poolspreadsheet.get_week_winner(weeknum)
-        if winner_ss_name == None:
+        if winner_ss_name == None or poolspreadsheet.has_multiple_winners(weeknum):
             weekobj.winner = None
         else:
             populate_player_year(yearnum, winner_ss_name)
