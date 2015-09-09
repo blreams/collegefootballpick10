@@ -78,8 +78,8 @@ if os.environ.get('COLLEGEFOOTBALLPICK10_DATABASE') == 'mysql':
             'NAME': 'collegefootballpick10',
             'HOST': 'localhost',
             'PORT': '3306',
-            'USER': 'user_django',
-            'PASSWORD': 'pass_django',
+            'USER': os.environ.get('COLLEGEFOOTBALLPICK10_DATABASE_USER'),
+            'PASSWORD': os.environ.get('COLLEGEFOOTBALLPICK10_DATABASE_PASSWORD'),
         }
     }
 
