@@ -47,13 +47,13 @@
                     <td class="header-light">score</td>
                 </thead>
                 <tr class="{{pick.team1_row_class}}" id="team1_row_{{pick.number}}">
-                    <td><label id="team-name">{{pick.team1}}</label></td>
+                    <td><label class="team-width" id="team-name">{{pick.team1}}</label></td>
                     <td id="spread">{{pick.team1_spread}}</td>
                     <td><input type="text" size="3" name="team1-score" value="{{pick.team1_predicted_points}}"></input></td>
                     <td></td>
                 </tr>
                 <tr class="{{pick.team2_row_class}}" id="team2_row_{{pick.number}}">
-                    <td><label id="team-name">{{pick.team2}}</label></td>
+                    <td><label class="team-width" id="team-name">{{pick.team2}}</label></td>
                     <td id="spread">{{pick.team2_spread}}</td>
                     <td><input type="text" size="3" name="team2-score" value="{{pick.team2_predicted_points}}"></input></td>
                     <td>
@@ -68,14 +68,14 @@
                     <td class="header-light">spread</td>
                 </thead>
                 <tr class="{{pick.team1_row_class}}" id="team1_row_{{pick.number}}">
-                    <td ><label class="radio-inline">
+                    <td ><label class="radio-inline team-width">
                         <input type="radio" name="pick_{{pick.number}}" value="team1" onclick="highlightTeam1({{pick.number}})" {{pick.team1_checked}}>
                         <span id="team-name">{{pick.team1}}</span></label>
                     </td>
                 <td id="spread">{{pick.team1_spread}}</td>
                 </tr>
                 <tr class="{{pick.team2_row_class}}" id="team2_row_{{pick.number}}">
-                    <td><label class="radio-inline">
+                    <td><label class="radio-inline team-width">
                         <input type="radio" name="pick_{{pick.number}}" value="team2" onclick="highlightTeam2({{pick.number}})" {{pick.team2_checked}}>
                         <span id="team-name">{{pick.team2}}</span></label>
                     </td>

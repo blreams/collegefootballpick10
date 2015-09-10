@@ -8,7 +8,7 @@ body {
    font-weight: bold;
 }
 .header-light {
-   color: lightgray;
+   color: gray;
    background-color: white;
    font-weight: 100;
    text-align: center;
@@ -42,4 +42,7 @@ body {
    text-align: center;
    vertical-align: middle;
    padding: 1px 4px;
+}
+.team-width {
+    width: 15em;
 }
