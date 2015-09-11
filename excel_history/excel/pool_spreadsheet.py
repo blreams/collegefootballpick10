@@ -251,6 +251,28 @@ class PoolSpreadsheet:
 
         return None
 
+    def get_number_of_winners(self,week_number):
+        player_row = 1
+        first_player_column = 10
+        winner_row = 27
+        CELL_EMPTY = 0
+
+        sheet = self.__get_weekly_sheet(week_number)
+
+        num_winners = 0
+        for column in range(first_player_column,sheet.ncols):
+            winner = str(sheet.cell(winner_row,column).value) 
+            if sheet.cell_type(winner_row,column) == CELL_EMPTY or winner == "":
+                continue
+
+            if float(winner) == 1.0:
+                num_winners += 1
+
+        return num_winners
+
+    def has_multiple_winners(self,week_number):
+        return self.get_number_of_winners(week_number) > 1
+
     ##### Conference sheet
     def get_teams(self):
         if self.__teams != None:
