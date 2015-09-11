@@ -222,7 +222,10 @@ class WeekWinner:
 
         for player_id in self.players_tied_for_first:
             player_pick = self.__data.player_featured_game_picks[player_id]
-            if player_pick.winner == featured_winner:
+
+            if player_pick == None:
+                self.players_lost_tiebreak0.append(player_id)
+            elif player_pick.winner == featured_winner:
                 self.players_won_tiebreak0.append(player_id)
             else: 
                 self.players_lost_tiebreak0.append(player_id)
@@ -259,9 +262,9 @@ class WeekWinner:
         for player_id in players:
             pick = self.__data.player_featured_game_picks[player_id]
 
-            # no score entered
-            if pick.team1_predicted_points == None or pick.team2_predicted_points == None:
+            if self.__pick_score_not_entered(pick):
                 self.players_lost_tiebreak1.append(player_id)
+                continue
 
             pick_spread = pick.team1_predicted_points - pick.team2_predicted_points
             pick_difference = abs(pick_spread-result_spread) 
@@ -424,7 +427,8 @@ class WeekWinner:
         return self.__data
 
     def __pick_score_not_entered(self,pick):
-        return pick.team1_predicted_points == None or pick.team2_predicted_points == None or\
+        return pick == None or\
+               pick.team1_predicted_points == None or pick.team2_predicted_points == None or\
                pick.team1_predicted_points < 0 or pick.team2_predicted_points < 0
 
     def __setup_data_to_use(self,year,week_number,week_data_supplied=None):

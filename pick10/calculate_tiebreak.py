@@ -175,10 +175,15 @@ class CalculateTiebreak:
                 d = Tiebreak0Data()
                 d.player_id = player_id
                 d.player_name = self.__get_player_name(player_id)
-                d.player_pick = self.__calc.get_team_name_player_picked_to_win(player,featured_game)
                 d.result = result
                 d.result_id = css_id
                 d.featured_game_winner = self.__get_featured_game_winner()
+
+                if self.__calc.player_did_not_pick(player,featured_game):
+                    d.player_pick = 'n/a'
+                else:
+                    d.player_pick = self.__calc.get_team_name_player_picked_to_win(player,featured_game)
+
                 details.append(d)
 
         players = self.__winners.get_players_that_lost_tiebreak_0()
@@ -192,10 +197,15 @@ class CalculateTiebreak:
                 d = Tiebreak0Data()
                 d.player_id = player_id
                 d.player_name = self.__get_player_name(player_id)
-                d.player_pick = self.__calc.get_team_name_player_picked_to_win(player,featured_game)
                 d.result = result
                 d.result_id = css_id
                 d.featured_game_winner = self.__get_featured_game_winner()
+
+                if self.__calc.player_did_not_pick(player,featured_game):
+                    d.player_pick = 'n/a'
+                else:
+                    d.player_pick = self.__calc.get_team_name_player_picked_to_win(player,featured_game)
+
                 details.append(d)
 
         self.__tiebreak0_details = self.__sort_tiebreak0(details)
@@ -232,12 +242,17 @@ class CalculateTiebreak:
                 d.result = result
                 d.result_id = css_id
     
-                pick = self.__calc.get_player_pick_for_game(player,featured_game)
-    
-                d.team1_score = pick.team1_predicted_points
-                d.team2_score = pick.team2_predicted_points
-                d.pick_spread = pick.team1_predicted_points - pick.team2_predicted_points
-                d.difference = abs(d.pick_spread - summary.result_spread)
+                if self.__calc.player_did_not_pick(player,featured_game):
+                    d.team1_score = 'n/a'
+                    d.team2_score = 'n/a'
+                    d.pick_spread = 'n/a'
+                    d.difference = 'n/a'
+                else:
+                    pick = self.__calc.get_player_pick_for_game(player,featured_game)
+                    d.team1_score = pick.team1_predicted_points
+                    d.team2_score = pick.team2_predicted_points
+                    d.pick_spread = pick.team1_predicted_points - pick.team2_predicted_points
+                    d.difference = abs(d.pick_spread - summary.result_spread)
     
                 details.append(d)
 
@@ -254,13 +269,18 @@ class CalculateTiebreak:
                 d.player_name = self.__get_player_name(player_id)
                 d.result = result
                 d.result_id = css_id
-        
-                pick = self.__calc.get_player_pick_for_game(player,featured_game)
 
-                d.team1_score = pick.team1_predicted_points
-                d.team2_score = pick.team2_predicted_points
-                d.pick_spread = pick.team1_predicted_points - pick.team2_predicted_points
-                d.difference = abs(d.pick_spread - summary.result_spread)
+                if self.__calc.player_did_not_pick(player,featured_game):
+                    d.team1_score = 'n/a'
+                    d.team2_score = 'n/a'
+                    d.pick_spread = 'n/a'
+                    d.difference = 'n/a'
+                else:
+                    pick = self.__calc.get_player_pick_for_game(player,featured_game)
+                    d.team1_score = pick.team1_predicted_points
+                    d.team2_score = pick.team2_predicted_points
+                    d.pick_spread = pick.team1_predicted_points - pick.team2_predicted_points
+                    d.difference = abs(d.pick_spread - summary.result_spread)
 
                 details.append(d)
 
@@ -299,12 +319,17 @@ class CalculateTiebreak:
                 d.result = result
                 d.result_id = css_id
     
-                pick = self.__calc.get_player_pick_for_game(player,featured_game)
-    
-                d.team1_score = pick.team1_predicted_points
-                d.team2_score = pick.team2_predicted_points
-                d.pick_total = pick.team1_predicted_points + pick.team2_predicted_points
-                d.difference = abs(summary.result_total - d.pick_total)
+                if self.__calc.player_did_not_pick(player,featured_game):
+                    d.team1_score = 'n/a'
+                    d.team2_score = 'n/a'
+                    d.pick_total = 'n/a'
+                    d.difference = 'n/a'
+                else:
+                    pick = self.__calc.get_player_pick_for_game(player,featured_game)
+                    d.team1_score = pick.team1_predicted_points
+                    d.team2_score = pick.team2_predicted_points
+                    d.pick_total = pick.team1_predicted_points + pick.team2_predicted_points
+                    d.difference = abs(summary.result_total - d.pick_total)
     
                 details.append(d)
 
@@ -322,12 +347,17 @@ class CalculateTiebreak:
                 d.result = result
                 d.result_id = css_id
     
-                pick = self.__calc.get_player_pick_for_game(player,featured_game)
-    
-                d.team1_score = pick.team1_predicted_points
-                d.team2_score = pick.team2_predicted_points
-                d.pick_total = pick.team1_predicted_points + pick.team2_predicted_points
-                d.difference = abs(summary.result_total - d.pick_total)
+                if self.__calc.player_did_not_pick(player,featured_game):
+                    d.team1_score = 'n/a'
+                    d.team2_score = 'n/a'
+                    d.pick_total = 'n/a'
+                    d.difference = 'n/a'
+                else:
+                    pick = self.__calc.get_player_pick_for_game(player,featured_game)
+                    d.team1_score = pick.team1_predicted_points
+                    d.team2_score = pick.team2_predicted_points
+                    d.pick_total = pick.team1_predicted_points + pick.team2_predicted_points
+                    d.difference = abs(summary.result_total - d.pick_total)
 
                 details.append(d)
 
@@ -508,17 +538,20 @@ class CalculateTiebreak:
         sort_by_name = sorted(details,key=lambda item:item.player_name)
         sort_by_wins = sorted(sort_by_name,key=lambda item:item.result == "won",reverse=True)
         sort_by_ahead = sorted(sort_by_wins,key=lambda item:item.result == "ahead",reverse=True)
-        return sort_by_ahead
+        move_na_to_end = sorted(sort_by_ahead,key=lambda item:item.player_pick != 'n/a',reverse=True)
+        return move_na_to_end
 
     def __sort_tiebreak1(self,details):
         sort_by_name = sorted(details,key=lambda item:item.player_name)
         sort_by_difference = sorted(sort_by_name,key=lambda item:item.difference)
-        return sort_by_difference
+        move_na_to_end = sorted(sort_by_difference,key=lambda item:item.difference != 'n/a',reverse=True)
+        return move_na_to_end
 
     def __sort_tiebreak2(self,details):
         sort_by_name = sorted(details,key=lambda item:item.player_name)
         sort_by_difference = sorted(sort_by_name,key=lambda item:item.difference)
-        return sort_by_difference
+        move_na_to_end = sorted(sort_by_difference,key=lambda item:item.difference != 'n/a',reverse=True)
+        return move_na_to_end
 
     def __sort_tiebreak3(self,details):
         sort_by_name = sorted(details,key=lambda item:item.player_name)

@@ -87,11 +87,16 @@ class CalculatePlayerResults:
         return result
 
     def __set_game10_attributes(self,summary):
-        team1_score,team2_score = self.__get_player_game10_pick_score()
-        summary.game10_predicted_team1_score = team1_score
-        summary.game10_predicted_team2_score = team2_score
-        
         game10 = self.__calc.get_featured_game()
+
+        if self.__calc.player_did_not_pick(self.__player,game10):
+            summary.game10_predicted_team1_score = 'n/a'
+            summary.game10_predicted_team2_score = 'n/a'
+        else:
+            team1_score,team2_score = self.__get_player_game10_pick_score()
+            summary.game10_predicted_team1_score = team1_score
+            summary.game10_predicted_team2_score = team2_score
+
         summary.game10_team1 = game10.team1.team_name
         summary.game10_team2 = game10.team2.team_name
 

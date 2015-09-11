@@ -124,6 +124,40 @@ class UnitTestDatabase:
             self.setup_pick(kevin,game,winner=0)
             self.setup_pick(john,game,winner=0)
 
+    def setup_week_not_started_with_no_pick_defaulters(self,year=1978,week_number=13):
+        week = self.setup_week(year,week_number)
+        games = [None]*10
+        games[0] = self.setup_game(week,1,"Georgia Tech","Clemson",state=NOT_STARTED)
+        games[1] = self.setup_game(week,2,"Duke","North Carolina",state=NOT_STARTED)
+        games[2] = self.setup_game(week,3,"Virginia","Virginia Tech",state=NOT_STARTED)
+        games[3] = self.setup_game(week,4,"Indiana","Maryland",state=NOT_STARTED)
+        games[4] = self.setup_game(week,5,"South Carolina","Georgia",state=NOT_STARTED)
+        games[5] = self.setup_game(week,6,"Tennessee","Vanderbilt",state=NOT_STARTED)
+        games[6] = self.setup_game(week,7,"Auburn","Alabama",state=NOT_STARTED)
+        games[7] = self.setup_game(week,8,"Southern California","UCLA",state=NOT_STARTED)
+        games[8] = self.setup_game(week,9,"Army","Navy",state=NOT_STARTED)
+        games[9] = self.setup_game(week,10,"Notre Dame","Florida State",state=NOT_STARTED)
+        brent = self.setup_player(year,'Brent')
+        byron = self.setup_player(year,'Byron')
+        alice = self.setup_player(year,'Alice')
+        joan = self.setup_player(year,'Joan')
+        bill = self.setup_player(year,'Bill')
+        david = self.setup_player(year,'David')
+        amy = self.setup_player(year,'Amy')
+        annie = self.setup_player(year,'Annie')
+        kevin = self.setup_player(year,'Kevin')
+        john = self.setup_player(year,'John')
+        for game in games:
+            self.setup_pick(brent,game,winner=TEAM1)
+            self.setup_pick(byron,game,winner=TEAM1)
+            self.setup_pick(alice,game,winner=TEAM1)
+            self.setup_pick(joan,game,winner=TEAM1)
+            self.setup_pick(bill,game,winner=TEAM1)
+            self.setup_pick(david,game,winner=TEAM1)
+            self.setup_pick(amy,game,winner=TEAM1)
+            self.setup_pick(annie,game,winner=TEAM1)
+        # kevin, john don't have picks for the week
+
     def setup_week_in_progress(self,year=1978,week_number=8):
         week = self.setup_week(year,week_number)
         games = [None]*10
@@ -192,6 +226,39 @@ class UnitTestDatabase:
         self.setup_player_picks_projected(kevin,games,wins=1,projected=2)
         self.setup_player_default(john,games)
 
+    def setup_week_in_progress_with_no_pick_defaulters(self,year=1978,week_number=8):
+        week = self.setup_week(year,week_number)
+        games = [None]*10
+        games[0] = self.setup_game_with_winner(week,1,"Georgia Tech","Clemson",state=FINAL,winner=TEAM1)
+        games[1] = self.setup_game_with_winner(week,2,"Duke","North Carolina",state=FINAL,winner=TEAM1)
+        games[2] = self.setup_game_with_winner(week,3,"Virginia","Virginia Tech",state=FINAL,winner=TEAM1)
+        games[3] = self.setup_game_with_winner(week,4,"Indiana","Maryland",state=FINAL,winner=TEAM2)
+        games[4] = self.setup_game_with_winner(week,5,"South Carolina","Georgia",state=FINAL,winner=TEAM2)
+        games[5] = self.setup_game_with_winner(week,6,"Tennessee","Vanderbilt",state=FINAL,winner=TEAM2)
+        games[6] = self.setup_game(week,7,"Auburn","Alabama",state=NOT_STARTED)
+        games[7] = self.setup_game(week,8,"Southern California","UCLA",state=NOT_STARTED)
+        games[8] = self.setup_game(week,9,"Army","Navy",state=NOT_STARTED)
+        games[9] = self.setup_game(week,10,"Notre Dame","Florida State",state=NOT_STARTED)
+        brent = self.setup_player(year,'Brent')
+        byron = self.setup_player(year,'Byron')
+        alice = self.setup_player(year,'Alice')
+        joan = self.setup_player(year,'Joan')
+        bill = self.setup_player(year,'Bill')
+        david = self.setup_player(year,'David')
+        amy = self.setup_player(year,'Amy')
+        annie = self.setup_player(year,'Annie')
+        kevin = self.setup_player(year,'Kevin')
+        john = self.setup_player(year,'John')
+        self.setup_player_picks(brent,games,number_of_wins=6)
+        self.setup_player_picks(byron,games,number_of_wins=6)
+        self.setup_player_picks(alice,games,number_of_wins=5)
+        self.setup_player_picks(joan,games,number_of_wins=5)
+        self.setup_player_picks(bill,games,number_of_wins=4)
+        self.setup_player_picks(david,games,number_of_wins=4)
+        self.setup_player_picks(amy,games,number_of_wins=3)
+        self.setup_player_picks(annie,games,number_of_wins=3)
+        # no picks for john, kevin
+
     def setup_week_final(self,year=1978,week_number=10):
         week = self.setup_week(year,week_number)
         games = [None]*10
@@ -226,6 +293,40 @@ class UnitTestDatabase:
             self.setup_pick(annie,game,winner=TEAM1)
             self.setup_pick(kevin,game,winner=TEAM1)
             self.setup_pick(john,game,winner=TEAM1)
+
+    def setup_week_final_with_no_pick_defaulters(self,year=1978,week_number=11):
+        week = self.setup_week(year,week_number)
+        games = [None]*10
+        games[0] = self.setup_game_with_winner(week,1,"Georgia Tech","Clemson",state=FINAL,winner=TEAM1)
+        games[1] = self.setup_game_with_winner(week,2,"Duke","North Carolina",state=FINAL,winner=TEAM2)
+        games[2] = self.setup_game_with_winner(week,3,"Virginia","Virginia Tech",state=FINAL,winner=TEAM1)
+        games[3] = self.setup_game_with_winner(week,4,"Indiana","Maryland",state=FINAL,winner=TEAM2)
+        games[4] = self.setup_game_with_winner(week,5,"South Carolina","Georgia",state=FINAL,winner=TEAM1)
+        games[5] = self.setup_game_with_winner(week,6,"Tennessee","Vanderbilt",state=FINAL,winner=TEAM2)
+        games[6] = self.setup_game_with_winner(week,7,"Auburn","Alabama",state=FINAL,winner=TEAM1)
+        games[7] = self.setup_game_with_winner(week,8,"Southern California","UCLA",state=FINAL,winner=TEAM2)
+        games[8] = self.setup_game_with_winner(week,9,"Army","Navy",state=FINAL,winner=TEAM1)
+        games[9] = self.setup_game_with_winner(week,10,"Notre Dame","Florida State",state=FINAL,winner=TEAM2)
+        brent = self.setup_player(year,'Brent')
+        byron = self.setup_player(year,'Byron')
+        alice = self.setup_player(year,'Alice')
+        joan = self.setup_player(year,'Joan')
+        bill = self.setup_player(year,'Bill')
+        david = self.setup_player(year,'David')
+        amy = self.setup_player(year,'Amy')
+        annie = self.setup_player(year,'Annie')
+        kevin = self.setup_player(year,'Kevin')
+        john = self.setup_player(year,'John')
+        for game in games:
+            self.setup_pick(brent,game,winner=TEAM1)
+            self.setup_pick(byron,game,winner=TEAM1)
+            self.setup_pick(alice,game,winner=TEAM1)
+            self.setup_pick(joan,game,winner=TEAM1)
+            self.setup_pick(bill,game,winner=TEAM1)
+            self.setup_pick(david,game,winner=TEAM1)
+            self.setup_pick(amy,game,winner=TEAM1)
+            self.setup_pick(annie,game,winner=TEAM1)
+        # kevin, john have no picks
 
     def setup_week_not_started_no_picks(self,year=1978,week_number=11):
         week = self.setup_week(year,week_number)
@@ -303,6 +404,30 @@ class UnitTestDatabase:
     # pool not started has no games yet
     def setup_week_with_no_games(self,year=1978,week=13):
         week = self.setup_week(year,week)
+        brent = self.setup_player(year,'Brent')
+        byron = self.setup_player(year,'Byron')
+        alice = self.setup_player(year,'Alice')
+        joan = self.setup_player(year,'Joan')
+        bill = self.setup_player(year,'Bill')
+        david = self.setup_player(year,'David')
+        amy = self.setup_player(year,'Amy')
+        annie = self.setup_player(year,'Annie')
+        kevin = self.setup_player(year,'Kevin')
+        john = self.setup_player(year,'John')
+
+    def setup_week_no_picks(self,year=1975,week=2,game_state=FINAL):
+        week = self.setup_week(year,week_number=week)
+        games = [None]*10
+        games[0] = self.setup_game_with_winner(week,1,"Georgia Tech","Clemson",state=game_state,winner=TEAM1)
+        games[1] = self.setup_game_with_winner(week,2,"Duke","North Carolina",state=game_state,winner=TEAM2)
+        games[2] = self.setup_game_with_winner(week,3,"Virginia","Virginia Tech",state=game_state,winner=TEAM1)
+        games[3] = self.setup_game_with_winner(week,4,"Indiana","Maryland",state=game_state,winner=TEAM2)
+        games[4] = self.setup_game_with_winner(week,5,"South Carolina","Georgia",state=game_state,winner=TEAM1)
+        games[5] = self.setup_game_with_winner(week,6,"Tennessee","Vanderbilt",state=game_state,winner=TEAM2)
+        games[6] = self.setup_game_with_winner(week,7,"Auburn","Alabama",state=game_state,winner=TEAM1)
+        games[7] = self.setup_game_with_winner(week,8,"Southern California","UCLA",state=game_state,winner=TEAM2)
+        games[8] = self.setup_game_with_winner(week,9,"Army","Navy",state=game_state,winner=TEAM1)
+        games[9] = self.setup_game_with_winner(week,10,"Notre Dame","Florida State",state=game_state,winner=TEAM2)
         brent = self.setup_player(year,'Brent')
         byron = self.setup_player(year,'Byron')
         alice = self.setup_player(year,'Alice')
