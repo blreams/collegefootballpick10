@@ -145,6 +145,7 @@ class Pick(models.Model):
     winner = models.IntegerField(default=0)                            # Indicates which team was picked to win (1 or 2)
     team1_predicted_points = models.IntegerField(default=-1)           # Points predicted for team (tie-break game)
     team2_predicted_points = models.IntegerField(default=-1)           # Points predicted for team (tie-break game)
+    submit_time = models.DateTimeField(null=True, blank=True)          # DateTime, must be set only when pick is posted.
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated = models.DateTimeField(auto_now=True, auto_now_add=True)
 
