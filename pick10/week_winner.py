@@ -366,8 +366,6 @@ class WeekWinner:
     # - week.pick_deadline is set (i.e a pick deadline set)
     # - the picks were entered before the pick deadline
     # - the submit time makes sense (i.e. submit time year matches the week.year)
-    # TODO:  consider adding a pick submit time to Picks data model?
-    #        If Picks.created or Picks.modified gets corrupted, submit time won't be valid
     def is_tiebreaker_3_valid(self):
         return self.__tiebreaker_3_valid
 

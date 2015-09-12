@@ -404,18 +404,15 @@ class CalculateResults:
         return self.get_player_pick_for_game(player,game10)
 
     def get_player_submit_time(self,player,week=None):
-        picks = self.__data.player_picks[player.id]
-        latest_time = None
-        for pick in picks:
-            pick_entry_time = max(pick.created,pick.updated)
+        game10_pick = self.get_player_featured_game_pick(player)
 
-            if latest_time == None or pick_entry_time > latest_time:
-                latest_time = pick_entry_time
-
-        if self.__submit_time_invalid(week,latest_time):
+        if game10_pick.submit_time == None:
             return None
 
-        return latest_time
+        if self.__submit_time_invalid(week,game10_pick.submit_time):
+            return None
+
+        return game10_pick.submit_time
 
     def __find_player_pick_for_game(self,picks,game):
         if game == None:
