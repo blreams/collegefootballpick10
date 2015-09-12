@@ -8,10 +8,10 @@ import unittest
 from django.contrib.auth.models import User
 from django.test.client import Client
 from utils import *
-import datetime as dt
 from pick10.utils import get_timestamp
 from django.conf import settings
 import pytz
+import django.utils.timezone as tz
 
 class EnterPicksTest(FunctionalTest):
 
@@ -171,7 +171,7 @@ class EnterPicksTest(FunctionalTest):
         # verify submit time is close to current time
         self.__run_test(1978,1,player,picks,auto_score=True)
         submit_time = self.__get_pick_submit_time(1978,1,player)
-        current_time = dt.datetime.now(pytz.timezone('UTC'))
+        current_time = tz.now()
 
         # note that this assumes test is run in eastern time zone
 

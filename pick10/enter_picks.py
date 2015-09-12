@@ -2,7 +2,7 @@ from pick_data import *
 from database import *
 from django.core.exceptions import ObjectDoesNotExist
 from pick10.utils import *
-import datetime as dt
+import django.utils.timezone as tz
 
 class EnterPicks:
 
@@ -134,5 +134,5 @@ class EnterPicks:
     def __update_submit_time(self,player):
         game = get_game(self.year,self.week_number,10)
         pick = self.__get_existing_pick(player,game)
-        pick.submit_time = dt.datetime.now(pytz.timezone('UTC'))
+        pick.submit_time = tz.now()
         pick.save()

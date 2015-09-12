@@ -3,8 +3,8 @@ from pick10.database import Database
 from pick10.models import *
 from unit_test_database import *
 import unittest
-import datetime as dt
 import pytz
+import django.utils.timezone as tz
 
 class PoolStateTest(TestCase):
 
@@ -20,9 +20,7 @@ class PoolStateTest(TestCase):
         # data for the enter_picks tests, make deadline 1 day after current time
         test_db.setup_week_not_started(1981,1)
         week = get_week(1981,1)
-        naive_dt_now = dt.datetime.now()
-        naive_dt_deadline = dt.datetime(naive_dt_now.year, naive_dt_now.month, naive_dt_now.day, 16, 0, 0) + timedelta(days=1)
-        deadline = pytz.timezone('US/Eastern').localize(naive_dt_deadline)
+        deadline = tz.now() + timedelta(days=1)
         week.pick_deadline = deadline
         week.lock_picks = False
         week.save()
@@ -31,9 +29,7 @@ class PoolStateTest(TestCase):
         test_db.setup_week_final(1982,1)
         test_db.setup_week_not_started(1982,2)
         week = get_week(1982,2)
-        naive_dt_now = dt.datetime.now()
-        naive_dt_deadline = dt.datetime(naive_dt_now.year, naive_dt_now.month, naive_dt_now.day, 16, 0, 0) + timedelta(days=1)
-        deadline = pytz.timezone('US/Eastern').localize(naive_dt_deadline)
+        deadline = tz.now() + timedelta(days=1)
         week.pick_deadline = deadline
         week.lock_picks = True
         week.save()

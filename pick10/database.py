@@ -2,6 +2,7 @@ from week_data import WeekData
 from pick10.models import *
 import datetime
 from calculator import *
+import django.utils.timezone as tz
 
 class Database:
 
@@ -177,16 +178,14 @@ class Database:
     def __before_pick_deadline(self,week):
         if week.pick_deadline == None:
             return False
-        current_time = datetime.datetime.utcnow()
-        current_time_tz = pytz.timezone('UTC').localize(current_time)
-        return current_time_tz <= week.pick_deadline
+        current_time_utc = tz.now()
+        return current_time_utc <= week.pick_deadline
 
     def __after_pick_deadline(self,week):
         if week.pick_deadline == None:
             return False
-        current_time = datetime.datetime.utcnow()
-        current_time_tz = pytz.timezone('UTC').localize(current_time)
-        return current_time_tz > week.pick_deadline
+        current_time_utc = tz.now()
+        return current_time_utc > week.pick_deadline
 
     def update_games_cache(self,year,week_number,data):
         raise AssertionError,"Not implemented"
