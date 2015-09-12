@@ -2,6 +2,7 @@ from pick_data import *
 from database import *
 from django.core.exceptions import ObjectDoesNotExist
 from pick10.utils import *
+import datetime as dt
 
 class EnterPicks:
 
@@ -59,6 +60,8 @@ class EnterPicks:
 
         player = Player.objects.get(id=self.player_id)
 
+        update_submit_time = False
+
         for pick in picks:
             game_number = pick.number
             game = get_game(self.year,self.week_number,game_number)
@@ -66,9 +69,15 @@ class EnterPicks:
             existing_pick = self.__get_existing_pick(player,game)
 
             if existing_pick != None:
-                self.__edit_pick(game_number,existing_pick,pick)
+                pick_changed = self.__edit_pick(game_number,existing_pick,pick)
+                if pick_changed:
+                    update_submit_time = True
             else:
                 self.__create_pick(player,game,pick)
+                update_submit_time = True
+
+        if update_submit_time:
+            self.__update_submit_time(player)
 
     def __picks_sanity_check(self,picks):
         assert len(picks) == 10
@@ -114,8 +123,16 @@ class EnterPicks:
         if change:
             pick_model.save()
 
+        return change
+
     def __create_pick(self,player,game,pick):
         if game.gamenum == 10:
             p = add_pick(player,game,pick.pick,pick.team1_predicted_points,pick.team2_predicted_points)
         else:
             p = add_pick(player,game,pick.pick)
+
+    def __update_submit_time(self,player):
+        game = get_game(self.year,self.week_number,10)
+        pick = self.__get_existing_pick(player,game)
+        pick.submit_time = dt.datetime.now()
+        pick.save()

@@ -8,10 +8,15 @@ import unittest
 from django.contrib.auth.models import User
 from django.test.client import Client
 from utils import *
+import datetime as dt
+from pick10.utils import get_timestamp
+from django.conf import settings
+import pytz
 
 class EnterPicksTest(FunctionalTest):
 
     def setUp(self):
+        settings.DEBUG = True
         super(EnterPicksTest, self).setUp()
         self.utils = Utils(self.browser,self.server_url)
 
@@ -150,6 +155,32 @@ class EnterPicksTest(FunctionalTest):
         self.assertIsNotNone(submit3_time)
         self.assertEqual(submit1_time,submit2_time)
         self.assertNotEqual(submit1_time,submit3_time)
+
+        test_db.delete_database()
+
+    def test_pick_submit_time(self):
+        test_db = UnitTestDatabase()
+        test_db.setup_week_not_started_no_picks(1978,1)
+
+        # login a user and open the picks page
+        player = self.utils.get_player_from_public_name(1978,'Brent')
+        self.utils.login_assigned_user(name='Brent',player=player)
+
+        picks = [TEAM1]*10
+
+        # verify submit time is close to current time
+        self.__run_test(1978,1,player,picks,auto_score=True)
+        submit_time = self.__get_pick_submit_time(1978,1,player)
+        current_time = dt.datetime.now()
+
+        # note that this assumes test is run in eastern time zone
+
+        # verify times are within a minute
+        self.assertIsNotNone(submit_time)
+        submit_time_eastern = submit_time.astimezone(pytz.timezone('US/Eastern'))
+        diff = get_timestamp(current_time) - get_timestamp(submit_time_eastern) 
+        self.assertGreaterEqual(diff,0)
+        self.assertLess(diff,60)
 
         test_db.delete_database()
 
