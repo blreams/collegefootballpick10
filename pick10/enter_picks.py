@@ -134,5 +134,5 @@ class EnterPicks:
     def __update_submit_time(self,player):
         game = get_game(self.year,self.week_number,10)
         pick = self.__get_existing_pick(player,game)
-        pick.submit_time = dt.datetime.now()
+        pick.submit_time = dt.datetime.now(pytz.timezone('US/Eastern'))
         pick.save()
