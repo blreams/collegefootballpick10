@@ -171,14 +171,13 @@ class EnterPicksTest(FunctionalTest):
         # verify submit time is close to current time
         self.__run_test(1978,1,player,picks,auto_score=True)
         submit_time = self.__get_pick_submit_time(1978,1,player)
-        current_time = dt.datetime.now()
+        current_time = dt.datetime.now(pytz.timezone('UTC'))
 
         # note that this assumes test is run in eastern time zone
 
         # verify times are within a minute
         self.assertIsNotNone(submit_time)
-        submit_time_eastern = submit_time.astimezone(pytz.timezone('US/Eastern'))
-        diff = get_timestamp(current_time) - get_timestamp(submit_time_eastern) 
+        diff = get_timestamp(current_time) - get_timestamp(submit_time) 
         self.assertGreaterEqual(diff,0)
         self.assertLess(diff,60)
 
