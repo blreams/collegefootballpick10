@@ -13,7 +13,7 @@ from enter_picks_view import *
 from django.core.cache import *
 from django.http import HttpResponseNotFound
 from django.contrib.admin.views.decorators import staff_member_required
-from models import get_yearlist, get_player_by_user
+from models import get_yearlist, get_profile_by_user
 
 def home(request):
     return render(request, 'pick10/home.html')
@@ -23,8 +23,8 @@ def index(request):
     year_num = get_yearlist()[-1]
     week_num = get_weeklist(year_num)[-1]
     player_id = None
-    player_id = get_player_by_user(user=request.user)
-    context = {'year_num': year_num, 'week_num': week_num, 'player_id': player_id}
+    profile = get_profile_by_user(user=request.user)
+    context = {'year_num': year_num, 'week_num': week_num, 'profile': profile}
     return render(request, 'pick10/index.html', context)
 
 @login_required

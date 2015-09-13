@@ -16,7 +16,11 @@ give a high-level view of the pool including things like:</p>
 <ul>
     <li><a href="{% url 'overall_results' year_num %}">Latest Season Results</a></li>
     <li><a href="{% url 'week_results' year_num week_num %}">Latest Week Results</a></li>
-    {% if player_id %}
+    {% if profile == None %}
+    <li><a href="{% url 'profile' %}">Create/Edit Profile</a></li>
+    {% elif profile.player == None %}
+    <li>...Waiting for Commissioner to create Player link...</li>
+    {% else %}
     <li><a href="{% url 'player_results' year_num week_num player_id %}">Latest Pick Results</a></li>
     <li><a href="{% url 'enter_picks' year_num week_num player_id %}">Enter/Modify Picks</a></li>
     {% endif %}
