@@ -12,5 +12,13 @@ give a high-level view of the pool including things like:</p>
     <li>A preview of games in the coming week.</li>
 </ul>
 <h1 id="index_h1">This is the INDEX page!</h1>
-<h2>Hello, {{ user.username }}!</h2><br />
+<h2>Hello, {{ user.username }}, what would you like to do?</h2><br />
+<ul>
+    <li><a href="{% url 'overall_results' year_num %}">Latest Season Results</a></li>
+    <li><a href="{% url 'week_results' year_num week_num %}">Latest Week Results</a></li>
+    {% if player_id %}
+    <li><a href="{% url 'player_results' year_num week_num player_id %}">Latest Pick Results</a></li>
+    <li><a href="{% url 'enter_picks' year_num week_num player_id %}">Enter/Modify Picks</a></li>
+    {% endif %}
+</ul>
 {% endblock %}

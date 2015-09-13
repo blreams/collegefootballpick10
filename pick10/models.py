@@ -248,6 +248,13 @@ def get_user_by_email(email):
     u = User.objects.get(email=email)
     return u
 
+def get_player_by_user(user):
+    try:
+        userprofile = UserProfile.objects.get(user=user)
+    except:
+        return
+    return userprofile.player.id
+
 def get_team(team):
     t = Team.objects.get(team_name=team)
     return t
