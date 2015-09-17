@@ -12,7 +12,7 @@ from pick10.user_access import *
 
 class OverallResultsView:
 
-    def get(self,request,year,use_private_names=None,use_memcache=True):
+    def get(self,request,year,use_private_names=None):
 
         year = int(year)
 
@@ -22,7 +22,12 @@ class OverallResultsView:
             data={'year':year}
             return render(request,"pick10/bad_year.html",data,status=400)
 
-        access = UserAccess(request.user)
+        loading_memcache = request == None
+
+        if loading_memcache:
+            access = None
+        else:
+            access = UserAccess(request.user)
 
         use_private_names = self.__determine_private_access(access,use_private_names)
 
@@ -46,7 +51,7 @@ class OverallResultsView:
             last_week_number = last_week_number - 1
 
         # look for hit in the memcache
-        if use_memcache:
+        if not loading_memcache:
             body = cache.get(body_key)
             memcache_hit = body != None
             if memcache_hit:
@@ -63,6 +68,9 @@ class OverallResultsView:
             data={'year':year, 'num_players':len(players)}
             body = render_to_string("pick10/overall_not_started.html",data)
             cache.set(body_key,body)
+
+            if loading_memcache:
+                return
 
             data = {'body_content':body,'side_block_content':sidebar,'year':year }
             WeekNavbar(year,last_week_number,'overall',request.user).add_parameters(data)
@@ -126,6 +134,9 @@ class OverallResultsView:
 
         body = render_to_string("pick10/overall_results_body.html",params)
         cache.set(body_key,body)
+
+        if loading_memcache:
+            return
 
         data = {'body_content':body,'side_block_content':sidebar,'year':year,'weeks_in_year':weeks_in_year }
         self.__set_player_id(access,data)
