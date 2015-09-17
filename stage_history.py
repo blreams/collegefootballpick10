@@ -204,16 +204,16 @@ def populate_picks_for_year_week(yearnum, weeknum, verbose=False):
             pickobj.save()
 
 def update_memcache_week_results(yearnum,weeknum):
-    response = WeekResultsView().get(yearnum,weeknum,use_private_names=False,use_memcache=False)
-    response = WeekResultsView().get(yearnum,weeknum,use_private_names=True,use_memcache=False)
+    WeekResultsView().get(None,yearnum,weeknum,use_private_names=False)
+    WeekResultsView().get(None,yearnum,weeknum,use_private_names=True)
 
 def update_memcache_tiebreak(yearnum,weeknum):
-    response = TiebreakView().get(yearnum,weeknum,use_private_names=False,use_memcache=False)
-    response = TiebreakView().get(yearnum,weeknum,use_private_names=True,use_memcache=False)
+    TiebreakView().get(None,yearnum,weeknum,use_private_names=False)
+    TiebreakView().get(None,yearnum,weeknum,use_private_names=True)
 
 def update_memcache_overall_results(yearnum):
-    response = OverallResultsView().get(yearnum,use_private_names=False,use_memcache=False)
-    response = OverallResultsView().get(yearnum,use_private_names=True,use_memcache=False)
+    OverallResultsView().get(None,yearnum,use_private_names=False)
+    OverallResultsView().get(None,yearnum,use_private_names=True)
 
 def main(years=None, weeks=None, verbose=False):
     if years is None:

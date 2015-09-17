@@ -9,9 +9,12 @@ from pick10.user_access import *
 
 class TiebreakView:
 
-    def get(self,request,year,week_number,use_private_names=None,use_memcache=True):
+    def get(self,request,year,week_number,use_private_names=None):
+
+        loading_memcache = request == None
 
         if self.__bad_year_or_week_number(year,week_number):
+            assert not loading_memcache,"When loading memcache, year/week needs to be valid "
             data={'year':year,'week_number':week_number}
             return render(request,"pick10/bad_week.html",data,status=400)
 
@@ -21,12 +24,16 @@ class TiebreakView:
         d = Database()
 
         if d.is_week_being_setup(year,week_number):
+            assert not loading_memcache,"Loading memcache does not support week being setup"
             years_in_pool = sorted(d.get_years(),reverse=True)
             data={'error':'week_not_setup','years_in_pool':years_in_pool,'year':year}
             WeekNavbar(year,week_number,'tiebreak',request.user).add_parameters(data)
             return render(request,"pick10/tiebreak_error.html",data,status=400)
 
-        use_private_names = self.__determine_private_access(request.user,use_private_names)
+        if loading_memcache:
+            use_private_names = use_private_names
+        else:
+            use_private_names = self.__determine_private_access(request.user,use_private_names)
 
         # setup memcache parameters
         cache = get_cache('default')
@@ -39,7 +46,7 @@ class TiebreakView:
         sidebar = render_to_string("pick10/year_sidebar.html",{'years_in_pool':years_in_pool,'year':year})
 
         # look for hit in the memcache
-        if use_memcache:
+        if not loading_memcache:
             body = cache.get(body_key)
             memcache_hit = body != None
             if memcache_hit:
@@ -78,6 +85,8 @@ class TiebreakView:
         body = render_to_string("pick10/tiebreak_body.html",params)
 
         cache.set(body_key,body)
+        if loading_memcache:
+            return
 
         data = {'body_content':body,'side_block_content':sidebar,'week_number':week_number }
         WeekNavbar(year,week_number,'tiebreak',request.user).add_parameters(data)

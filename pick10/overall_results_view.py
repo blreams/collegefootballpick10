@@ -15,14 +15,13 @@ class OverallResultsView:
     def get(self,request,year,use_private_names=None):
 
         year = int(year)
-
+        loading_memcache = request == None
         d = Database()
 
         if not(d.is_year_valid(year)):
+            assert not loading_memcache,"When loading memcache, year needs to be valid "
             data={'year':year}
             return render(request,"pick10/bad_year.html",data,status=400)
-
-        loading_memcache = request == None
 
         if loading_memcache:
             access = None
