@@ -12,7 +12,7 @@ from pick10.user_access import *
 
 class WeekResultsView:
 
-    def get(self,request,year,week_number,use_private_names=None):
+    def get(self,request,year,week_number,use_private_names=None,use_memcache=True):
 
         loading_memcache = request == None
 
@@ -51,7 +51,7 @@ class WeekResultsView:
         sidebar = render_to_string("pick10/year_sidebar.html",{'years_in_pool':years_in_pool,'year':year})
 
         # look for hit in the memcache
-        if not loading_memcache:
+        if not loading_memcache and use_memcache:
             body = cache.get(body_key)
             memcache_hit = body != None
             if memcache_hit:

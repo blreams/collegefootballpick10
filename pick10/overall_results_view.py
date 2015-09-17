@@ -12,7 +12,7 @@ from pick10.user_access import *
 
 class OverallResultsView:
 
-    def get(self,request,year,use_private_names=None):
+    def get(self,request,year,use_private_names=None,use_memcache=True):
 
         year = int(year)
         loading_memcache = request == None
@@ -50,7 +50,7 @@ class OverallResultsView:
             last_week_number = last_week_number - 1
 
         # look for hit in the memcache
-        if not loading_memcache:
+        if not loading_memcache and use_memcache:
             body = cache.get(body_key)
             memcache_hit = body != None
             if memcache_hit:
