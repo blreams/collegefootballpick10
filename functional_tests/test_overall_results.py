@@ -19,7 +19,6 @@ class OverallResultsTest(FunctionalTest):
     def test_page_up(self):
         test_db = UnitTestDatabase()
         test_db.load_historical_data_for_year(2013)
-        self.__clear_cache()
 
         self.utils.overall_results_page(year=2013)
         title = self.browser.find_element_by_id('page-title').text
@@ -35,7 +34,6 @@ class OverallResultsTest(FunctionalTest):
     def test_final_results(self):
         test_db = UnitTestDatabase()
         test_db.load_historical_data_for_year(2013)
-        self.__clear_cache()
 
         self.utils.overall_results_page(year=2013)
 
@@ -160,7 +158,3 @@ class OverallResultsTest(FunctionalTest):
         self.assertIn('week 1 final',body)
 
         test_db.delete_database()
-
-    def __clear_cache(self):
-        cache = get_cache('default')
-        cache.clear()

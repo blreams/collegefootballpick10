@@ -215,7 +215,7 @@ def update_memcache_overall_results(yearnum):
     OverallResultsView().get(None,yearnum,use_private_names=False)
     OverallResultsView().get(None,yearnum,use_private_names=True)
 
-def main(years=None, weeks=None, verbose=False):
+def main(years=None, weeks=None, verbose=False, load_memcache=True):
     if years is None:
         years = range(beginyear, endyear + 1)
     elif isinstance(years, (int, long)):
@@ -244,13 +244,16 @@ def main(years=None, weeks=None, verbose=False):
             populate_games_for_year_week(yearnum, weeknum, verbose)
             print("populate_picks_for_year_week(%d, %d)" % (yearnum, weeknum,))
             populate_picks_for_year_week(yearnum, weeknum, verbose)
-            print("update_memcache_week_results(%d, %d)" % (yearnum, weeknum,))
-            update_memcache_week_results(yearnum, weeknum)
-            print("update_memcache_tiebreak(%d, %d)" % (yearnum, weeknum,))
-            update_memcache_tiebreak(yearnum, weeknum)
 
-        print("update_memcache_overall_results(%d)" % (yearnum))
-        update_memcache_overall_results(yearnum)
+            if load_memcache:
+                print("update_memcache_week_results(%d, %d)" % (yearnum, weeknum,))
+                update_memcache_week_results(yearnum, weeknum)
+                print("update_memcache_tiebreak(%d, %d)" % (yearnum, weeknum,))
+                update_memcache_tiebreak(yearnum, weeknum)
+
+        if load_memcache:
+            print("update_memcache_overall_results(%d)" % (yearnum))
+            update_memcache_overall_results(yearnum)
 
 
 # Execution starts here

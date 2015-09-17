@@ -33,7 +33,6 @@ class WeekResultsTest(FunctionalTest):
     def test_page_up(self):
         test_db = UnitTestDatabase()
         test_db.load_historical_data_for_week(2013,1)
-        self.__clear_cache()
 
         self.__open_week_results_page(year=2013,week_number=1)
         title = self.browser.find_element_by_id('page-title').text
@@ -76,7 +75,6 @@ class WeekResultsTest(FunctionalTest):
     def test_invalid_week(self):
         test_db = UnitTestDatabase()
         test_db.load_historical_data_for_week(2013,1)
-        self.__clear_cache()
 
         self.__open_week_results_page(year=2013,week_number=15)
         body = self.browser.find_element_by_tag_name('body').text
@@ -114,6 +112,3 @@ class WeekResultsTest(FunctionalTest):
         self.assertIn('Player',body)
         self.assertIn('Wins',body)
 
-    def __clear_cache(self):
-        cache = get_cache('default')
-        cache.clear()
