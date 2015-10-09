@@ -48,10 +48,10 @@ class UnitTestDatabase:
         add_pick(john,game10,TEAM2,7,21)
 
     def load_historical_data_for_year(self,year=2014):
-        main(years=[year])
+        main(years=[year],load_memcache=False)
 
     def load_historical_data_for_week(self,year=2014,week_number=1):
-        main(years=[year],weeks=[week_number])
+        main(years=[year],weeks=[week_number],load_memcache=False)
 
     def setup_week_not_started(self,year=1978,week_number=6):
         week = self.setup_week(year,week_number)

@@ -14,7 +14,10 @@ class WeekResultsView:
 
     def get(self,request,year,week_number,use_private_names=None,use_memcache=True):
 
+        loading_memcache = request == None
+
         if self.__bad_year_or_week_number(year,week_number):
+            assert not loading_memcache,"When loading memcache, year/week needs to be valid "
             data={'year':year,'week_number':week_number}
             return render(request,"pick10/bad_week.html",data,status=400)
 
@@ -24,12 +27,16 @@ class WeekResultsView:
         d = Database()
 
         if d.is_week_being_setup(year,week_number):
+            assert not loading_memcache,"Loading memcache does not support week being setup"
             years_in_pool = sorted(d.get_years(),reverse=True)
             data={'error':'week_not_setup','years_in_pool':years_in_pool,'year':year}
             WeekNavbar(year,week_number,'week_results',request.user).add_parameters(data)
             return render(request,"pick10/week_results_error.html",data,status=400)
 
-        access = UserAccess(request.user)
+        if loading_memcache:
+            access = None
+        else:
+            access = UserAccess(request.user)
 
         use_private_names = self.__determine_private_access(access,use_private_names)
 
@@ -39,20 +46,19 @@ class WeekResultsView:
             body_key = "week_private_%d_%d" % (year,week_number)
         else:
             body_key = "week_public_%d_%d" % (year,week_number)
-        sidebar_key = "week_year_sidebar_%d_%d" % (year,week_number)
+
+        years_in_pool = sorted(d.get_years(),reverse=True)
+        sidebar = render_to_string("pick10/year_sidebar.html",{'years_in_pool':years_in_pool,'year':year})
 
         # look for hit in the memcache
-        if use_memcache:
+        if not loading_memcache and use_memcache:
             body = cache.get(body_key)
-            sidebar = cache.get(sidebar_key)
-            memcache_hit = body != None and sidebar != None
+            memcache_hit = body != None
             if memcache_hit:
                 data = {'body_content':body,'side_block_content':sidebar,'week_number':week_number }
                 self.__set_player_id(access,data)
                 WeekNavbar(year,week_number,'week_results',request.user).add_parameters(data)
                 return render(request,"pick10/week_results.html",data)
-
-        years_in_pool = sorted(d.get_years(),reverse=True)
 
         cwr = CalculateWeekResults(year,week_number,use_private_names)
         results = cwr.get_results()
@@ -90,10 +96,10 @@ class WeekResultsView:
             params['sorted_by_possible_wins_reversed'] = self.__sort_by_possible_wins_reversed(results,winner_info)
 
         body = render_to_string("pick10/week_results_body.html",params)
-        sidebar = render_to_string("pick10/year_sidebar.html",params)
 
         cache.set(body_key,body)
-        cache.set(sidebar_key,sidebar)
+        if loading_memcache:
+            return
 
         data = {'body_content':body,'side_block_content':sidebar,'week_number':week_number }
         self.__set_player_id(access,data)

@@ -15,14 +15,18 @@ class OverallResultsView:
     def get(self,request,year,use_private_names=None,use_memcache=True):
 
         year = int(year)
-
+        loading_memcache = request == None
         d = Database()
 
         if not(d.is_year_valid(year)):
+            assert not loading_memcache,"When loading memcache, year needs to be valid "
             data={'year':year}
             return render(request,"pick10/bad_year.html",data,status=400)
 
-        access = UserAccess(request.user)
+        if loading_memcache:
+            access = None
+        else:
+            access = UserAccess(request.user)
 
         use_private_names = self.__determine_private_access(access,use_private_names)
 
@@ -32,22 +36,23 @@ class OverallResultsView:
             body_key = "overall_private_%d" % (year)
         else:
             body_key = "overall_public_%d" % (year)
-        sidebar_key = "overall_year_sidebar_%d" % (year)
 
         pool_state = d.get_pool_state(year)
 
         weeks_in_year = d.get_week_numbers(year)
         last_week_number = weeks_in_year[-1]
 
+        years_in_pool = sorted(d.get_years(),reverse=True)
+        sidebar = render_to_string("pick10/year_sidebar.html",{'years_in_pool':years_in_pool,'year':year})
+
         if pool_state == "week_setup":    # use last weeks results
             weeks_in_year.remove(last_week_number)
             last_week_number = last_week_number - 1
 
         # look for hit in the memcache
-        if use_memcache:
+        if not loading_memcache and use_memcache:
             body = cache.get(body_key)
-            sidebar = cache.get(sidebar_key)
-            memcache_hit = body != None and sidebar != None
+            memcache_hit = body != None
             if memcache_hit:
                 data = {'body_content':body,'side_block_content':sidebar,'year':year,'weeks_in_year':weeks_in_year }
                 self.__set_player_id(access,data)
@@ -61,10 +66,10 @@ class OverallResultsView:
 
             data={'year':year, 'num_players':len(players)}
             body = render_to_string("pick10/overall_not_started.html",data)
-            sidebar = render_to_string("pick10/year_sidebar.html",{'years_in_pool':years_in_pool})
-
             cache.set(body_key,body)
-            cache.set(sidebar_key,sidebar)
+
+            if loading_memcache:
+                return
 
             data = {'body_content':body,'side_block_content':sidebar,'year':year }
             WeekNavbar(year,last_week_number,'overall',request.user).add_parameters(data)
@@ -127,10 +132,10 @@ class OverallResultsView:
             params['sorted_by_possible_reversed'] = ""
 
         body = render_to_string("pick10/overall_results_body.html",params)
-        sidebar = render_to_string("pick10/year_sidebar.html",params)
-
         cache.set(body_key,body)
-        cache.set(sidebar_key,sidebar)
+
+        if loading_memcache:
+            return
 
         data = {'body_content':body,'side_block_content':sidebar,'year':year,'weeks_in_year':weeks_in_year }
         self.__set_player_id(access,data)

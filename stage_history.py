@@ -13,6 +13,9 @@ from pick10.models import add_player, add_conference, add_team, add_game, add_we
 from pick10.models import get_user_by_username, get_team, get_game, get_week
 from pick10.models import get_player_by_public_name, get_player_by_private_name
 from pick10.models import update_game
+from pick10.overall_results_view import *
+from pick10.week_results_view import *
+from pick10.tiebreak_view import *
 
 from excel_history.excel.spreadsheet_test import player_username, get_player_years_dict, team_mascot_conference_division
 from excel_history.excel.pool_spreadsheet import PoolSpreadsheet
@@ -200,8 +203,19 @@ def populate_picks_for_year_week(yearnum, weeknum, verbose=False):
             if verbose: print("Pick(%s, %d, %d, %d).save()" % (pick.player_name, yearnum, weeknum, pick.game_number,))
             pickobj.save()
 
+def update_memcache_week_results(yearnum,weeknum):
+    WeekResultsView().get(None,yearnum,weeknum,use_private_names=False)
+    WeekResultsView().get(None,yearnum,weeknum,use_private_names=True)
 
-def main(years=None, weeks=None, verbose=False):
+def update_memcache_tiebreak(yearnum,weeknum):
+    TiebreakView().get(None,yearnum,weeknum,use_private_names=False)
+    TiebreakView().get(None,yearnum,weeknum,use_private_names=True)
+
+def update_memcache_overall_results(yearnum):
+    OverallResultsView().get(None,yearnum,use_private_names=False)
+    OverallResultsView().get(None,yearnum,use_private_names=True)
+
+def main(years=None, weeks=None, verbose=False, load_memcache=True):
     if years is None:
         years = range(beginyear, endyear + 1)
     elif isinstance(years, (int, long)):
@@ -230,6 +244,16 @@ def main(years=None, weeks=None, verbose=False):
             populate_games_for_year_week(yearnum, weeknum, verbose)
             print("populate_picks_for_year_week(%d, %d)" % (yearnum, weeknum,))
             populate_picks_for_year_week(yearnum, weeknum, verbose)
+
+            if load_memcache:
+                print("update_memcache_week_results(%d, %d)" % (yearnum, weeknum,))
+                update_memcache_week_results(yearnum, weeknum)
+                print("update_memcache_tiebreak(%d, %d)" % (yearnum, weeknum,))
+                update_memcache_tiebreak(yearnum, weeknum)
+
+        if load_memcache:
+            print("update_memcache_overall_results(%d)" % (yearnum))
+            update_memcache_overall_results(yearnum)
 
 
 # Execution starts here

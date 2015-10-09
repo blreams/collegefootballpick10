@@ -11,7 +11,10 @@ class TiebreakView:
 
     def get(self,request,year,week_number,use_private_names=None,use_memcache=True):
 
+        loading_memcache = request == None
+
         if self.__bad_year_or_week_number(year,week_number):
+            assert not loading_memcache,"When loading memcache, year/week needs to be valid "
             data={'year':year,'week_number':week_number}
             return render(request,"pick10/bad_week.html",data,status=400)
 
@@ -21,12 +24,16 @@ class TiebreakView:
         d = Database()
 
         if d.is_week_being_setup(year,week_number):
+            assert not loading_memcache,"Loading memcache does not support week being setup"
             years_in_pool = sorted(d.get_years(),reverse=True)
             data={'error':'week_not_setup','years_in_pool':years_in_pool,'year':year}
             WeekNavbar(year,week_number,'tiebreak',request.user).add_parameters(data)
             return render(request,"pick10/tiebreak_error.html",data,status=400)
 
-        use_private_names = self.__determine_private_access(request.user,use_private_names)
+        if loading_memcache:
+            use_private_names = use_private_names
+        else:
+            use_private_names = self.__determine_private_access(request.user,use_private_names)
 
         # setup memcache parameters
         cache = get_cache('default')
@@ -34,21 +41,20 @@ class TiebreakView:
             body_key = "tiebreak_private_%d_%d" % (year,week_number)
         else:
             body_key = "tiebreak_public_%d_%d" % (year,week_number)
-        sidebar_key = "tiebreak_year_sidebar_%d_%d" % (year,week_number)
+
+        years_in_pool = sorted(d.get_years(),reverse=True)
+        sidebar = render_to_string("pick10/year_sidebar.html",{'years_in_pool':years_in_pool,'year':year})
 
         # look for hit in the memcache
-        if use_memcache:
+        if not loading_memcache and use_memcache:
             body = cache.get(body_key)
-            sidebar = cache.get(sidebar_key)
-            memcache_hit = body != None and sidebar != None
+            memcache_hit = body != None
             if memcache_hit:
                 data = {'body_content':body,'side_block_content':sidebar,'week_number':week_number }
                 WeekNavbar(year,week_number,'tiebreak',request.user).add_parameters(data)
                 return render(request,"pick10/tiebreak.html",data)
 
-        d = Database()
         weeks_in_year = d.get_week_numbers(year)
-        years_in_pool = sorted(d.get_years(),reverse=True)
 
         tiebreak = CalculateTiebreak(year,week_number,use_private_names)
 
@@ -77,10 +83,10 @@ class TiebreakView:
         params['FINAL'] = FINAL
 
         body = render_to_string("pick10/tiebreak_body.html",params)
-        sidebar = render_to_string("pick10/year_sidebar.html",params)
 
         cache.set(body_key,body)
-        cache.set(sidebar_key,sidebar)
+        if loading_memcache:
+            return
 
         data = {'body_content':body,'side_block_content':sidebar,'week_number':week_number }
         WeekNavbar(year,week_number,'tiebreak',request.user).add_parameters(data)
