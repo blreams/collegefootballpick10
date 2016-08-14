@@ -54,6 +54,15 @@ class CreateWeekForm(forms.Form):
         self.fields['week'] = forms.ChoiceField(choices=week_choices)
 
 
+class EditWeekSelForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super(EditWeekSelForm, self).__init__(*args, **kwargs)
+        (defaultyear, defaultweek) = get_createweek_year_week()
+        self.initial['year'] = defaultyear
+        self.initial['week'] = defaultweek
+        self.fields['year'] = forms.ChoiceField(choices=year_choices())
+        self.fields['week'] = forms.ChoiceField(choices=week_choices)
+
 
 class EditWeekForm(forms.Form):
     def __init__(self, *args, **kwargs):

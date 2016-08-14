@@ -43,6 +43,7 @@
                     {% if user.is_authenticated %}
                       {% if user.is_staff %}
                         <li><a href="{% url 'admin:index' %}?next=/">Admin</a></li>
+                        <li><a href="{% url 'commissioner' %}">Commissioner</a></li>
                       {% endif %}
                     <li><a href="{% url 'profile' %}?next=/">Profile</a></li>
                     <li><a href="{% url 'auth_logout' %}?next=/">Logout</a></li>

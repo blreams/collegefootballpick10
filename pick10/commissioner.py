@@ -3,7 +3,7 @@ from django.http import HttpResponseNotFound
 from datetime import datetime
 from models import Year, Week
 from models import add_year, add_week, get_default_pick_deadline
-from forms import CreateWeekForm, EditWeekSelForm
+from forms import CreateWeekForm
 
 class CreateWeekView:
 

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from profile import ProfileView
 from create_week import CreateWeekView
+from edit_week import EditWeekSelView
 from edit_week import EditWeekView
 from overall_results_view import *
 from week_results_view import *
@@ -38,11 +39,24 @@ def profile(request):
     return HttpResponseNotFound('<h1>Page not found</h1>')
 
 @staff_member_required
+def commissioner(request):
+    context = {}
+    return render(request, 'pick10/commissioner.html', context)
+
+@staff_member_required
 def create_week(request):
     if request.method == 'GET':
         response = CreateWeekView().get(request)
     elif request.method == 'POST':
         response = CreateWeekView().post(request)
+    return response
+
+@staff_member_required
+def edit_week_sel(request):
+    if request.method == 'GET':
+        response = EditWeekSelView().get(request)
+    elif request.method == 'POST':
+        response = EditWeekSelView().post(request)
     return response
 
 @staff_member_required

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block body_block %}
+
+<p>This page is is used to select a week to edit (commissioners-only).</p>
+
+<form id="edit_week_sel_form" action="{% url 'edit_week_sel' %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit" />
+</form>
+
+{% endblock %}
+

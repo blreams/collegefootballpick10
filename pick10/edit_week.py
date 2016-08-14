@@ -4,7 +4,7 @@ from django.utils import timezone
 from models import Year, Week
 from models import get_commish_can_post, get_games_info_for_week, get_week_info, set_week_lock_picks
 from models import add_game, get_week, get_team
-from forms import CreateWeekForm, EditWeekForm
+from forms import CreateWeekForm, EditWeekForm, EditWeekSelForm
 
 def make_boolean(val):
     if isinstance(val, basestring):
@@ -17,6 +17,22 @@ def make_boolean(val):
             return True
         else:
             return False
+
+class EditWeekSelView:
+
+    def get(self, request):
+        form = EditWeekSelForm()
+        return render(request, 'pick10/edit_week_sel_form.html', {'form': form})
+
+    def post(self, request):
+        form = EditWeekSelForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            year = cd.get('year')
+            week = cd.get('week')
+            return redirect('/pick10/commissioner/editweek/' + str(year) + '/week/' + str(week))
+        return render(request, 'pick10/commissioner/edit_week_form.html', {'form': form})
+
 
 class EditWeekView:
 
