@@ -106,7 +106,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
         STATIC_PATH,
         )
-#STATIC_ROOT = os.path.join(BASE_DIR, '../static')
+STATIC_ROOT = os.path.join(BASE_DIR, '../static')
 
 TEMPLATE_DIRS = [
         # Put strings here, like '/home/html/django_templates'.
