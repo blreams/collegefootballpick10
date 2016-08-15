@@ -15,12 +15,15 @@ class CalculateOverallResults:
         return self.__results
 
     def __calculate_overall_results(self):
+        import pdb;pdb.set_trace()
         self.__database = Database()
 
         overall_results = self.__setup_overall_results()
 
         week_numbers = self.__get_week_numbers()
-        last_week_number = week_numbers[-1]
+        last_week_number = 0
+        if len(week_numbers) > 0:
+            last_week_number = week_numbers[-1]
 
         for week_number in week_numbers:
             last_week = week_number == last_week_number

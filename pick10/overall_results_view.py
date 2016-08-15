@@ -6,7 +6,7 @@ from pick10.calculate_overall_results import *
 import string
 import re
 from django.core.cache import *
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from pick10.week_navbar import *
 from pick10.user_access import *
 
@@ -48,6 +48,9 @@ class OverallResultsView:
         if pool_state == "week_setup":    # use last weeks results
             weeks_in_year.remove(last_week_number)
             last_week_number = last_week_number - 1
+
+        if last_week_number == 0:
+            return HttpResponseNotFound('<h1>Page not found</h1>')
 
         # look for hit in the memcache
         if not loading_memcache and use_memcache:
