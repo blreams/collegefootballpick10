@@ -15,7 +15,6 @@ class CalculateOverallResults:
         return self.__results
 
     def __calculate_overall_results(self):
-        import pdb;pdb.set_trace()
         self.__database = Database()
 
         overall_results = self.__setup_overall_results()
