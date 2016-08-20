@@ -49,8 +49,12 @@ class OverallResultsView:
             weeks_in_year.remove(last_week_number)
             last_week_number = last_week_number - 1
 
+        # What if we need to go back a year?
         if last_week_number == 0:
-            return HttpResponseNotFound('<h1>Page not found</h1>')
+            year -= 1
+            pool_state = d.get_pool_state(year)
+            weeks_in_year = d.get_week_numbers(year)
+            last_week_number = weeks_in_year[-1]
 
         # look for hit in the memcache
         if not loading_memcache and use_memcache:
