@@ -1,11 +1,16 @@
+import sys
+import os
 from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 
+print >> sys.stderr, "Figuring out registration_backend_string"
 registration_backend_string = 'registration.backends.simple.urls'
-if settings.REGISTRATION_BACKEND_STRING:
-    registration_backend_string = settings.REGISTRATION_BACKEND_STRING
+print >> sys.stderr, "  registration_backend_string = %s" % registration_backend_string
+if os.environ['COLLEGEFOOTBALLPICK10_REGISTRATION_BACKEND']:
+    registration_backend_string = registration_backend_string.replace('simple', os.environ['COLLEGEFOOTBALLPICK10_REGISTRATION_BACKEND'])
+    print >> sys.stderr, "  registration_backend_string = %s" % registration_backend_string
 
 urlpatterns = patterns('',
     # Examples:

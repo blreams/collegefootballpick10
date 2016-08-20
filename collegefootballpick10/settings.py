@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import sys
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 STATIC_PATH = os.path.join(BASE_DIR, 'static')
@@ -75,8 +76,8 @@ if os.environ.get('COLLEGEFOOTBALLPICK10_DATABASE') == 'mysql':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'collegefootballpick10',
-            'HOST': 'localhost',
+            'NAME': os.environ.get('COLLEGEFOOTBALLPICK10_DATABASE_NAME'),
+            'HOST': os.environ.get('COLLEGEFOOTBALLPICK10_DATABASE_HOST'),
             'PORT': '3306',
             'USER': os.environ.get('COLLEGEFOOTBALLPICK10_DATABASE_USER'),
             'PASSWORD': os.environ.get('COLLEGEFOOTBALLPICK10_DATABASE_PASSWORD'),
@@ -140,10 +141,6 @@ CACHES = {
          'TIMEOUT':None
     }
 }
-
-REGISTRATION_BACKEND_STRING = 'registration.backends.simple.urls'
-if os.environ.get('COLLEGEFOOTBALLPICK10_REGISTRATION_BACKEND') is not None:
-    REGISTRATION_BACKEND_STRING.replace('simple', os.environ.get('COLLEGEFOOTBALLPICK10_REGISTRATION_BACKEND'))
 
 
 SELENIUM_WEBDRIVER_STRING = 'firefox'
