@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import sys
 import os
+import ast
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 STATIC_PATH = os.path.join(BASE_DIR, 'static')
 TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')
@@ -24,11 +25,11 @@ TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')
 SECRET_KEY = os.environ.get('COLLEGEFOOTBALLPICK10_DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+#DEBUG = True
+DEBUG = ast.literal_eval(os.environ.get('COLLEGEFOOTBALLPICK10_DJANGO_DEBUG', 'True'))
 TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['collegefootballpick10.pythonanywhere.com']
 
 
 # Application definition
