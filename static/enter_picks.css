@@ -46,3 +46,12 @@ body {
 .team-width {
     width: 15em;
 }
+
+.table-striped>tbody>tr:nth-child(odd)>td,
+tr.found {
+    background-color: #e6e6ff;
+}
+.table-striped>tbody>tr:nth-child(even)>td,
+tr.found {
+    background-color: #e6ffe6;
+}
