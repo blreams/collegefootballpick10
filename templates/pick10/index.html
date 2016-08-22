@@ -1,17 +1,6 @@
 {% extends 'base.html' %}
 
 {% block body_block %}
-<p>TBD - This is intended to be the landing page for logged in users. It should
-give a high-level view of the pool including things like:</p>
-<ul>
-    <li>The last completed week/year of the pool.</li>
-    <li>The state of the current week (picks available, picks closed, week closed, etc.)</li>
-    <li>The number of poolers participating in the current season.</li>
-    <li>The Top 5 poolers.</li>
-    <li>Who's in the running for last place.</li>
-    <li>A preview of games in the coming week.</li>
-</ul>
-<h1 id="index_h1">This is the INDEX page!</h1>
 <h2>Hello, {{ user.username }}, what would you like to do?</h2><br />
 <ul>
     <li><a href="{% url 'overall_results' year_num %}">Latest Season Results</a></li>
