@@ -46,6 +46,7 @@ class Player(models.Model):
 
     class Meta:
         verbose_name_plural = '2. Players'
+        ordering = ('private_name',)
 
     def __unicode__(self):
         return '%s/%s/%s'%(self.private_name, self.public_name, self.ss_name)
