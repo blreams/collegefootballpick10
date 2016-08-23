@@ -14,6 +14,7 @@ class PlayerAdmin(admin.ModelAdmin):
 class PlayerYearAdmin(admin.ModelAdmin):
     list_display = ('player', 'year')
     list_filter = ('year', 'player')
+    ordering = ('year', 'player')
 
 class ConferenceAdmin(admin.ModelAdmin):
     list_display = ('conf_name', 'div_name', 'created', 'updated')
@@ -48,6 +49,7 @@ class UserProfileInline(admin.StackedInline):
 
 class UserAdmin(UserAdmin):
     inlines = (UserProfileInline,)
+    ordering = ('username',)
 
 admin.site.register(Year, YearAdmin)
 admin.site.register(Player, PlayerAdmin)
