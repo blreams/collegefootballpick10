@@ -54,12 +54,13 @@ class UserAdmin(UserAdmin):
 
     def player(self, obj):
         try:
-            player = obj.userprofile.player
+            player = obj.userprofile.player.ss_name
             return player
         except:
             return ""
 
     player.short_description = 'Player'
+    player.admin_order_field = 'last_name'
 
 admin.site.register(Year, YearAdmin)
 admin.site.register(Player, PlayerAdmin)
