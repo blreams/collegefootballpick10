@@ -50,6 +50,16 @@ class UserProfileInline(admin.StackedInline):
 class UserAdmin(UserAdmin):
     inlines = (UserProfileInline,)
     ordering = ('username',)
+    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff', 'player')
+
+    def player(self, obj):
+        try:
+            player = obj.userprofile.player
+            return player
+        except:
+            return ""
+
+    player.short_description = 'Player'
 
 admin.site.register(Year, YearAdmin)
 admin.site.register(Player, PlayerAdmin)
