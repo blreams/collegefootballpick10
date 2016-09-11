@@ -35,11 +35,11 @@ class EnterPicks:
                 data.pick = 0
 
             if game.favored == TEAM1:
-                data.team1_spread = game.spread
+                data.team1_spread = game.spread * -1
                 data.team2_spread = ""
             elif game.favored == TEAM2:
                 data.team1_spread = ""
-                data.team2_spread = game.spread
+                data.team2_spread = game.spread * -1
             else:
                 raise AssertionError,"Invalid favored value"
 
