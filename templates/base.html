@@ -46,9 +46,11 @@
                         <li><a href="{% url 'commissioner' %}">Commissioner</a></li>
                       {% endif %}
                     <li><a href="{% url 'profile' %}?next=/">Profile</a></li>
+                    <li><a href="{% url 'auth_password_change' %}?next=/">PWChange</a></li>
                     <li><a href="{% url 'auth_logout' %}?next=/">Logout</a></li>
                     {% else %}
                     <li><a href="{% url 'registration_register' %}">Register</a></li>
+                    <li><a href="{% url 'auth_password_reset' %}">PWReset</a></li>
                     <li><a href="{% url 'auth_login' %}">Login</a></li>
                     {% endif %}
                 </ul>
