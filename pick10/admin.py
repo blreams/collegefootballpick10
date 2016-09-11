@@ -36,7 +36,7 @@ class WeekAdmin(admin.ModelAdmin):
 
 class PickAdmin(admin.ModelAdmin):
     list_display = ('player', 'game', 'created', 'updated')
-    list_filter = ('game__week__year', 'game__week__weeknum', 'player')
+    list_filter = ('game__week__year', 'game__week__weeknum', 'game__gamenum', 'player')
 
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'player', 'company', 'preferredtz', 'favorite_team')
