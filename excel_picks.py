@@ -118,6 +118,8 @@ def create_picks_sheet(year,week_number,data):
     for player_id in data.players:
         player = data.players[player_id]
         column_data = get_picks_column(player_id,data)
+        if len(column_data) < 22:
+            column_data = ['' for i in range(22)]
         picks_df[player.ss_name] = column_data
 
     filename = 'picks_%d_%d.xls' % (year,week_number)
