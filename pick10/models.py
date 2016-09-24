@@ -346,3 +346,22 @@ def set_week_lock_picks(yearnum, weeknum, value):
         w.lock_picks = value
         w.save()
 
+def calc_completed_games(yearnum, weeknum=0):
+    """Calculate number of complete games for the given yearnum, weeknum.
+    yearnum is required. weeknum=0 means calculate for the entire year.
+    """
+    if weeknum == 0:
+        weeknums = get_weeklist(yearnum)
+    else:
+        weeknums = [weeknum]
+
+    completed_games = 0
+    for weeknum in weeknums:
+        games = get_games(yearnum, weeknum)
+        for game in games:
+            if game.game_state == 3:
+                completed_games += 1
+    return completed_games
+
+
+

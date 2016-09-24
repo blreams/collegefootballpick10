@@ -5,8 +5,9 @@ from overall_results import *
 
 class CalculateOverallResults:
 
-    def __init__(self,year,private_names=False,use_weeks=None):
+    def __init__(self,year,completed_games,private_names=False,use_weeks=None):
         self.year = year
+        self.completed_games = completed_games
         self.__use_private_names = private_names
         self.__week_numbers = use_weeks
         self.__calculate_overall_results()
@@ -100,7 +101,8 @@ class CalculateOverallResults:
             if overall_results[player_id].overall == 0:
                 win_pct = 0.0
             else:
-                win_pct = float(overall_results[player_id].overall) / float(number_of_total_points_so_far)
+                #win_pct = float(overall_results[player_id].overall) / float(number_of_total_points_so_far)
+                win_pct = float(overall_results[player_id].overall) / float(self.completed_games)
 
             overall_results[player_id].win_pct = "%0.3f" % (win_pct)
 

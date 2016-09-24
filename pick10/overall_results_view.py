@@ -82,7 +82,8 @@ class OverallResultsView:
             WeekNavbar(year,last_week_number,'overall',request.user).add_parameters(data)
             return render(request,"pick10/overall_results.html",data)
 
-        results = CalculateOverallResults(year,use_private_names,use_weeks=weeks_in_year).get_results()
+        completed_games = calc_completed_games(year)
+        results = CalculateOverallResults(year,completed_games,use_private_names,use_weeks=weeks_in_year).get_results()
 
         content_params = dict()
         content_params['year'] = year
