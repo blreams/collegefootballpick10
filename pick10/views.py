@@ -40,7 +40,9 @@ def profile(request):
 
 @staff_member_required
 def commissioner(request):
-    context = {}
+    year_num = get_yearlist()[-1]
+    week_num = get_weeklist(year_num)[-1]
+    context = {'year_num': year_num, 'week_num': week_num}
     return render(request, 'pick10/commissioner.html', context)
 
 @staff_member_required
