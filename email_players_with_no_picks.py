@@ -80,7 +80,8 @@ def send_email(year,week,deadline,addresses):
     subject = "CollegeFootballPick10 %d Week %d Picks Reminder" % (year,week)
 
     message = "The CollegeFootballPick10 site has detected that you have not entered any picks for %d week %d.\n" % (year,week) +\
-              "This email is a reminder to enter picks before the deadline at %s." % (deadline_as_string(deadline))
+              "This email is a reminder to enter picks before the deadline at %s.\n" % (deadline_as_string(deadline))
+    message += "\nhttp://collegefootballpick10.pythonanywhere.com/pick10/%d/week/%d/results\n" % (year,week)
 
     send_mail(subject,message,cfp_settings.DEFAULT_FROM_EMAIL,addresses)
 
@@ -92,6 +93,8 @@ def script_test_email(year,week,deadline,addresses):
 
     for addr in email_addresses:
         message += "%s\n" % (addr)
+
+    message += "\nhttp://collegefootballpick10.pythonanywhere.com/pick10/%d/week/%d/results\n" % (year,week)
 
     to_field = ["brent.l.holden@gmail.com","blreams@gmail.com"]
 
