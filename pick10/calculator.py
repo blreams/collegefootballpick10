@@ -208,6 +208,13 @@ class CalculateResults:
                 wins += 1
         return wins
 
+    def did_player_default(self,player):
+        picks = 0
+        for game in self.__data.games.values():
+            if self.player_did_not_pick(player,game) == False:
+                picks += 1
+        return picks == 0
+
     def __debug_print_game(self,player_key,game_key):
         raise AssertionError,"Not implemented"
 

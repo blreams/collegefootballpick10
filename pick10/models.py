@@ -256,6 +256,13 @@ def get_profile_by_user(user):
         return
     return userprofile
 
+def get_profile_by_player(player):
+    try:
+        userprofile = UserProfile.objects.get(player=player)
+    except:
+        return
+    return userprofile
+
 def get_team(team):
     t = Team.objects.get(team_name=team)
     return t
