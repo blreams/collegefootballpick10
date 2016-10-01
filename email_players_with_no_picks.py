@@ -107,10 +107,22 @@ def send_pick_reminder_email(year,week,deadline,player):
     except:
         print "Failed to send an email to %s" % (player.email)
 
+def get_staff_email_addresses():
+    users = get_staff()
+
+    if users == None or len(users) <= 0:
+        return []
+
+    staff_email = [ u.email for u in users if u.email != None ]
+    staff_email_remove_duplicates = set(staff_email)
+    staff_email_as_list = [ email for email in staff_email_remove_duplicates ]
+
+    return staff_email_as_list
+
 def send_admin_email(year,week,deadline):
     subject = "CollegeFootballPick10 %d Week %d Picks Reminder Notification" % (year,week)
 
-    message  = "The script to send a pick reminder email has been run.\n\n"
+    message  = "The script to send a pick reminder email has been executed.\n\n"
 
     if len(players) <= 0:
         message += "The script detected that all players have entered their picks.\n\n"
@@ -131,7 +143,10 @@ def send_admin_email(year,week,deadline):
         print subject
         print message
 
-    to_field = ["brent.l.holden@gmail.com","blreams@gmail.com"]
+    to_field = get_staff_email_addresses()
+    if len(to_field) <= 0:
+        print "Could not find any staff email addresses"
+        return
 
     try:
         send_mail(subject,message,cfp_settings.DEFAULT_FROM_EMAIL,to_field)

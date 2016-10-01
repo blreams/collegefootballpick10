@@ -263,6 +263,9 @@ def get_profile_by_player(player):
         return
     return userprofile
 
+def get_staff():
+    return User.objects.filter(is_staff=True)
+
 def get_team(team):
     t = Team.objects.get(team_name=team)
     return t
