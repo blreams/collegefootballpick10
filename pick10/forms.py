@@ -75,8 +75,8 @@ class EditWeekForm(forms.Form):
         super(EditWeekForm, self).__init__(*args, **kwargs)
         self.initial['pick_deadline'] = get_default_pick_deadline()
         self.initial['lock_picks'] = weekfields.get('lock_picks')
-        self.fields['lock_picks'] = forms.ChoiceField(widget=forms.RadioSelect, choices=((True, 'Yes'), (False, 'No')))
-        self.fields['pick_deadline'] = forms.DateTimeField(widget=forms.DateTimeInput)
+        self.fields['lock_picks'] = forms.ChoiceField(widget=forms.RadioSelect(attrs={'class': 'csscls_lock_picks'}), choices=((True, 'Yes'), (False, 'No')))
+        self.fields['pick_deadline'] = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'class': 'csscls_pick_deadline'}))
         for i in range(1, 11):
             gamestr = 'game%d_' % i
 
@@ -87,11 +87,11 @@ class EditWeekForm(forms.Form):
             self.initial[gamestr + 'spread'] = gamefields.get(gamestr + 'spread')
             self.initial[gamestr + 'kickoff'] = gamefields.get(gamestr + 'kickoff')
 
-            self.fields[gamestr + 'team1'] = forms.ChoiceField(choices=tuple((t, t) for t in get_teamlist()))
-            self.fields[gamestr + 'team2'] = forms.ChoiceField(choices=tuple((t, t) for t in get_teamlist()))
-            self.fields[gamestr + 'favored'] = forms.ChoiceField(widget=forms.RadioSelect, choices=tuple(('Team%d' % i, 'Team%d' % i) for i in range(1, 3)))
-            self.fields[gamestr + 'spread'] = forms.DecimalField(decimal_places=1)
-            self.fields[gamestr + 'kickoff'] = forms.DateTimeField(widget=forms.DateTimeInput, required=False)
+            self.fields[gamestr + 'team1'] = forms.ChoiceField(widget=forms.Select(attrs={'class': 'csscls_game_team1'}), choices=tuple((t, t) for t in get_teamlist()))
+            self.fields[gamestr + 'team2'] = forms.ChoiceField(widget=forms.Select(attrs={'class': 'csscls_game_team2'}), choices=tuple((t, t) for t in get_teamlist()))
+            self.fields[gamestr + 'favored'] = forms.ChoiceField(widget=forms.RadioSelect(attrs={'class': 'csscls_game_favored'}), choices=tuple(('Team%d' % i, 'Team%d' % i) for i in range(1, 3)))
+            self.fields[gamestr + 'spread'] = forms.DecimalField(widget=forms.NumberInput(attrs={'class': 'csscls_game_spread'}), decimal_places=1)
+            self.fields[gamestr + 'kickoff'] = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'class': 'csscls_game_kickoff'}), required=False)
 
     def clean(self):
         cleaned_data = super(EditWeekForm, self).clean()

@@ -40,12 +40,12 @@ class EditWeekView:
         weekfields = get_week_info(year, week_number)
         gamefields = get_games_info_for_week(year, week_number)
         form = EditWeekForm(weekfields=weekfields, gamefields=gamefields)
-        context = {'form': form, 'year': year, 'week_number': week_number, 'commish_can_post': get_commish_can_post(year, week_number)}
+        context = {'form': form, 'gamenums': range(1, 11), 'year': year, 'week_number': week_number, 'commish_can_post': get_commish_can_post(year, week_number)}
         return render(request,"pick10/edit_week_form.html", context)
 
     def post(self, request, year, week_number):
         form = EditWeekForm(request.POST)
-        context = {'form': form, 'year': year, 'week_number': week_number, 'commish_can_post': True}
+        context = {'form': form, 'gamenums': range(1, 11), 'year': year, 'week_number': week_number, 'commish_can_post': True}
         # Need to set a LOCK that players will observe before getting/posting picks
         set_week_lock_picks(year, week_number, True)
         if not get_commish_can_post(year, week_number):

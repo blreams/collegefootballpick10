@@ -1,13 +1,215 @@
 {% extends 'base.html' %}
 
 {% block body_block %}
+<link href="/static/edit_picks.css" rel="stylesheet" type="text/css" media="all">
 
 <p>This page will eventually be the form to edit the games for week {{week_number}} of {{year}} of
 the pool (commissioners-only).</p>
 
 <form id="edit_week_form" action="{% url 'edit_week' year week_number %}" method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    {% if form.errors %}
+    {{form.non_field_errors}}
+    {% endif %}
+    <div class="row csscls_logistics">
+        <div class="col-md-6">
+            <p><label for="id_lock_picks_0">Lock picks:</label>{{form.lock_picks}}</p>
+        </div>
+        <div class="col-md-6">
+            <p><label for="id_pick_deadline">Pick deadline:</label>{{form.pick_deadline}}</p>
+        </div>
+    </div>
+    <hr></hr>
+    <div class="row csscls_game_odd">
+        <div class="col-md-3">
+            <p><label for="id_game1_team1">Game1 team1:</label>{{form.game1_team1}}</p>
+            <p><label for="id_game1_team2">Game1 team2:</label>{{form.game1_team2}}</p>
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game1_favored_0">Game1 favored:</label>{{form.game1_favored}}</p>
+            {{form.game1_favored.errors}}
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game1_spread">Game1 spread:</label>{{form.game1_spread}}</p>
+            {{form.game1_spread.errors}}
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game1_kickoff">Game1 kickoff:</label>{{form.game1_kickoff}}</p>
+            {{form.game1_kickoff.errors}}
+        </div>
+    </div>
+    <hr></hr>
+    <div class="row csscls_game_even">
+        <div class="col-md-3">
+            <p><label for="id_game2_team1">Game2 team1:</label>{{form.game2_team1}}</p>
+            <p><label for="id_game2_team2">Game2 team2:</label>{{form.game2_team2}}</p>
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game2_favored_0">Game2 favored:</label>{{form.game2_favored}}</p>
+            {{form.game2_favored.errors}}
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game2_spread">Game2 spread:</label>{{form.game2_spread}}</p>
+            {{form.game2_spread.errors}}
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game2_kickoff">Game2 kickoff:</label>{{form.game2_kickoff}}</p>
+            {{form.game2_kickoff.errors}}
+        </div>
+    </div>
+    <hr></hr>
+    <div class="row csscls_game_odd">
+        <div class="col-md-3">
+            <p><label for="id_game3_team1">Game3 team1:</label>{{form.game3_team1}}</p>
+            <p><label for="id_game3_team2">Game3 team2:</label>{{form.game3_team2}}</p>
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game3_favored_0">Game3 favored:</label>{{form.game3_favored}}</p>
+            {{form.game3_favored.errors}}
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game3_spread">Game3 spread:</label>{{form.game3_spread}}</p>
+            {{form.game3_spread.errors}}
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game3_kickoff">Game3 kickoff:</label>{{form.game3_kickoff}}</p>
+            {{form.game3_kickoff.errors}}
+        </div>
+    </div>
+    <hr></hr>
+    <div class="row csscls_game_even">
+        <div class="col-md-3">
+            <p><label for="id_game4_team1">Game4 team1:</label>{{form.game4_team1}}</p>
+            <p><label for="id_game4_team2">Game4 team2:</label>{{form.game4_team2}}</p>
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game4_favored_0">Game4 favored:</label>{{form.game4_favored}}</p>
+            {{form.game4_favored.errors}}
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game4_spread">Game4 spread:</label>{{form.game4_spread}}</p>
+            {{form.game4_spread.errors}}
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game4_kickoff">Game4 kickoff:</label>{{form.game4_kickoff}}</p>
+            {{form.game4_kickoff.errors}}
+        </div>
+    </div>
+    <hr></hr>
+    <div class="row csscls_game_odd">
+        <div class="col-md-3">
+            <p><label for="id_game5_team1">Game5 team1:</label>{{form.game5_team1}}</p>
+            <p><label for="id_game5_team2">Game5 team2:</label>{{form.game5_team2}}</p>
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game5_favored_0">Game5 favored:</label>{{form.game5_favored}}</p>
+            {{form.game5_favored.errors}}
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game5_spread">Game5 spread:</label>{{form.game5_spread}}</p>
+            {{form.game5_spread.errors}}
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game5_kickoff">Game5 kickoff:</label>{{form.game5_kickoff}}</p>
+            {{form.game5_kickoff.errors}}
+        </div>
+    </div>
+    <hr></hr>
+    <div class="row csscls_game_even">
+        <div class="col-md-3">
+            <p><label for="id_game6_team1">Game6 team1:</label>{{form.game6_team1}}</p>
+            <p><label for="id_game6_team2">Game6 team2:</label>{{form.game6_team2}}</p>
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game6_favored_0">Game6 favored:</label>{{form.game6_favored}}</p>
+            {{form.game6_favored.errors}}
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game6_spread">Game6 spread:</label>{{form.game6_spread}}</p>
+            {{form.game6_spread.errors}}
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game6_kickoff">Game6 kickoff:</label>{{form.game6_kickoff}}</p>
+            {{form.game6_kickoff.errors}}
+        </div>
+    </div>
+    <hr></hr>
+    <div class="row csscls_game_odd">
+        <div class="col-md-3">
+            <p><label for="id_game7_team1">Game7 team1:</label>{{form.game7_team1}}</p>
+            <p><label for="id_game7_team2">Game7 team2:</label>{{form.game7_team2}}</p>
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game7_favored_0">Game7 favored:</label>{{form.game7_favored}}</p>
+            {{form.game7_favored.errors}}
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game7_spread">Game7 spread:</label>{{form.game7_spread}}</p>
+            {{form.game7_spread.errors}}
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game7_kickoff">Game7 kickoff:</label>{{form.game7_kickoff}}</p>
+            {{form.game7_kickoff.errors}}
+        </div>
+    </div>
+    <hr></hr>
+    <div class="row csscls_game_even">
+        <div class="col-md-3">
+            <p><label for="id_game8_team1">Game8 team1:</label>{{form.game8_team1}}</p>
+            <p><label for="id_game8_team2">Game8 team2:</label>{{form.game8_team2}}</p>
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game8_favored_0">Game8 favored:</label>{{form.game8_favored}}</p>
+            {{form.game8_favored.errors}}
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game8_spread">Game8 spread:</label>{{form.game8_spread}}</p>
+            {{form.game8_spread.errors}}
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game8_kickoff">Game8 kickoff:</label>{{form.game8_kickoff}}</p>
+            {{form.game8_kickoff.errors}}
+        </div>
+    </div>
+    <hr></hr>
+    <div class="row csscls_game_odd">
+        <div class="col-md-3">
+            <p><label for="id_game9_team1">Game9 team1:</label>{{form.game9_team1}}</p>
+            <p><label for="id_game9_team2">Game9 team2:</label>{{form.game9_team2}}</p>
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game9_favored_0">Game9 favored:</label>{{form.game9_favored}}</p>
+            {{form.game9_favored.errors}}
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game9_spread">Game9 spread:</label>{{form.game9_spread}}</p>
+            {{form.game9_spread.errors}}
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game9_kickoff">Game9 kickoff:</label>{{form.game9_kickoff}}</p>
+            {{form.game9_kickoff.errors}}
+        </div>
+    </div>
+    <hr></hr>
+    <div class="row csscls_game_even">
+        <div class="col-md-3">
+            <p><label for="id_game10_team1">Game10 team1:</label>{{form.game10_team1}}</p>
+            <p><label for="id_game10_team2">Game10 team2:</label>{{form.game10_team2}}</p>
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game10_favored_0">Game10 favored:</label>{{form.game10_favored}}</p>
+            {{form.game10_favored.errors}}
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game10_spread">Game10 spread:</label>{{form.game10_spread}}</p>
+            {{form.game10_spread.errors}}
+        </div>
+        <div class="col-md-3">
+            <p><label for="id_game10_kickoff">Game10 kickoff:</label>{{form.game10_kickoff}}</p>
+            {{form.game10_kickoff.errors}}
+        </div>
+    </div>
+    <hr></hr>
     <input type="submit" {% if commish_can_post %}value="Submit"{% else %}value="Disabled" disabled="disabled"{% endif %} />
 </form>
 

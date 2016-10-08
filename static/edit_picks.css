@@ -1,0 +1,65 @@
+body {
+   font-size: 10pt;
+   font-family: Helvetica;
+}
+ul {
+    list-style-type: none;
+}
+hr {
+    margin: 0 0;
+    border: 1px;
+}
+#id_lock_picks li {
+    display: inline;
+    margin: 0 5px;
+}
+.csscls_logistics {
+    background-color: mistyrose;
+}
+.csscls_game_odd {
+    background-color: lavender;
+}
+.csscls_game_even {
+    background-color: honeydew;
+}
+.errorlist {
+    color: red;
+    margin: 0 0;
+    padding: 0 0;
+}
+#page-title {
+   color: gray;
+   font-size: 14pt;
+   font-weight: 500;
+   text-align: left;
+   white-space: nowrap;
+   padding: 0px 4px;
+}
+#team-name {
+   font-weight: 300;
+   font-size: 10pt;
+   color: black;
+   text-align: left;
+   padding: 1px 4px;
+   white-space: nowrap;
+}
+#spread {
+   font-weight: 100;
+   font-size: 10pt;
+   color: blue;
+   text-align: center;
+   vertical-align: middle;
+   padding: 1px 4px;
+}
+.team-width {
+    width: 15em;
+}
+
+.table-striped>tbody>tr:nth-child(odd)>td,
+tr.found {
+    background-color: #e6e6ff;
+}
+.table-striped>tbody>tr:nth-child(even)>td,
+tr.found {
+    background-color: #e6ffe6;
+}
