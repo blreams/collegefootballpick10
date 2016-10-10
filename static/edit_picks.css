@@ -9,18 +9,33 @@ hr {
     margin: 0 0;
     border: 1px;
 }
+.container {
+    margin-bottom: 25px;
+}
 #id_lock_picks li {
     display: inline;
     margin: 0 5px;
 }
 .csscls_logistics {
     background-color: mistyrose;
+    border-radius: 15px;
+    margin: 10px auto;
+}
+#vertical_center {
+    position: absolute;
+    top: 50%;
+    //height: 5em;
+    margin-top: 1.5em;
 }
 .csscls_game_odd {
     background-color: lavender;
+    border-radius: 15px;
+    margin: 10px auto;
 }
 .csscls_game_even {
     background-color: honeydew;
+    border-radius: 15px;
+    margin: 10px auto;
 }
 .errorlist {
     color: red;

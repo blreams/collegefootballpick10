@@ -3,8 +3,7 @@
 {% block body_block %}
 <link href="/static/edit_picks.css" rel="stylesheet" type="text/css" media="all">
 
-<p>This page will eventually be the form to edit the games for week {{week_number}} of {{year}} of
-the pool (commissioners-only).</p>
+<h2>Commissioner Edit {{year}} Week {{week_number}}</h2>
 
 <form id="edit_week_form" action="{% url 'edit_week' year week_number %}" method="post">
     {% csrf_token %}
@@ -16,7 +15,9 @@ the pool (commissioners-only).</p>
             <p><label for="id_lock_picks_0">Lock picks:</label>{{form.lock_picks}}</p>
         </div>
         <div class="col-md-6">
+            <div id="vertical_center">
             <p><label for="id_pick_deadline">Pick deadline:</label>{{form.pick_deadline}}</p>
+            </div>
         </div>
     </div>
     <hr></hr>
@@ -210,7 +211,7 @@ the pool (commissioners-only).</p>
         </div>
     </div>
     <hr></hr>
-    <input type="submit" {% if commish_can_post %}value="Submit"{% else %}value="Disabled" disabled="disabled"{% endif %} />
+    <input class="btn-primary btn-lg" type="submit" {% if commish_can_post %}value="Submit"{% else %}value="Disabled" disabled="disabled"{% endif %} />
 </form>
 
 {% endblock %}
