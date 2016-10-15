@@ -180,7 +180,8 @@ def create_picks_sheet(year,week_number,data):
                 picks_df[score_column][team1_score_row] = game.team1_actual_points
                 picks_df[score_column][team2_score_row] = game.team2_actual_points
 
-    filename = 'picks_%d_%d.xls' % (year,week_number)
+    filefolder = r'excel_history/picks'
+    filename = os.path.join(filefolder, 'picks_%d_%d.xls' % (year,week_number))
     sheet = 'week_%d' % (week_number)
     picks_df.to_excel(filename,sheet)
 
