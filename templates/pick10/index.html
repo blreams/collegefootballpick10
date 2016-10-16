@@ -1,7 +1,16 @@
 {% extends 'base.html' %}
 
+{% load staticfiles %}
+
+{% block header_other_jq_scripts %}
+    <link href="{% static 'jqplot/css/jquery.jqplot.min.css' %}" rel="stylesheet" media="screen">
+    <script src="{% static 'jqplot/js/jquery.jqplot.min.js' %}"></script>
+    <script src="{% static 'jqplot/plugins/jqplot.canvasTextRenderer.min.js' %}"></script>
+    <script src="{% static 'jqplot/plugins/jqplot.canvasAxisLabelRenderer.min.js' %}"></script>
+    <script src="{% static 'jqplot/plugins/jqplot.trendline.min.js' %}"></script>
+{% endblock %}
+
 {% block body_block %}
-<h2>Hello, {{ user.username }}, what would you like to do?</h2><br />
 <ul>
     <li><a href="{% url 'overall_results' year_num %}">Latest Season Results</a></li>
     <li><a href="{% url 'week_results' year_num week_num %}">Latest Week Results</a></li>
@@ -14,4 +23,44 @@
     <li><a href="{% url 'enter_picks' year_num week_num profile.player.id %}">Enter/Modify Picks</a></li>
     {% endif %}
 </ul>
+{% if profile.player != None and week_num > 1 %}
+<div id="chartdiv" style="height:400px;width=300px; ">
+    <img src="" alt="">
+</div>
+<script class="code" type="text/javascript">
+    $(document).ready(function() {
+        $.jqplot.config.enablePlugins = true;
+        var ou = [0.0].concat({{over_under_list}});
+        var i, dp;
+        var line1 = [];
+        var ticks = [];
+        for (i=0; i<ou.length; i++){
+            dp = [i, ou[i]];
+            line1.push(dp);
+        }
+        for (i=-1; i<=ou.length; i++){
+            ticks.push(i);
+        }
+        var optionObj = {
+            title:{text:"{{user.username}} Trend Line"},
+            grid:{shadow:false, borderWidth:9.0},
+            axes:{
+                xaxis:{
+                    ticks: ticks,
+                    tickInterval: 1.0,
+                    label: 'Week Number'
+                },
+                yaxis:{
+                    labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+                    label: 'Points - Over/Under'
+                }
+            },
+            series:[{
+                trendline: {color: '#993333'}
+            }]
+        };
+        var plot1 = $.jqplot ('chartdiv', [line1], optionObj);
+    });
+</script>
+{% endif %}
 {% endblock %}

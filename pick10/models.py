@@ -1,3 +1,4 @@
+import itertools
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -284,8 +285,10 @@ def get_week(yearnum, weeknum):
     w = Week.objects.get(year=year, weeknum=weeknum)
     return w
 
-def query_picks(email, yearnum, weeknum):
-    picks = Pick.objects.filter(pick_user__email=u, game__week__year__yearnum=yearnum, game__week__weeknum=weeknum).order_by('game__gamenum')
+def query_picks(username, yearnum, weeknum):
+    user = get_user_by_username(username)
+    player = user.userprofile.player
+    picks = Pick.objects.filter(player=player, game__week__year__yearnum=yearnum, game__week__weeknum=weeknum).order_by('game__gamenum')
     return picks
 
 def query_picks_week(yearnum, weeknum):
@@ -373,5 +376,24 @@ def calc_completed_games(yearnum, weeknum=0):
                 completed_games += 1
     return completed_games
 
+def calc_weekly_over_under(yearnum, username):
+    """Return list of cumulative points over/under, one per week, for the given year/player
+    """
+    retval = []
+    user = get_user_by_username(username)
+    if not user or not hasattr(user, 'userprofile') or not hasattr(user.userprofile, 'player'):
+        return retval
+    weeknums = get_weeklist(yearnum)
+    retval.append(0.0)
+    for weeknum in weeknums:
+        picks = query_picks(username, yearnum, weeknum)
+        games = get_games(yearnum, weeknum)
+        retval.append(retval[-1])
+        for pick, game in itertools.izip(picks, games):
+            if game.game_state == 3:
+                retval[-1] -= 0.5
+                if pick.winner == game.winner:
+                    retval[-1] += 1.0
+    return retval
 
 

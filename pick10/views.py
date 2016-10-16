@@ -25,7 +25,13 @@ def index(request):
     week_num = get_weeklist(year_num)[-1]
     player_id = None
     profile = get_profile_by_user(user=request.user)
-    context = {'year_num': year_num, 'week_num': week_num, 'profile': profile}
+    over_under_list = calc_weekly_over_under(year_num, request.user.username)
+    context = {
+            'year_num': year_num,
+            'week_num': week_num,
+            'profile': profile,
+            'over_under_list': over_under_list,
+            }
     return render(request, 'pick10/index.html', context)
 
 @login_required

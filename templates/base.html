@@ -18,6 +18,15 @@
     <script src="{% static 'jquery/html5shiv.min.js' %}"></script>
     <script src="{% static 'jquery/respond.min.js' %}"></script>
     <![endif]-->
+    
+    <!-- Bootstrap core JavaScript
+    =========================================================== -->
+    <script src="{% static 'jquery/jquery-1.11.3.min.js' %}"></script>
+    {% block header_other_jq_scripts %}{% endblock %}
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="{% static 'bootstrap/js/ie10-viewport-bug-workaround.js' %}"></script>
+
 </head>
 
 <body>
@@ -73,13 +82,6 @@
         </div>
     </div>
 
-    <!-- Bootstrap core JavaScript
-    =========================================================== -->
-    <!-- Placed at the end of the document so that pages load faster -->
-    <script src="{% static 'jquery/jquery-1.11.3.min.js' %}"></script>
-    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="{% static 'bootstrap/js/ie10-viewport-bug-workaround.js' %}"></script>
     {% block script_block %}{% endblock %}
 </body>
 </html>
