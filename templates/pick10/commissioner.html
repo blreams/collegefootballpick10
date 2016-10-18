@@ -1,17 +1,12 @@
 {% extends 'base.html' %}
 
 {% block body_block %}
-<p>TBD - This is intended to be the commissioner page. 
-Essentially, it will provide links for:</p>
-<ul>
-    <li>Creating a week.</li>
-    <li>Editing a week.</li>
-</ul>
-<h1 id="commissioner_h1">This is the COMMISSIONER page!</h1>
+<h1 id="commissioner_h1">COMMISSIONER page!</h1>
 <h2>Hello, {{ user.username }}, what would you like to do?</h2><br />
 <ul>
     <li><a href="{% url 'create_week'%}">Create Week</a></li>
     <li><a href="{% url 'edit_week_sel' %}">Edit Week</a></li>
     <li><a href="{% url 'update_pages' year_num week_num %}">Update Cache</a></li>
+    <li><a href="{% url 'set_week_winner' year_num week_num %}">Set Week Winner</a></li>
 </ul>
 {% endblock %}

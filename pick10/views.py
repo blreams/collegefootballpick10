@@ -4,6 +4,7 @@ from profile import ProfileView
 from create_week import CreateWeekView
 from edit_week import EditWeekSelView
 from edit_week import EditWeekView
+from set_week_winner import SetWeekWinnerView
 from overall_results_view import *
 from week_results_view import *
 from player_results_view import *
@@ -73,6 +74,14 @@ def edit_week(request, year, week_number):
         response = EditWeekView().get(request, year, week_number)
     elif request.method == 'POST':
         response = EditWeekView().post(request, year, week_number)
+    return response
+
+@staff_member_required
+def set_week_winner(request, year_num, week_num):
+    if request.method == 'GET':
+        response = SetWeekWinnerView().get(request, year_num, week_num)
+    elif request.method == 'POST':
+        response = SetWeekWinnerView().post(request, year_num, week_num)
     return response
 
 @login_required

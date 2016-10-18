@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block body_block %}
+
+<p>This page will eventually be the form to set the week winner (commissioners-only).</p>
+
+<form id="set_week_winner_form" action="{% url 'set_week_winner' year_num week_num %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit" />
+</form>
+
+{% endblock %}
+
