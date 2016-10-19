@@ -285,6 +285,12 @@ def get_week(yearnum, weeknum):
     w = Week.objects.get(year=year, weeknum=weeknum)
     return w
 
+def get_week_with_no_winner(yearnum):
+    weekobjs = Week.objects.filter(year__yearnum=yearnum, lock_scores=True, lock_picks=False, winner=None).order_by('-weeknum')
+    if not weekobjs:
+        return 0
+    return weekobjs[0].weeknum
+
 def query_picks(username, yearnum, weeknum):
     user = get_user_by_username(username)
     player = user.userprofile.player

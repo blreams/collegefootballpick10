@@ -49,7 +49,8 @@ def profile(request):
 def commissioner(request):
     year_num = get_yearlist()[-1]
     week_num = get_weeklist(year_num)[-1]
-    context = {'year_num': year_num, 'week_num': week_num}
+    week_num_no_winner = get_week_with_no_winner(year_num)
+    context = {'year_num': year_num, 'week_num': week_num, 'week_num_no_winner': week_num_no_winner}
     return render(request, 'pick10/commissioner.html', context)
 
 @staff_member_required

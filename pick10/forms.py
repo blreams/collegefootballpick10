@@ -131,9 +131,8 @@ class SetWeekWinnerForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(SetWeekWinnerForm, self).__init__(*args, **kwargs)
         yearnum = get_yearlist()[-1]
-        year = Year.objects.filter(yearnum=yearnum)
-        playeryears = PlayerYear.objects.filter(year=year)
-        player_choices = sorted([(str(py.player.private_name), str(py.player.ss_name)) for py in playeryears])
+        playeryears = PlayerYear.objects.filter(year__yearnum=yearnum).order_by('player__ss_name')
+        player_choices = [(str(py.player.private_name), str(py.player.ss_name)) for py in playeryears]
         self.initial['winner'] = None
         self.fields['winner'] = forms.ChoiceField(choices=player_choices)
 

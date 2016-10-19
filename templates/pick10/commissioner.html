@@ -7,6 +7,10 @@
     <li><a href="{% url 'create_week'%}">Create Week</a></li>
     <li><a href="{% url 'edit_week_sel' %}">Edit Week</a></li>
     <li><a href="{% url 'update_pages' year_num week_num %}">Update Cache</a></li>
-    <li><a href="{% url 'set_week_winner' year_num week_num %}">Set Week Winner</a></li>
+    {% if week_num_no_winner > 0 %}
+    <li><a href="{% url 'set_week_winner' year_num week_num_no_winner %}">Set Week Winner for week {{week_num}}</a></li>
+    {% else %}
+        <li>Set Week Winner (disabled)</a></li>
+    {% endif %}
 </ul>
 {% endblock %}
