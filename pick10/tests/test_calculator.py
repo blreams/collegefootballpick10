@@ -1,6 +1,6 @@
 from django.test import TestCase
 from pick10.database import Database
-from pick10.calculator import *
+from pick10.calculator import CalculateResults, TEAM1, TEAM2, TIED, NOT_STARTED, IN_PROGRESS, FINAL
 from pick10.models import *
 from unit_test_database import *
 import datetime as dt

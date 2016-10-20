@@ -1,5 +1,7 @@
-from pick10.models import *
-from pick10.database import *
+#from pick10.models import *
+#from pick10.database import *
+from pick10.models import UserProfile
+from pick10.database import Database
 
 # Assumes user is already authenticated
 

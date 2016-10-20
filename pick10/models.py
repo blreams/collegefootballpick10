@@ -175,9 +175,9 @@ def add_year(yearnum):
     y, created = Year.objects.get_or_create(yearnum=yearnum)
     return y
 
-def add_player(public_name, private_name):
-    p = Player.objects.get_or_create(public_name=public_name, private_name=private_name)[0]
-    return p
+#def add_player(public_name, private_name):
+#    p = Player.objects.get_or_create(public_name=public_name, private_name=private_name)[0]
+#    return p
 
 def add_user(username, email, firstname, lastname):
     u, created = User.objects.get_or_create(username=username, email=email, first_name=firstname, last_name=lastname)
@@ -234,9 +234,9 @@ def add_pick(player, game, winner, team1_predicted_points=-1, team2_predicted_po
     p.save()
     return p
 
-def get_player_by_public_name(public_name):
-    p = Player.objects.get(public_name=public_name)
-    return p
+#def get_player_by_public_name(public_name):
+#    p = Player.objects.get(public_name=public_name)
+#    return p
 
 def get_player_by_private_name(private_name):
     p = Player.objects.get(private_name=private_name)
@@ -246,9 +246,9 @@ def get_user_by_username(username):
     u = User.objects.get(username=username)
     return u
 
-def get_user_by_email(email):
-    u = User.objects.get(email=email)
-    return u
+#def get_user_by_email(email):
+#    u = User.objects.get(email=email)
+#    return u
 
 def get_profile_by_user(user):
     try:

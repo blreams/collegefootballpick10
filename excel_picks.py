@@ -5,8 +5,10 @@ import django
 django.setup()
 
 import sys
-from pick10.database import *
-from pick10.models import *
+#from pick10.database import *
+#from pick10.models import *
+from pick10.database import Database
+from pick10.models import get_week
 import pandas as pd
 
 def bad_year_or_week_number(year,week_number):

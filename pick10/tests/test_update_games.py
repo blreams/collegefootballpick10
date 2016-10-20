@@ -1,5 +1,4 @@
 from django.test import TestCase
-from unit_test_database import *
 
 class TestUpdateGames(TestCase):
 

@@ -1,10 +1,15 @@
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
-from pick10.models import *
-from update_games import *
-from calculator import *
-from pick10.week_navbar import *
-from pick10.user_access import *
+#from pick10.models import *
+#from update_games import *
+#from pick10.week_navbar import *
+#from pick10.user_access import *
+from pick10.models import get_week
+from pick10.database import Database
+from update_games import UpdateGames
+from pick10.week_navbar import WeekNavbar
+from pick10.user_access import UserAccess
+from pick10.calculator import NOT_STARTED, IN_PROGRESS, FINAL
 
 class BadInputException(Exception):
     def __init__(self,errmsg):

@@ -1,4 +1,5 @@
-from pick10.week_results import *
+#from pick10.week_results import *
+from pick10.week_results import WeekResults
 
 class TestDataUtils:
 

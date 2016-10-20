@@ -1,10 +1,11 @@
-from django.test import TestCase
-from pick10.database import Database
-from pick10.models import *
-from unit_test_database import *
 import unittest
 import pytz
+from datetime import timedelta
 import django.utils.timezone as tz
+from django.test import TestCase
+from pick10.database import Database
+from pick10.models import get_week
+from unit_test_database import UnitTestDatabase
 
 class PoolStateTest(TestCase):
 

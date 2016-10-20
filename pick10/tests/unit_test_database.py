@@ -1,8 +1,10 @@
 # This class sets up a database that can be used for unit testing.  
 # The class creates a central location for setting up a database 
 # so each unit test doesn't have to reinvent the wheel every time.
-from pick10.models import *
-from pick10.calculator import *
+from django.contrib.auth.models import User
+from pick10.models import Player, Year, PlayerYear, Team, Conference, Game, Pick, UserProfile, Week
+from pick10.models import add_game, add_pick, get_team
+from pick10.calculator import CalculateResults, TEAM1, TEAM2, NOT_STARTED, IN_PROGRESS, FINAL
 from stage_history import main, populate_picks_for_year_week, populate_games_for_year_week, populate_year, populate_player_count
 from stage_models import populate_conferences_teams
 import random

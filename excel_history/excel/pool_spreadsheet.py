@@ -1,10 +1,14 @@
 import os as _os
 import re as _re
 from xlrd import *
-from player import *
-from game import *
-from pick import *
-from team import *
+#from player import *
+#from game import *
+#from pick import *
+#from team import *
+from player import Player
+from game import Game
+from pick import Pick
+from team import Team
 
 class PoolSpreadsheet:
 

@@ -1,7 +1,7 @@
 from django.test import TestCase
 from pick10.database import Database
-from pick10.models import *
-from unit_test_database import *
+#from pick10.models import *
+from unit_test_database import UnitTestDatabase
 
 # This class tests the database.py file load_week_data function
 class LoadWeekDataTest(TestCase):

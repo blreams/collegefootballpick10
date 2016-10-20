@@ -1,7 +1,11 @@
-from calculator import *
-from database import *
-from week_results import *
-from week_winner import *
+#from calculator import *
+#from database import *
+#from week_results import *
+#from week_winner import *
+from calculator import CalculateResults
+from database import Database
+from week_results import WeekResults
+from week_winner import WeekWinner
 
 class CalculateWeekResults:
 

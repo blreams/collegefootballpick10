@@ -1,5 +1,4 @@
-from pick10.week_results import *
-from utils import *
+from utils import TestDataUtils
 
 class WeekInProgressResults:
 

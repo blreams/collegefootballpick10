@@ -1,5 +1,5 @@
 from django.test import TestCase
-from unit_test_database import *
+from unit_test_database import UnitTestDatabase
 
 class CalculatePlayerResultsTests(TestCase):
 

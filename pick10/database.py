@@ -1,7 +1,11 @@
 from week_data import WeekData
-from pick10.models import *
+#from pick10.models import *
+from pick10.models import Year, PlayerYear, Team, Pick, Week, Game
+from pick10.models import get_week, get_game
 import datetime
-from calculator import *
+#from calculator import *
+from calculator import CalculateResults
+from calculator import NOT_STARTED, IN_PROGRESS, FINAL
 import django.utils.timezone as tz
 
 class Database:

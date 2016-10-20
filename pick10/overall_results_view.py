@@ -1,14 +1,19 @@
-from django.shortcuts import render
-from django.template.loader import render_to_string
-from pick10.models import *
-from pick10.database import *
-from pick10.calculate_overall_results import *
 import string
 import re
-from django.core.cache import *
+from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.http import HttpResponse, HttpResponseNotFound
-from pick10.week_navbar import *
-from pick10.user_access import *
+from django.core.cache import *
+#from pick10.models import *
+#from pick10.database import *
+#from pick10.calculate_overall_results import *
+#from pick10.week_navbar import *
+#from pick10.user_access import *
+from pick10.models import calc_completed_games
+from pick10.database import Database
+from pick10.calculate_overall_results import CalculateOverallResults
+from pick10.week_navbar import WeekNavbar
+from pick10.user_access import UserAccess
 
 class OverallResultsView:
 

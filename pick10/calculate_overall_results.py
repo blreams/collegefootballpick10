@@ -1,7 +1,10 @@
-from calculator import *
-from database import *
-from calculate_week_results import *
-from overall_results import *
+#from calculator import *
+#from database import *
+#from calculate_week_results import *
+#from overall_results import *
+from database import Database
+from calculate_week_results import CalculateWeekResults
+from overall_results import OverallResults
 
 class CalculateOverallResults:
 

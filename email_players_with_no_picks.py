@@ -10,9 +10,12 @@ django.setup()
 
 from django.core.mail import send_mail
 
-from pick10.database import *
-from pick10.calculator import *
-from pick10.models import *
+#from pick10.database import *
+from pick10.database import Database
+#from pick10.calculator import *
+from pick10.calculator import CalculateResults
+#from pick10.models import *
+from pick10.models import get_profile_by_player, get_staff
 import django.utils.timezone as tz
 import datetime
 import collegefootballpick10.settings as cfp_settings

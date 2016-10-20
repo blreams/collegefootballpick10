@@ -1,5 +1,8 @@
-from pick10.database import *
-from pick10.calculator import *
+#from pick10.database import *
+#from pick10.calculator import *
+from pick10.database import Database
+from pick10.calculator import CalculateResults
+from pick10.calculator import NOT_STARTED, IN_PROGRESS, FINAL
 
 class WeekWinnerData:
     featured_game_state = None

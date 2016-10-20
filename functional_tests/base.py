@@ -20,6 +20,8 @@ class FunctionalTest(StaticLiveServerTestCase):
             super(FunctionalTest, cls).tearDownClass()
 
     def setUp(self):
+        self.debug_setting = settings.DEBUG
+        settings.DEBUG = True
         if settings.SELENIUM_WEBDRIVER_STRING:
             if settings.SELENIUM_WEBDRIVER_STRING == 'firefox':
                 self.browser = webdriver.Firefox()
@@ -31,5 +33,6 @@ class FunctionalTest(StaticLiveServerTestCase):
         self.browser.implicitly_wait(3)
 
     def tearDown(self):
+        settings.DEBUG = self.debug_setting
         self.browser.quit()
 

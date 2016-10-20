@@ -1,8 +1,13 @@
-from pick_data import *
-from database import *
+#from pick_data import *
+#from database import *
+#from pick10.utils import *
+from pick_data import PickData
+from database import Database
+from calculator import TEAM1, TEAM2
 from django.core.exceptions import ObjectDoesNotExist
-from pick10.utils import *
+from pick10.utils import get_timestamp
 import django.utils.timezone as tz
+from pick10.models import add_pick, get_game
 
 class EnterPicks:
 

@@ -1,13 +1,19 @@
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
-from pick10.models import *
-from enter_picks import *
-from calculator import *
-from database import *
+#from pick10.models import *
+#from enter_picks import *
+#from calculator import *
+#from database import *
+#from pick10.week_navbar import *
+from pick10.models import Player, UserProfile
+from pick10.models import get_week
+from enter_picks import EnterPicks
+from calculator import CalculateResults
+from calculator import TEAM1, TEAM2, IN_PROGRESS, FINAL
+from database import Database
 from django.http import HttpResponseNotFound
 import pytz
-from pick10.week_navbar import *
-from utils import *
+from pick10.week_navbar import WeekNavbar
 
 class EnterPicksView:
 

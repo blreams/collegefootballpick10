@@ -1,6 +1,7 @@
 from django.test import TestCase
-from unit_test_database import *
-from pick10.calculate_overall_results import *
+from unit_test_database import UnitTestDatabase
+from pick10.calculate_overall_results import CalculateOverallResults
+from pick10.models import calc_completed_games
 
 class CalculateOverallResultsTests(TestCase):
 
@@ -17,7 +18,8 @@ class CalculateOverallResultsTests(TestCase):
         super(CalculateOverallResultsTests, cls).tearDownClass()
 
     def test_get_results(self):
-        c = CalculateOverallResults(2013)
+        cgs = calc_completed_games(2013)
+        c = CalculateOverallResults(2013, cgs)
         results = c.get_results()
         self.assertIsNotNone(results)
 

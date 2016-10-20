@@ -1,29 +1,44 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.core.cache import *
+from django.http import HttpResponseNotFound
+from django.contrib.admin.views.decorators import staff_member_required
 from profile import ProfileView
 from create_week import CreateWeekView
 from edit_week import EditWeekSelView
 from edit_week import EditWeekView
 from set_week_winner import SetWeekWinnerView
-from overall_results_view import *
-from week_results_view import *
-from player_results_view import *
-from update_view import *
-from tiebreak_view import *
-from update_games_view import *
-from enter_picks_view import *
-from django.core.cache import *
-from django.http import HttpResponseNotFound
-from django.contrib.admin.views.decorators import staff_member_required
-from models import get_yearlist, get_profile_by_user
+#from overall_results_view import *
+#from week_results_view import *
+#from player_results_view import *
+#from update_view import *
+#from tiebreak_view import *
+#from update_games_view import *
+#from enter_picks_view import *
+from week_results_view import WeekResultsView
+from player_results_view import PlayerResultsView
+from update_view import UpdatePageView
+from tiebreak_view import TiebreakView
+from update_games_view import UpdateGamesView
+from enter_picks_view import EnterPicksView
+from overall_results_view import OverallResultsView
+from models import get_yearlist, get_weeklist, get_profile_by_user, calc_weekly_over_under, get_week_with_no_winner
 
 def home(request):
     return render(request, 'pick10/home.html')
 
 @login_required
 def index(request):
-    year_num = get_yearlist()[-1]
-    week_num = get_weeklist(year_num)[-1]
+    yearlist = get_yearlist()
+    year_num = 0
+    week_num = 0
+    if len(yearlist) > 0:
+        year_num = yearlist[-1]
+        weeklist = get_weeklist(year_num)
+        if len(weeklist) > 0:
+            week_num = weeklist[-1]
+        else:
+            year_num = 0
     player_id = None
     profile = get_profile_by_user(user=request.user)
     over_under_list = calc_weekly_over_under(year_num, request.user.username)

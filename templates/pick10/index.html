@@ -11,6 +11,7 @@
 {% endblock %}
 
 {% block body_block %}
+{% if year_num > 0 %}
 <ul>
     <li><a href="{% url 'overall_results' year_num %}">Latest Season Results</a></li>
     <li><a href="{% url 'week_results' year_num week_num %}">Latest Week Results</a></li>
@@ -23,6 +24,9 @@
     <li><a href="{% url 'enter_picks' year_num week_num profile.player.id %}">Enter/Modify Picks</a></li>
     {% endif %}
 </ul>
+{% else %}
+<p id="index_p">Pool has not been initialized with data.</p>
+{% endif %}
 {% if profile.player != None and week_num > 1 %}
 <div id="chartdiv" style="height:400px;width=300px; "></div>
 <script class="code" type="text/javascript">

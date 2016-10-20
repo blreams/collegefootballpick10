@@ -1,11 +1,15 @@
-from django.shortcuts import render
-from django.template.loader import render_to_string
-from pick10.models import *
-from pick10.calculate_player_results import *
 import string
 import re
-from pick10.week_navbar import *
-from pick10.user_access import *
+from django.shortcuts import render
+from django.template.loader import render_to_string
+#from pick10.models import *
+#from pick10.calculate_player_results import *
+from pick10.models import Player, get_week
+from pick10.database import Database
+from pick10.calculate_player_results import CalculatePlayerResults
+from pick10.week_navbar import WeekNavbar
+from pick10.user_access import UserAccess
+from pick10.calculator import NOT_STARTED, IN_PROGRESS, FINAL
 
 class PlayerResultsView:
 

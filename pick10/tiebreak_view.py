@@ -1,11 +1,17 @@
 from django.shortcuts import render
 from django.template.loader import render_to_string
-from pick10.calculate_tiebreak import *
-from calculator import *
 from django.core.cache import *
+#from pick10.calculate_tiebreak import *
+#from calculator import *
+#from pick10.week_navbar import *
+#from pick10.user_access import *
+from pick10.models import get_week
+from pick10.database import Database
+from pick10.calculate_tiebreak import CalculateTiebreak
+from calculator import NOT_STARTED, IN_PROGRESS, FINAL
 from django.http import HttpResponse
-from pick10.week_navbar import *
-from pick10.user_access import *
+from pick10.week_navbar import WeekNavbar
+from pick10.user_access import UserAccess
 
 class TiebreakView:
 

@@ -1,13 +1,16 @@
+import random
 from django.test import TestCase
-from pick10.tests.data.week_results_2013 import *
-from pick10.tests.data.week_not_started_results import *
-from pick10.tests.data.week_not_started_with_defaulters_results import *
-from pick10.tests.data.week_in_progress_results import *
-from pick10.tests.data.week_in_progress_games_in_progress_results import *
-from pick10.tests.data.utils import *
-from pick10.database import *
-from pick10.calculate_week_results import *
-from unit_test_database import *
+from pick10.tests.data.week_results_2013 import WeekResults2013
+from pick10.tests.data.week_not_started_results import WeekNotStartedResults
+from pick10.tests.data.week_not_started_with_defaulters_results import WeekNotStartedWithDefaultersResults
+from pick10.tests.data.week_in_progress_results import WeekInProgressResults
+from pick10.tests.data.week_in_progress_games_in_progress_results import WeekInProgressGamesInProgressResults
+from pick10.tests.data.utils import TestDataUtils
+from pick10.models import Player
+from pick10.database import Database
+from pick10.calculator import NOT_STARTED, IN_PROGRESS, FINAL
+from pick10.calculate_week_results import CalculateWeekResults
+from unit_test_database import UnitTestDatabase
 
 class CalculateWeekResultsTests(TestCase):
 

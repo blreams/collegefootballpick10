@@ -13,7 +13,8 @@ from stage_history import main as shmain
 from unittest import skip
 
 class BasicModelTest(TestCase):
-    def setUp(self):
+    @classmethod
+    def setUpClass(cls):
         players = Player.objects.all()
         if len(players) == 0:
             # This will load the test database with data for all players, 1 week

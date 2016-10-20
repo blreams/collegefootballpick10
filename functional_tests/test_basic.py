@@ -18,9 +18,9 @@ class NewVisitorTest(FunctionalTest):
         header_text = self.browser.find_element_by_id('base_id').text
         self.assertIn('College Football Pick 10', header_text)
 
-        # There should be id="home_h1" element
-        body_text = self.browser.find_element_by_id('home_h1').text
-        self.assertIn('HOME page', body_text)
+        # There should be id="home_p" element
+        body_text = self.browser.find_element_by_id('home_p').text
+        self.assertIn('main landing page', body_text)
 
         # He clicks Register to see if he can get in.
         register_link = self.browser.find_element_by_link_text('Register')
@@ -32,14 +32,10 @@ class NewVisitorTest(FunctionalTest):
         # He fills in the form to register himself
         username_box = self.browser.find_element_by_name('username')
         email_box = self.browser.find_element_by_name('email')
-        #fname_box = self.browser.find_element_by_name('first_name')
-        #lname_box = self.browser.find_element_by_name('last_name')
         password1_box = self.browser.find_element_by_name('password1')
         password2_box = self.browser.find_element_by_name('password2')
         username_box.send_keys('johndoe')
         email_box.send_keys('john.doe@example.com')
-        #fname_box.send_keys('John')
-        #lname_box.send_keys('Doe')
         password1_box.send_keys('eodnhoj')
         password2_box.send_keys('eodnhoj')
         password2_box.submit()
@@ -55,7 +51,7 @@ class NewVisitorTest(FunctionalTest):
         logout_link = self.browser.find_element_by_link_text('Logout')
         logout_link.click()
         WebDriverWait(self.browser, 5).until(
-                EC.presence_of_element_located((By.ID, 'home_h1'))
+                EC.presence_of_element_located((By.ID, 'home_p'))
             )
 
         # Now he clicks Login
@@ -64,7 +60,7 @@ class NewVisitorTest(FunctionalTest):
         WebDriverWait(self.browser, 5).until(
                 EC.presence_of_element_located((By.ID, 'login_form'))
             )
-        
+
         # Try logging in with test user
         username_box = self.browser.find_element_by_name('username')
         password_box = self.browser.find_element_by_name('password')
@@ -74,9 +70,9 @@ class NewVisitorTest(FunctionalTest):
 
         # After successful login, should redirect to Index
         WebDriverWait(self.browser, 5).until(
-                EC.presence_of_element_located((By.ID, 'index_h1'))
+                EC.presence_of_element_located((By.ID, 'ident_id'))
             )
-        body_text = self.browser.find_element_by_id('index_h1').text
-        self.assertIn('INDEX page', body_text)
+        ident_text = self.browser.find_element_by_id('ident_id').text
+        self.assertIn('johndoe', ident_text)
 
         #self.browser.save_screenshot('aaa.png')

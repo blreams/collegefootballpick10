@@ -8,20 +8,20 @@ django.setup()
 
 from django.core.exceptions import ObjectDoesNotExist
 
+#from pick10.models import *
+#from pick10.overall_results_view import *
+#from pick10.week_results_view import *
+#from pick10.tiebreak_view import *
 from pick10.models import Year, Player, PlayerYear, Conference, Team, Game, Pick, Week
-from pick10.models import add_player, add_conference, add_team, add_game, add_week, add_pick
-from pick10.models import get_user_by_username, get_team, get_game, get_week
-from pick10.models import get_player_by_public_name, get_player_by_private_name
-from pick10.models import update_game
-from pick10.overall_results_view import *
-from pick10.week_results_view import *
-from pick10.tiebreak_view import *
+from pick10.overall_results_view import OverallResultsView
+from pick10.week_results_view import WeekResultsView
+from pick10.tiebreak_view import TiebreakView
 
 from excel_history.excel.spreadsheet_test import player_username, get_player_years_dict, team_mascot_conference_division
 from excel_history.excel.pool_spreadsheet import PoolSpreadsheet
 
 beginyear = 1997
-endyear = 2014
+endyear = 2015
 poolspreadsheets = {}
 
 def get_poolspreadsheet(year):

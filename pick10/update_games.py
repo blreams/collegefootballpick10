@@ -1,7 +1,12 @@
-from game_data import *
-from database import *
-from models import *
-from calculator import *
+#from game_data import *
+#from database import *
+#from models import *
+#from calculator import *
+from game_data import GameData
+from database import Database
+from models import get_week, get_game
+from calculator import CalculateResults
+from calculator import NOT_STARTED, IN_PROGRESS, FINAL
 
 class UpdateGames:
 

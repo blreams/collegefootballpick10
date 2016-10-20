@@ -1,14 +1,21 @@
-from django.shortcuts import render
-from django.template.loader import render_to_string
-from pick10.models import *
-from pick10.database import *
-from pick10.calculate_week_results import *
 import string
 import re
-from django.core.cache import *
+from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.http import HttpResponse
-from pick10.week_navbar import *
-from pick10.user_access import *
+from django.core.cache import *
+#from pick10.models import *
+#from pick10.database import *
+#from pick10.calculate_week_results import *
+#from django.http import HttpResponse
+#from pick10.week_navbar import *
+#from pick10.user_access import *
+from pick10.models import get_week
+from pick10.database import Database
+from pick10.calculate_week_results import CalculateWeekResults
+from pick10.week_navbar import WeekNavbar
+from pick10.user_access import UserAccess
+from pick10.calculator import NOT_STARTED, IN_PROGRESS, FINAL
 
 class WeekResultsView:
 
