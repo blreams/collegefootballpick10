@@ -25,7 +25,6 @@ class UserAccessTest(FunctionalTest):
         self.utils.login_assigned_user(name="Brent",password="1234",player=player)
         self.utils.update_games_page(year=2013,week_number=1)
         self.assertEqual(self.browser.title,'Week 1 Update Games')
-        import pdb;pdb.set_trace()
         self.__verify_user_logged_in("Brent")
         self.utils.click_input_button('submit_form')
 
