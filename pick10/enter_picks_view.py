@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 #from calculator import *
 #from database import *
 #from pick10.week_navbar import *
-from pick10.models import Player, UserProfile
+from pick10.models import Player, UserProfile, Game
 from pick10.models import get_week
 from enter_picks import EnterPicks
 from calculator import CalculateResults

@@ -110,7 +110,7 @@ class UpdateGamesTest(FunctionalTest):
 
         self.__set_game_quarter_time(1,quarter='1st',time='15:00')
         self.__set_game_quarter_time(2,quarter='2nd',time='8:57')
-        self.__set_game_quarter_time(3,quarter='Half',time='')
+        self.__set_game_quarter_time(3,quarter='Hal',time='')
         self.__set_game_quarter_time(4,quarter='3rd',time='1:30')
         self.__set_game_quarter_time(5,quarter='4th',time='0:10')
         self.__set_game_quarter_time(6,quarter='OT',time='')
@@ -123,7 +123,7 @@ class UpdateGamesTest(FunctionalTest):
 
         self.__verify_game_in_database(1978,1,1,IN_PROGRESS,11,12,'1st','15:00')
         self.__verify_game_in_database(1978,1,2,IN_PROGRESS,21,22,'2nd','8:57')
-        self.__verify_game_in_database(1978,1,3,IN_PROGRESS,31,32,'Half','')
+        self.__verify_game_in_database(1978,1,3,IN_PROGRESS,31,32,'Hal','')
         self.__verify_game_in_database(1978,1,4,IN_PROGRESS,41,42,'3rd','1:30')
         self.__verify_game_in_database(1978,1,5,IN_PROGRESS,51,52,'4th','0:10')
         self.__verify_game_in_database(1978,1,6,IN_PROGRESS,61,62,'OT','')
@@ -140,7 +140,7 @@ class UpdateGamesTest(FunctionalTest):
 
         self.__set_game_attr(1981,1,number=7,quarter='2nd',time_left='7:30')
         self.__set_game_attr(1981,1,number=8,quarter='1st',time_left='11:20')
-        self.__set_game_attr(1981,1,number=9,quarter='Half',time_left='')
+        self.__set_game_attr(1981,1,number=9,quarter='Hal',time_left='')
 
         player = self.utils.get_player_from_public_name(1981,'Brent')
         self.utils.login_assigned_user(name='Brent',player=player)
@@ -158,7 +158,7 @@ class UpdateGamesTest(FunctionalTest):
         self.__verify_game(6,"final",team1_score=15,team2_score=30)
         self.__verify_game(7,"in_progress",team1_score=25,team2_score=20,quarter='2nd',time='7:30')
         self.__verify_game(8,"in_progress",team1_score=15,team2_score=30,quarter='1st',time='11:20')
-        self.__verify_game(9,"in_progress",team1_score=25,team2_score=20,quarter='Half',time='')
+        self.__verify_game(9,"in_progress",team1_score=25,team2_score=20,quarter='Hal',time='')
         self.__verify_game(10,"not_started")
 
         test_db.delete_database()

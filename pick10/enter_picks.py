@@ -7,6 +7,7 @@ from calculator import TEAM1, TEAM2
 from django.core.exceptions import ObjectDoesNotExist
 from pick10.utils import get_timestamp
 import django.utils.timezone as tz
+from pick10.models import Player, Pick
 from pick10.models import add_pick, get_game
 
 class EnterPicks:
