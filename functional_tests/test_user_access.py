@@ -1,12 +1,12 @@
 from .base import FunctionalTest
 from django.core.urlresolvers import reverse
-from pick10.tests.unit_test_database import *
-from pick10.models import *
-from pick10.calculator import *
+from pick10.tests.unit_test_database import UnitTestDatabase
+#from pick10.models import *
+#from pick10.calculator import *
 import unittest
 from django.contrib.auth.models import User
 from django.test.client import Client
-from utils import *
+from utils import Utils
 
 class UserAccessTest(FunctionalTest):
 
@@ -184,14 +184,6 @@ class UserAccessTest(FunctionalTest):
             self.assertIn(error_message,body)
 
     def __verify_user_logged_in(self,name):
-        logged_in = self.browser.find_element_by_id('ident_id')
-        loggged_in_text = logged_in.text
+        logged_in_text = self.browser.find_element_by_id('ident_id').text
         expected = 'Logged in as: %s' % (name)
-        # For some reason, selenium with phantomjs will return u'' for the
-        # above find_element_by_id. I think it is because the is_displayed()
-        # function property returns False. I am going to write a special
-        # case to circumvent this as best I can.
-        if logged_in.text == '' and not logged_in.is_displayed():
-            if expected in self.browser.page_source:
-                logged_in_text = expected
         self.assertEquals(expected,logged_in_text)

@@ -30,6 +30,8 @@ class FunctionalTest(StaticLiveServerTestCase):
         else:
             # This will be the default webdriver if not setup in settings via environment
             self.browser = webdriver.Firefox()
+        # set_window_size insures bootstrap elements are displayed
+        self.browser.set_window_size(width=1024, height=768)
         self.browser.implicitly_wait(3)
 
     def tearDown(self):
