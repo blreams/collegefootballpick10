@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseNotFound
 from django.utils import timezone
-from models import Year, Week
 from models import get_commish_can_post, get_games_info_for_week, get_week_info, set_week_lock_picks
 from models import add_game, get_week, get_team
 from forms import CreateWeekForm, EditWeekForm, EditWeekSelForm
