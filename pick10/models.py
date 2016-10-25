@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 import pytz
 from datetime import datetime, timedelta
 
-def get_default_pick_deadline():
+def calc_default_pick_deadline():
     # The idea behind this is to grab the current day, then figure out the
     # next Thursday and use 4:00pm in the US/Eastern timezone.
     # Start with the current datetime
@@ -20,6 +20,24 @@ def get_default_pick_deadline():
     # Localize it assuming US/Eastern time zone
     deadline = pytz.timezone('US/Eastern').localize(naive_dt_deadline)
     return deadline
+
+def get_pick_deadline(yearnum=0, weeknum=0):
+    '''Returns a value for pick_deadline as follows:
+        1. If the current year/week has any games with kickoffs assigned, use the earliest kickoff.
+        2. If the current year/week has a pick_deadline, return that.
+        3. Call calc_default_pick_deadline and return that.
+    '''
+    if not yearnum or not weeknum or yearnum not in get_yearlist() or weeknum not in get_weeklist(yearnum):
+        return calc_default_pick_deadline()
+
+    gameobjs = get_games(yearnum, weeknum)
+    kickoffs = sorted([getattr(g, 'kickoff') for g in gameobjs if getattr(g, 'kickoff') is not None])
+    if kickoffs:
+        return kickoffs[0]
+
+    weekobj = get_week(yearnum, weeknum)
+    if weekobj and getattr(weekobj, 'pick_deadline'):
+        return getattr(weekobj, 'pick_deadline')
 
 
 class Year(models.Model):
@@ -277,7 +295,10 @@ def get_game(yearnum, weeknum, gamenum):
     return g
 
 def get_games(yearnum, weeknum):
-    week = Week.objects.get(year__yearnum=yearnum, weeknum=weeknum)
+    try:
+        week = Week.objects.get(year__yearnum=yearnum, weeknum=weeknum)
+    except DoesNotExist:
+        return []
     return Game.objects.filter(week=week)
 
 def get_week(yearnum, weeknum):

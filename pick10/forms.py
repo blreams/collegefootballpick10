@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django import forms
 from models import UserProfile, Team, Player, PlayerYear, Year
-from models import get_yearlist, get_createweek_year_week, get_teamlist, get_default_pick_deadline
+from models import get_yearlist, get_createweek_year_week, get_teamlist, get_pick_deadline
 from django.utils import timezone
 
 import pytz
@@ -72,8 +72,14 @@ class EditWeekForm(forms.Form):
         gamefields = {}
         if 'gamefields' in kwargs:
             gamefields = kwargs.pop('gamefields')
+        yearnum = 0
+        if 'yearnum' in kwargs:
+            yearnum = int(kwargs.pop('yearnum'))
+        weeknum = 0
+        if 'weeknum' in kwargs:
+            weeknum = int(kwargs.pop('weeknum'))
         super(EditWeekForm, self).__init__(*args, **kwargs)
-        self.initial['pick_deadline'] = get_default_pick_deadline()
+        self.initial['pick_deadline'] = get_pick_deadline(yearnum, weeknum)
         self.initial['lock_picks'] = weekfields.get('lock_picks')
         self.fields['lock_picks'] = forms.ChoiceField(widget=forms.RadioSelect(attrs={'class': 'csscls_lock_picks'}), choices=((True, 'Yes'), (False, 'No')))
         self.fields['pick_deadline'] = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'class': 'csscls_pick_deadline'}))
