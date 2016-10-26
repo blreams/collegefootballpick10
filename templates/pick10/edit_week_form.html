@@ -10,6 +10,8 @@
     {% if form.errors %}
     {{form.non_field_errors}}
     {% endif %}
+    <input class="btn-primary btn-lg" type="submit" {% if commish_can_post %}value="Submit"{% else %}value="Disabled" disabled="disabled"{% endif %} />
+    <hr></hr>
     <div class="row csscls_logistics">
         <div class="col-md-6">
             <p><label for="id_lock_picks_0">Lock picks:</label>{{form.lock_picks}}</p>

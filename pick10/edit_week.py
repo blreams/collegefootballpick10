@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseNotFound
 from django.utils import timezone
+from models import Game
 from models import get_commish_can_post, get_games_info_for_week, get_week_info, set_week_lock_picks
 from models import add_game, get_week, get_team
 from forms import CreateWeekForm, EditWeekForm, EditWeekSelForm
@@ -57,6 +58,10 @@ class EditWeekView:
             weekobj.lock_picks = make_boolean(cd['lock_picks'])
             weekobj.pick_deadline = cd['pick_deadline']
             weekobj.save()
+            kickoffs = []
+
+            # Delete any existing Games for this week
+            Game.objects.filter(week=weekobj).delete()
             for i in range(1, 11):
                 gamestr = 'game%d_' % i
                 gameobj = add_game(
@@ -73,6 +78,14 @@ class EditWeekView:
                 gameobj.quarter = '1st'
                 gameobj.time_left = '15:00'
                 gameobj.save()
+                if cd[gamestr + 'kickoff'] is not None:
+                    kickoffs.append(cd[gamestr + 'kickoff'])
+
+            # Get earliest kickoff and perhaps save that to the Week.
+            kickoffs.sort()
+            if kickoffs:
+                weekobj.pick_deadline = kickoffs[0]
+                weekobj.save()
 
             # Need to clear the LOCK that players will observe before getting/posting picks
             if not cd['lock_picks']:
