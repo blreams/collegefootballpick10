@@ -61,6 +61,19 @@ def delete_year_from_db(yearnum):
         print "Deleting year %d..." % (yearnum,)
         years.delete()
 
+def delete_year_week_from_db(yearnum, weeknum):
+    picks = Pick.objects.filter(game__week__year__yearnum=yearnum, game__week__weeknum=weeknum)
+    if len(picks) > 0:
+        print "Deleting %d picks for year %d week %d..." % (len(picks), yearnum, weeknum)
+        picks.delete()
+    games = Game.objects.filter(week__year__yearnum=yearnum, week__weeknum=weeknum)
+    if len(games) > 0:
+        print "Deleting %d games for year %d week %d..." % (len(games), yearnum, weeknum)
+        games.delete()
+    weeks = Week.objects.filter(year__yearnum=yearnum, weeknum=weeknum)
+    if len(weeks) > 0:
+        print "Deleting %d weeks for year %d week %d..." % (len(weeks), yearnum, weeknum)
+        weeks.delete()
 
 def populate_year(yearnum, verbose=False):
     yearobj, created = Year.objects.get_or_create(yearnum=yearnum)
