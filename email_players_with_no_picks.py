@@ -18,6 +18,7 @@ from pick10.calculator import CalculateResults
 from pick10.models import get_profile_by_player, get_staff
 import django.utils.timezone as tz
 import datetime
+import pytz
 import collegefootballpick10.settings as cfp_settings
 
 class PlayerInfo:
