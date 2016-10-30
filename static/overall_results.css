@@ -136,3 +136,10 @@
    white-space: nowrap;
    padding: 0px 4px;
 }
+
+.week-winner {
+   color: white;
+   background-color: green;
+   padding-left: 2pt;
+   padding-right: 2pt;
+}

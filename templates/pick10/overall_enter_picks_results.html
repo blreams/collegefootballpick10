@@ -16,7 +16,11 @@
             <td id="{{overall_id}}">{{result.overall}}</td>
             <td id="content">{{result.win_pct}}</td>
             {% for week_points in result.week_points %}
-                <td id="content"><a id="week-link" href="{% url 'player_results' year forloop.counter result.player_id %}">{{week_points}}</a></td>
+                {% if result.week_winner|slice:"forloop.counter0:forloop.counter0" %}
+                    <td id="content"><a id="week-link" href="{% url 'player_results' year forloop.counter result.player_id %}"><span class="week-winner">{{week_points}}</span></a></td>
+                {% else %}
+                    <td id="content"><a id="week-link" href="{% url 'player_results' year forloop.counter result.player_id %}">{{week_points}}</a></td>
+                {% endif %}
             {% endfor %}
         </tr>
         <tr>
