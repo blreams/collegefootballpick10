@@ -299,7 +299,7 @@ def get_games(yearnum, weeknum):
         week = Week.objects.get(year__yearnum=yearnum, weeknum=weeknum)
     except DoesNotExist:
         return []
-    return Game.objects.filter(week=week)
+    return Game.objects.filter(week=week).order_by('gamenum')
 
 def get_week(yearnum, weeknum):
     year = Year.objects.get(yearnum=yearnum)
