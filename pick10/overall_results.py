@@ -7,8 +7,7 @@ class OverallResults:
     projected = None
     possible = None
     win_pct = None
-    week_points = None
-    week_winner = None
+    week_points_info = None
     last_week_projected = None
     last_week_possible = None
 

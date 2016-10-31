@@ -62,8 +62,7 @@ class CalculateOverallResults:
             result.overall = 0
             result.projected = 0
             result.possible = 0
-            result.week_points = []
-            result.week_winner = []
+            result.week_points_info = []
             result.last_week_projected = 0
             result.last_week_possible = 0
 
@@ -76,19 +75,20 @@ class CalculateOverallResults:
 
         return results
 
-    def __update_week_winner(self,player_id,overall_results,winner_info):
+    def __get_week_winner_info(self,player_id,overall_results,winner_info):
         if winner_info.official and winner_info.winner.id == player_id:
-            overall_results[player_id].week_winner += [ True ]
+            return True
         else:
-            overall_results[player_id].week_winner += [ False ]
+            return False
 
     def __update_overall_results(self,player_id,overall_results,week_result,last_week,winner_info):
         overall_results[player_id].overall += week_result.wins
         overall_results[player_id].projected += week_result.projected_wins
         overall_results[player_id].possible += week_result.possible_wins
-        overall_results[player_id].week_points += [ week_result.wins ]
 
-        self.__update_week_winner(player_id,overall_results,winner_info)
+        points = week_result.wins
+        winner = self.__get_week_winner_info(player_id,overall_results,winner_info)
+        overall_results[player_id].week_points_info += [ (winner,points) ]
 
         if last_week:
             overall_results[player_id].last_week_projected = week_result.projected_wins

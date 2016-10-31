@@ -25,14 +25,18 @@
             <td id="{{projected_id}}">{{result.projected}}</td>
             <td id="{{possible_id}}">{{result.possible}}</td>
             <td id="content">{{result.win_pct}}</td>
-            {% for week_points in result.week_points %}
-                <td id="content"><a id="week-link" href="{% url 'player_results' year forloop.counter result.player_id %}">{{week_points}}</a></td>
+            {% for week_winner,week_points in result.week_points_info %}
+                {% if week_winner %}
+                    <td id="content"><a id="week-link" href="{% url 'player_results' year forloop.counter result.player_id %}"><span class="week-winner">{{week_points}}</span></a></td>
+                {% else %}
+                    <td id="content"><a id="week-link" href="{% url 'player_results' year forloop.counter result.player_id %}">{{week_points}}</a></td>
+                {% endif %}
             {% endfor %}
             <td id="content">{{result.last_week_projected}}</td>
             <td id="content">{{result.last_week_possible}}</td>
         </tr>
         <tr>
-            <td id="table-line" colspan="{{result.week_points|length|add:"8"}}"></td>
+            <td id="table-line" colspan="{{result.week_points_info|length|add:"8"}}"></td>
         </tr>
     {% endfor %}
 </table>
