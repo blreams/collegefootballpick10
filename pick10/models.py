@@ -327,7 +327,7 @@ def get_yearlist():
 
 def get_weeklist(year):
     yearobj = Year.objects.filter(yearnum=year)
-    return [w.weeknum for w in Week.objects.filter(year=yearobj)]
+    return [w.weeknum for w in Week.objects.filter(year=yearobj).order_by('weeknum')]
 
 def get_createweek_year_week():
     thisyear = timezone.now().year
