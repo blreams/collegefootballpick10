@@ -18,6 +18,7 @@ from pick10.user_access import UserAccess
 class OverallResultsView:
 
     def get(self,request,year,use_private_names=None,use_memcache=True):
+        use_memcache = False
 
         year = int(year)
         loading_memcache = request == None
