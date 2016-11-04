@@ -14,6 +14,9 @@ class Utils:
         self.browser = browser
         self.server_url = server_url
 
+    def landing_page(self):
+        self.browser.get(self.server_url + reverse('index'))
+
     def update_games_page(self,year,week_number):
         address = self.server_url + reverse('update_games',args=(year,week_number,))
         self.browser.get(address)
