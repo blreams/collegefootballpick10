@@ -1,42 +1,40 @@
 <div id="weekinprogress-pool-state">week {{last_week_number}} in progress</div>
 <table>
     <thead class="results-header">
-        <td id="header">Rank</td>
-        <td id="header"><a id="link-header" href="#" onclick="change_content('players');return false;">Player</a></td>
-        <td id="header"><a id="link-header" href="#" onclick="change_content('overall');return false;">Overall</a></td>
-        <td id="header"><a id="link-header" href="#" onclick="change_content('projected');return false;">Projected</a></td>
-        <td id="header"><a id="link-header" href="#" onclick="change_content('possible');return false;">Possible</a></td>
-        <td id="header">Win Pct.</td>
+        <td id="header_rank">Rank</td>
+        <td id="header_player" class="td_header"><a class="link-header btn btn-detail btn-xs active" href="#" onclick="change_content('players');return false;" role="button">Player</a></td>
+        <td id="header_overall" class="td_header"><a class="link-header btn btn-detail btn-xs active" href="#" onclick="change_content('overall');return false;" role="button">Overall</a></td>
+        <td id="header_projected" class="td_header"><a class="link-header btn btn-detail btn-xs active" href="#" onclick="change_content('projected');return false;" role="button">Projected</a></td>
+        <td id="header_possible" class="td_header"><a class="link-header btn btn-detail btn-xs active" href="#" onclick="change_content('possible');return false;" role="button">Possible</a></td>
+        <td id="header_winpct" class="td_header">Win Pct.</td>
         {% for wk_num in weeks_in_year %}
-            <td id="header">Wk{{wk_num}}</td>
+        <td id="header_wk{{wk_num}}" class="td_header">Wk{{wk_num}}</td>
         {% endfor %}
-        <td id="header">Wk{{last_week_number}} Projected</td>
-        <td id="header">Wk{{last_week_number}} Possible</td>
+        <td id="header_wkprojected" class="td_header">Wk{{last_week_number}} Projected</td>
+        <td id="header_wkpossible" class="td_header">Wk{{last_week_number}} Possible</td>
     </thead>
     {% for result in results %}
-        <tr id="player_{{result.player_id}}">
+    <tr id="player_{{result.player_id}}">
             {% if rank == "projected" %}
-                <td id="content">{{result.projected_rank}}</td>
+        <td id="p_rank{{result.player_id}}" class="p_content">{{result.projected_rank}}</td>
             {% else %}
-                <td id="content">{{result.rank}}</td>
+        <td id="p_rank{{result.player_id}}" class="p_content">{{result.rank}}</td>
             {% endif %}
-            <td id="player-content">{{result.player_name}}</td>
-            <td id="{{overall_id}}">{{result.overall}}</td>
-            <td id="{{projected_id}}">{{result.projected}}</td>
-            <td id="{{possible_id}}">{{result.possible}}</td>
-            <td id="content">{{result.win_pct}}</td>
+        <td id="p_name_{{result.player_id}}" class="p_content">{{result.player_name}}</td>
+        <td id="p_overall_{{result.player_id}}" class="player-content">{{result.overall}}</td>
+        <td id="p_projected_{{result.player_id}}" class="highlight-content">{{result.projected}}</td>
+        <td id="p_possible_{{result.player_id}}" class="p_content">{{result.possible}}</td>
+        <td id="p_winpct_{{result.player_id}}" class="p_content">{{result.win_pct}}</td>
             {% for week_winner,week_points in result.week_points_info %}
                 {% if week_winner %}
-                    <td id="content"><a id="week-link" href="{% url 'player_results' year forloop.counter result.player_id %}"><span class="week-winner">{{week_points}}</span></a></td>
+        <td id="p_weeklink_{{result.player_id}}_{{forloop.counter}}" class="p_content"><a class="week-link" href="{% url 'player_results' year forloop.counter result.player_id %}"><span class="week-winner">{{week_points}}</span></a></td>
                 {% else %}
-                    <td id="content"><a id="week-link" href="{% url 'player_results' year forloop.counter result.player_id %}">{{week_points}}</a></td>
+        <td id="p_weeklink_{{result.player_id}}_{{forloop.counter}}" class="p_content"><a class="week-link" href="{% url 'player_results' year forloop.counter result.player_id %}">{{week_points}}</a></td>
                 {% endif %}
             {% endfor %}
-            <td id="content">{{result.last_week_projected}}</td>
-            <td id="content">{{result.last_week_possible}}</td>
-        </tr>
-        <tr>
-            <td id="table-line" colspan="{{result.week_points_info|length|add:"8"}}"></td>
-        </tr>
+        <td id="p_wkprojected_{{result.player_id}}" class="p_content">{{result.last_week_projected}}</td>
+        <td id="p_wkpossible_{{result.player_id}}" class="p_content">{{result.last_week_possible}}</td>
+    </tr>
+    <tr><td class="table-line" colspan="{{result.week_points_info|length|add:"8"}}"></td></tr>
     {% endfor %}
 </table>

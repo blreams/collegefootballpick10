@@ -5,22 +5,22 @@
     </table>
     <table>
         <thead class="results-header">
-            <td id="header">Rank</td>
-            <td id="header"><a id="link-header" href="#" onclick="change_content('players');return false;">Player</a></td>
-            <td id="header"><a id="link-header" href="#" onclick="change_content('wins');return false;">Wins</a></td>
-            <td id="header"><a id="link-header" href="#" onclick="change_content('losses');return false;">Losses</a></td>
-            <td id="header">Win Pct.</td>
-            <td id="header"><a id="link-header" href="#" onclick="change_content('possible_wins');return false;">Possible</a></td>
+            <td id="header_rank" class="td_header">Rank</td>
+            <td id="header_player" class="td_header"><a class="link-header btn btn-default btn-xs active" href="#" onclick="change_content('players');return false;" role="button">Player</a></td>
+            <td id="header_wins" class="td_header"><a class="link-header btn btn-default btn-xs active" href="#" onclick="change_content('wins');return false;" role="button">Wins</a></td>
+            <td id="header_losses" class="td_header"><a class="link-header btn btn-default btn-xs active" href="#" onclick="change_content('losses');return false;" role="button">Losses</a></td>
+            <td id="header_winpct" class="td_header">Win Pct.</td>
+            <td id="header_possible" class="td_header"><a class="link-header btn btn-default btn-xs active" href="#" onclick="change_content('possible_wins');return false;" role="button">Possible</a></td>
         </thead>
         {% for result in results %}
             <tr id="player_{{result.player_id}}">
-                <td id="content">{{result.rank}}</td>
-                <td id="player-content"><a id="player-link" href="player/{{result.player_id}}/results">{{result.player_name}}</a></td>
-                <td id="{{wins_id}}">{{result.wins}}</td>
-                <td id="{{losses_id}}">{{result.losses}}</td>
-                <td id="content">{{result.win_pct}}</td>
-                <td id="{{possible_id}}">{{result.possible_wins}}</td>
+                <td id="p_rank_{{result.player_id}}" class="p_content">{{result.rank}}</td>
+                <td id="p_player_{{result.player_id}}" class="player-content"><a class="player-link" href="player/{{result.player_id}}/results">{{result.player_name}}</a></td>
+                <td id="p_wins_{{result.player_id}}" class="highlight-content">{{result.wins}}</td>
+                <td id="p_losses_{{result.player_id}}" class="p_content">{{result.losses}}</td>
+                <td id="p_winpct_{{result.player_id}}" class="p_content">{{result.win_pct}}</td>
+                <td id="p_possible_{{result.player_id}}" class="p_content">{{result.possible_wins}}</td>
             </tr>
-            <tr><td id="table-line" colspan="7"></td></tr>
+            <tr><td class="table-line" colspan="7"></td></tr>
         {% endfor %}
     </table>

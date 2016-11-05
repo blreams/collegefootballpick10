@@ -58,7 +58,7 @@
    text-align: center;
 }
 
-#link-header {
+a.link-header {
    text-align: center;
    padding: 1px 4px;
    color: #E6E6FF;

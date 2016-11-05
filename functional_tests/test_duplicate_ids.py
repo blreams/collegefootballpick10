@@ -1,6 +1,9 @@
 from .base import FunctionalTest
 from django.core.urlresolvers import reverse
 from pick10.tests.unit_test_database import UnitTestDatabase
+from pick10.database import Database
+from pick10.calculate_week_results import CalculateWeekResults
+from pick10.calculator import NOT_STARTED, IN_PROGRESS, FINAL
 #from pick10.models import *
 #from pick10.calculator import *
 import unittest
@@ -45,8 +48,10 @@ class TestHtmlAnalysis(FunctionalTest):
 
         self.utils.landing_page()
 
-    def test_check_overall_results_page(self):
+    def test_check_overall_results_weekfinal_page(self):
         self.utils.overall_results_page(2013)
+        db = Database()
+        self.assertEqual(db.get_pool_state(2013), 'week_final')
         soup = BeautifulSoup(self.browser.page_source, 'lxml')
         all_ids_counter = Counter([elem.get('id') for elem in soup.find_all(id=True)])
         duplicate_ids = [id for id in all_ids_counter if all_ids_counter[id] > 1]
@@ -54,9 +59,77 @@ class TestHtmlAnalysis(FunctionalTest):
         self.assertEqual(duplicate_ids, [], 'The following id attributes are duplicate: \n%s' % '\n'.join(['%s: %d' % (id, all_ids_counter[id]) for id in duplicate_ids]))
         #test_db.delete_database()
 
-    def test_check_week_results_page(self):
-        self.utils.week_results_page(2013, 2)
+    def test_check_overall_results_weekinprogress_page(self):
+        self.test_db.setup_week_in_progress(2013, 3)
+        self.utils.set_pick_deadline_to_expired(2013, 3)
+        self.utils.overall_results_page(2013)
+        db = Database()
+        self.assertEqual(db.get_pool_state(2013), 'week_in_progress')
         soup = BeautifulSoup(self.browser.page_source, 'lxml')
+        all_ids_counter = Counter([elem.get('id') for elem in soup.find_all(id=True)])
+        duplicate_ids = [id for id in all_ids_counter if all_ids_counter[id] > 1]
+        self.longMessage = True
+        self.assertEqual(duplicate_ids, [], 'The following id attributes are duplicate: \n%s' % '\n'.join(['%s: %d' % (id, all_ids_counter[id]) for id in duplicate_ids]))
+        #test_db.delete_database()
+
+    def test_check_overall_results_weeknotstarted_page(self):
+        self.test_db.setup_week_not_started(2013, 3)
+        self.utils.set_pick_deadline_to_expired(2013, 3)
+        self.utils.overall_results_page(2013)
+        db = Database()
+        self.assertEqual(db.get_pool_state(2013), 'week_not_started')
+        soup = BeautifulSoup(self.browser.page_source, 'lxml')
+        all_ids_counter = Counter([elem.get('id') for elem in soup.find_all(id=True)])
+        duplicate_ids = [id for id in all_ids_counter if all_ids_counter[id] > 1]
+        self.longMessage = True
+        self.assertEqual(duplicate_ids, [], 'The following id attributes are duplicate: \n%s' % '\n'.join(['%s: %d' % (id, all_ids_counter[id]) for id in duplicate_ids]))
+        #test_db.delete_database()
+
+    def test_check_overall_results_enterpicks_page(self):
+        self.test_db.setup_week_not_started(2013, 3)
+        self.utils.set_pick_deadline_not_expired(2013, 3)
+        self.utils.unlock_picks(2013, 3)
+        self.utils.overall_results_page(2013)
+        db = Database()
+        self.assertEqual(db.get_pool_state(2013), 'enter_picks')
+        soup = BeautifulSoup(self.browser.page_source, 'lxml')
+        all_ids_counter = Counter([elem.get('id') for elem in soup.find_all(id=True)])
+        duplicate_ids = [id for id in all_ids_counter if all_ids_counter[id] > 1]
+        self.longMessage = True
+        self.assertEqual(duplicate_ids, [], 'The following id attributes are duplicate: \n%s' % '\n'.join(['%s: %d' % (id, all_ids_counter[id]) for id in duplicate_ids]))
+        #test_db.delete_database()
+
+    def test_check_week_results_weeknotstarted_page(self):
+        self.test_db.setup_week_not_started(2013, 3)
+        self.utils.set_pick_deadline_to_expired(2013, 3)
+        self.utils.week_results_page(2013, 3)
+        cwr = CalculateWeekResults(2013, 3, True)
+        self.assertEqual(cwr.get_week_state(), NOT_STARTED)
+        soup = BeautifulSoup(self.browser.page_source, 'lxml')
+        all_ids_counter = Counter([elem.get('id') for elem in soup.find_all(id=True)])
+        duplicate_ids = [id for id in all_ids_counter if all_ids_counter[id] > 1]
+        self.longMessage = True
+        self.assertEqual(duplicate_ids, [], 'The following id attributes are duplicate: \n%s' % '\n'.join(['%s: %d' % (id, all_ids_counter[id]) for id in duplicate_ids]))
+        #test_db.delete_database()
+
+    def test_check_week_results_weekinprogress_page(self):
+        self.test_db.setup_week_in_progress(2013, 3)
+        self.utils.set_pick_deadline_to_expired(2013, 3)
+        self.utils.week_results_page(2013, 3)
+        cwr = CalculateWeekResults(2013, 3, True)
+        soup = BeautifulSoup(self.browser.page_source, 'lxml')
+        self.assertEqual(cwr.get_week_state(), IN_PROGRESS)
+        all_ids_counter = Counter([elem.get('id') for elem in soup.find_all(id=True)])
+        duplicate_ids = [id for id in all_ids_counter if all_ids_counter[id] > 1]
+        self.longMessage = True
+        self.assertEqual(duplicate_ids, [], 'The following id attributes are duplicate: \n%s' % '\n'.join(['%s: %d' % (id, all_ids_counter[id]) for id in duplicate_ids]))
+        #test_db.delete_database()
+
+    def test_check_week_results_weekfinal_page(self):
+        self.utils.week_results_page(2013, 2)
+        cwr = CalculateWeekResults(2013, 2, True)
+        soup = BeautifulSoup(self.browser.page_source, 'lxml')
+        self.assertEqual(cwr.get_week_state(), FINAL)
         all_ids_counter = Counter([elem.get('id') for elem in soup.find_all(id=True)])
         duplicate_ids = [id for id in all_ids_counter if all_ids_counter[id] > 1]
         self.longMessage = True
