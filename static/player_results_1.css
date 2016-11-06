@@ -1,6 +1,6 @@
 /* css help?  http://kyleschaeffer.com/development/css-font-size-em-vs-px-vs-pt-vs/ */
 
-#table-line {
+.table-line {
    width: 100%;
    border-bottom: 1px solid lightgray;
    padding: 0 0 0 0;
@@ -15,22 +15,22 @@
    font-weight: 100;
 }
 
-#pick-header {
+.pick-header {
    text-align: center;
    padding: 1px 4px;
 }
 
-#result-header {
+.result-header {
    text-align: center;
    padding: 1px 4px;
 }
 
-#game-header {
+.game-header {
    text-align: left;
    padding: 1px 4px;
 }
 
-#spread-header {
+.spread-header {
    text-align: left;
    padding: 1px 4px;
 }
@@ -43,21 +43,21 @@
    white-space: nowrap;
 }
 
-#summary-label {
+.summary-label {
    color: blue;
    background-color: white;
    text-align: right;
    padding: 1px 4px;
 }
 
-#summary-value {
+.summary-value {
    color: gray;
    background-color: white;
    text-align: center;
    padding: 1px 4px;
 }
 
-#pick-content {
+.pick-content {
    color: blue;
    text-align: center;
    padding: 1px 4px;
@@ -67,7 +67,7 @@
    white-space: nowrap;
 }
 
-#result-content {
+.result-content {
    font-family: Helvetica;
    font-weight: 500;
    font-size: 8pt;
@@ -77,7 +77,7 @@
    white-space: nowrap;
 }
 
-#win-result-content {
+.win-result-content {
    font-family: Helvetica;
    font-weight: 200;
    font-size: 8pt;
@@ -87,7 +87,7 @@
    padding: 8px 4px;
 }
 
-#loss-result-content {
+.loss-result-content {
    font-family: Helvetica;
    font-weight: 500;
    font-size: 8pt;
@@ -97,7 +97,7 @@
    padding: 8px 4px;
 }
 
-#behind-result-content {
+.behind-result-content {
    font-family: Helvetica;
    font-weight: 500;
    font-size: 8pt;
@@ -107,7 +107,7 @@
    padding: 8px 4px;
 }
 
-#ahead-result-content {
+.ahead-result-content {
    font-family: Helvetica;
    font-weight: 500;
    font-size: 8pt;
@@ -117,7 +117,7 @@
    padding: 8px 4px;
 }
 
-#team-content {
+.team-content {
    font-family: Helvetica;
    font-weight: 300;
    font-size: 10pt;
@@ -129,7 +129,7 @@
    white-space: nowrap;
 }
 
-#score-content {
+.score-content {
    font-family: Helvetica;
    font-weight: 100;
    font-size: 10pt;
@@ -140,7 +140,7 @@
    width: 1em;
 }
 
-#spread-label {
+.spread-label {
    font-family: Helvetica;
    font-weight: 300;
    font-size: 10pt;
@@ -151,7 +151,7 @@
    white-space: nowrap;
 }
 
-#spread-team {
+.spread-team {
    font-family: Helvetica;
    font-weight: 300;
    font-size: 10pt;
@@ -163,7 +163,7 @@
    white-space: nowrap;
 }
 
-#spread-value {
+.spread-value {
    font-family: Helvetica;
    font-weight: 100;
    font-size: 10pt;
@@ -174,7 +174,7 @@
    width: 2em;
 }
 
-#game-final {
+.game-final {
    color: black;
    background-color: white;
    padding: 1px 4px;
@@ -185,7 +185,7 @@
    white-space: nowrap;
 }
 
-#game-in-progress {
+.game-in-progress {
    color: red;
    background-color: white;
    padding: 1px 4px;
@@ -195,7 +195,7 @@
    text-align: left;
    white-space: nowrap;
 }
-#game-quarter {
+.game-quarter {
    color: red;
    background-color: white;
    padding: 1px 4px;
@@ -205,7 +205,7 @@
    text-align: left;
    white-space: nowrap;
 }
-#game-time-in-progress {
+.game-time-in-progress {
    color: red;
    background-color: white;
    padding: 1px 4px;
@@ -215,7 +215,7 @@
    text-align: left;
    white-space: nowrap;
 }
-#game-time {
+.game-time {
    color: gray;
    background-color: white;
    padding: 1px 4px;
@@ -225,7 +225,7 @@
    text-align: left;
    white-space: nowrap;
 }
-#game-link {
+.game-link {
    color: darkgray;
    background-color: white;
    font-size: 10pt;
@@ -246,7 +246,7 @@
    padding: 0px 4px;
 }
 
-#predicted-score-label {
+.predicted-score-label {
    color: blue;
    background-color: white;
    text-align: right;
@@ -254,13 +254,13 @@
    font-weight: 200;
    font-size: 10pt;
 }
-#predicted-team {
+.predicted-team {
    color: black;
    background-color: white;
    font-weight: 200;
    font-size: 10pt;
 }
-#predicted-score {
+.predicted-score {
    color: gray;
    background-color: white;
    font-weight: 200;

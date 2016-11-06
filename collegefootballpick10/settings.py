@@ -135,14 +135,21 @@ DEFAULT_FROM_EMAIL = 'collegefootballpick10@gmail.com'
 DEFAULT_TO_EMAIL = 'fluffgazer@hotmail.com'
 
 # The following sets up the memcache to use
-CACHES = {
-    'default': {
-         'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-         'LOCATION': 'memcache_table',
-         'TIMEOUT':None
+DISABLE_MEMCACHE = ast.literal_eval(os.environ.get('COLLEGEFOOTBALLPICK10_DISABLE_MEMCACHE', 'False'))
+if not DISABLE_MEMCACHE:
+    CACHES = {
+        'default': {
+             'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+             'LOCATION': 'memcache_table',
+             'TIMEOUT':None
+        }
     }
-}
-
+else:
+    CACHES = {
+        'default': {
+             'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+        }
+    }
 
 SELENIUM_WEBDRIVER_STRING = 'firefox'
 if os.environ.get('COLLEGEFOOTBALLPICK10_SELENIUM_WEBDRIVER'):

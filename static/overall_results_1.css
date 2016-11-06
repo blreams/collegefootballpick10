@@ -7,13 +7,13 @@
    font-weight: 100;
 }
 
-#header {
+.td_header {
    text-align: center;
    padding: 1px 4px;
    white-space: nowrap;
 }
 
-#content {
+.p_content {
    color: black;
    background-color: white;
    font-size: 10pt;
@@ -24,7 +24,7 @@
    text-align: center;
 }
 
-#player-content {
+.player-content {
    color: black;
    background-color: lightyellow;
    font-size: 10pt;
@@ -47,7 +47,7 @@
    padding: 0px 4px;
 }
 
-#highlight-content {
+.highlight-content {
    color: black;
    background-color: lightgray;
    font-size: 10pt;
@@ -58,7 +58,7 @@
    text-align: center;
 }
 
-#link-header {
+a.link-header {
    text-align: center;
    padding: 1px 4px;
    color: #E6E6FF;
@@ -69,13 +69,13 @@
    font-weight: 100;
 }
 
-#table-line {
+.table-line {
    width: 100%;
    border-bottom: 1px solid lightgray;
    padding: 0 0 0 0;
 }
 
-#week-link {
+.week-link {
    color: black;
    background-color: white;
    font-size: 10pt;
