@@ -48,30 +48,6 @@ class TestHtmlAnalysis(FunctionalTest):
 
         self.utils.landing_page()
 
-    def test_check_overall_results_weekfinal_page(self):
-        self.utils.overall_results_page(2013)
-        db = Database()
-        self.assertEqual(db.get_pool_state(2013), 'week_final')
-        soup = BeautifulSoup(self.browser.page_source, 'lxml')
-        all_ids_counter = Counter([elem.get('id') for elem in soup.find_all(id=True)])
-        duplicate_ids = [id for id in all_ids_counter if all_ids_counter[id] > 1]
-        self.longMessage = True
-        self.assertEqual(duplicate_ids, [], 'The following id attributes are duplicate: \n%s' % '\n'.join(['%s: %d' % (id, all_ids_counter[id]) for id in duplicate_ids]))
-        #test_db.delete_database()
-
-    def test_check_overall_results_weekinprogress_page(self):
-        self.test_db.setup_week_in_progress(2013, 3)
-        self.utils.set_pick_deadline_to_expired(2013, 3)
-        self.utils.overall_results_page(2013)
-        db = Database()
-        self.assertEqual(db.get_pool_state(2013), 'week_in_progress')
-        soup = BeautifulSoup(self.browser.page_source, 'lxml')
-        all_ids_counter = Counter([elem.get('id') for elem in soup.find_all(id=True)])
-        duplicate_ids = [id for id in all_ids_counter if all_ids_counter[id] > 1]
-        self.longMessage = True
-        self.assertEqual(duplicate_ids, [], 'The following id attributes are duplicate: \n%s' % '\n'.join(['%s: %d' % (id, all_ids_counter[id]) for id in duplicate_ids]))
-        #test_db.delete_database()
-
     def test_check_overall_results_weeknotstarted_page(self):
         self.test_db.setup_week_not_started(2013, 3)
         self.utils.set_pick_deadline_to_expired(2013, 3)
@@ -79,6 +55,9 @@ class TestHtmlAnalysis(FunctionalTest):
         db = Database()
         self.assertEqual(db.get_pool_state(2013), 'week_not_started')
         soup = BeautifulSoup(self.browser.page_source, 'lxml')
+        tags = soup.find_all(id='weeknotstarted-pool-state')
+        self.assertEqual(len(tags), 1)
+        self.assertEqual(tags[0].text, 'week 3 pick entry deadline has passed, no games have started')
         all_ids_counter = Counter([elem.get('id') for elem in soup.find_all(id=True)])
         duplicate_ids = [id for id in all_ids_counter if all_ids_counter[id] > 1]
         self.longMessage = True
@@ -93,6 +72,54 @@ class TestHtmlAnalysis(FunctionalTest):
         db = Database()
         self.assertEqual(db.get_pool_state(2013), 'enter_picks')
         soup = BeautifulSoup(self.browser.page_source, 'lxml')
+        tags = soup.find_all(id='enterpicks-pool-state')
+        self.assertEqual(len(tags), 1)
+        self.assertEqual(tags[0].text, 'currently entering picks for week 3')
+        all_ids_counter = Counter([elem.get('id') for elem in soup.find_all(id=True)])
+        duplicate_ids = [id for id in all_ids_counter if all_ids_counter[id] > 1]
+        self.longMessage = True
+        self.assertEqual(duplicate_ids, [], 'The following id attributes are duplicate: \n%s' % '\n'.join(['%s: %d' % (id, all_ids_counter[id]) for id in duplicate_ids]))
+        #test_db.delete_database()
+
+    def test_check_overall_results_weekinprogress_page(self):
+        self.test_db.setup_week_in_progress(2013, 3)
+        self.utils.set_pick_deadline_to_expired(2013, 3)
+        self.utils.overall_results_page(2013)
+        db = Database()
+        self.assertEqual(db.get_pool_state(2013), 'week_in_progress')
+        soup = BeautifulSoup(self.browser.page_source, 'lxml')
+        tags = soup.find_all(id='weekinprogress-pool-state')
+        self.assertEqual(len(tags), 1)
+        self.assertEqual(tags[0].text, 'week 3 in progress')
+        all_ids_counter = Counter([elem.get('id') for elem in soup.find_all(id=True)])
+        duplicate_ids = [id for id in all_ids_counter if all_ids_counter[id] > 1]
+        self.longMessage = True
+        self.assertEqual(duplicate_ids, [], 'The following id attributes are duplicate: \n%s' % '\n'.join(['%s: %d' % (id, all_ids_counter[id]) for id in duplicate_ids]))
+        #test_db.delete_database()
+
+    def test_check_overall_results_weekfinal_page(self):
+        self.utils.overall_results_page(2013)
+        db = Database()
+        self.assertEqual(db.get_pool_state(2013), 'week_final')
+        soup = BeautifulSoup(self.browser.page_source, 'lxml')
+        tags = soup.find_all(id='weekfinal-pool-state')
+        self.assertEqual(len(tags), 1)
+        self.assertEqual(tags[0].text, 'week 2 final')
+        all_ids_counter = Counter([elem.get('id') for elem in soup.find_all(id=True)])
+        duplicate_ids = [id for id in all_ids_counter if all_ids_counter[id] > 1]
+        self.longMessage = True
+        self.assertEqual(duplicate_ids, [], 'The following id attributes are duplicate: \n%s' % '\n'.join(['%s: %d' % (id, all_ids_counter[id]) for id in duplicate_ids]))
+        #test_db.delete_database()
+
+    def test_check_overall_results_final_page(self):
+        self.test_db.setup_week_final(2013, 13)
+        self.utils.overall_results_page(2013)
+        db = Database()
+        self.assertEqual(db.get_pool_state(2013), 'end_of_year')
+        soup = BeautifulSoup(self.browser.page_source, 'lxml')
+        tags = soup.find_all(id='final-pool-state')
+        self.assertEqual(len(tags), 1)
+        self.assertEqual(tags[0].text, 'final results')
         all_ids_counter = Counter([elem.get('id') for elem in soup.find_all(id=True)])
         duplicate_ids = [id for id in all_ids_counter if all_ids_counter[id] > 1]
         self.longMessage = True
