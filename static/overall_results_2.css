@@ -16,6 +16,7 @@
 .p_content {
    color: black;
    background-color: white;
+   border-bottom: 1px solid lightgray;
    font-size: 10pt;
    padding: 0px 4px;
    font-family: Helvetica;
@@ -27,6 +28,7 @@
 .player-content {
    color: black;
    background-color: lightyellow;
+   border-bottom: 1px solid lightgray;
    font-size: 10pt;
    padding: 0px 4px;
    font-family: Helvetica;
@@ -50,6 +52,7 @@
 .highlight-content {
    color: black;
    background-color: lightgray;
+   border-bottom: 1px solid lightgray;
    font-size: 10pt;
    padding: 0px 4px;
    font-family: Helvetica;

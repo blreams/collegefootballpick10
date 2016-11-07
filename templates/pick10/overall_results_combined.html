@@ -1,29 +1,49 @@
+{% if   pool_state == "week_not_started" %}
+<div id="weeknotstarted-pool-state">week {{last_week_number}} pick entry deadline has passed, no games have started</div>
+{% elif pool_state == "enter_picks" %}
+<div id="enterpicks-pool-state">currently entering picks for week {{last_week_number}}</div>
+{% elif pool_state == "week_in_progress" %}
 <div id="weekinprogress-pool-state">week {{last_week_number}} in progress</div>
+{% elif pool_state == "week_setup" or pool_state == "week_final" %}
+<div id="weekfinal-pool-state">week {{last_week_number}} final</div>
+{% elif pool_state == "end_of_year" %}
+<div id="final-pool-state">final results</div>
+{% endif %}
 <table>
     <thead class="results-header">
         <td id="header_rank">Rank</td>
         <td id="header_player" class="td_header"><a class="link-header btn btn-detail btn-xs active" href="#" onclick="change_content('players');return false;" role="button">Player</a></td>
         <td id="header_overall" class="td_header"><a class="link-header btn btn-detail btn-xs active" href="#" onclick="change_content('overall');return false;" role="button">Overall</a></td>
+        {% if pool_state == "week_in_progress" %}
         <td id="header_projected" class="td_header"><a class="link-header btn btn-detail btn-xs active" href="#" onclick="change_content('projected');return false;" role="button">Projected</a></td>
+        {% endif %}
+        {% if pool_state == "week_not_started" or pool_state == "week_in_progress" or pool_state == "week_final" %}
         <td id="header_possible" class="td_header"><a class="link-header btn btn-detail btn-xs active" href="#" onclick="change_content('possible');return false;" role="button">Possible</a></td>
+        {% endif %}
         <td id="header_winpct" class="td_header">Win Pct.</td>
         {% for wk_num in weeks_in_year %}
         <td id="header_wk{{wk_num}}" class="td_header">Wk{{wk_num}}</td>
         {% endfor %}
+        {% if pool_state == "week_in_progress" %}
         <td id="header_wkprojected" class="td_header">Wk{{last_week_number}} Projected</td>
         <td id="header_wkpossible" class="td_header">Wk{{last_week_number}} Possible</td>
+        {% endif %}
     </thead>
     {% for result in results %}
     <tr id="player_{{result.player_id}}">
-            {% if rank == "projected" %}
+            {% if pool_state == "week_in_progress" and rank == "projected" %}
         <td id="p_rank{{result.player_id}}" class="p_content">{{result.projected_rank}}</td>
             {% else %}
         <td id="p_rank{{result.player_id}}" class="p_content">{{result.rank}}</td>
             {% endif %}
-        <td id="p_name_{{result.player_id}}" class="p_content">{{result.player_name}}</td>
-        <td id="p_overall_{{result.player_id}}" class="player-content">{{result.overall}}</td>
+        <td id="p_player_{{result.player_id}}" class="player-content">{{result.player_name}}</td>
+        <td id="p_overall_{{result.player_id}}" class="highlight-content">{{result.overall}}</td>
+            {% if pool_state == "week_in_progress" %}
         <td id="p_projected_{{result.player_id}}" class="highlight-content">{{result.projected}}</td>
+            {% endif %}
+            {% if pool_state == "week_not_started" or pool_state == "week_in_progress" or pool_state == "week_final" %}
         <td id="p_possible_{{result.player_id}}" class="p_content">{{result.possible}}</td>
+            {% endif %}
         <td id="p_winpct_{{result.player_id}}" class="p_content">{{result.win_pct}}</td>
             {% for week_winner,week_points in result.week_points_info %}
                 {% if week_winner %}
@@ -32,9 +52,23 @@
         <td id="p_weeklink_{{result.player_id}}_{{forloop.counter}}" class="p_content"><a class="week-link" href="{% url 'player_results' year forloop.counter result.player_id %}">{{week_points}}</a></td>
                 {% endif %}
             {% endfor %}
+            {% if pool_state == "week_in_progress" %}
         <td id="p_wkprojected_{{result.player_id}}" class="p_content">{{result.last_week_projected}}</td>
         <td id="p_wkpossible_{{result.player_id}}" class="p_content">{{result.last_week_possible}}</td>
+            {% endif %}
     </tr>
+    <!--
+    {% if   pool_state == "week_not_started" %}
+    <tr><td class="table-line" colspan="{{result.week_points_info|length|add:"5"}}"></td></tr>
+    {% elif pool_state == "enter_picks" %}
+    <tr><td class="table-line" colspan="{{result.week_points_info|length|add:"4"}}"></td></tr>
+    {% elif pool_state == "week_in_progress" %}
     <tr><td class="table-line" colspan="{{result.week_points_info|length|add:"8"}}"></td></tr>
+    {% elif pool_state == "week_setup" or pool_state == "week_final" %}
+    <tr><td class="table-line" colspan="{{result.week_points_info|length|add:"5"}}"></td></tr>
+    {% elif pool_state == "end_of_year" %}
+    <tr><td class="table-line" colspan="{{result.week_points_info|length|add:"4"}}"></td></tr>
+    {% endif %}
+    -->
     {% endfor %}
 </table>

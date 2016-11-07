@@ -18,6 +18,7 @@ from pick10.user_access import UserAccess
 class OverallResultsView:
 
     def get(self,request,year,use_private_names=None,use_memcache=True): 
+        # TODO how to get final pool state?
 
         year = int(year)
         loading_memcache = request == None
@@ -97,18 +98,7 @@ class OverallResultsView:
         content_params['results'] = results
         content_params['last_week_number'] = last_week_number
 
-        if pool_state == "week_setup":
-            self.__render_file = "pick10/overall_week_final_results.html"
-        elif pool_state == "enter_picks":
-            self.__render_file = "pick10/overall_enter_picks_results.html"
-        elif pool_state == "week_not_started":
-            self.__render_file = "pick10/overall_week_not_started_results.html"
-        elif pool_state == "week_in_progress":
-            self.__render_file = "pick10/overall_week_in_progress_results.html"
-        elif pool_state == "week_final":
-            self.__render_file = "pick10/overall_week_final_results.html"
-        elif pool_state == "end_of_year":
-            self.__render_file = "pick10/overall_final_results.html"
+        self.__render_file = "pick10/overall_results_combined.html"
 
         params = dict()
         params['year'] = year
