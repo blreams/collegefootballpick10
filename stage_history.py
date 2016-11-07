@@ -13,6 +13,7 @@ from django.core.exceptions import ObjectDoesNotExist
 #from pick10.week_results_view import *
 #from pick10.tiebreak_view import *
 from pick10.models import Year, Player, PlayerYear, Conference, Team, Game, Pick, Week
+from pick10.models import get_yearlist, get_weeklist
 from pick10.overall_results_view import OverallResultsView
 from pick10.week_results_view import WeekResultsView
 from pick10.tiebreak_view import TiebreakView
@@ -29,6 +30,29 @@ def get_poolspreadsheet(year):
     if poolspreadsheets.get(year) is None:
         poolspreadsheets[year] = PoolSpreadsheet(year)
     return poolspreadsheets[year]
+
+def update_cache(yearnums=0, weeknum=0, debug=False):
+    yearnumlist = [yearnums]
+    if isinstance(yearnums, list):
+        yearnumlist = yearnums
+    if yearnums == 0:
+        yearnumlist = get_yearlist()
+
+    weeknumdict = {}
+    for yearnum in yearnumlist:
+        if weeknum == 0:
+            weeknumdict[yearnum] = get_weeklist(yearnum)
+        else:
+            weeknumdict[yearnum] = [weeknum]
+
+    for yearnum in weeknumdict:
+        for weeknum in weeknumdict[yearnum]:
+            print "Updating memcache week results      year %d, week %d." % (yearnum, weeknum)
+            if not debug: update_memcache_week_results(yearnum, weeknum)
+            print "Updating memcache tiebreaks         year %d, week %d." % (yearnum, weeknum)
+            if not debug: update_memcache_tiebreak(yearnum, weeknum)
+        print "Updating memcache overall results   year %d, week %d." % (yearnum, weeknum)
+        if not debug: update_memcache_overall_results(yearnum)
 
 def delete_year_from_db(yearnum):
     picks = Pick.objects.filter(game__week__year__yearnum=yearnum)
