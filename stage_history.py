@@ -31,7 +31,7 @@ def get_poolspreadsheet(year):
         poolspreadsheets[year] = PoolSpreadsheet(year)
     return poolspreadsheets[year]
 
-def update_cache(yearnums=0, weeknum=0, debug=False):
+def update_cache(yearnums=0, weeknum=0, weekonly=False, debug=False):
     yearnumlist = [yearnums]
     if isinstance(yearnums, list):
         yearnumlist = yearnums
@@ -51,8 +51,9 @@ def update_cache(yearnums=0, weeknum=0, debug=False):
             if not debug: update_memcache_week_results(yearnum, weeknum)
             print "Updating memcache tiebreaks         year %d, week %d." % (yearnum, weeknum)
             if not debug: update_memcache_tiebreak(yearnum, weeknum)
-        print "Updating memcache overall results   year %d, week %d." % (yearnum, weeknum)
-        if not debug: update_memcache_overall_results(yearnum)
+        if not weekonly:
+            print "Updating memcache overall results   year %d, week %d." % (yearnum, weeknum)
+            if not debug: update_memcache_overall_results(yearnum)
 
 def delete_year_from_db(yearnum):
     picks = Pick.objects.filter(game__week__year__yearnum=yearnum)
