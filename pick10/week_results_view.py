@@ -73,13 +73,15 @@ class WeekResultsView:
         winner_info = cwr.get_winner_info()
 
         if week_state == FINAL:
-            self.__render_file = "pick10/week_final_results.html"
+            self.week_state_string = 'final'
         elif week_state == IN_PROGRESS:
-            self.__render_file = "pick10/week_in_progress_results.html"
+            self.week_state_string = 'in_progress'
         elif week_state == NOT_STARTED:
-            self.__render_file = "pick10/week_not_started_results.html"
+            self.week_state_string = 'not_started'
         else:
             raise AssertionError,"Invalid week state %s" % (week_state)
+
+        self.__render_file = "pick10/week_results_combined.html"
 
         params = dict()
         params['year'] = year
@@ -124,6 +126,7 @@ class WeekResultsView:
         highlight = self.__highlight_column('wins')
 
         params = dict()
+        params['week_state'] = self.week_state_string
         params['results'] = sorted_by_wins
         params['winner'] = winner_info
         params.update(highlight)
@@ -141,6 +144,7 @@ class WeekResultsView:
         highlight = self.__highlight_column('wins')
 
         params = dict()
+        params['week_state'] = self.week_state_string
         params['results'] = sorted_by_wins
         params['winner'] = winner_info
         params.update(highlight)
@@ -155,6 +159,7 @@ class WeekResultsView:
         highlight = self.__highlight_column('losses')
 
         params = dict()
+        params['week_state'] = self.week_state_string
         params['results'] = sorted_by_losses
         params['winner'] = winner_info
         params.update(highlight)
@@ -169,6 +174,7 @@ class WeekResultsView:
         highlight = self.__highlight_column('losses')
 
         params = dict()
+        params['week_state'] = self.week_state_string
         params['results'] = sorted_by_losses
         params['winner'] = winner_info
         params.update(highlight)
@@ -182,6 +188,7 @@ class WeekResultsView:
         highlight = self.__highlight_no_columns()
 
         params = dict()
+        params['week_state'] = self.week_state_string
         params['results'] = sorted_by_players
         params['winner'] = winner_info
         params.update(highlight)
@@ -195,6 +202,7 @@ class WeekResultsView:
         highlight = self.__highlight_no_columns()
 
         params = dict()
+        params['week_state'] = self.week_state_string
         params['results'] = sorted_by_players
         params['winner'] = winner_info
         params.update(highlight)
@@ -210,6 +218,7 @@ class WeekResultsView:
         highlight = self.__highlight_column('projected_wins')
 
         params = dict()
+        params['week_state'] = self.week_state_string
         params['results'] = sorted_by_wins
         params['winner'] = winner_info
         params['use_projected_rank'] = True
@@ -226,6 +235,7 @@ class WeekResultsView:
         highlight = self.__highlight_column('projected_wins')
 
         params = dict()
+        params['week_state'] = self.week_state_string
         params['results'] = sorted_by_wins
         params['winner'] = winner_info
         params['use_projected_rank'] = True
@@ -241,6 +251,7 @@ class WeekResultsView:
         highlight = self.__highlight_column('possible_wins')
 
         params = dict()
+        params['week_state'] = self.week_state_string
         params['results'] = sorted_by_wins
         params['winner'] = winner_info
         params.update(highlight)
@@ -255,6 +266,7 @@ class WeekResultsView:
         highlight = self.__highlight_column('possible_wins')
 
         params = dict()
+        params['week_state'] = self.week_state_string
         params['results'] = sorted_by_wins
         params['winner'] = winner_info
         params.update(highlight)
