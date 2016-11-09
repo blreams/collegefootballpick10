@@ -12,13 +12,13 @@
 <table>
     <thead class="results-header">
         <td id="header_rank">Rank</td>
-        <td id="header_player" class="td_header"><a class="link-header btn btn-detail btn-xs active" href="#" onclick="change_content('players');return false;" role="button">Player</a></td>
-        <td id="header_overall" class="td_header"><a class="link-header btn btn-detail btn-xs active" href="#" onclick="change_content('overall');return false;" role="button">Overall</a></td>
+        <td id="header_player" class="td_header"><a class="link-header btn btn-default btn-xs active" href="#" onclick="change_content('players');return false;" role="button">Player</a></td>
+        <td id="header_overall" class="td_header"><a class="link-header btn btn-default btn-xs active" href="#" onclick="change_content('overall');return false;" role="button">Overall</a></td>
         {% if pool_state == "week_in_progress" %}
-        <td id="header_projected" class="td_header"><a class="link-header btn btn-detail btn-xs active" href="#" onclick="change_content('projected');return false;" role="button">Projected</a></td>
+        <td id="header_projected" class="td_header"><a class="link-header btn btn-default btn-xs active" href="#" onclick="change_content('projected');return false;" role="button">Projected</a></td>
         {% endif %}
         {% if pool_state == "week_not_started" or pool_state == "week_in_progress" or pool_state == "week_final" %}
-        <td id="header_possible" class="td_header"><a class="link-header btn btn-detail btn-xs active" href="#" onclick="change_content('possible');return false;" role="button">Possible</a></td>
+        <td id="header_possible" class="td_header"><a class="link-header btn btn-default btn-xs active" href="#" onclick="change_content('possible');return false;" role="button">Possible</a></td>
         {% endif %}
         <td id="header_winpct" class="td_header">Win Pct.</td>
         {% for wk_num in weeks_in_year %}
