@@ -31,7 +31,7 @@ def get_poolspreadsheet(year):
         poolspreadsheets[year] = PoolSpreadsheet(year)
     return poolspreadsheets[year]
 
-def update_cache(yearnums=0, weeknum=0, weekonly=False, debug=False):
+def update_cache(yearnums=0, weeknum=0, skipweek=False, skiptiebreak=False, skipoverall=False, debug=False):
     yearnumlist = [yearnums]
     if isinstance(yearnums, list):
         yearnumlist = yearnums
@@ -47,11 +47,13 @@ def update_cache(yearnums=0, weeknum=0, weekonly=False, debug=False):
 
     for yearnum in weeknumdict:
         for weeknum in weeknumdict[yearnum]:
-            print "Updating memcache week results      year %d, week %d." % (yearnum, weeknum)
-            if not debug: update_memcache_week_results(yearnum, weeknum)
-            print "Updating memcache tiebreaks         year %d, week %d." % (yearnum, weeknum)
-            if not debug: update_memcache_tiebreak(yearnum, weeknum)
-        if not weekonly:
+            if not skipweek:
+                print "Updating memcache week results      year %d, week %d." % (yearnum, weeknum)
+                if not debug: update_memcache_week_results(yearnum, weeknum)
+            if not skiptiebreak:
+                print "Updating memcache tiebreaks         year %d, week %d." % (yearnum, weeknum)
+                if not debug: update_memcache_tiebreak(yearnum, weeknum)
+        if not skipoverall:
             print "Updating memcache overall results   year %d, week %d." % (yearnum, weeknum)
             if not debug: update_memcache_overall_results(yearnum)
 
