@@ -42,13 +42,16 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" id="brand_id" href="{% url 'index' %}">Pick10</a>
-                <a class="navbar-brand" id="home_id" href="{% url 'home' %}">Home</a></li>
+                <a class="navbar-brand" id="home_id" href="{% url 'home' %}">Home</a>
             </div>
 
             <div id="navbar-collapse" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
                     {% if user.is_authenticated %}
+                    <!--
                     <p id="ident_id" class="navbar-text">Logged in as: {{user.username}}</p>
+                    -->
+                    <li id="ident_id" class="navbar-text">Logged in as: {{user.username}}</li>
                     {% endif %}
                     {% if user.is_authenticated %}
                     {% if user.is_staff %}
