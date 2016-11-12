@@ -47,7 +47,7 @@
    font-weight: 100;
 }
 
-.td_header {
+.th_header {
    text-align: center;
    padding: 1px 4px;
    white-space: nowrap;
@@ -128,9 +128,11 @@
    padding: 0 0 0 0;
 }
 
+/*
 #header_winner {
    background-color: white;
 }
+*/
 
 #not-winner {
    background-color: white;
@@ -230,3 +232,22 @@
    white-space: nowrap;
    padding: 0px 4px;
 }
+
+table.tablesorter thead tr .header span {
+    background-image: url(images/bg_y.png);
+    background-repeat: no-repeat;
+    background-position: center right;
+    padding-right: 15px;
+    cursor: pointer;
+}
+
+table.tablesorter thead tr .headerSortUp span {
+    background-image: url(images/asc_y.png);
+    padding-right: 15px;
+}
+
+table.tablesorter thead tr .headerSortDown span {
+    background-image: url(images/desc_y.png);
+    padding-right: 15px;
+}
+

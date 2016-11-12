@@ -33,7 +33,7 @@ class PlayerResultsTest(FunctionalTest):
         player = self.__get_valid_player(year=2013)
 
         self.__open_week_results_page(year=2013,week_number=1,player_id=player.id)
-        summary = self.browser.find_elements_by_id('summary-label')
+        summary = self.browser.find_elements_by_class_name('summary-label')
         self.assertEqual(len(summary),3)
         self.assertEqual(summary[0].text,'Wins')
         self.assertEqual(summary[1].text,'Losses')
@@ -52,7 +52,7 @@ class PlayerResultsTest(FunctionalTest):
         self.assertEqual(expected,summary)
 
         # check that at no games have started (i.e. all show Favored)
-        spread_labels = self.browser.find_elements_by_id('spread-label')
+        spread_labels = self.browser.find_elements_by_class_name('spread-label')
         for label in spread_labels:
             self.assertEquals(label.text,'Favored')
 
@@ -64,7 +64,7 @@ class PlayerResultsTest(FunctionalTest):
         player = self.__get_valid_player(year=1978)
 
         self.__open_week_results_page(year=1978,week_number=8,player_id=player.id)
-        summary = self.browser.find_elements_by_id('summary-label')
+        summary = self.browser.find_elements_by_class_name('summary-label')
         self.assertEqual(len(summary),5)
         self.assertEqual(summary[0].text,'Wins')
         self.assertEqual(summary[1].text,'Losses')
@@ -73,7 +73,7 @@ class PlayerResultsTest(FunctionalTest):
         self.assertEqual(summary[4].text,'Possible Wins')
 
         # check that at least one game has 'Result'
-        spread_labels = self.browser.find_elements_by_id('spread-label')
+        spread_labels = self.browser.find_elements_by_class_name('spread-label')
         labels = [ label.text for label in spread_labels ]
         self.assertIn('Result',labels)
 
@@ -85,7 +85,7 @@ class PlayerResultsTest(FunctionalTest):
         player = self.__get_player(year=1978,ss_name='Brent')
 
         self.__open_week_results_page(year=1978,week_number=9,player_id=player.id)
-        summary = self.browser.find_elements_by_id('summary-label')
+        summary = self.browser.find_elements_by_class_name('summary-label')
         self.assertEqual(len(summary),5)
         self.assertEqual(summary[0].text,'Wins')
         self.assertEqual(summary[1].text,'Losses')
@@ -94,9 +94,8 @@ class PlayerResultsTest(FunctionalTest):
         self.assertEqual(summary[4].text,'Possible Wins')
 
         # check that at least one game has 'Ahead' and 'Behind' results
-        ahead = self.browser.find_elements_by_id('ahead-result-content')
-        behind = self.browser.find_elements_by_id('behind-result-content')
-        bad = self.browser.find_elements_by_id('does-not-exist')
+        ahead = self.browser.find_elements_by_class_name('ahead-result-content')
+        behind = self.browser.find_elements_by_class_name('behind-result-content')
         self.assertGreater(len(ahead),0)
         self.assertGreater(len(behind),0)
 
@@ -182,7 +181,7 @@ class PlayerResultsTest(FunctionalTest):
         body = self.browser.find_element_by_tag_name('body').text
         self.assertIn(title,body)
 
-        summary = self.browser.find_elements_by_id('summary-label')
+        summary = self.browser.find_elements_by_class_name('summary-label')
         self.assertEqual(len(summary),3)
         self.assertEqual(summary[0].text,'Wins')
         self.assertEqual(summary[1].text,'Losses')

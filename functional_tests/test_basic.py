@@ -47,7 +47,12 @@ class NewVisitorTest(FunctionalTest):
         ident_text = self.browser.find_element_by_id('ident_id').text
         self.assertIn('johndoe', ident_text)
 
-        # Now he clicks Logout and waits for the index page
+        # Now he clicks User->Logout and waits for the index page
+        user_link = self.browser.find_element_by_link_text('User')
+        user_link.click()
+        WebDriverWait(self.browser, 5).until(
+                EC.presence_of_element_located((By.LINK_TEXT, 'Logout'))
+            )
         logout_link = self.browser.find_element_by_link_text('Logout')
         logout_link.click()
         WebDriverWait(self.browser, 5).until(

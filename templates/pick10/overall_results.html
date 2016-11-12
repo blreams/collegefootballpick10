@@ -19,6 +19,12 @@
 
 {% block script_block %}
     <script>
+        $(document).ready(function() {
+                $("#overall_results_table").tablesorter();
+            }
+        );
+    </script>
+    <script>
         var player_id = {{player_id}};
         $(document).ready(function() {
             highlight_player_row(player_id);

@@ -41,7 +41,7 @@ class OverallResultsTest(FunctionalTest):
         self.assertIn('2013 Leaderboard',title)
 
         header = self.browser.find_element_by_class_name('results-header').text
-        expected = 'Rank Player Overall Win Pct. Wk1 Wk2 Wk3 Wk4 Wk5 Wk6 Wk7 Wk8 Wk9 Wk10 Wk11 Wk12 Wk13'
+        expected = 'Rank Player Overall Win Pct. 1 2 3 4 5 6 7 8 9 10 11 12 13'
         self.assertEqual(expected,header)
 
         test_db.delete_database()
@@ -87,7 +87,7 @@ class OverallResultsTest(FunctionalTest):
         self.assertEqual(expected,message)
 
         header = self.browser.find_element_by_class_name('results-header').text
-        expected = 'Rank Player Overall Win Pct. Wk1 Wk2 Wk3 Wk4'
+        expected = 'Rank Player Overall Win Pct. 1 2 3 4'
         self.assertEqual(expected,header)
 
         test_db.delete_database()
@@ -106,7 +106,7 @@ class OverallResultsTest(FunctionalTest):
         self.assertIn('1978 Leaderboard',title)
 
         header = self.browser.find_element_by_class_name('results-header').text
-        expected = 'Rank Player Overall Possible Win Pct. Wk1 Wk2 Wk3 Wk4'
+        expected = 'Rank Player Overall Possible Win Pct. 1 2 3 4'
         self.assertEqual(expected,header)
 
         test_db.delete_database()
@@ -124,7 +124,7 @@ class OverallResultsTest(FunctionalTest):
         self.assertIn('1978 Leaderboard',title)
 
         header = self.browser.find_element_by_class_name('results-header').text
-        expected = 'Rank Player Overall Projected Possible Win Pct. Wk1 Wk2 Wk3 Wk3 Projected Wk3 Possible'
+        expected = 'Rank Player Overall Projected Possible Win Pct. 1 2 3 Wk3 Projected Wk3 Possible'
         self.assertEqual(expected,header)
 
         test_db.delete_database()
@@ -141,7 +141,7 @@ class OverallResultsTest(FunctionalTest):
         self.assertIn('1978 Leaderboard',title)
 
         header = self.browser.find_element_by_class_name('results-header').text
-        expected = 'Rank Player Overall Possible Win Pct. Wk1 Wk2'
+        expected = 'Rank Player Overall Possible Win Pct. 1 2'
         self.assertEqual(expected,header)
 
         test_db.delete_database()

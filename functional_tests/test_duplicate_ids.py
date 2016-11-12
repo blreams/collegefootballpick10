@@ -62,7 +62,7 @@ class TestHtmlAnalysis(FunctionalTest):
         duplicate_ids = [id for id in all_ids_counter if all_ids_counter[id] > 1]
         self.longMessage = True
         self.assertEqual(duplicate_ids, [], 'The following id attributes are duplicate: \n%s' % '\n'.join(['%s: %d' % (id, all_ids_counter[id]) for id in duplicate_ids]))
-        #test_db.delete_database()
+        self.test_db.delete_database()
 
     def test_check_overall_results_enterpicks_page(self):
         self.test_db.setup_week_not_started(2013, 3)
@@ -79,7 +79,7 @@ class TestHtmlAnalysis(FunctionalTest):
         duplicate_ids = [id for id in all_ids_counter if all_ids_counter[id] > 1]
         self.longMessage = True
         self.assertEqual(duplicate_ids, [], 'The following id attributes are duplicate: \n%s' % '\n'.join(['%s: %d' % (id, all_ids_counter[id]) for id in duplicate_ids]))
-        #test_db.delete_database()
+        self.test_db.delete_database()
 
     def test_check_overall_results_weekinprogress_page(self):
         self.test_db.setup_week_in_progress(2013, 3)
@@ -95,7 +95,7 @@ class TestHtmlAnalysis(FunctionalTest):
         duplicate_ids = [id for id in all_ids_counter if all_ids_counter[id] > 1]
         self.longMessage = True
         self.assertEqual(duplicate_ids, [], 'The following id attributes are duplicate: \n%s' % '\n'.join(['%s: %d' % (id, all_ids_counter[id]) for id in duplicate_ids]))
-        #test_db.delete_database()
+        self.test_db.delete_database()
 
     def test_check_overall_results_weekfinal_page(self):
         self.utils.overall_results_page(2013)
@@ -109,7 +109,7 @@ class TestHtmlAnalysis(FunctionalTest):
         duplicate_ids = [id for id in all_ids_counter if all_ids_counter[id] > 1]
         self.longMessage = True
         self.assertEqual(duplicate_ids, [], 'The following id attributes are duplicate: \n%s' % '\n'.join(['%s: %d' % (id, all_ids_counter[id]) for id in duplicate_ids]))
-        #test_db.delete_database()
+        self.test_db.delete_database()
 
     def test_check_overall_results_final_page(self):
         self.test_db.setup_week_final(2013, 13)
@@ -124,7 +124,7 @@ class TestHtmlAnalysis(FunctionalTest):
         duplicate_ids = [id for id in all_ids_counter if all_ids_counter[id] > 1]
         self.longMessage = True
         self.assertEqual(duplicate_ids, [], 'The following id attributes are duplicate: \n%s' % '\n'.join(['%s: %d' % (id, all_ids_counter[id]) for id in duplicate_ids]))
-        #test_db.delete_database()
+        self.test_db.delete_database()
 
     def test_check_week_results_weeknotstarted_page(self):
         self.test_db.setup_week_not_started(2013, 3)
@@ -137,7 +137,7 @@ class TestHtmlAnalysis(FunctionalTest):
         duplicate_ids = [id for id in all_ids_counter if all_ids_counter[id] > 1]
         self.longMessage = True
         self.assertEqual(duplicate_ids, [], 'The following id attributes are duplicate: \n%s' % '\n'.join(['%s: %d' % (id, all_ids_counter[id]) for id in duplicate_ids]))
-        #test_db.delete_database()
+        self.test_db.delete_database()
 
     def test_check_week_results_weekinprogress_page(self):
         self.test_db.setup_week_in_progress(2013, 3)
@@ -150,7 +150,7 @@ class TestHtmlAnalysis(FunctionalTest):
         duplicate_ids = [id for id in all_ids_counter if all_ids_counter[id] > 1]
         self.longMessage = True
         self.assertEqual(duplicate_ids, [], 'The following id attributes are duplicate: \n%s' % '\n'.join(['%s: %d' % (id, all_ids_counter[id]) for id in duplicate_ids]))
-        #test_db.delete_database()
+        self.test_db.delete_database()
 
     def test_check_week_results_weekfinal_page(self):
         self.utils.week_results_page(2013, 2)
@@ -161,7 +161,7 @@ class TestHtmlAnalysis(FunctionalTest):
         duplicate_ids = [id for id in all_ids_counter if all_ids_counter[id] > 1]
         self.longMessage = True
         self.assertEqual(duplicate_ids, [], 'The following id attributes are duplicate: \n%s' % '\n'.join(['%s: %d' % (id, all_ids_counter[id]) for id in duplicate_ids]))
-        #test_db.delete_database()
+        self.test_db.delete_database()
 
     def test_check_player_results_page(self):
         self.utils.player_results_page(2013, 2, self.player.id)
@@ -170,7 +170,7 @@ class TestHtmlAnalysis(FunctionalTest):
         duplicate_ids = [id for id in all_ids_counter if all_ids_counter[id] > 1]
         self.longMessage = True
         self.assertEqual(duplicate_ids, [], 'The following id attributes are duplicate: \n%s' % '\n'.join(['%s: %d' % (id, all_ids_counter[id]) for id in duplicate_ids]))
-        #test_db.delete_database()
+        self.test_db.delete_database()
 
     def __verify_user_logged_in(self,name):
         logged_in_text = self.browser.find_element_by_id('ident_id').text

@@ -62,7 +62,7 @@ class WeekResultsTest(FunctionalTest):
         self.assertIn('week is in progress',week_state)
 
         table_header = self.browser.find_element_by_class_name('results-header').text
-        self.assertEqual('Rank Player Wins Losses Win Pct. Projected Possible',table_header)
+        self.assertEqual('Rank Player Wins Losses Win Pct. Projected Possible Winner',table_header)
 
         test_db.delete_database()
 
