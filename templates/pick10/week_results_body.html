@@ -1,21 +1,21 @@
 <link href="/static/title_bar.css" rel="stylesheet" type="text/css" media="all">
 <link href="/static/week_results_3.css" rel="stylesheet" type="text/css" media="all">
 <script>
-function highlight_player_row(player_id) {		
-    if (player_id == null) {		
-        return;		
-    }		
+function highlight_player_row(player_id) {
+    if (player_id == null) {
+        return;
+    }
 
-    var row_id = "#player_" + player_id;		
+    var row_id = "#player_" + player_id;
 
-    // red		
-    var color = "#b94a48";		
-    var bgcolor = "#f2dede";		
+    // red
+    var color = "#b94a48";
+    var bgcolor = "#f2dede";
 
-    $(row_id).find("td").not('#winner').css("color",color);		
-    $(row_id).find("td").not('#winner').css("background-color",bgcolor);		
-    $(row_id).find("a").not('#winner-link').css("color",color);		
-    $(row_id).find("a").not('#winner-link').css("background-color",bgcolor);		
+    $(row_id).find("td").not('#winner').css("color",color);
+    $(row_id).find("td").not('#winner').css("background-color",bgcolor);
+    $(row_id).find("a").not('#winner-link').css("color",color);
+    $(row_id).find("a").not('#winner-link').css("background-color",bgcolor);
 }
 </script>
 <div id="results">

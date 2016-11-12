@@ -45,7 +45,7 @@
                 {% if week_state == 'in_progress' or week_state == 'final' %}
                     {% if winner.num_tied_for_first == 1 %}
                 <td id="p_winner_{{result.player_id}}" class="winner">{{result.winner}}</td>
-                {% else %}
+                    {% else %}
                 <td id="p_winner_{{result.player_id}}" class="winner"><a class="winner-link" href="tiebreak">{{result.winner}}</a></td>
                     {% endif %}
                 {% endif %}

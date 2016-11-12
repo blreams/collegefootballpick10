@@ -7,6 +7,7 @@ import django
 django.setup()
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.cache import cache
 
 #from pick10.models import *
 #from pick10.overall_results_view import *
@@ -31,6 +32,46 @@ def get_poolspreadsheet(year):
         poolspreadsheets[year] = PoolSpreadsheet(year)
     return poolspreadsheets[year]
 
+def flush_cache(yearnums=0, weeknum=0, skipweek=False, skiptiebreak=False, skipoverall=False, debug=False):
+    """Delete memcache contents based on arguments.
+    """
+    yearnumlist = [yearnums]
+    if isinstance(yearnums, list):
+        yearnumlist = yearnums
+    if yearnums == 0:
+        yearnumlist = get_yearlist()
+
+    weeknumdict = {}
+    for yearnum in yearnumlist:
+        if weeknum == 0:
+            weeknumdict[yearnum] = get_weeklist(yearnum)
+        else:
+            weeknumdict[yearnum] = [weeknum]
+
+    for yearnum in weeknumdict:
+        for weeknum in weeknumdict[yearnum]:
+            if not skipweek:
+                print "Flushing memcache week results      year %d, week %d." % (yearnum, weeknum)
+                for keytype in ('private', 'public'):
+                    body_key = 'week_%s_%d_%d' % (keytype, yearnum, weeknum)
+                    if cache.get(body_key) is not None:
+                        print "  Flushing entry %s." % (body_key,)
+                        if not debug: cache.delete(body_key)
+            if not skiptiebreak:
+                print "Flushing memcache tiebreaks         year %d, week %d." % (yearnum, weeknum)
+                for keytype in ('private', 'public'):
+                    body_key = 'tiebreak_%s_%d_%d' % (keytype, yearnum, weeknum)
+                    if cache.get(body_key) is not None:
+                        print "  Flushing entry %s." % (body_key,)
+                        if not debug: cache.delete(body_key)
+        if not skipoverall:
+            print "Flushing memcache overall results   year %d." % (yearnum)
+            for keytype in ('private', 'public'):
+                body_key = 'overall_%s_%d' % (keytype, yearnum)
+                if cache.get(body_key) is not None:
+                    print "  Flushing entry %s." % (body_key,)
+                    if not debug: cache.delete(body_key)
+
 def update_cache(yearnums=0, weeknum=0, skipweek=False, skiptiebreak=False, skipoverall=False, debug=False):
     yearnumlist = [yearnums]
     if isinstance(yearnums, list):
@@ -54,7 +95,7 @@ def update_cache(yearnums=0, weeknum=0, skipweek=False, skiptiebreak=False, skip
                 print "Updating memcache tiebreaks         year %d, week %d." % (yearnum, weeknum)
                 if not debug: update_memcache_tiebreak(yearnum, weeknum)
         if not skipoverall:
-            print "Updating memcache overall results   year %d, week %d." % (yearnum, weeknum)
+            print "Updating memcache overall results   year %d." % (yearnum)
             if not debug: update_memcache_overall_results(yearnum)
 
 def delete_year_from_db(yearnum):
