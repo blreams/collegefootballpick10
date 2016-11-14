@@ -411,12 +411,8 @@ def calc_picked_games(playerid, yearnum, weeknum=0):
     picked_games = 0
     for weeknum in weeknums:
         w = get_week(yearnum, weeknum)
-        #if w.lock_scores:
-            # The week is complete, just get number of picks
-            #picked_games += len(Pick.objects.filter(player__id=playerid, game__week__weeknum=weeknum, game__week__year__yearnum=yearnum))
-        #else:
         for game in Game.objects.filter(week=w).exclude(winner=0):
-                picked_games += len(Pick.objects.filter(player__id=playerid, game=game))
+            picked_games += len(Pick.objects.filter(player__id=playerid, game=game).exclude(winner=0))
 
     return picked_games
 

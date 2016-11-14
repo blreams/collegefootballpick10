@@ -5,6 +5,7 @@
 from database import Database
 from calculate_week_results import CalculateWeekResults
 from overall_results import OverallResults
+from pick10.models import calc_picked_games
 
 class CalculateOverallResults:
 
@@ -40,6 +41,7 @@ class CalculateOverallResults:
 
         self.__update_overall_results_unplayed_weeks(overall_results,last_week_number)
         self.__update_overall_results_win_pct(overall_results,last_week_number)
+        self.__update_overall_results_pick_pct(overall_results,last_week_number)
 
         overall_results = self.__convert_overall_results_to_list(overall_results)
         overall_results = self.assign_overall_rank(overall_results)
@@ -107,17 +109,23 @@ class CalculateOverallResults:
             overall_results[player_id].possible += number_of_points_left
 
     def __update_overall_results_win_pct(self,overall_results,last_week_number):
-        number_of_points_per_week = 10
-        number_of_total_points_so_far = last_week_number * number_of_points_per_week
-
         for player_id in overall_results:
             if overall_results[player_id].overall == 0:
                 win_pct = 0.0
             else:
-                #win_pct = float(overall_results[player_id].overall) / float(number_of_total_points_so_far)
                 win_pct = float(overall_results[player_id].overall) / float(self.completed_games)
 
             overall_results[player_id].win_pct = "%0.3f" % (win_pct)
+
+    def __update_overall_results_pick_pct(self,overall_results,last_week_number):
+        for player_id in overall_results:
+            overall_results[player_id].pick_cnt = calc_picked_games(player_id, self.year)
+            if overall_results[player_id].overall == 0:
+                pick_pct = 0.0
+            else:
+                pick_pct = float(overall_results[player_id].overall) / float(overall_results[player_id].pick_cnt)
+
+            overall_results[player_id].pick_pct = "%0.3f" % (pick_pct)
 
     def __convert_overall_results_to_list(self,overall_results_dict):
         return overall_results_dict.values()
