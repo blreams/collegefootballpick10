@@ -1,4 +1,5 @@
 import os
+from collections import Counter
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'collegefootballpick10.settings')
 #from datetime import datetime, date, time
 from django.utils import timezone
@@ -14,7 +15,7 @@ from django.core.cache import cache
 #from pick10.week_results_view import *
 #from pick10.tiebreak_view import *
 from pick10.models import Year, Player, PlayerYear, Conference, Team, Game, Pick, Week
-from pick10.models import get_yearlist, get_weeklist
+from pick10.models import get_yearlist, get_weeklist, get_player_by_private_name
 from pick10.overall_results_view import OverallResultsView
 from pick10.week_results_view import WeekResultsView
 from pick10.tiebreak_view import TiebreakView
@@ -31,6 +32,72 @@ def get_poolspreadsheet(year):
     if poolspreadsheets.get(year) is None:
         poolspreadsheets[year] = PoolSpreadsheet(year)
     return poolspreadsheets[year]
+
+def get_player_duplicates():
+    private_players = [player.private_name for player in Player.objects.all()]
+    c = Counter(private_players)
+    for private_player in c:
+        if c[private_player] > 1:
+            for index in range(c[private_player]):
+                player = get_player_by_private_name(private_player, index)
+                print str(player)
+
+def get_playernames_with_years(yearnums=0, debug=False):
+    playerdict = {}
+    if isinstance(yearnums, list):
+        yearnumlist = yearnums
+    if yearnums == 0:
+        yearnumlist = get_yearlist()
+
+    for yearnum in yearnumlist:
+        if debug: print "Parsing %d spreadsheet..." % yearnum
+        ss = get_poolspreadsheet(yearnum)
+        for playername in ss.get_player_names():
+            if playerdict.get(playername) is None:
+                playerdict[playername] = [str(yearnum)]
+            else:
+                playerdict[playername].append(str(yearnum))
+
+    outlines = []
+    for playername in sorted(playerdict):
+        years_string = ','.join(playerdict[playername])
+        outline = "%s: %s" % (playername, years_string)
+        if debug: print outline
+        outlines.append(outline)
+
+    return '\n'.join(outlines)
+
+def picks_change_players(from_ssname, to_ssname, debug=False):
+    fromplayer = Player.objects.get(ss_name=from_ssname)
+    toplayer = Player.objects.get(ss_name=to_ssname)
+    print "From Player = %s" % str(fromplayer)
+    print "To   Player = %s" % str(toplayer)
+    picks = Pick.objects.filter(player=fromplayer)
+    topicks = Pick.objects.filter(player=toplayer)
+    print "-----------------BEFORE--------------------"
+    print "Found %d Picks for From Player %s" % (len(picks), str(fromplayer))
+    print "Found %d Picks for To   Player %s" % (len(topicks), str(toplayer))
+    playeryears = PlayerYear.objects.filter(player=fromplayer)
+    toplayeryears = PlayerYear.objects.filter(player=toplayer)
+    print "Found %d PlayerYears for From Player %s" % (len(playeryears), str(fromplayer))
+    print "Found %d PlayerYears for To   Player %s" % (len(toplayeryears), str(toplayer))
+    print "-------------------------------------------"
+    for pick in picks:
+        pick.player = toplayer
+        if not debug: pick.save()
+    for playeryear in playeryears:
+        playeryear.player = toplayer
+        if not debug: playeryear.save()
+    picks = Pick.objects.filter(player=fromplayer)
+    topicks = Pick.objects.filter(player=toplayer)
+    print "-----------------AFTER---------------------"
+    print "Found %d Picks for From Player %s" % (len(picks), str(fromplayer))
+    print "Found %d Picks for To   Player %s" % (len(topicks), str(toplayer))
+    playeryears = PlayerYear.objects.filter(player=fromplayer)
+    toplayeryears = PlayerYear.objects.filter(player=toplayer)
+    print "Found %d PlayerYears for From Player %s" % (len(playeryears), str(fromplayer))
+    print "Found %d PlayerYears for To   Player %s" % (len(toplayeryears), str(toplayer))
+    print "-------------------------------------------"
 
 def flush_cache(yearnums=0, weeknum=0, skipweek=False, skiptiebreak=False, skipoverall=False, debug=False):
     """Delete memcache contents based on arguments.

@@ -252,21 +252,17 @@ def add_pick(player, game, winner, team1_predicted_points=-1, team2_predicted_po
     p.save()
     return p
 
-#def get_player_by_public_name(public_name):
-#    p = Player.objects.get(public_name=public_name)
-#    return p
+def get_player_by_private_name(private_name, index=0):
+    players = Player.objects.filter(private_name=private_name)
+    return players[index]
 
-def get_player_by_private_name(private_name):
-    p = Player.objects.get(private_name=private_name)
+def get_player_by_ss_name(ss_name):
+    p = Player.objects.get(ss_name=ss_name)
     return p
 
 def get_user_by_username(username):
     u = User.objects.get(username=username)
     return u
-
-#def get_user_by_email(email):
-#    u = User.objects.get(email=email)
-#    return u
 
 def get_profile_by_user(user):
     try:
@@ -402,6 +398,27 @@ def calc_completed_games(yearnum, weeknum=0):
             if game.game_state == 3:
                 completed_games += 1
     return completed_games
+
+def calc_picked_games(playerid, yearnum, weeknum=0):
+    """Calculate number of picked games for the given playerid, yearnum,
+    weeknum. weeknum=0 means calculate for the entire year.
+    """
+    if weeknum == 0:
+        weeknums = get_weeklist(yearnum)
+    else:
+        weeknums = [weeknum]
+
+    picked_games = 0
+    for weeknum in weeknums:
+        w = get_week(yearnum, weeknum)
+        #if w.lock_scores:
+            # The week is complete, just get number of picks
+            #picked_games += len(Pick.objects.filter(player__id=playerid, game__week__weeknum=weeknum, game__week__year__yearnum=yearnum))
+        #else:
+        for game in Game.objects.filter(week=w).exclude(winner=0):
+                picked_games += len(Pick.objects.filter(player__id=playerid, game=game))
+
+    return picked_games
 
 def calc_weekly_over_under(yearnum, username):
     """Return list of cumulative points over/under, one per week, for the given year/player
