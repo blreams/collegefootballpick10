@@ -79,9 +79,11 @@
 
     <div class="container">
         <div class="row">
+            {% if side_block_content %}
             <div class="col-sm-3 col-md-2">
                 {% block side_block %}{% endblock %}
             </div>
+            {% endif %}
             <div class="col-sm-9 col-md-10 main">
                 <div>
                     <h1 id="base_id">College Football Pick 10</h1>

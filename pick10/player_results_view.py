@@ -60,16 +60,20 @@ class PlayerResultsView:
 
         self.set_game_status_params(results,timezone)
 
+        years_in_pool = sorted(d.get_years(),reverse=True)
+        sidebar = render_to_string("pick10/year_sidebar.html", {'years_in_pool': years_in_pool, 'year': year})
+
         params = dict()
         params['year'] = year
         params['week_number'] = week_number
         params['weeks_in_year'] = d.get_week_numbers(year)
-        params['years_in_pool'] = sorted(d.get_years(),reverse=True)
+        params['years_in_pool'] = years_in_pool
         params['summary'] = summary
         params['results'] = results
         params['FINAL'] = FINAL
         params['IN_PROGRESS'] = IN_PROGRESS
         params['NOT_STARTED'] = NOT_STARTED
+        params['side_block_content'] = sidebar
 
         WeekNavbar(year,week_number,'player_results',request.user).add_parameters(params)
 

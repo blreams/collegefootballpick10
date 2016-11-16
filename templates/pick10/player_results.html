@@ -3,8 +3,8 @@
 {% block header_text %}Week {{week_number}} Player {{summary.player_name}} Results{% endblock %}
 
 {% block side_block %}
-    {% include "pick10/year_sidebar.html" %}
-    {% endblock %}
+    {{ side_block_content|safe }}
+{% endblock %}
 
 {% block body_header_block %}
     <div id="page-title">{{summary.player_name}} Week {{week_number}} Results</div>
