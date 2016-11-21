@@ -416,7 +416,7 @@ def calc_picked_games(playerid, yearnum, weeknum=0):
 
     return picked_games
 
-def calc_weekly_over_under(yearnum, username):
+def calc_weekly_points(yearnum, username, overunder=False):
     """Return list of cumulative points over/under, one per week, for the given year/player
     """
     retval = []
@@ -431,9 +431,10 @@ def calc_weekly_over_under(yearnum, username):
         retval.append(retval[-1])
         for pick, game in itertools.izip(picks, games):
             if game.game_state == 3:
-                retval[-1] -= 0.5
+                if overunder:
+                    retval[-1] -= 0.5
                 if pick.winner == game.winner:
                     retval[-1] += 1.0
-    return retval
+    return retval[1:]
 
 

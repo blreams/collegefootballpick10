@@ -29,10 +29,37 @@
 {% endif %}
 {% if profile.player != None and week_num > 1 %}
 <div id="chartdiv" style="height:400px;width=300px; "></div>
+<div id="formdiv">
+    <form id="index_form" action="{% url 'index' %}" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" value="Submit" />
+    </form>
+</div>
+<div id="charttab">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Player</th>
+                {% for wk in week_range %}
+                <th>Wk{{wk}}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{profile.player.public_name}}</td>
+                {% for ou in over_under_list %}
+                <td>{{ou}}</td>
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+</div>
 <script class="code" type="text/javascript">
     $(document).ready(function() {
         $.jqplot.config.enablePlugins = true;
-        var ou = {{over_under_list}};
+        var ou = [0].concat({{over_under_list}});
         var i, dp;
         var line1 = [];
         var ticks = [];
@@ -44,7 +71,7 @@
             ticks.push(i);
         }
         var optionObj = {
-            title:{text:"Trend Line {{year_num}} - {{user.username}}"},
+            title:{text:"Trend Line {{year_num}} - {{profile.player.public_name}}"},
             grid:{shadow:false, borderWidth:9.0},
             axes:{
                 xaxis:{

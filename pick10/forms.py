@@ -36,6 +36,14 @@ class UserProfileForm(forms.ModelForm):
             team_name = ''
         return team_name
 
+class IndexForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super(IndexForm, self).__init__(*args, **kwargs)
+        yearchoices = year_choices()
+        self.initial['year'] = yearchoices[-1][0]
+        self.fields['year'] = forms.ChoiceField(choices=year_choices())
+
+
 def year_choices():
     yearlist = get_yearlist()
     thisyear = timezone.now().year
