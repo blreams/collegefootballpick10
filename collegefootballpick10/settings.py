@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'pick10',
     'registration',
+    'dbbackup',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -154,4 +155,9 @@ else:
 SELENIUM_WEBDRIVER_STRING = 'firefox'
 if os.environ.get('COLLEGEFOOTBALLPICK10_SELENIUM_WEBDRIVER'):
     SELENIUM_WEBDRIVER_STRING = os.environ.get('COLLEGEFOOTBALLPICK10_SELENIUM_WEBDRIVER')
+
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {
+        'location': os.path.join(BASE_DIR, '../dbbackup'),
+        }
 

@@ -32,7 +32,9 @@
 <div id="formdiv">
     <form id="index_form" action="{% url 'index' %}" method="post">
         {% csrf_token %}
+        <table>
         {{ form }}
+        </table>
         <input type="submit" value="Submit" />
     </form>
 </div>
