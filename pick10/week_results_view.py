@@ -3,7 +3,8 @@ import re
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.http import HttpResponse
-from django.core.cache import *
+from django.core.cache import cache
+#from django.core.cache import *
 #from pick10.models import *
 #from pick10.database import *
 #from pick10.calculate_week_results import *
@@ -48,7 +49,7 @@ class WeekResultsView:
         use_private_names = self.__determine_private_access(access,use_private_names)
 
         # setup memcache parameters
-        cache = get_cache('default')
+        #cache = get_cache('default')
         if use_private_names:
             body_key = "week_private_%d_%d" % (year,week_number)
         else:

@@ -120,7 +120,7 @@ class CalculateOverallResults:
     def __update_overall_results_pick_pct(self,overall_results,last_week_number):
         for player_id in overall_results:
             overall_results[player_id].pick_cnt = calc_picked_games(player_id, self.year)
-            if overall_results[player_id].overall == 0:
+            if overall_results[player_id].overall == 0 or overall_results[player_id].pick_cnt == 0:
                 pick_pct = 0.0
             else:
                 pick_pct = float(overall_results[player_id].overall) / float(overall_results[player_id].pick_cnt)

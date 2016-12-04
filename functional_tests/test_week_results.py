@@ -2,7 +2,8 @@ from .base import FunctionalTest
 from django.core.urlresolvers import reverse
 from pick10.tests.unit_test_database import *
 import unittest
-from django.core.cache import *
+from django.core.cache import cache
+#from django.core.cache import *
 from utils import *
 
 class WeekResultsTest(FunctionalTest):
@@ -24,7 +25,7 @@ class WeekResultsTest(FunctionalTest):
         #super(WeekResultsTest, cls).tearDownClass()
 
     def setUp(self):
-        cache = get_cache('default')
+        #cache = get_cache('default')
         cache.clear()
         super(WeekResultsTest, self).setUp()
         self.utils = Utils(self.browser,self.server_url)

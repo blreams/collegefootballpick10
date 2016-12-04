@@ -47,8 +47,8 @@ class Year(models.Model):
     payout_first = models.DecimalField(default=0.0, decimal_places=2, max_digits=7)
     payout_second = models.DecimalField(default=0.0, decimal_places=2, max_digits=7)
     payout_third = models.DecimalField(default=0.0, decimal_places=2, max_digits=7)
-    created = models.DateTimeField(auto_now=False, auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True, auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name_plural = '1. Years'
@@ -60,8 +60,8 @@ class Player(models.Model):
     public_name = models.CharField(max_length=100, null=True, blank=True, default='')
     private_name = models.CharField(max_length=100, null=True, blank=True, default='')
     ss_name = models.CharField(max_length=100, null=True, blank=True, default='')
-    created = models.DateTimeField(auto_now=False, auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True, auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name_plural = '2. Players'
@@ -73,8 +73,8 @@ class Player(models.Model):
 class PlayerYear(models.Model):
     player = models.ForeignKey('Player')
     year = models.ForeignKey('Year')
-    created = models.DateTimeField(auto_now=False, auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True, auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name_plural = '3. PlayerYears'
@@ -85,8 +85,8 @@ class PlayerYear(models.Model):
 class Conference(models.Model):
     conf_name = models.CharField(max_length=40)                            # Conference name, 'Southeastern'
     div_name = models.CharField(max_length=40, null=True, blank=True, default='')      # Division name, 'East'
-    created = models.DateTimeField(auto_now=False, auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True, auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name_plural = '4. Conferences'
@@ -101,8 +101,8 @@ class Team(models.Model):
     #helmet = models.ImageField()                                          # Helmet pic, local file (.png, .gif, .jpg)
     conference = models.ForeignKey('Conference', default=None)             # Pointer back to Conference entry
     current = models.BooleanField(default=True)                            # True if team should be included in selection lists
-    created = models.DateTimeField(auto_now=False, auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True, auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name_plural = '5. Teams'
@@ -150,8 +150,8 @@ class Game(models.Model):
     quarter = models.CharField(max_length=3, default='')                    # Used to indicate game progress ('1st', '2nd', '3rd', '4th', 'OT')
     time_left = models.CharField(max_length=10, default='')                 # Time left in the quarter (MM:SS)
     winner = models.IntegerField(default=0)                                 # Winner according to spread
-    created = models.DateTimeField(auto_now=False, auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True, auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name_plural = '7. Games'
@@ -166,8 +166,8 @@ class Pick(models.Model):
     team1_predicted_points = models.IntegerField(default=-1)           # Points predicted for team (tie-break game)
     team2_predicted_points = models.IntegerField(default=-1)           # Points predicted for team (tie-break game)
     submit_time = models.DateTimeField(null=True, blank=True)          # DateTime, must be set only when pick is posted.
-    created = models.DateTimeField(auto_now=False, auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True, auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name_plural = '8. Picks'
@@ -183,8 +183,8 @@ class UserProfile(models.Model):
     # You can customize this with whatever fields you want to extend User.
     favorite_team = models.CharField(max_length=100, blank=True, null=True)
     preferredtz = models.CharField(max_length=100, null=True, blank=True, choices=tz_choices, default='US/Eastern')
-    created = models.DateTimeField(auto_now=False, auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True, auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
         return 'User=%s, Player=%s' % (self.user.username, self.player,)

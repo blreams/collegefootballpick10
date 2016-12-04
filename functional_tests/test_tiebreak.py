@@ -2,13 +2,14 @@ from .base import FunctionalTest
 from django.core.urlresolvers import reverse
 from pick10.tests.unit_test_database import *
 import unittest
-from django.core.cache import *
+from django.core.cache import cache
+#from django.core.cache import *
 from utils import *
 
 class TiebreakTest(FunctionalTest):
 
     def setUp(self):
-        cache = get_cache('default')
+        #cache = get_cache('default')
         cache.clear()
         super(TiebreakTest, self).setUp()
         self.utils = Utils(self.browser,self.server_url)

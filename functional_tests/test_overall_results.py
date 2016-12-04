@@ -4,13 +4,14 @@ from pick10.tests.unit_test_database import *
 import unittest
 import datetime as dt
 import pytz
-from django.core.cache import *
+from django.core.cache import cache
+#from django.core.cache import *
 from utils import *
 
 class OverallResultsTest(FunctionalTest):
 
     def setUp(self):
-        cache = get_cache('default')
+        #cache = get_cache('default')
         cache.clear()
         super(OverallResultsTest, self).setUp()
         self.utils = Utils(self.browser,self.server_url)
@@ -41,7 +42,7 @@ class OverallResultsTest(FunctionalTest):
         self.assertIn('2013 Leaderboard',title)
 
         header = self.browser.find_element_by_class_name('results-header').text
-        expected = 'Rank Player Overall Win Pct. 1 2 3 4 5 6 7 8 9 10 11 12 13'
+        expected = 'Rank Player Overall Win% Pick% Picks 1 2 3 4 5 6 7 8 9 10 11 12 13'
         self.assertEqual(expected,header)
 
         test_db.delete_database()
@@ -87,7 +88,7 @@ class OverallResultsTest(FunctionalTest):
         self.assertEqual(expected,message)
 
         header = self.browser.find_element_by_class_name('results-header').text
-        expected = 'Rank Player Overall Win Pct. 1 2 3 4'
+        expected = 'Rank Player Overall Win% Pick% Picks 1 2 3 4'
         self.assertEqual(expected,header)
 
         test_db.delete_database()
@@ -106,7 +107,7 @@ class OverallResultsTest(FunctionalTest):
         self.assertIn('1978 Leaderboard',title)
 
         header = self.browser.find_element_by_class_name('results-header').text
-        expected = 'Rank Player Overall Possible Win Pct. 1 2 3 4'
+        expected = 'Rank Player Overall Possible Win% Pick% Picks 1 2 3 4'
         self.assertEqual(expected,header)
 
         test_db.delete_database()
@@ -124,7 +125,7 @@ class OverallResultsTest(FunctionalTest):
         self.assertIn('1978 Leaderboard',title)
 
         header = self.browser.find_element_by_class_name('results-header').text
-        expected = 'Rank Player Overall Projected Possible Win Pct. 1 2 3 Wk3 Projected Wk3 Possible'
+        expected = 'Rank Player Overall Projected Possible Win% Pick% Picks 1 2 3 Wk3 Projected Wk3 Possible'
         self.assertEqual(expected,header)
 
         test_db.delete_database()
@@ -141,7 +142,7 @@ class OverallResultsTest(FunctionalTest):
         self.assertIn('1978 Leaderboard',title)
 
         header = self.browser.find_element_by_class_name('results-header').text
-        expected = 'Rank Player Overall Possible Win Pct. 1 2'
+        expected = 'Rank Player Overall Possible Win% Pick% Picks 1 2'
         self.assertEqual(expected,header)
 
         test_db.delete_database()

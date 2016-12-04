@@ -10,7 +10,8 @@ from unit_test_database import UnitTestDatabase
 class PoolStateTest(TestCase):
 
     @classmethod
-    def setUpClass(cls):
+    def setUpTestData(cls):
+    #def setUpClass(cls):
         test_db = UnitTestDatabase()
         test_db.load_historical_data_for_year(2013)
         test_db.setup_pool_not_started(1975)
@@ -38,7 +39,7 @@ class PoolStateTest(TestCase):
         test_db.setup_week_final(1983,1)
         test_db.setup_week_with_no_games(1983,2)
 
-        super(PoolStateTest, cls).setUpClass()
+        super(PoolStateTest, cls).setUpTestData()
 
     @classmethod
     def tearDownClass(cls):

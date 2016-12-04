@@ -14,7 +14,7 @@ from unittest import skip
 
 class BasicModelTest(TestCase):
     @classmethod
-    def setUpClass(cls):
+    def setUpTestData(cls):
         players = Player.objects.all()
         if len(players) == 0:
             # This will load the test database with data for all players, 1 week
