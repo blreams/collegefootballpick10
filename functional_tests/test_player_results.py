@@ -4,13 +4,11 @@ from pick10.tests.unit_test_database import *
 from pick10.database import *
 import unittest
 from django.core.cache import cache
-#from django.core.cache import *
 from utils import *
 
 class PlayerResultsTest(FunctionalTest):
 
     def setUp(self):
-        #cache = get_cache('default')
         cache.clear()
         super(PlayerResultsTest, self).setUp()
         self.utils = Utils(self.browser,self.server_url)

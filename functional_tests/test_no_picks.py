@@ -3,7 +3,6 @@ from django.core.urlresolvers import reverse
 from pick10.tests.unit_test_database import *
 import unittest
 from django.core.cache import cache
-#from django.core.cache import *
 from utils import *
 from django.conf import settings
 
@@ -11,7 +10,6 @@ class NoPicksTest(FunctionalTest):
 
     def setUp(self):
         settings.DEBUG = True
-        #cache = get_cache('default')
         cache.clear()
         super(NoPicksTest, self).setUp()
         self.utils = Utils(self.browser,self.server_url)

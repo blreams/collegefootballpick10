@@ -5,13 +5,11 @@ import unittest
 import datetime as dt
 import pytz
 from django.core.cache import cache
-#from django.core.cache import *
 from utils import *
 
 class OverallResultsTest(FunctionalTest):
 
     def setUp(self):
-        #cache = get_cache('default')
         cache.clear()
         super(OverallResultsTest, self).setUp()
         self.utils = Utils(self.browser,self.server_url)

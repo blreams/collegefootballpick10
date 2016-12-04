@@ -7,13 +7,11 @@ import unittest
 from django.contrib.auth.models import User
 from django.test.client import Client
 from django.core.cache import cache
-#from django.core.cache import *
 from utils import *
 
 class UpdateGamesTest(FunctionalTest):
 
     def setUp(self):
-        #cache = get_cache('default')
         cache.clear()
         super(UpdateGamesTest, self).setUp()
         self.utils = Utils(self.browser,self.server_url)

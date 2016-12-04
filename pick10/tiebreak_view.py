@@ -1,11 +1,6 @@
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.core.cache import cache
-#from django.core.cache import *
-#from pick10.calculate_tiebreak import *
-#from calculator import *
-#from pick10.week_navbar import *
-#from pick10.user_access import *
 from pick10.models import get_week
 from pick10.database import Database
 from pick10.calculate_tiebreak import CalculateTiebreak
@@ -43,7 +38,6 @@ class TiebreakView:
             use_private_names = self.__determine_private_access(request.user,use_private_names)
 
         # setup memcache parameters
-        #cache = get_cache('default')
         if use_private_names:
             body_key = "tiebreak_private_%d_%d" % (year,week_number)
         else:

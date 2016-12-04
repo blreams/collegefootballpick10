@@ -4,12 +4,6 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.http import HttpResponse, HttpResponseNotFound
 from django.core.cache import cache
-#from django.core.cache import *
-#from pick10.models import *
-#from pick10.database import *
-#from pick10.calculate_overall_results import *
-#from pick10.week_navbar import *
-#from pick10.user_access import *
 from pick10.models import calc_completed_games
 from pick10.database import Database
 from pick10.calculate_overall_results import CalculateOverallResults
@@ -38,7 +32,6 @@ class OverallResultsView:
         use_private_names = self.__determine_private_access(access,use_private_names)
 
         # setup memcache parameters
-        #cache = get_cache('default')
         if use_private_names:
             body_key = "overall_private_%d" % (year)
         else:
