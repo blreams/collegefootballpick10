@@ -1,5 +1,6 @@
 *.pyc
 *~
 *.swp
+.idea/
 db.sqlite3
 ghostdriver.log
