@@ -116,8 +116,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, '../static')
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': TEMPLATE_PATH,
-        'APP_DIRS': True,
+        'DIRS': [TEMPLATE_PATH],
+        #'APP_DIRS': True,
         'OPTIONS': {
             'debug': DEBUG,
             'context_processors': [
