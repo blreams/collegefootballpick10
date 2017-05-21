@@ -27,9 +27,11 @@ SECRET_KEY = os.environ.get('COLLEGEFOOTBALLPICK10_DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = True
 DEBUG = ast.literal_eval(os.environ.get('COLLEGEFOOTBALLPICK10_DJANGO_DEBUG', 'True'))
-TEMPLATE_DEBUG = DEBUG
 
-ALLOWED_HOSTS = ['collegefootballpick10.pythonanywhere.com']
+ALLOWED_HOSTS = [
+    'collegefootballpick10.pythonanywhere.com',
+    'localhost',
+]
 
 
 # Application definition
@@ -111,12 +113,25 @@ STATICFILES_DIRS = (
         )
 STATIC_ROOT = os.path.join(BASE_DIR, '../static')
 
-TEMPLATE_DIRS = [
-        # Put strings here, like '/home/html/django_templates'.
-        # Always use forward slashes, even for Windows.
-        # Don't forget to use absolute paths, not relative paths.
-        TEMPLATE_PATH,
-        ]
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': TEMPLATE_PATH,
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'debug': DEBUG,
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        }
+    },
+]
 
 #AUTH_PROFILE_MODULE = 'pick10.UserProfile'
 REGISTRATION_OPEN = True             # If True, users can register
