@@ -30,6 +30,7 @@ DEBUG = ast.literal_eval(os.environ.get('COLLEGEFOOTBALLPICK10_DJANGO_DEBUG', 'T
 
 ALLOWED_HOSTS = [
     'collegefootballpick10.pythonanywhere.com',
+    'blreams.pythonanywhere.com',
     'localhost',
 ]
 
