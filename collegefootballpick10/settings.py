@@ -86,6 +86,7 @@ if os.environ.get('COLLEGEFOOTBALLPICK10_DATABASE') == 'mysql':
             'PORT': '3306',
             'USER': os.environ.get('COLLEGEFOOTBALLPICK10_DATABASE_USER'),
             'PASSWORD': os.environ.get('COLLEGEFOOTBALLPICK10_DATABASE_PASSWORD'),
+            'OPTIONS': {'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",},
         }
     }
 
