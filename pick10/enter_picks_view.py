@@ -189,6 +189,7 @@ class EnterPicksView:
         params['years_in_pool'] = years_in_pool
         params['player_name'] = self.__get_player_name(player_id)
         params['overall_error_message'] = overall_error_message
+        params['pick_deadline'] = self.__get_pick_deadline(year, week_number, player_id)
 
         self.__setup_pick_team_rows(picks)
         self.__set_game10_params(picks,params)

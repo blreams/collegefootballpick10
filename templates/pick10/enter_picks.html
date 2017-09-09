@@ -7,7 +7,7 @@
     {% endblock %}
 
 {% block body_header_block %}
-    <div id="page-title">{{player_name}} Week {{week_number}} Picks</div>
+<div id="page-title">{{player_name}} Week {{week_number}} Picks<p>Deadline: {{pick_deadline}}</p></div>
     {% include "pick10/week_navbar.html" %}
     <br>
 {% endblock %}
