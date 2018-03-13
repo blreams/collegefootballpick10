@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
+from pick10.models import get_profile_by_player
 
 from .models import Year, Player, PlayerYear, Conference, Team, Game, Week, Pick, UserProfile
 from .forms import UserProfileForm
@@ -12,9 +13,16 @@ class PlayerAdmin(admin.ModelAdmin):
     list_display = ('public_name', 'private_name', 'ss_name')
 
 class PlayerYearAdmin(admin.ModelAdmin):
-    list_display = ('player', 'year')
+    list_display = ('user_email', 'player', 'year')
     list_filter = ('year', 'player')
     ordering = ('year', 'player')
+
+    def user_email(self, instance):
+        rv = ''
+        profile = get_profile_by_player(instance.player)
+        if profile is not None:
+            rv = profile.user.email
+        return rv
 
 class ConferenceAdmin(admin.ModelAdmin):
     list_display = ('conf_name', 'div_name', 'created', 'updated')
