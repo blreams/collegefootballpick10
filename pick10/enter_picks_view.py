@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 #from database import *
 #from pick10.week_navbar import *
 from pick10.models import Player, UserProfile, Game
-from pick10.models import get_week
+from pick10.models import get_week, get_player_by_id
 from enter_picks import EnterPicks
 from calculator import CalculateResults
 from calculator import TEAM1, TEAM2, IN_PROGRESS, FINAL
@@ -24,7 +24,7 @@ class EnterPicksView:
             return render(request,"pick10/bad_week.html",data)
 
         if not(self.__is_player_id_valid(player_id)):
-            data={'player_id':player_id,'error':'bad_id'}
+            data={'player_id':player_id,'player_name': get_player_by_id(player_id).public_name,'error':'bad_id'}
             return render(request,"pick10/bad_player.html",data)
 
         year = int(year)
@@ -32,7 +32,7 @@ class EnterPicksView:
         player_id = int(player_id)
 
         if not(self.__is_player_in_year(player_id,year)):
-            data={'year':year,'player_id':player_id,'error':'bad_year'}
+            data={'player_id':player_id,'player_name': get_player_by_id(player_id).public_name,'error':'bad_year'}
             return render(request,"pick10/bad_player.html",data)
 
         if self.__user_is_not_participant(request.user):
@@ -94,7 +94,7 @@ class EnterPicksView:
             return render(request,"pick10/bad_week.html",data)
 
         if not(self.__is_player_id_valid(player_id)):
-            data={'player_id':player_id,'error':'bad_id'}
+            data={'player_id':player_id,'player_name': get_player_by_id(player_id).public_name,'error':'bad_id'}
             return render(request,"pick10/bad_player.html",data)
 
         year = int(year)
@@ -102,7 +102,7 @@ class EnterPicksView:
         player_id = int(player_id)
 
         if not(self.__is_player_in_year(player_id,year)):
-            data={'year':year,'player_id':player_id,'error':'bad_year'}
+            data={'player_id':player_id,'player_name': get_player_by_id(player_id).public_name,'error':'bad_year'}
             return render(request,"pick10/bad_player.html",data)
 
         if self.__user_is_not_participant(request.user):

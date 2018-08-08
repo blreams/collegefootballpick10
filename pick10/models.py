@@ -260,6 +260,10 @@ def get_player_by_ss_name(ss_name):
     p = Player.objects.get(ss_name=ss_name)
     return p
 
+def get_player_by_id(player_id):
+    p = Player.objects.get(id=player_id)
+    return p
+
 def get_user_by_username(username):
     u = User.objects.get(username=username)
     return u
