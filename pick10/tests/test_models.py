@@ -6,7 +6,7 @@ from django.utils.html import escape
 from django.contrib.auth.models import User
 
 from pick10.views import home
-from pick10.models import Conference, Team, Game, Week, Pick, Player
+from pick10.models import Conference, Team, Game, Week, Pick, Player, PlayerYear
 from pick10.models import query_picks
 from stage_history import main as shmain
 
@@ -56,7 +56,8 @@ class BasicModelTest(TestCase):
         self.assertEqual(week.weeknum, 1)
 
     def test_pick_model(self):
-        players = Player.objects.all()
+        #players = Player.objects.all()
+        players = [playeryear.player for playeryear in PlayerYear.objects.filter(year__yearnum=2014)]
         for player in players:
             picks = Pick.objects.filter(player__public_name=player.public_name, game__week__year__yearnum=2014, game__week__weeknum=1)
             self.assertEqual(len(picks), 10)
