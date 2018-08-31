@@ -13,16 +13,29 @@ class PlayerAdmin(admin.ModelAdmin):
     list_display = ('public_name', 'private_name', 'ss_name')
 
 class PlayerYearAdmin(admin.ModelAdmin):
-    list_display = ('user_email', 'player', 'year')
+    list_display = ('user_name', 'user_email', 'player', 'year')
     list_filter = ('year', 'player')
-    ordering = ('year', 'player')
+    ordering = ('-year', 'player') # Default ordering is reverse year, then player
 
+    # Create a user_name entry for PlayerYear table
+    def user_name(self, instance):
+        rv = ''
+        profile = get_profile_by_player(instance.player)
+        if profile is not None:
+            rv = profile.user.username
+        return rv
+    # Set the ordering for user_name
+    user_name.admin_order_field = 'player__userprofile__user__username'
+
+    # Create a user_email entry for PlayerYear table
     def user_email(self, instance):
         rv = ''
         profile = get_profile_by_player(instance.player)
         if profile is not None:
             rv = profile.user.email
         return rv
+    # Set the ordering for user_email
+    user_email.admin_order_field = 'player__userprofile__user__email'
 
 class ConferenceAdmin(admin.ModelAdmin):
     list_display = ('conf_name', 'div_name', 'created', 'updated')
