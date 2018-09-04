@@ -1,10 +1,20 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
+from django.contrib import admin
+from django.utils.translation import ugettext_lazy
 from pick10.models import get_profile_by_player
 
 from .models import Year, Player, PlayerYear, Conference, Team, Game, Week, Pick, UserProfile
 from .forms import UserProfileForm
+
+site_text = 'College Football Pick10'
+# Text to put at the end of each page's <title>
+admin.site.site_title = ugettext_lazy(site_text + ' site admin')
+# Text to put in each page's <h1> (and above login form).
+admin.site.site_header = ugettext_lazy(site_text + ' administration')
+# Text to put at the top of the admin index page.
+admin.site.index_title = ugettext_lazy(site_text + ' administration')
 
 class YearAdmin(admin.ModelAdmin):
     list_display = ('yearnum', 'entry_fee', 'payout_week', 'payout_first', 'payout_second', 'payout_third')

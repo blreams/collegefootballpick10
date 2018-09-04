@@ -1,13 +1,14 @@
 #from pick_data import *
 #from database import *
 #from pick10.utils import *
+import pytz
 from pick_data import PickData
 from database import Database
 from calculator import TEAM1, TEAM2
 from django.core.exceptions import ObjectDoesNotExist
 from pick10.utils import get_timestamp
 import django.utils.timezone as tz
-from pick10.models import Player, Pick
+from pick10.models import Player, Pick, UserProfile
 from pick10.models import add_pick, get_game
 
 class EnterPicks:
@@ -18,6 +19,7 @@ class EnterPicks:
         self.player_id = player_id
 
     def get_game_picks(self):
+        profile = UserProfile.objects.get(player__id=self.player_id)
         database = Database()
         week_data = database.load_week_data(self.year,self.week_number)
 
@@ -33,6 +35,7 @@ class EnterPicks:
             data.team2 = game.team2.team_name
             data.favored = game.favored
             data.spread = game.spread
+            data.kickoff = self.__format_kickoff(game.kickoff, profile.preferredtz)
             data.timestamp = get_timestamp(game.updated)
 
             if player_already_picked:
@@ -142,3 +145,13 @@ class EnterPicks:
         pick = self.__get_existing_pick(player,game)
         pick.submit_time = tz.now()
         pick.save()
+
+    def __get_local_time(self, tz_date, timezone_name):
+        tz = pytz.timezone(timezone_name)
+        return tz_date.astimezone(tz)
+
+    def __format_kickoff(self, kickoff, timezone):
+        kickoff_localtime = self.__get_local_time(kickoff, timezone)
+        date_format = "%a %m/%d/%Y %I:%M %p %Z"
+        return kickoff_localtime.strftime(date_format)
+

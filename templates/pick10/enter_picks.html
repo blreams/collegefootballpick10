@@ -42,7 +42,7 @@
         {% if pick.number == 10 %}
             <table class="table table-hover table-striped">
                 <thead>
-                    <td class="game-number">Game {{pick.number}}</td>
+                    <td class="game-number">Game {{pick.number}}: {{pick.kickoff}}</td>
                     <td class="header-light">spread</td>
                     <td class="header-light">score</td>
                 </thead>
@@ -64,15 +64,15 @@
         {% else %}
             <table class="table table-hover table-striped">
                 <thead>
-                    <td class="game-number">Game {{pick.number}}</td>
+                    <td class="game-number">Game {{pick.number}}: {{pick.kickoff}}</td>
                     <td class="header-light">spread</td>
                 </thead>
                 <tr class="{{pick.team1_row_class}}" id="team1_row_{{pick.number}}">
-                    <td ><label class="radio-inline team-width">
+                    <td><label class="radio-inline team-width">
                         <input type="radio" name="pick_{{pick.number}}" value="team1" onclick="highlightTeam1({{pick.number}})" {{pick.team1_checked}}>
                         <span id="team-name">{{pick.team1}}</span></label>
                     </td>
-                <td id="spread">{{pick.team1_spread}}</td>
+                    <td id="spread">{{pick.team1_spread}}</td>
                 </tr>
                 <tr class="{{pick.team2_row_class}}" id="team2_row_{{pick.number}}">
                     <td><label class="radio-inline team-width">

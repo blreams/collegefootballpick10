@@ -1,0 +1,22 @@
+{% extends "admin/change_form.html" %}
+
+{% block extrahead %}{{ block.super }}
+<script type="text/javascript">
+django.jQuery(window).load(function() {
+    django.jQuery('.timelist').each(function(num, el) {
+        time_format = get_format('TIME_INPUT_FORMATS')[0];
+        django.jQuery(el).html('');
+        for (i=8; i<24; i++) {
+          var time = new Date(1970,1,1,i,0,0);
+          var time1 = new Date(1970,1,1,i,30,0);
+          lnk = "javascript:DateTimeShortcuts.handleClockQuicklink(" + num + ", '" + time.strftime(time_format) + "');"
+          django.jQuery(el).append('<li><a href="' + lnk + '">' + time.strftime(time_format) + '</a></li>');
+          lnk = "javascript:DateTimeShortcuts.handleClockQuicklink(" + num + ", '" + time1.strftime(time_format) + "');"
+          django.jQuery(el).append('<li><a href="' + lnk + '">' + time1.strftime(time_format) + '</a></li>');
+        }
+
+    });
+});
+</script>
+{% endblock %}
+

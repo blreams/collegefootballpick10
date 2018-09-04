@@ -7,6 +7,7 @@ class PickData:
     favored = None
     team1_predicted_points = None
     team2_predicted_points = None
+    kickoff = None
     timestamp = None
 
     # these are related to the HTML template
