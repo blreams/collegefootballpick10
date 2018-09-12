@@ -21,7 +21,7 @@
     <li>...Waiting for Commissioner to create Player link...</li>
     {% else %}
     <li><a href="{% url 'player_results' year_num last_completed_week_num profile.player.id %}">Week {{last_completed_week_num}} Player Pick Results</a></li>
-    <li><a href="{% url 'enter_picks' year_num week_num profile.player.id %}">Enter/Modify Picks</a></li>
+    <li><a href="{% url 'enter_picks' year_num week_num profile.player.id %}">Week {{week_num}} Enter/Modify Picks</a></li>
     {% endif %}
 </ul>
 {% else %}
