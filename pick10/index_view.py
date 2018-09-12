@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from pick10.models import get_yearlist, get_weeklist, get_profile_by_user, calc_weekly_points
 from forms import IndexForm
+from calculator import FINAL
+from database import Database
 
 class IndexView:
 
@@ -15,12 +17,15 @@ class IndexView:
                 week_num = weeklist[-1]
             else:
                 year_num = 0
+            db = Database()
+            last_completed_week_num = [w for w in weeklist if db.get_week_state(year_num, w) == FINAL][-1]
         profile = get_profile_by_user(user=request.user)
         over_under_list = calc_weekly_points(year_num, request.user.username, overunder=True)
         form = IndexForm()
         context = {
                 'year_num': year_num,
                 'week_num': week_num,
+                'last_completed_week_num': last_completed_week_num,
                 'week_range': range(1, week_num + 1),
                 'profile': profile,
                 'over_under_list': over_under_list,

@@ -88,6 +88,11 @@ def set_week_winner(request, year_num, week_num):
         response = SetWeekWinnerView().post(request, year_num, week_num)
     return response
 
+@staff_member_required
+def commissioner_stats(request, year_num):
+    context = {'year_num': year_num}
+    return render(request, 'pick10/commissioner_stats.html', context)
+
 @login_required
 def overall_results(request,year):
     if request.method == "GET":
