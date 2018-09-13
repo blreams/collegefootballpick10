@@ -6,12 +6,14 @@ from calculator import CalculateResults
 from database import Database
 from week_results import WeekResults
 from week_winner import WeekWinner
+from stats import Stats
 
 class CalculateWeekResults:
 
     def __init__(self,year,week_number,private_names=False):
         self.year = year
         self.week_number = week_number
+        self.week_stats = Stats()
         self.__use_private_names = private_names
         self.__calculate_week_results()
 
@@ -48,12 +50,16 @@ class CalculateWeekResults:
             player_results.possible_wins = calc.get_number_of_possible_wins(player)
             player_results.winner = self.__get_winner_message(player,winner)
 
+            self.week_stats.add_score(player_results.wins, (player_results.wins + player_results.losses))
+
             if self.__use_private_names:
                 player_results.player_name = player.private_name
             else:
                 player_results.player_name = player.public_name
 
             results.append(player_results)
+
+        self.week_stats.calc_stats()
 
         if len(results) > 0:
             winner_state = winner.get_winner_state()

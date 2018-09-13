@@ -6,12 +6,15 @@ from database import Database
 from calculate_week_results import CalculateWeekResults
 from overall_results import OverallResults
 from pick10.models import calc_picked_games
+from stats import Stats
+from pick10.calculator import FINAL
 
 class CalculateOverallResults:
 
     def __init__(self,year,completed_games,private_names=False,use_weeks=None):
         self.year = year
         self.completed_games = completed_games
+        self.overall_stats = Stats()
         self.__use_private_names = private_names
         self.__week_numbers = use_weeks
         self.__calculate_overall_results()
@@ -33,11 +36,15 @@ class CalculateOverallResults:
             last_week = week_number == last_week_number
 
             calc_week = CalculateWeekResults(self.year,week_number,self.__use_private_names)
+            if calc_week.get_week_state() == FINAL:
+                self.overall_stats.merge_stats(calc_week.week_stats)
             week_results = calc_week.get_results()
             week_winner_info = calc_week.get_winner_info()
 
             for week_result in week_results:
                 self.__update_overall_results(week_result.player_id,overall_results,week_result,last_week,week_winner_info)
+
+        self.overall_stats.calc_stats()
 
         self.__update_overall_results_unplayed_weeks(overall_results,last_week_number)
         self.__update_overall_results_win_pct(overall_results,last_week_number)

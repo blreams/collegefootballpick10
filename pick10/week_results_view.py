@@ -60,10 +60,10 @@ class WeekResultsView:
                 WeekNavbar(year,week_number,'week_results',request.user).add_parameters(data)
                 return render(request,"pick10/week_results.html",data)
 
-        cwr = CalculateWeekResults(year,week_number,use_private_names)
-        results = cwr.get_results()
-        week_state = cwr.get_week_state()
-        winner_info = cwr.get_winner_info()
+        self.cwr = CalculateWeekResults(year,week_number,use_private_names)
+        results = self.cwr.get_results()
+        week_state = self.cwr.get_week_state()
+        winner_info = self.cwr.get_winner_info()
 
         if week_state == FINAL:
             self.week_state_string = 'final'
@@ -122,6 +122,7 @@ class WeekResultsView:
         params['week_state'] = self.week_state_string
         params['results'] = sorted_by_wins
         params['winner'] = winner_info
+        params['week_stats'] = self.cwr.week_stats
         params.update(highlight)
 
         content = render_to_string(self.__render_file,params)

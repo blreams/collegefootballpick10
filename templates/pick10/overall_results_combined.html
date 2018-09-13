@@ -9,6 +9,16 @@
 {% elif pool_state == "end_of_year" %}
 <div id="final-pool-state">final results</div>
 {% endif %}
+<table>
+    <tr>
+        <td class="p_content">Points={{overall_stats.points}}</td>
+        <td class="p_content">Population={{overall_stats.scores|length}}</td>
+        <td class="p_content">Mean={{overall_stats.mean|floatformat}}</td>
+        <td class="p_content">Median={{overall_stats.median}}</td>
+        <td class="p_content">Mode={{overall_stats.mode}}</td>
+        <td class="p_content">Over/Under={{overall_stats.over_under}}</td>
+    </tr>
+</table>
 <table id="overall_results_table" class="tablesorter">
 	<thead class="results-header">
 		<tr id="results_row">

@@ -83,7 +83,8 @@ class OverallResultsView:
             return render(request,"pick10/overall_results.html",data)
 
         completed_games = calc_completed_games(year)
-        results = CalculateOverallResults(year,completed_games,use_private_names,use_weeks=weeks_in_year).get_results()
+        self.cor = CalculateOverallResults(year,completed_games,use_private_names,use_weeks=weeks_in_year)
+        results = self.cor.get_results()
 
         content_params = dict()
         content_params['year'] = year
@@ -151,6 +152,7 @@ class OverallResultsView:
         params['last_week_number'] = content_params['last_week_number']
         params['pool_state'] = content_params['pool_state']
         params['results'] = sorted_by_overall
+        params['overall_stats'] = self.cor.overall_stats
 
         self.__highlight_column('overall',params)
 
