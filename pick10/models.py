@@ -325,9 +325,14 @@ def query_picks_week(yearnum, weeknum):
 def get_yearlist():
     return sorted([y.yearnum for y in Year.objects.all()])
 
-def get_weeklist(year):
+def get_weeklist(year, only_unlocked_picks=False, only_locked_scores=False):
     yearobj = Year.objects.filter(yearnum=year)
-    return [w.weeknum for w in Week.objects.filter(year=yearobj).order_by('weeknum')]
+    if only_locked_scores:
+        return [w.weeknum for w in Week.objects.filter(year=yearobj, lock_scores=True).order_by('weeknum')]
+    elif only_unlocked_picks:
+        return [w.weeknum for w in Week.objects.filter(year=yearobj, lock_picks=False).order_by('weeknum')]
+    else:
+        return [w.weeknum for w in Week.objects.filter(year=yearobj).order_by('weeknum')]
 
 def get_createweek_year_week():
     thisyear = timezone.now().year
@@ -427,7 +432,7 @@ def calc_weekly_points(yearnum, username, overunder=False):
     user = get_user_by_username(username)
     if not user or not hasattr(user, 'userprofile') or not hasattr(user.userprofile, 'player'):
         return retval
-    weeknums = get_weeklist(yearnum)
+    weeknums = get_weeklist(yearnum, only_locked_scores=True)
     retval.append(0.0)
     for weeknum in weeknums:
         picks = query_picks(username, yearnum, weeknum)

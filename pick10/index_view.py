@@ -7,18 +7,26 @@ from database import Database
 class IndexView:
 
     def get(self,request):
-        yearlist = get_yearlist()
         year_num = 0
         week_num = 0
+        last_completed_week_num = 0
+        yearlist = get_yearlist()
         if len(yearlist) > 0:
             year_num = yearlist[-1]
-            weeklist = get_weeklist(year_num)
+            weeklist = get_weeklist(year_num, only_unlocked_picks=True)
             if len(weeklist) > 0:
                 week_num = weeklist[-1]
             else:
                 year_num = 0
-            db = Database()
-            last_completed_week_num = [w for w in weeklist if db.get_week_state(year_num, w) == FINAL][-1]
+            if year_num:
+                db = Database()
+                try:
+                    for w in weeklist:
+                        week_state = db.get_week_state(year_num, w)
+                        if week_state == FINAL:
+                            last_completed_week_num = w
+                except:
+                    pass
         profile = get_profile_by_user(user=request.user)
         over_under_list = calc_weekly_points(year_num, request.user.username, overunder=True)
         form = IndexForm()
@@ -43,16 +51,26 @@ class IndexView:
         yearlist = get_yearlist()
         if year_num in yearlist:
             week_num = 0
-            weeklist = get_weeklist(year_num)
+            weeklist = get_weeklist(year_num, only_unlocked_picks=True)
             if len(weeklist) > 0:
                 week_num = weeklist[-1]
             else:
                 year_num = 0
+            if year_num:
+                db = Database()
+                try:
+                    for w in weeklist:
+                        week_state = db.get_week_state(year_num, w)
+                        if week_state == FINAL:
+                            last_completed_week_num = w
+                except:
+                    pass
         profile = get_profile_by_user(user=request.user)
         over_under_list = calc_weekly_points(year_num, request.user.username, overunder=True)
         context = {
                 'year_num': year_num,
                 'week_num': week_num,
+                'last_completed_week_num': last_completed_week_num,
                 'week_range': range(1, week_num + 1),
                 'profile': profile,
                 'over_under_list': over_under_list,
