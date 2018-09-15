@@ -28,7 +28,8 @@ class IndexView:
                 except:
                     pass
         profile = get_profile_by_user(user=request.user)
-        over_under_list = calc_weekly_points(year_num, request.user.username, overunder=True)
+        player_name, player_over_under_list = calc_weekly_points(year_num, request.user.username, overunder=True)
+        compare_name, compare_over_under_list = calc_weekly_points(year_num, None, overunder=True)
         form = IndexForm()
         context = {
                 'year_num': year_num,
@@ -36,7 +37,12 @@ class IndexView:
                 'last_completed_week_num': last_completed_week_num,
                 'week_range': range(1, week_num + 1),
                 'profile': profile,
-                'over_under_list': over_under_list,
+                'player_name': player_name,
+                'player_over_under_list': player_over_under_list,
+                'player_color': '#009999',
+                'compare_name': compare_name,
+                'compare_over_under_list': compare_over_under_list,
+                'compare_color': '#cc0099',
                 'form': form,
                 }
 
@@ -66,14 +72,20 @@ class IndexView:
                 except:
                     pass
         profile = get_profile_by_user(user=request.user)
-        over_under_list = calc_weekly_points(year_num, request.user.username, overunder=True)
+        player_name, player_over_under_list = calc_weekly_points(year_num, request.user.username, overunder=True)
+        compare_name, compare_over_under_list = calc_weekly_points(year_num, None, overunder=True)
         context = {
                 'year_num': year_num,
                 'week_num': week_num,
                 'last_completed_week_num': last_completed_week_num,
                 'week_range': range(1, week_num + 1),
                 'profile': profile,
-                'over_under_list': over_under_list,
+                'player_name': player_name,
+                'player_over_under_list': player_over_under_list,
+                'player_color': '#009999',
+                'compare_name': compare_name,
+                'compare_over_under_list': compare_over_under_list,
+                'compare_color': '#cc0099',
                 'form': form,
                 }
 

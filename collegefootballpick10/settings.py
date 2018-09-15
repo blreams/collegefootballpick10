@@ -32,6 +32,7 @@ ALLOWED_HOSTS = [
     'collegefootballpick10.pythonanywhere.com',
     'blreams.pythonanywhere.com',
     'localhost',
+    'jkt-myth',
 ]
 
 

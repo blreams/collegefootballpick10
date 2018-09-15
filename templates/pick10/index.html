@@ -50,8 +50,14 @@
         </thead>
         <tbody>
             <tr>
-                <td>{{profile.player.public_name}}</td>
-                {% for ou in over_under_list %}
+                <td style="color:{{player_color}}">{{player_name}}</td>
+                {% for ou in player_over_under_list %}
+                <td>{{ou}}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td style="color:{{compare_color}}">{{compare_name}}</td>
+                {% for ou in compare_over_under_list %}
                 <td>{{ou}}</td>
                 {% endfor %}
             </tr>
@@ -61,19 +67,23 @@
 <script class="code" type="text/javascript">
     $(document).ready(function() {
         $.jqplot.config.enablePlugins = true;
-        var ou = [0].concat({{over_under_list}});
+        var ou1 = [0].concat({{player_over_under_list}});
+        var ou2 = [0].concat({{compare_over_under_list}});
         var i, dp;
         var line1 = [];
+        var line2 = [];
         var ticks = [];
-        for (i=0; i<ou.length; i++){
-            dp = [i, ou[i]];
+        for (i=0; i<ou1.length; i++){
+            dp = [i, ou1[i]];
             line1.push(dp);
+            dp = [i, ou2[i]];
+            line2.push(dp);
         }
-        for (i=-1; i<=ou.length; i++){
+        for (i=-1; i<=ou1.length; i++){
             ticks.push(i);
         }
         var optionObj = {
-            title:{text:"Trend Line {{year_num}} - {{profile.player.public_name}}"},
+            title:{text:"Trend Line {{year_num}} - {{player_name}}"},
             grid:{shadow:false, borderWidth:9.0},
             axes:{
                 xaxis:{
@@ -87,10 +97,17 @@
                 }
             },
             series:[{
-                trendline: {color: '#993333'}
+                color: '{{player_color}}',
+                rendererOptions: {smooth: true},
+                trendline: {color: '{{player_color}}'},
+            },
+            {
+                color: '{{compare_color}}',
+                rendererOptions: {smooth: true},
+                trendline: {color: '{{compare_color}}'},
             }]
         };
-        var plot1 = $.jqplot ('chartdiv', [line1], optionObj);
+        var plot1 = $.jqplot ('chartdiv', [line1, line2], optionObj);
     });
 </script>
 {% endif %}

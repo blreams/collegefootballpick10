@@ -40,7 +40,7 @@ class WeekNavbar:
         page_links = []
 
         overall = PageLink()
-        overall.name = "Overall"
+        overall.name = "Season"
         overall.link = reverse('overall_results',args=(self.year,))
         overall.active = True if self.page == "overall" else False
         page_links.append(overall)

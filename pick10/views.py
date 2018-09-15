@@ -23,7 +23,7 @@ from tiebreak_view import TiebreakView
 from update_games_view import UpdateGamesView
 from enter_picks_view import EnterPicksView
 from overall_results_view import OverallResultsView
-from models import get_yearlist, get_weeklist, get_profile_by_user, calc_weekly_points, get_week_with_no_winner
+from models import get_yearlist, get_weeklist, get_profile_by_user, get_week_with_no_winner
 
 def home(request):
     return render(request, 'pick10/home.html')

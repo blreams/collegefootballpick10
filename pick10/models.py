@@ -1,4 +1,5 @@
 import itertools
+import random
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -264,6 +265,10 @@ def get_player_by_id(player_id):
     p = Player.objects.get(id=player_id)
     return p
 
+def get_player_id_list_by_year(yearnum):
+    playeryears = PlayerYear.objects.filter(year__yearnum=yearnum).order_by('player__private_name')
+    return [py.player.id for py in playeryears]
+
 def get_user_by_username(username):
     u = User.objects.get(username=username)
     return u
@@ -307,7 +312,7 @@ def get_week(yearnum, weeknum):
     return w
 
 def get_week_with_no_winner(yearnum):
-    weekobjs = Week.objects.filter(year__yearnum=yearnum, lock_scores=True, lock_picks=False, winner=None).order_by('-weeknum')
+    weekobjs = Week.objects.filter(year__yearnum=yearnum, lock_picks=False, winner=None).order_by('weeknum')
     if not weekobjs:
         return 0
     return weekobjs[0].weeknum
@@ -315,6 +320,11 @@ def get_week_with_no_winner(yearnum):
 def query_picks(username, yearnum, weeknum):
     user = get_user_by_username(username)
     player = user.userprofile.player
+    picks = Pick.objects.filter(player=player, game__week__year__yearnum=yearnum, game__week__weeknum=weeknum).order_by('game__gamenum')
+    return picks
+
+def query_picks_by_player_id(player_id, yearnum, weeknum):
+    player = get_player_by_id(player_id)
     picks = Pick.objects.filter(player=player, game__week__year__yearnum=yearnum, game__week__weeknum=weeknum).order_by('game__gamenum')
     return picks
 
@@ -425,25 +435,37 @@ def calc_picked_games(playerid, yearnum, weeknum=0):
 
     return picked_games
 
-def calc_weekly_points(yearnum, username, overunder=False):
-    """Return list of cumulative points over/under, one per week, for the given year/player
+def calc_weekly_points(yearnum, username_or_player_id=None, overunder=False):
+    """Return list of cumulative points over/under, one per week, for the given year.
+    Can query using username or player_id. If neither is given, it picks a random
+    player.
     """
-    retval = []
-    user = get_user_by_username(username)
-    if not user or not hasattr(user, 'userprofile') or not hasattr(user.userprofile, 'player'):
-        return retval
+    retlist = []
+    if username_or_player_id is None:
+        # Get a random player
+        player_id = random.choice(get_player_id_list_by_year(yearnum))
+    elif isinstance(username_or_player_id, basestring):
+        user = get_user_by_username(username_or_player_id)
+        if not user or not hasattr(user, 'userprofile') or not hasattr(user.userprofile, 'player'):
+            return ('', retlist)
+        player_id = user.userprofile.player.id
+    else:
+        if not get_player_by_id(username_or_player_id):
+            return ('', retlist)
+        player_id = username_or_player_id
+    player_name = get_player_by_id(player_id).private_name
     weeknums = get_weeklist(yearnum, only_locked_scores=True)
-    retval.append(0.0)
+    retlist.append(0.0)
     for weeknum in weeknums:
-        picks = query_picks(username, yearnum, weeknum)
+        picks = query_picks_by_player_id(player_id, yearnum, weeknum)
         games = get_games(yearnum, weeknum)
-        retval.append(retval[-1])
+        retlist.append(retlist[-1])
         for pick, game in itertools.izip(picks, games):
             if game.game_state == 3:
                 if overunder:
-                    retval[-1] -= 0.5
+                    retlist[-1] -= 0.5
                 if pick.winner == game.winner:
-                    retval[-1] += 1.0
-    return retval[1:]
+                    retlist[-1] += 1.0
+    return (player_name, retlist[1:])
 
 
