@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from pick10.models import get_yearlist, get_weeklist, get_profile_by_user, calc_weekly_points
 from forms import IndexForm
-from calculator import FINAL
+from calculator import CalculateResults, IN_PROGRESS, FINAL
 from database import Database
 
 class IndexView:
@@ -10,6 +10,7 @@ class IndexView:
         year_num = 0
         week_num = 0
         last_completed_week_num = 0
+        last_inprogress_week_num = 0
         yearlist = get_yearlist()
         if len(yearlist) > 0:
             year_num = yearlist[-1]
@@ -22,9 +23,12 @@ class IndexView:
                 db = Database()
                 try:
                     for w in weeklist:
-                        week_state = db.get_week_state(year_num, w)
+                        cr = CalculateResults(db.load_week_data(year_num, w))
+                        week_state = cr.get_summary_state_of_all_games()
                         if week_state == FINAL:
                             last_completed_week_num = w
+                        elif week_state == IN_PROGRESS:
+                            last_inprogress_week_num = w
                 except:
                     pass
         profile = get_profile_by_user(user=request.user)
@@ -35,6 +39,7 @@ class IndexView:
                 'year_num': year_num,
                 'week_num': week_num,
                 'last_completed_week_num': last_completed_week_num,
+                'last_inprogress_week_num': last_inprogress_week_num,
                 'week_range': range(1, week_num + 1),
                 'profile': profile,
                 'player_name': player_name,

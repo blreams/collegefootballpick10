@@ -14,14 +14,26 @@
 {% if year_num > 0 %}
 <ul>
     <li><a href="{% url 'overall_results' year_num %}">{{year_num}} Season Results</a></li>
+    {% if last_inprogress_week_num %}
+    <li><a href="{% url 'week_results' year_num last_inprogress_week_num %}">Week {{last_inprogress_week_num}} Results</a></li>
+    {% else %}
     <li><a href="{% url 'week_results' year_num last_completed_week_num %}">Week {{last_completed_week_num}} Results</a></li>
+    {% endif %}
     {% if profile == None %}
     <li><a href="{% url 'profile' %}">Create/Edit Profile</a></li>
     {% elif profile.player == None %}
     <li>...Waiting for Commissioner to create Player link...</li>
     {% else %}
+    {% if last_inprogress_week_num %}
+    <li><a href="{% url 'player_results' year_num last_inprogress_week_num profile.player.id %}">Week {{last_inprogress_week_num}} Player Pick Results</a></li>
+    {% else %}
     <li><a href="{% url 'player_results' year_num last_completed_week_num profile.player.id %}">Week {{last_completed_week_num}} Player Pick Results</a></li>
+    {% endif %}
+    {% if week_num > last_inprogress_week_num %}
     <li><a href="{% url 'enter_picks' year_num week_num profile.player.id %}">Week {{week_num}} Enter/Modify Picks</a></li>
+    {% else %}
+    <li>Week {{week_num}} Enter/Modify Picks (disabled)</li>
+    {% endif %}
     {% endif %}
 </ul>
 {% else %}
