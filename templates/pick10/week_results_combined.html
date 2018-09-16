@@ -4,6 +4,8 @@
     <table><tr><td id="in-progress-week-state">week is in progress</td></tr></table>
 {% elif week_state == 'final' %}
     <table><tr><td id="final-week-state">final results</td></tr></table>
+{% endif %}
+{% if week_state == 'in_progress' or week_state == 'final' %}
     <table>
         <tr>
             <td class="p_content">Points={{week_stats.points}}</td>
