@@ -29,7 +29,7 @@
     {% else %}
     <li><a href="{% url 'player_results' year_num last_completed_week_num profile.player.id %}">Week {{last_completed_week_num}} Player Pick Results</a></li>
     {% endif %}
-    {% if week_num > last_inprogress_week_num %}
+    {% if week_num > last_inprogress_week_num and last_completed_week_num < 13 %}
     <li><a href="{% url 'enter_picks' year_num week_num profile.player.id %}">Week {{week_num}} Enter/Modify Picks</a></li>
     {% else %}
     <li>Week {{week_num}} Enter/Modify Picks (disabled)</li>
