@@ -446,7 +446,7 @@ def calc_weekly_points(yearnum, username_or_player_id=None, overunder=False):
         player_id = random.choice(get_player_id_list_by_year(yearnum))
     elif isinstance(username_or_player_id, basestring):
         user = get_user_by_username(username_or_player_id)
-        if not user or not hasattr(user, 'userprofile') or not hasattr(user.userprofile, 'player'):
+        if not user or not hasattr(user, 'userprofile') or not hasattr(user.userprofile, 'player') or user.userprofile.player is None:
             return ('', retlist)
         player_id = user.userprofile.player.id
     else:
