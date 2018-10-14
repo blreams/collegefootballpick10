@@ -25,13 +25,13 @@ class FBPoolList:
 
         teams_sorted = sorted(teams,key=lambda team:team['name'])
 
-        print ""
-        print "Teams: (%d)" % (len(teams_sorted))
-        print "----------------------------------------------------------------------------------"
+        print("")
+        print("Teams: (%d)" % (len(teams_sorted)))
+        print("----------------------------------------------------------------------------------")
         for team in teams_sorted:
-            print "%-40s %s" % (team['name'],team['conference'])
-        print "----------------------------------------------------------------------------------"
-        print ""
+            print("%-40s %s" % (team['name'],team['conference']))
+        print("----------------------------------------------------------------------------------")
+        print("")
 
     def list_all_players(self):
         self.__verbose.start("reading players from database...")
@@ -44,13 +44,13 @@ class FBPoolList:
 
         players_sorted = sorted(players,key=lambda player:player['name'])
 
-        print ""
-        print "Players:"
-        print "----------------------------------------------------------------------------------"
+        print("")
+        print("Players:")
+        print("----------------------------------------------------------------------------------")
         for player in players_sorted:
-            print "%-40s %s" % (player['name'],self.__array_str(player['years']))
-        print "----------------------------------------------------------------------------------"
-        print ""
+            print("%-40s %s" % (player['name'],self.__array_str(player['years'])))
+        print("----------------------------------------------------------------------------------")
+        print("")
 
 
     def list_all_weeks(self):
@@ -64,19 +64,19 @@ class FBPoolList:
 
         years = sorted(set([week['year'] for week in weeks ]))
 
-        print ""
-        print "Weeks:"
-        print "----------------------------------------------------------------------------------"
+        print("")
+        print("Weeks:")
+        print("----------------------------------------------------------------------------------")
         for year in years:
             numbers = sorted([ week['number'] for week in weeks if week['year'] == year])
 
             for week_number in numbers:
-                print "%d Week %d" % (year,week_number)
+                print("%d Week %d" % (year,week_number))
 
-            print ""
+            print("")
 
-        print "----------------------------------------------------------------------------------"
-        print ""
+        print("----------------------------------------------------------------------------------")
+        print("")
 
     def list_player_picks(self,year,week_number,player_name):
         self.__verbose.start("reading player picks from database...")
@@ -111,18 +111,18 @@ class FBPoolList:
         except FBAPIException as e:
             FBPoolError.exit_with_error("list player picks",e,"error getting games")
 
-        print ""
-        print "%s Picks for %d Week %d:" % (player_name,year,week_number)
-        print "----------------------------------------------------------------------------------"
+        print("")
+        print("%s Picks for %d Week %d:" % (player_name,year,week_number))
+        print("----------------------------------------------------------------------------------")
         game_numbers = sorted(game_picks.keys())
         for game_number in game_numbers:
             if game_number < 10:
-                print "Game  %d: %s" % (game_number,game_picks[game_number])
+                print("Game  %d: %s" % (game_number,game_picks[game_number]))
             else:
-                print "Game %d: %s" % (game_number,game_picks[game_number])
+                print("Game %d: %s" % (game_number,game_picks[game_number]))
 
-        print "----------------------------------------------------------------------------------"
-        print ""
+        print("----------------------------------------------------------------------------------")
+        print("")
 
     def list_week_games(self,year,week_number):
         self.__verbose.start("reading week games from database...")
@@ -147,9 +147,9 @@ class FBPoolList:
         except FBAPIException as e:
             FBPoolError.exit_with_error("list week games",e)
 
-        print ""
-        print "%d Week %d Games:" % (year,week_number)
-        print "----------------------------------------------------------------------------------"
+        print("")
+        print("%d Week %d Games:" % (year,week_number))
+        print("----------------------------------------------------------------------------------")
         game_numbers = sorted(game_teams.keys())
         for game_number in game_numbers:
 
@@ -158,12 +158,12 @@ class FBPoolList:
             team2 = teams[1]
 
             if game_number < 10:
-                print "Game  %d: %s vs. %s" % (game_number,team1,team2)
+                print("Game  %d: %s vs. %s" % (game_number,team1,team2))
             else:
-                print "Game %d: %s vs. %s" % (game_number,team1,team2)
+                print("Game %d: %s vs. %s" % (game_number,team1,team2))
 
-        print "----------------------------------------------------------------------------------"
-        print ""
+        print("----------------------------------------------------------------------------------")
+        print("")
 
     def __array_str(self,a):
         s = ""

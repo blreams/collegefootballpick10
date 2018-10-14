@@ -1,12 +1,13 @@
-#from week_winner import *
-#from database import *
-#from calculator import *
-#from tiebreak_data import *
-from week_winner import WeekWinner
-from database import Database
-from calculator import CalculateResults
-from calculator import NOT_STARTED, IN_PROGRESS, FINAL
-from tiebreak_data import TiebreakSummary, Tiebreak1Summary, Tiebreak2Summary, Tiebreak3Summary, Tiebreak0Data, Tiebreak1Data, Tiebreak2Data, Tiebreak3Data
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
+from .week_winner import WeekWinner
+from .database import Database
+from .calculator import CalculateResults
+from .calculator import NOT_STARTED, IN_PROGRESS, FINAL
+from .tiebreak_data import TiebreakSummary, Tiebreak1Summary, Tiebreak2Summary, Tiebreak3Summary, Tiebreak0Data, Tiebreak1Data, Tiebreak2Data, Tiebreak3Data
 
 class CalculateTiebreak:
 
@@ -462,10 +463,10 @@ class CalculateTiebreak:
             return "lost"
 
         if win_loss != "win" or win_loss != "loss":
-            raise AssertionError,"Bad win_loss value %s" % (win_loss)
+            raise AssertionError("Bad win_loss value %s" % (win_loss))
             return
 
-        raise AssertionError,"Bad state value %s" % (featured_game.game_state)
+        raise AssertionError("Bad state value %s" % (featured_game.game_state))
 
     def get_featured_game_state(self):
         winner_data = self.__winners.get_week_winner_data()
@@ -485,7 +486,7 @@ class CalculateTiebreak:
         if featured_game.game_state == FINAL:
             return self.__calc.get_pool_game_winner_team_name(featured_game)
 
-        raise AssertionError,"Bad state value %s" % (featured_game.game_state)
+        raise AssertionError("Bad state value %s" % (featured_game.game_state))
 
     def __get_player_submit_time(self,player_id):
         winner_data = self.__winners.get_week_winner_data()
@@ -530,7 +531,7 @@ class CalculateTiebreak:
             else:
                 return 7
 
-        raise AssertionError, "unexpected number of tiebreaks"
+        raise AssertionError("unexpected number of tiebreaks")
 
     def __sort_tiebreak_summary(self,summary):
         # this will sort the data so that it appears in the following order:

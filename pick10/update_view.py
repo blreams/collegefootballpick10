@@ -1,14 +1,10 @@
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.http import HttpResponseNotFound, HttpResponse
-#from pick10.overall_results_view import *
-#from pick10.week_results_view import *
-#from pick10.tiebreak_view import *
-#from pick10.user_access import *
-from pick10.overall_results_view import OverallResultsView
-from pick10.week_results_view import WeekResultsView
-from pick10.tiebreak_view import TiebreakView
-from pick10.user_access import UserAccess
+from .overall_results_view import OverallResultsView
+from .week_results_view import WeekResultsView
+from .tiebreak_view import TiebreakView
+from .user_access import UserAccess
 
 class UpdatePageView:
 

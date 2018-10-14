@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from pick10.models import Player, Year, PlayerYear, Team, Conference, Game, Pick, UserProfile, Week
 from pick10.models import add_game, add_pick, get_team
 from pick10.calculator import CalculateResults, TEAM1, TEAM2, NOT_STARTED, IN_PROGRESS, FINAL
-from stage_history import main, populate_picks_for_year_week, populate_games_for_year_week, populate_year, populate_player_count
+from stage_history import main, populate_year
 from stage_models import populate_conferences_teams
 import random
 

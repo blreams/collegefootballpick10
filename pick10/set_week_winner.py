@@ -1,8 +1,13 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
 from django.shortcuts import render, redirect
 from django.http import HttpResponseNotFound
 from datetime import datetime
-from models import get_week, get_player_by_private_name
-from forms import SetWeekWinnerForm
+from .models import get_week, get_player_by_private_name
+from .forms import SetWeekWinnerForm
 
 class SetWeekWinnerView:
 

@@ -1,3 +1,8 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
 import os
 from collections import Counter
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'collegefootballpick10.settings')
@@ -10,10 +15,6 @@ django.setup()
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.cache import cache
 
-#from pick10.models import *
-#from pick10.overall_results_view import *
-#from pick10.week_results_view import *
-#from pick10.tiebreak_view import *
 from pick10.models import Year, Player, PlayerYear, Conference, Team, Game, Pick, Week
 from pick10.models import get_yearlist, get_weeklist, get_player_by_private_name
 from pick10.overall_results_view import OverallResultsView
@@ -40,7 +41,7 @@ def get_player_duplicates():
         if c[private_player] > 1:
             for index in range(c[private_player]):
                 player = get_player_by_private_name(private_player, index)
-                print str(player)
+                print(str(player))
 
 def get_playernames_with_years(yearnums=0, debug=False):
     playerdict = {}
@@ -50,7 +51,7 @@ def get_playernames_with_years(yearnums=0, debug=False):
         yearnumlist = get_yearlist()
 
     for yearnum in yearnumlist:
-        if debug: print "Parsing %d spreadsheet..." % yearnum
+        if debug: print("Parsing %d spreadsheet..." % yearnum)
         ss = get_poolspreadsheet(yearnum)
         for playername in ss.get_player_names():
             if playerdict.get(playername) is None:
@@ -62,7 +63,7 @@ def get_playernames_with_years(yearnums=0, debug=False):
     for playername in sorted(playerdict):
         years_string = ','.join(playerdict[playername])
         outline = "%s: %s" % (playername, years_string)
-        if debug: print outline
+        if debug: print(outline)
         outlines.append(outline)
 
     return '\n'.join(outlines)
@@ -70,18 +71,18 @@ def get_playernames_with_years(yearnums=0, debug=False):
 def picks_change_players(from_ssname, to_ssname, debug=False):
     fromplayer = Player.objects.get(ss_name=from_ssname)
     toplayer = Player.objects.get(ss_name=to_ssname)
-    print "From Player = %s" % str(fromplayer)
-    print "To   Player = %s" % str(toplayer)
+    print("From Player = %s" % str(fromplayer))
+    print("To   Player = %s" % str(toplayer))
     picks = Pick.objects.filter(player=fromplayer)
     topicks = Pick.objects.filter(player=toplayer)
-    print "-----------------BEFORE--------------------"
-    print "Found %d Picks for From Player %s" % (len(picks), str(fromplayer))
-    print "Found %d Picks for To   Player %s" % (len(topicks), str(toplayer))
+    print("-----------------BEFORE--------------------")
+    print("Found %d Picks for From Player %s" % (len(picks), str(fromplayer)))
+    print("Found %d Picks for To   Player %s" % (len(topicks), str(toplayer)))
     playeryears = PlayerYear.objects.filter(player=fromplayer)
     toplayeryears = PlayerYear.objects.filter(player=toplayer)
-    print "Found %d PlayerYears for From Player %s" % (len(playeryears), str(fromplayer))
-    print "Found %d PlayerYears for To   Player %s" % (len(toplayeryears), str(toplayer))
-    print "-------------------------------------------"
+    print("Found %d PlayerYears for From Player %s" % (len(playeryears), str(fromplayer)))
+    print("Found %d PlayerYears for To   Player %s" % (len(toplayeryears), str(toplayer)))
+    print("-------------------------------------------")
     for pick in picks:
         pick.player = toplayer
         if not debug: pick.save()
@@ -90,14 +91,14 @@ def picks_change_players(from_ssname, to_ssname, debug=False):
         if not debug: playeryear.save()
     picks = Pick.objects.filter(player=fromplayer)
     topicks = Pick.objects.filter(player=toplayer)
-    print "-----------------AFTER---------------------"
-    print "Found %d Picks for From Player %s" % (len(picks), str(fromplayer))
-    print "Found %d Picks for To   Player %s" % (len(topicks), str(toplayer))
+    print("-----------------AFTER---------------------")
+    print("Found %d Picks for From Player %s" % (len(picks), str(fromplayer)))
+    print("Found %d Picks for To   Player %s" % (len(topicks), str(toplayer)))
     playeryears = PlayerYear.objects.filter(player=fromplayer)
     toplayeryears = PlayerYear.objects.filter(player=toplayer)
-    print "Found %d PlayerYears for From Player %s" % (len(playeryears), str(fromplayer))
-    print "Found %d PlayerYears for To   Player %s" % (len(toplayeryears), str(toplayer))
-    print "-------------------------------------------"
+    print("Found %d PlayerYears for From Player %s" % (len(playeryears), str(fromplayer)))
+    print("Found %d PlayerYears for To   Player %s" % (len(toplayeryears), str(toplayer)))
+    print("-------------------------------------------")
 
 def flush_cache(yearnums=0, weeknum=0, skipweek=False, skiptiebreak=False, skipoverall=False, debug=False):
     """Delete memcache contents based on arguments.
@@ -118,25 +119,25 @@ def flush_cache(yearnums=0, weeknum=0, skipweek=False, skiptiebreak=False, skipo
     for yearnum in weeknumdict:
         for weeknum in weeknumdict[yearnum]:
             if not skipweek:
-                print "Flushing memcache week results      year %d, week %d." % (yearnum, weeknum)
+                print("Flushing memcache week results      year %d, week %d." % (yearnum, weeknum))
                 for keytype in ('private', 'public'):
                     body_key = 'week_%s_%d_%d' % (keytype, yearnum, weeknum)
                     if cache.get(body_key) is not None:
-                        print "  Flushing entry %s." % (body_key,)
+                        print("  Flushing entry %s." % (body_key,))
                         if not debug: cache.delete(body_key)
             if not skiptiebreak:
-                print "Flushing memcache tiebreaks         year %d, week %d." % (yearnum, weeknum)
+                print("Flushing memcache tiebreaks         year %d, week %d." % (yearnum, weeknum))
                 for keytype in ('private', 'public'):
                     body_key = 'tiebreak_%s_%d_%d' % (keytype, yearnum, weeknum)
                     if cache.get(body_key) is not None:
-                        print "  Flushing entry %s." % (body_key,)
+                        print("  Flushing entry %s." % (body_key,))
                         if not debug: cache.delete(body_key)
         if not skipoverall:
-            print "Flushing memcache overall results   year %d." % (yearnum)
+            print("Flushing memcache overall results   year %d." % (yearnum))
             for keytype in ('private', 'public'):
                 body_key = 'overall_%s_%d' % (keytype, yearnum)
                 if cache.get(body_key) is not None:
-                    print "  Flushing entry %s." % (body_key,)
+                    print("  Flushing entry %s." % (body_key,))
                     if not debug: cache.delete(body_key)
 
 def update_cache(yearnums=0, weeknum=0, skipweek=False, skiptiebreak=False, skipoverall=False, debug=False):
@@ -156,31 +157,31 @@ def update_cache(yearnums=0, weeknum=0, skipweek=False, skiptiebreak=False, skip
     for yearnum in weeknumdict:
         for weeknum in weeknumdict[yearnum]:
             if not skipweek:
-                print "Updating memcache week results      year %d, week %d." % (yearnum, weeknum)
+                print("Updating memcache week results      year %d, week %d." % (yearnum, weeknum))
                 if not debug: update_memcache_week_results(yearnum, weeknum)
             if not skiptiebreak:
-                print "Updating memcache tiebreaks         year %d, week %d." % (yearnum, weeknum)
+                print("Updating memcache tiebreaks         year %d, week %d." % (yearnum, weeknum))
                 if not debug: update_memcache_tiebreak(yearnum, weeknum)
         if not skipoverall:
-            print "Updating memcache overall results   year %d." % (yearnum)
+            print("Updating memcache overall results   year %d." % (yearnum))
             if not debug: update_memcache_overall_results(yearnum)
 
 def delete_year_from_db(yearnum):
     picks = Pick.objects.filter(game__week__year__yearnum=yearnum)
     if len(picks) > 0:
-        print "Deleting %d picks for year %d..." % (len(picks), yearnum,)
+        print("Deleting %d picks for year %d..." % (len(picks), yearnum,))
         picks.delete()
     games = Game.objects.filter(week__year__yearnum=yearnum)
     if len(games) > 0:
-        print "Deleting %d games for year %d..." % (len(games), yearnum,)
+        print("Deleting %d games for year %d..." % (len(games), yearnum,))
         games.delete()
     weeks = Week.objects.filter(year__yearnum=yearnum)
     if len(weeks) > 0:
-        print "Deleting %d weeks for year %d..." % (len(weeks), yearnum,)
+        print("Deleting %d weeks for year %d..." % (len(weeks), yearnum,))
         weeks.delete()
     playeryears = PlayerYear.objects.filter(year__yearnum=yearnum)
     if len(playeryears) > 0:
-        print "Deleting %d playeryears for year %d..." % (len(playeryears), yearnum,)
+        print("Deleting %d playeryears for year %d..." % (len(playeryears), yearnum,))
         playeryears.delete()
     players = []
     for player in Player.objects.all():
@@ -188,26 +189,26 @@ def delete_year_from_db(yearnum):
         if len(playeryears) == 0:
             players.append(player)
     if len(players) > 0:
-        print "Deleting %d players for year %d..." % (len(players), yearnum,)
+        print("Deleting %d players for year %d..." % (len(players), yearnum,))
         for player in players:
             player.delete()
     years = Year.objects.filter(yearnum=yearnum)
     if len(years) > 0:
-        print "Deleting year %d..." % (yearnum,)
+        print("Deleting year %d..." % (yearnum,))
         years.delete()
 
 def delete_year_week_from_db(yearnum, weeknum):
     picks = Pick.objects.filter(game__week__year__yearnum=yearnum, game__week__weeknum=weeknum)
     if len(picks) > 0:
-        print "Deleting %d picks for year %d week %d..." % (len(picks), yearnum, weeknum)
+        print("Deleting %d picks for year %d week %d..." % (len(picks), yearnum, weeknum))
         picks.delete()
     games = Game.objects.filter(week__year__yearnum=yearnum, week__weeknum=weeknum)
     if len(games) > 0:
-        print "Deleting %d games for year %d week %d..." % (len(games), yearnum, weeknum)
+        print("Deleting %d games for year %d week %d..." % (len(games), yearnum, weeknum))
         games.delete()
     weeks = Week.objects.filter(year__yearnum=yearnum, weeknum=weeknum)
     if len(weeks) > 0:
-        print "Deleting %d weeks for year %d week %d..." % (len(weeks), yearnum, weeknum)
+        print("Deleting %d weeks for year %d week %d..." % (len(weeks), yearnum, weeknum))
         weeks.delete()
 
 def populate_year(yearnum, verbose=False):
@@ -366,7 +367,7 @@ def update_memcache_overall_results(yearnum):
 def main(years=None, weeks=None, verbose=False, load_memcache=True):
     if years is None:
         years = range(beginyear, endyear + 1)
-    elif isinstance(years, (int, long)):
+    elif isinstance(years, six.integer_types):
         years = [years]
 
     print("populate_all_teams()")
@@ -381,7 +382,7 @@ def main(years=None, weeks=None, verbose=False, load_memcache=True):
 
         if weeks is None:
             weeks = poolspreadsheet.get_week_numbers()
-        elif isinstance(weeks, (int, long)):
+        elif isinstance(weeks, six.integer_types):
             weeks = [weeks]
         print("Found %d weeks in spreadsheet..." % (len(weeks),))
 

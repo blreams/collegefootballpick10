@@ -256,15 +256,15 @@ def populate_picks():
 
 # Execution starts here
 if __name__ == '__main__':
-    print "Starting pick10 model population..."
-    print "  Populating Users..."
+    print("Starting pick10 model population...")
+    print("  Populating Users...")
     populate_users()
-    print "  Populating Conferences and Teams..."
+    print("  Populating Conferences and Teams...")
     populate_conferences_teams()
-    print "  Populating Games..."
+    print("  Populating Games...")
     populate_games()
-    print "  Populating Weeks..."
+    print("  Populating Weeks...")
     populate_weeks()
-    print "  Populating Picks..."
+    print("  Populating Picks...")
     populate_picks()
 

@@ -1,8 +1,18 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
 import itertools
 import random
+try:
+    from itertools import izip as zip
+except ImportError:
+    pass
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.utils.encoding import python_2_unicode_compatible
 
 import pytz
 from datetime import datetime, timedelta
@@ -41,6 +51,7 @@ def get_pick_deadline(yearnum=0, weeknum=0):
         return getattr(weekobj, 'pick_deadline')
 
 
+@python_2_unicode_compatible
 class Year(models.Model):
     yearnum = models.IntegerField()
     entry_fee = models.DecimalField(default=10.0, decimal_places=2, max_digits=6)
@@ -54,9 +65,10 @@ class Year(models.Model):
     class Meta:
         verbose_name_plural = '1. Years'
 
-    def __unicode__(self):
+    def __str__(self):
         return 'Year %d'%(self.yearnum,)
 
+@python_2_unicode_compatible
 class Player(models.Model):
     public_name = models.CharField(max_length=100, null=True, blank=True, default='')
     private_name = models.CharField(max_length=100, null=True, blank=True, default='')
@@ -68,9 +80,10 @@ class Player(models.Model):
         verbose_name_plural = '2. Players'
         ordering = ('private_name',)
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s/%s/%s'%(self.private_name, self.public_name, self.ss_name)
 
+@python_2_unicode_compatible
 class PlayerYear(models.Model):
     player = models.ForeignKey('Player')
     year = models.ForeignKey('Year')
@@ -80,9 +93,10 @@ class PlayerYear(models.Model):
     class Meta:
         verbose_name_plural = '3. PlayerYears'
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s:%s'%(self.player.private_name, self.year.yearnum,)
 
+@python_2_unicode_compatible
 class Conference(models.Model):
     conf_name = models.CharField(max_length=40)                            # Conference name, 'Southeastern'
     div_name = models.CharField(max_length=40, null=True, blank=True, default='')      # Division name, 'East'
@@ -92,9 +106,10 @@ class Conference(models.Model):
     class Meta:
         verbose_name_plural = '4. Conferences'
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s %s'%(self.conf_name, self.div_name,)
 
+@python_2_unicode_compatible
 class Team(models.Model):
     team_name = models.CharField(max_length=40)                            # Team name, 'South Carolina'
     mascot = models.CharField(max_length=40)                               # Team mascot, 'Gamecocks'
@@ -108,9 +123,10 @@ class Team(models.Model):
     class Meta:
         verbose_name_plural = '5. Teams'
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s %s'%(self.team_name, self.mascot,)
 
+@python_2_unicode_compatible
 class Week(models.Model):
     year = models.ForeignKey('Year')                                        # Season year corresponding to this week
     weeknum = models.IntegerField()                                         # Week number within the season
@@ -134,9 +150,10 @@ class Week(models.Model):
     class Meta:
         verbose_name_plural = '6. Weeks'
 
-    def __unicode__(self):
+    def __str__(self):
         return 'Year=%d, Week=%d'%(self.year.yearnum, self.weeknum,)
 
+@python_2_unicode_compatible
 class Game(models.Model):
     week = models.ForeignKey('Week')                                        # Pointer back to Week entry
     gamenum = models.IntegerField(default=0)                                # Game number within the week (ie. 1-10)
@@ -157,9 +174,10 @@ class Game(models.Model):
     class Meta:
         verbose_name_plural = '7. Games'
 
-    def __unicode__(self):
+    def __str__(self):
         return 'Year=%d, Week=%d, Game=%d'%(self.week.year.yearnum, self.week.weeknum, self.gamenum,)
 
+@python_2_unicode_compatible
 class Pick(models.Model):
     player = models.ForeignKey(Player)                                 # Link to player for which this pick applies
     game = models.ForeignKey('Game')                                   # Link to game for which this pick applies
@@ -173,9 +191,10 @@ class Pick(models.Model):
     class Meta:
         verbose_name_plural = '8. Picks'
 
-    def __unicode__(self):
+    def __str__(self):
         return 'User=%s, Year=%d, Week=%d, Game=%d'%(self.player.private_name, self.game.week.year.yearnum, self.game.week.weeknum, self.game.gamenum,)
 
+@python_2_unicode_compatible
 class UserProfile(models.Model):
     tz_choices = [(tz, tz) for tz in pytz.all_timezones if tz.startswith('US')] + [(tz, tz) for tz in pytz.all_timezones if not tz.startswith('US')]
     user = models.OneToOneField(User)
@@ -187,7 +206,7 @@ class UserProfile(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return 'User=%s, Player=%s' % (self.user.username, self.player,)
 
 def add_year(yearnum):
@@ -444,7 +463,7 @@ def calc_weekly_points(yearnum, username_or_player_id=None, overunder=False):
     if username_or_player_id is None:
         # Get a random player
         player_id = random.choice(get_player_id_list_by_year(yearnum))
-    elif isinstance(username_or_player_id, basestring):
+    elif isinstance(username_or_player_id, six.string_types):
         user = get_user_by_username(username_or_player_id)
         if not user or not hasattr(user, 'userprofile') or not hasattr(user.userprofile, 'player') or user.userprofile.player is None:
             return ('', retlist)
@@ -460,7 +479,7 @@ def calc_weekly_points(yearnum, username_or_player_id=None, overunder=False):
         picks = query_picks_by_player_id(player_id, yearnum, weeknum)
         games = get_games(yearnum, weeknum)
         retlist.append(retlist[-1])
-        for pick, game in itertools.izip(picks, games):
+        for pick, game in zip(picks, games):
             if game.game_state == 3:
                 if overunder:
                     retlist[-1] -= 0.5

@@ -75,7 +75,7 @@ def fill_in_player_email_and_timezone():
     for i in range(len(players)):
         profile = get_profile_by_player(players[i].player)
         if profile == None or profile.user.email == None:
-            print "No email address found for %s" % (players[i].player.private_name)
+            print("No email address found for %s" % (players[i].player.private_name))
             players[i].email = None
             players[i].timezone = 'US/Eastern'
             continue
@@ -109,7 +109,7 @@ def send_pick_reminder_email(year,week,deadline,player):
     try:
         send_mail(subject,message,cfp_settings.DEFAULT_FROM_EMAIL,[player.email])
     except:
-        print "Failed to send an email to %s" % (player.email)
+        print("Failed to send an email to %s" % (player.email))
 
 def get_staff_email_addresses():
     users = get_staff()
@@ -144,18 +144,18 @@ def send_admin_email(year,week,deadline):
         message += "\n"
 
     if SCRIPT_TEST:
-        print subject
-        print message
+        print(subject)
+        print(message)
 
     to_field = get_staff_email_addresses()
     if len(to_field) <= 0:
-        print "Could not find any staff email addresses"
+        print("Could not find any staff email addresses")
         return
 
     try:
         send_mail(subject,message,cfp_settings.DEFAULT_FROM_EMAIL,to_field)
     except:
-        print "Failed to send an email to %s" % (to_field)
+        print("Failed to send an email to %s" % (to_field))
 
 
 if __name__ == "__main__":
@@ -166,7 +166,7 @@ if __name__ == "__main__":
 
     if trigger_script(deadline):
 
-        print "Finding players with no picks for %d week %d" % (year,week)
+        print("Finding players with no picks for %d week %d" % (year,week))
 
         find_players_without_picks(data)
         fill_in_player_email_and_timezone()
@@ -174,9 +174,9 @@ if __name__ == "__main__":
         send_admin_email(year,week,deadline)
 
         if len(players) == 0:
-            print "All players have entered their picks."
+            print("All players have entered their picks.")
         else:
             for player in players:
                 if player.email != None:
-                    print "Sending reminder email to %s" % (player.email)
+                    print("Sending reminder email to %s" % (player.email))
                     send_pick_reminder_email(year,week,deadline,player)

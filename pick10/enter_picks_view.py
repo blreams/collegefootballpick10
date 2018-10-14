@@ -1,19 +1,19 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
+import pytz
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
-#from pick10.models import *
-#from enter_picks import *
-#from calculator import *
-#from database import *
-#from pick10.week_navbar import *
-from pick10.models import Player, UserProfile, Game
-from pick10.models import get_week, get_player_by_id
-from enter_picks import EnterPicks
-from calculator import CalculateResults
-from calculator import TEAM1, TEAM2, IN_PROGRESS, FINAL
-from database import Database
 from django.http import HttpResponseNotFound
-import pytz
-from pick10.week_navbar import WeekNavbar
+from .models import Player, UserProfile, Game
+from .models import get_week, get_player_by_id
+from .enter_picks import EnterPicks
+from .calculator import CalculateResults
+from .calculator import TEAM1, TEAM2, IN_PROGRESS, FINAL
+from .database import Database
+from .week_navbar import WeekNavbar
 
 class EnterPicksView:
 
@@ -352,7 +352,7 @@ class EnterPicksView:
         elif calc.is_team2_winning_pool(game):
             return TEAM2
 
-        raise AssertionError,"Team1 or Team2 should be winning the game"
+        raise AssertionError("Team1 or Team2 should be winning the game")
 
     def __set_game10_params(self,picks,params):
         for pick in picks:
@@ -360,7 +360,7 @@ class EnterPicksView:
                 params['game10_spread'] = pick.spread
                 params['game10_favored'] = pick.favored
                 return
-        raise AssertionError,'Could not find game 10'
+        raise AssertionError('Could not find game 10')
 
     def __were_games_edited(self,request,pick_data):
         for pick in pick_data:

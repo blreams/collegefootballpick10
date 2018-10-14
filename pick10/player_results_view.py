@@ -1,16 +1,19 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
 import string
 import re
 import pytz
 from django.shortcuts import render
 from django.template.loader import render_to_string
-#from pick10.models import *
-#from pick10.calculate_player_results import *
-from pick10.models import Player, get_week
-from pick10.database import Database
-from pick10.calculate_player_results import CalculatePlayerResults
-from pick10.week_navbar import WeekNavbar
-from pick10.user_access import UserAccess
-from pick10.calculator import NOT_STARTED, IN_PROGRESS, FINAL
+from .models import Player, get_week
+from .database import Database
+from .calculate_player_results import CalculatePlayerResults
+from .week_navbar import WeekNavbar
+from .user_access import UserAccess
+from .calculator import NOT_STARTED, IN_PROGRESS, FINAL
 
 class PlayerResultsView:
 
@@ -117,7 +120,7 @@ class PlayerResultsView:
             return self.__game_in_progress_status(result)
         elif result.game_state == FINAL:
             return self.__game_final_status()
-        raise AssertionError,"bad game state: %s" % (result.game_state)
+        raise AssertionError("bad game state: %s" % (result.game_state))
 
     def __game_not_started_status(self,result,timezone):
         if result.game_date == None:

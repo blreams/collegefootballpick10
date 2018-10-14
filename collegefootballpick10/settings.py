@@ -33,6 +33,7 @@ ALLOWED_HOSTS = [
     'blreams.pythonanywhere.com',
     'localhost',
     'jkt-myth',
+    'skx-linux',
 ]
 
 

@@ -1,23 +1,26 @@
-from .base import FunctionalTest
-from django.core.urlresolvers import reverse
-from pick10.tests.unit_test_database import UnitTestDatabase
-from pick10.database import Database
-from pick10.calculate_week_results import CalculateWeekResults
-from pick10.calculator import NOT_STARTED, IN_PROGRESS, FINAL
-#from pick10.models import *
-#from pick10.calculator import *
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
 import unittest
-from django.contrib.auth.models import User
-from django.test.client import Client
-from utils import Utils
 from bs4 import BeautifulSoup
 from collections import Counter
+from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
+from django.test.client import Client
+from .base import FunctionalTest
+from .tests.unit_test_database import UnitTestDatabase
+from .database import Database
+from .calculate_week_results import CalculateWeekResults
+from .calculator import NOT_STARTED, IN_PROGRESS, FINAL
+from .utils import Utils
 
 class TestHtmlAnalysis(FunctionalTest):
 
     def setUp(self):
         super(TestHtmlAnalysis, self).setUp()
-        print "Initializing Test Fixture..."
+        print("Initializing Test Fixture...")
         self.test_db = UnitTestDatabase()
         self.test_db.load_historical_data_for_week(2013, 1)
         self.test_db.load_historical_data_for_week(2013, 2)

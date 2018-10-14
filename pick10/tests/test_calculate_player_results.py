@@ -1,5 +1,10 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
 from django.test import TestCase
-from unit_test_database import UnitTestDatabase
+from .unit_test_database import UnitTestDatabase
 
 class CalculatePlayerResultsTests(TestCase):
 

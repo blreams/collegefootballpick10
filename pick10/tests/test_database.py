@@ -1,7 +1,11 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
 from django.test import TestCase
-from pick10.database import Database
-#from pick10.models import *
-from unit_test_database import UnitTestDatabase
+from ..database import Database
+from .unit_test_database import UnitTestDatabase
 
 # This class tests the database.py file load_week_data function
 class LoadWeekDataTest(TestCase):

@@ -12,5 +12,5 @@ class WeekData:
             player = self.players[player_id]
             if player and player.private_name == private_name:
                 return player
-        raise AssertionError,"Could not find player %s" % (private_name)
+        raise AssertionError("Could not find player %s" % (private_name))
 

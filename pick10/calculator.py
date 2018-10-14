@@ -11,19 +11,19 @@ class CalculateResults:
         self.__data = data
 
     def get_game_state(self):
-        raise AssertionError,"Not implemented"
+        raise AssertionError("Not implemented")
 
     def get_game_pick(self):
-        raise AssertionError,"Not implemented"
+        raise AssertionError("Not implemented")
 
     def get_player_name(self,player_key):
-        raise AssertionError,"Not implemented"
+        raise AssertionError("Not implemented")
 
     def get_game(self,game_key):
-        raise AssertionError,"Not implemented"
+        raise AssertionError("Not implemented")
 
     def get_team_name(self,team_key):
-        raise AssertionError,"Not implemented"
+        raise AssertionError("Not implemented")
 
     def get_team_player_picked_to_win(self,player,game):
         picks = self.__data.player_picks[player.id]
@@ -42,7 +42,7 @@ class CalculateResults:
             return game.team1.team_name
         elif winner == TEAM2:
             return game.team2.team_name
-        raise AssertionError,"Error determining winner name (winner=%s)" % (winner)
+        raise AssertionError("Error determining winner name (winner=%s)" % (winner))
 
     def is_team1_winning_pool(self,game):
         score_diff = game.team2_actual_points-game.team1_actual_points
@@ -51,7 +51,7 @@ class CalculateResults:
         elif game.favored == TEAM1:
             spread = -game.spread
         else:
-            raise AssertionError,"game.favored has an invalid value"
+            raise AssertionError("game.favored has an invalid value")
         return score_diff < spread
 
     def is_team2_winning_pool(self,game):
@@ -61,7 +61,7 @@ class CalculateResults:
         elif game.favored == TEAM1:
             spread = -game.spread
         else: 
-            raise AssertionError,"game.favored has an invalid value"
+            raise AssertionError("game.favored has an invalid value")
         return score_diff > spread
 
     def get_pool_game_winner(self,game):
@@ -71,7 +71,7 @@ class CalculateResults:
             elif self.is_team2_winning_pool(game):
                 return TEAM2
             else:
-                raise AssertionError,"Either team1 or team2 should be ahead"
+                raise AssertionError("Either team1 or team2 should be ahead")
         else:
             return None
 
@@ -86,7 +86,7 @@ class CalculateResults:
         elif winner == TEAM2:
             return game.team2.team_name
         else:
-            raise AssertionError,"Either team1 or team2 should have won"
+            raise AssertionError("Either team1 or team2 should have won")
 
     def get_game_winner(self,game):
         if game.game_state == FINAL:
@@ -113,7 +113,7 @@ class CalculateResults:
         elif winner == TEAM2:
             return game.team2.team_name
         else:
-            raise AssertionError,"Either team1 or team2 should have won"
+            raise AssertionError("Either team1 or team2 should have won")
 
     def get_team_winning_pool_game(self,game):
         if game.game_state == IN_PROGRESS:
@@ -122,7 +122,7 @@ class CalculateResults:
             elif self.is_team2_winning_pool(game):
                 return TEAM2
             else:
-                raise AssertionError,"Either team1 or team2 should be ahead"
+                raise AssertionError("Either team1 or team2 should be ahead")
         else:
             return None
 
@@ -137,7 +137,7 @@ class CalculateResults:
         elif team == TEAM2:
             return game.team2.team_name
         else:
-            raise AssertionError,"Either team1 or team2 should be ahead"
+            raise AssertionError("Either team1 or team2 should be ahead")
 
     def get_team_winning_game(self,game):
         if game.game_state == IN_PROGRESS:
@@ -163,7 +163,7 @@ class CalculateResults:
         elif team == TIED:
             return "tied"
         else:
-            raise AssertionError,"Invalid team value"
+            raise AssertionError("Invalid team value")
 
     def player_did_not_pick(self,player,game):
         assert game != None and self.__game_id_valid(game.id),"Game is not valid"
@@ -216,7 +216,7 @@ class CalculateResults:
         return picks == 0
 
     def __debug_print_game(self,player_key,game_key):
-        raise AssertionError,"Not implemented"
+        raise AssertionError("Not implemented")
 
     def get_number_of_losses(self,player):
         losses = 0
@@ -283,7 +283,7 @@ class CalculateResults:
         elif game.game_state == NOT_STARTED:
             return True
         else:
-            raise AssertionError,"invalid game state"
+            raise AssertionError("invalid game state")
 
     def is_player_possible_to_win_game(self,player,game):
         assert game != None and self.__game_id_valid(game.id),"invalid game"
@@ -298,7 +298,7 @@ class CalculateResults:
         elif game.game_state == NOT_STARTED:
             return True
         else:
-            raise AssertionError,"invalid game state"
+            raise AssertionError("invalid game state")
 
     def get_number_of_projected_wins(self,player):
         wins = 0
@@ -363,7 +363,7 @@ class CalculateResults:
             return game.team1.team_name
         elif game.favored == TEAM2:
             return game.team2.team_name
-        raise AssertionError,"invalid favored value"
+        raise AssertionError("invalid favored value")
 
     def get_game_score_spread(self,game):
         assert game != None and self.__game_id_valid(game.id),"invalid game"

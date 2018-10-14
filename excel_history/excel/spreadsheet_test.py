@@ -2,7 +2,7 @@ import os as _os
 import re
 
 import unittest
-from pool_spreadsheet import *
+from .pool_spreadsheet import *
 
 # Create a player translation dict
 player_username = {}

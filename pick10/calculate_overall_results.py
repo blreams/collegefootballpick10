@@ -1,13 +1,14 @@
-#from calculator import *
-#from database import *
-#from calculate_week_results import *
-#from overall_results import *
-from database import Database
-from calculate_week_results import CalculateWeekResults
-from overall_results import OverallResults
-from pick10.models import calc_picked_games
-from stats import Stats
-from pick10.calculator import FINAL
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
+from .database import Database
+from .calculate_week_results import CalculateWeekResults
+from .overall_results import OverallResults
+from .models import calc_picked_games
+from .stats import Stats
+from .calculator import FINAL
 
 class CalculateOverallResults:
 

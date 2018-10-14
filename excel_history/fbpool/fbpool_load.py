@@ -287,5 +287,5 @@ class FBPoolLoad:
         end_time = datetime.datetime.now()
         duration = end_time - self.__start_times[name]
         del self.__start_times[name]
-        print "%s duration %s" % (name,duration)
+        print("%s duration %s" % (name,duration))
 

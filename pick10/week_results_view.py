@@ -1,15 +1,24 @@
-import string
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
+if six.PY3:
+    string = str
+else:
+    import string
+
 import re
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.http import HttpResponse
 from django.core.cache import cache
-from pick10.models import get_week
-from pick10.database import Database
-from pick10.calculate_week_results import CalculateWeekResults
-from pick10.week_navbar import WeekNavbar
-from pick10.user_access import UserAccess
-from pick10.calculator import NOT_STARTED, IN_PROGRESS, FINAL
+from .models import get_week
+from .database import Database
+from .calculate_week_results import CalculateWeekResults
+from .week_navbar import WeekNavbar
+from .user_access import UserAccess
+from .calculator import NOT_STARTED, IN_PROGRESS, FINAL
 
 class WeekResultsView:
 
@@ -72,7 +81,7 @@ class WeekResultsView:
         elif week_state == NOT_STARTED:
             self.week_state_string = 'not_started'
         else:
-            raise AssertionError,"Invalid week state %s" % (week_state)
+            raise AssertionError("Invalid week state %s" % (week_state))
 
         self.__render_file = "pick10/week_results_combined.html"
 

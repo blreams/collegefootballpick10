@@ -1,10 +1,15 @@
-from django.test import TestCase
-from pick10.database import Database
-from pick10.calculator import CalculateResults, TEAM1, TEAM2, TIED, NOT_STARTED, IN_PROGRESS, FINAL
-from pick10.models import *
-from unit_test_database import *
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
 import datetime as dt
+from django.test import TestCase
 from django.utils import timezone
+from ..database import Database
+from ..calculator import CalculateResults, TEAM1, TEAM2, TIED, NOT_STARTED, IN_PROGRESS, FINAL
+from ..models import *
+from .unit_test_database import *
 
 # This class tests the calculator.py file load_week_data function
 class CalculatorTests(TestCase):
@@ -2613,11 +2618,11 @@ class CalculatorTests(TestCase):
             same_teams = team1 == game.team1.team_name and team2 == game.team2.team_name
             if same_teams:
                 return game
-        raise AssertionError, "Could not find game"
+        raise AssertionError("Could not find game")
 
     def __find_team(self,name):
         if name not in self.week1.teams:
-            raise AssertionError,"Could not find team %s" % (name)
+            raise AssertionError("Could not find team %s" % (name))
         return self.week1.teams[name]
 
     def __make_winner_missing(self,player,game):
@@ -2625,7 +2630,7 @@ class CalculatorTests(TestCase):
             if pick.game == game:
                 self.week1.player_picks[player.id][i].winner = 0
                 return
-        raise AssertionError,"could not find game in picks"
+        raise AssertionError("could not find game in picks")
 
     def __make_all_picks_missing(self,player):
         self.week1.player_picks[player.id] = []

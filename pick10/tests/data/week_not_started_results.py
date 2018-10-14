@@ -1,4 +1,4 @@
-from utils import TestDataUtils
+from .utils import TestDataUtils
 
 class WeekNotStartedResults:
 

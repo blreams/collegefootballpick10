@@ -1,13 +1,18 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
 from django.shortcuts import render, redirect
 from django.http import HttpResponseNotFound
 from django.utils import timezone
-from models import Game
-from models import get_commish_can_post, get_games_info_for_week, get_week_info, set_week_lock_picks
-from models import add_game, get_week, get_team
-from forms import CreateWeekForm, EditWeekForm, EditWeekSelForm
+from .models import Game
+from .models import get_commish_can_post, get_games_info_for_week, get_week_info, set_week_lock_picks
+from .models import add_game, get_week, get_team
+from .forms import CreateWeekForm, EditWeekForm, EditWeekSelForm
 
 def make_boolean(val):
-    if isinstance(val, basestring):
+    if isinstance(val, six.string_types):
         if val.lower() == 'true':
             return True
         else:

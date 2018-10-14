@@ -116,34 +116,34 @@ class FBPoolVerify:
                     else:
                         extras[year].append(number)
 
-        print ""
+        print("")
         if len(missing_years) == 0:
-            print "Missing Years   :  None"
+            print("Missing Years   :  None")
         else:
-            print "Missing Years   : %s" % (self.__array_str(missing_years))
+            print("Missing Years   : %s" % (self.__array_str(missing_years)))
 
         if len(missing) == 0:
-            print "Missing Weeks   :  None"
+            print("Missing Weeks   :  None")
         else:
-            print "Missing Weeks   :"
+            print("Missing Weeks   :")
             for year in missing:
-                print "           %s : %s" % (year,self.__array_str(missing[year]))
+                print("           %s : %s" % (year,self.__array_str(missing[year])))
 
         if len(duplicates) == 0:
-            print "Duplicate Weeks :  None"
+            print("Duplicate Weeks :  None")
         else:
-            print "Duplicate Weeks :  "
+            print("Duplicate Weeks :  ")
             for year in duplicates:
-                print "           %s : %s" % (year,self.__array_str(duplicates[year]))
+                print("           %s : %s" % (year,self.__array_str(duplicates[year])))
 
         if len(extra) == 0:
-            print "Extra Weeks     :  None"
+            print("Extra Weeks     :  None")
         else:
-            print "Extra Weeks     :  "
+            print("Extra Weeks     :  ")
             for year in extra:
-                print "           %s : %s" % (year,self.__array_str(extra[year]))
+                print("           %s : %s" % (year,self.__array_str(extra[year])))
 
-        print ""
+        print("")
 
     def __array_str(self,a):
         s = ""

@@ -123,7 +123,7 @@ if __name__ == "__main__":
         fbpool.list_week_games(args.year,args.week)
 
     else:
-        print ""
-        print "**ERROR** :  unrecognized command line arguments"
-        print ""
+        print("")
+        print("**ERROR** :  unrecognized command line arguments")
+        print("")
         sys.exit(1)

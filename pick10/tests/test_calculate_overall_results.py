@@ -1,7 +1,12 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
 from django.test import TestCase
-from unit_test_database import UnitTestDatabase
-from pick10.calculate_overall_results import CalculateOverallResults
-from pick10.models import calc_completed_games
+from .unit_test_database import UnitTestDatabase
+from ..calculate_overall_results import CalculateOverallResults
+from ..models import calc_completed_games
 
 class CalculateOverallResultsTests(TestCase):
 

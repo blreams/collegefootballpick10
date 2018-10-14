@@ -1,8 +1,13 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
 from django.contrib.auth.models import User
 from django import forms
-from models import UserProfile, Team, Player, PlayerYear, Year
-from models import get_yearlist, get_createweek_year_week, get_teamlist, get_pick_deadline
 from django.utils import timezone
+from .models import UserProfile, Team, Player, PlayerYear, Year
+from .models import get_yearlist, get_createweek_year_week, get_teamlist, get_pick_deadline
 
 import pytz
 

@@ -1,10 +1,12 @@
-#from pick10.player_results import *
-#from pick10.database import *
-#from pick10.calculator import *
-from pick10.player_results import PlayerResult, PlayerSummary
-from pick10.database import Database
-from pick10.calculator import CalculateResults
-from pick10.calculator import NOT_STARTED, IN_PROGRESS, FINAL
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
+from .player_results import PlayerResult, PlayerSummary
+from .database import Database
+from .calculator import CalculateResults
+from .calculator import NOT_STARTED, IN_PROGRESS, FINAL
 
 class CalculatePlayerResults:
 
@@ -86,7 +88,7 @@ class CalculatePlayerResults:
             result.team1_score = ''
             result.team2_score = ''
         else:
-            raise AssertionError,"Game state %s is not valid" % (game.game_state)
+            raise AssertionError("Game state %s is not valid" % (game.game_state))
 
         return result
 

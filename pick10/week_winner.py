@@ -1,8 +1,11 @@
-#from pick10.database import *
-#from pick10.calculator import *
-from pick10.database import Database
-from pick10.calculator import CalculateResults
-from pick10.calculator import NOT_STARTED, IN_PROGRESS, FINAL
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
+from .database import Database
+from .calculator import CalculateResults
+from .calculator import NOT_STARTED, IN_PROGRESS, FINAL
 
 class WeekWinnerData:
     featured_game_state = None
@@ -80,7 +83,7 @@ class WeekWinner:
             else:
                 return "official"
 
-        raise AssertionError,"should not get here"
+        raise AssertionError("should not get here")
 
 
     def get_winner(self):
@@ -218,7 +221,7 @@ class WeekWinner:
         elif self.__data.featured_game.game_state == IN_PROGRESS:
             featured_winner = self.__data.featured_game_ahead
         else:
-            raise AssertionError,"Should not reach here"
+            raise AssertionError("Should not reach here")
 
         self.players_won_tiebreak0 = []
         self.players_lost_tiebreak0 = []
@@ -413,7 +416,7 @@ class WeekWinner:
             else:
                 return self.players_won_tiebreak2
 
-        raise AssertionError,"tiebreaker_number %d is invalid." % (tiebreaker_number)
+        raise AssertionError("tiebreaker_number %d is invalid." % (tiebreaker_number))
 
     def get_winner_data_object(self):
         w = WeekWinnerData()

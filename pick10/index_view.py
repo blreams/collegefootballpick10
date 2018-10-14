@@ -1,8 +1,13 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
 from django.shortcuts import render
-from pick10.models import get_yearlist, get_weeklist, get_profile_by_user, calc_weekly_points
-from forms import IndexForm
-from calculator import CalculateResults, IN_PROGRESS, FINAL
-from database import Database
+from .models import get_yearlist, get_weeklist, get_profile_by_user, calc_weekly_points
+from .forms import IndexForm
+from .calculator import CalculateResults, IN_PROGRESS, FINAL
+from .database import Database
 
 class IndexView:
 

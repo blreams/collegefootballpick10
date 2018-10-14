@@ -1,8 +1,13 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
 from django.shortcuts import render, redirect
 from django.http import HttpResponseNotFound
 from datetime import datetime
-from models import add_year, add_week, calc_default_pick_deadline
-from forms import CreateWeekForm
+from .models import add_year, add_week, calc_default_pick_deadline
+from .forms import CreateWeekForm
 
 class CreateWeekView:
 

@@ -1,9 +1,7 @@
-#from pick10.database import *
-#from pick10.calculator import *
-from pick10.models import UserProfile
-from pick10.database import Database
-from pick10.calculator import NOT_STARTED
 from django.core.urlresolvers import reverse
+from .models import UserProfile
+from .database import Database
+from .calculator import NOT_STARTED
 
 class PageLink:
     name = None

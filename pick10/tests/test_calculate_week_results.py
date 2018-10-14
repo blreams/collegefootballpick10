@@ -1,22 +1,27 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
 import random
 from django.test import TestCase
-from pick10.tests.data.week_results_2013 import WeekResults2013
-from pick10.tests.data.week_not_started_results import WeekNotStartedResults
-from pick10.tests.data.week_not_started_with_defaulters_results import WeekNotStartedWithDefaultersResults
-from pick10.tests.data.week_in_progress_results import WeekInProgressResults
-from pick10.tests.data.week_in_progress_games_in_progress_results import WeekInProgressGamesInProgressResults
-from pick10.tests.data.utils import TestDataUtils
-from pick10.models import Player
-from pick10.database import Database
-from pick10.calculator import NOT_STARTED, IN_PROGRESS, FINAL
-from pick10.calculate_week_results import CalculateWeekResults
-from unit_test_database import UnitTestDatabase
+from .data.week_results_2013 import WeekResults2013
+from .data.week_not_started_results import WeekNotStartedResults
+from .data.week_not_started_with_defaulters_results import WeekNotStartedWithDefaultersResults
+from .data.week_in_progress_results import WeekInProgressResults
+from .data.week_in_progress_games_in_progress_results import WeekInProgressGamesInProgressResults
+from .data.utils import TestDataUtils
+from ..models import Player
+from ..database import Database
+from ..calculator import NOT_STARTED, IN_PROGRESS, FINAL
+from ..calculate_week_results import CalculateWeekResults
+from .unit_test_database import UnitTestDatabase
 
 class CalculateWeekResultsTests(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        print "Loading database with data from 2013...(may take a few minutes)"
+        print("Loading database with data from 2013...(may take a few minutes)")
         test_db = UnitTestDatabase()
         test_db.load_historical_data_for_year(2013)
         test_db.setup_week_not_started(1978,6)
@@ -560,7 +565,7 @@ class CalculateWeekResultsTests(TestCase):
         for expected in expected_results:
             if expected.player_name == result.player_name:
                 return expected
-        raise AssertionError,"could not find expected result"
+        raise AssertionError("could not find expected result")
 
     def __run_assign_rank_test(self,week_results,num_tests=10,winner=None):
         cwr = CalculateWeekResults(year=2013,week_number=1)
@@ -589,7 +594,7 @@ class CalculateWeekResultsTests(TestCase):
             self.__verify_projected_ranks(assigned_results)
 
     def __randomize_results_order(self,week_results):
-        indexes = range(len(week_results))
+        indexes = list(range(len(week_results)))
         random.shuffle(indexes)
 
         random_results = []

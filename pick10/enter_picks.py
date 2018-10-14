@@ -1,15 +1,17 @@
-#from pick_data import *
-#from database import *
-#from pick10.utils import *
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
 import pytz
-from pick_data import PickData
-from database import Database
-from calculator import TEAM1, TEAM2
-from django.core.exceptions import ObjectDoesNotExist
-from pick10.utils import get_timestamp
 import django.utils.timezone as tz
-from pick10.models import Player, Pick, UserProfile
-from pick10.models import add_pick, get_game
+from django.core.exceptions import ObjectDoesNotExist
+from .pick_data import PickData
+from .database import Database
+from .calculator import TEAM1, TEAM2
+from .utils import get_timestamp
+from .models import Player, Pick, UserProfile
+from .models import add_pick, get_game
 
 class EnterPicks:
 
@@ -50,7 +52,7 @@ class EnterPicks:
                 data.team1_spread = ""
                 data.team2_spread = game.spread * -1
             else:
-                raise AssertionError,"Invalid favored value"
+                raise AssertionError("Invalid favored value")
 
             if game.gamenum == 10:
                 if player_already_picked:

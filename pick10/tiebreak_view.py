@@ -1,13 +1,18 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.core.cache import cache
-from pick10.models import get_week
-from pick10.database import Database
-from pick10.calculate_tiebreak import CalculateTiebreak
-from calculator import NOT_STARTED, IN_PROGRESS, FINAL
 from django.http import HttpResponse
-from pick10.week_navbar import WeekNavbar
-from pick10.user_access import UserAccess
+from .models import get_week
+from .database import Database
+from .calculate_tiebreak import CalculateTiebreak
+from .calculator import NOT_STARTED, IN_PROGRESS, FINAL
+from .week_navbar import WeekNavbar
+from .user_access import UserAccess
 
 class TiebreakView:
 

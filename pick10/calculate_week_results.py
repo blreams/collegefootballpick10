@@ -1,12 +1,13 @@
-#from calculator import *
-#from database import *
-#from week_results import *
-#from week_winner import *
-from calculator import CalculateResults
-from database import Database
-from week_results import WeekResults
-from week_winner import WeekWinner
-from stats import Stats
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
+from .calculator import CalculateResults
+from .database import Database
+from .week_results import WeekResults
+from .week_winner import WeekWinner
+from .stats import Stats
 
 class CalculateWeekResults:
 
@@ -84,7 +85,7 @@ class CalculateWeekResults:
                 results = self.assign_rank(results,winner=None)
                 results = self.assign_projected_rank(results,projected_winner=None)
             else:
-                raise AssertionError,"unexpected winner state %s" % (winner_state)
+                raise AssertionError("unexpected winner state %s" % (winner_state))
 
             results = self.__sort_by_rank(results)
 

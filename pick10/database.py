@@ -1,12 +1,15 @@
-from week_data import WeekData
-#from pick10.models import *
-from pick10.models import Year, PlayerYear, Team, Pick, Week, Game
-from pick10.models import get_week, get_game
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
 import datetime
-#from calculator import *
-from calculator import CalculateResults
-from calculator import NOT_STARTED, IN_PROGRESS, FINAL
 import django.utils.timezone as tz
+from .week_data import WeekData
+from .models import Year, PlayerYear, Team, Pick, Week, Game
+from .models import get_week, get_game
+from .calculator import CalculateResults
+from .calculator import NOT_STARTED, IN_PROGRESS, FINAL
 
 class Database:
 
@@ -22,14 +25,14 @@ class Database:
         return data
 
     def put_games_week_in_database(self,games,week):
-        raise AssertionError,"Not implemented"
+        raise AssertionError("Not implemented")
 
     def is_year_valid(self,year):
         weeks_and_years = self.load_weeks_and_years()
         return year in weeks_and_years
 
     def is_week_valid(self,week,year,update=False):
-        raise AssertionError,"Not implemented"
+        raise AssertionError("Not implemented")
 
     def is_week_scores_locked(self,year,week_number):
         week = self.__get_week_in_database(year,week_number)
@@ -55,7 +58,7 @@ class Database:
         return week.pick_deadline
 
     def get_next_year_week_for_create_week(self,update=False):
-        raise AssertionError,"Not implemented"
+        raise AssertionError("Not implemented")
 
     def get_week_numbers(self,year):
         weeks_and_years = self.load_weeks_and_years()
@@ -127,14 +130,14 @@ class Database:
         return players
 
     def delete_players_from_memcache(self,year):
-        raise AssertionError,"Not implemented"
+        raise AssertionError("Not implemented")
 
     def load_teams(self):
         teams = Team.objects.all()
         return { t.team_name:t for t in teams }
 
     def load_week_data_timed(self,year,week_number,update=False):
-        raise AssertionError,"Not implemented"
+        raise AssertionError("Not implemented")
 
     def __get_week_in_database(self,year,week_number):
         return get_week(year,week_number)
@@ -192,19 +195,19 @@ class Database:
         return current_time_utc > week.pick_deadline
 
     def update_games_cache(self,year,week_number,data):
-        raise AssertionError,"Not implemented"
+        raise AssertionError("Not implemented")
 
     def update_games(self,year,week_number):
-        raise AssertionError,"Not implemented"
+        raise AssertionError("Not implemented")
 
     def update_week_cache(self,year,week_number):
-        raise AssertionError,"Not implemented"
+        raise AssertionError("Not implemented")
 
     def add_team_to_memcache(self,team):
-        raise AssertionError,"Not implemented"
+        raise AssertionError("Not implemented")
 
     def delete_team_from_memcache(self,team):
-        raise AssertionError,"Not implemented"
+        raise AssertionError("Not implemented")
 
     def __week_has_no_games(self,year,week_number):
         week = Week.objects.get(year__yearnum=year, weeknum=week_number)

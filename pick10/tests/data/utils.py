@@ -1,4 +1,3 @@
-#from pick10.week_results import *
 from pick10.week_results import WeekResults
 
 class TestDataUtils:
@@ -46,4 +45,4 @@ class TestDataUtils:
             player = self.__players[player_id]
             if player and player.ss_name == ss_name:
                 return player
-        raise AssertionError,"Could not find player %s" % (ss_name)
+        raise AssertionError("Could not find player %s" % (ss_name))

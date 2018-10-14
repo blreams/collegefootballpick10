@@ -27,18 +27,18 @@ def load_week_data(year,week_number):
 
 def print_player_names(data):
     players = sorted(data.players.values(),key=lambda player:player.ss_name)
-    print "Players (%d)" % (len(players))
-    print "-------------------"
+    print("Players (%d)" % (len(players)))
+    print("-------------------")
     for player in players:
-        print player.ss_name
-    print ""
+        print(player.ss_name)
+    print("")
 
 def print_player_picks(player_id,data):
     player = data.players[player_id]
     picks = { pick.game.gamenum:pick for pick in data.player_picks[player_id] }
 
-    print "%s Picks" % (player.ss_name)
-    print "----------------------------"
+    print("%s Picks" % (player.ss_name))
+    print("----------------------------")
 
     for game_number in range(1,11):
         pick = picks[game_number]
@@ -52,8 +52,8 @@ def print_player_picks(player_id,data):
         else:
             pick_string = "ERROR: winner=%s" % (pick.winner)
 
-        print "Game %d: %s" % (game_number,pick_string)
-    print ""
+        print("Game %d: %s" % (game_number,pick_string))
+    print("")
 
 def print_all_player_picks(data):
     # sort player id's by their ss_name
@@ -165,7 +165,7 @@ def create_picks_sheet(year,week_number,data):
         elif game.favored == 2:
             picks_df[favorite_column][team2_row] = game.spread
         else:
-            print "Favored info not available"
+            print("Favored info not available")
 
         # fill in the scores if available
         score_not_entered = game.team1_actual_points < 0 and game.team2_actual_points < 0
@@ -190,14 +190,14 @@ def create_picks_sheet(year,week_number,data):
 if __name__ == '__main__':
     # get input arguments and verify they are valid
     if len(sys.argv) != 3:
-        print "usage:  python excel_picks.py <year> <week number>"
+        print("usage:  python excel_picks.py <year> <week number>")
         sys.exit(1)
 
     year = sys.argv[1]
     week_number = sys.argv[2]
 
     if bad_year_or_week_number(year,week_number):
-        print "invalid year or week number"
+        print("invalid year or week number")
         sys.exit(1)
 
     year = int(sys.argv[1])

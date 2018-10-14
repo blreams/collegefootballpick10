@@ -1,11 +1,16 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
 import unittest
 import pytz
 from datetime import timedelta
 import django.utils.timezone as tz
 from django.test import TestCase
-from pick10.database import Database
-from pick10.models import get_week
-from unit_test_database import UnitTestDatabase
+from ..database import Database
+from ..models import get_week
+from .unit_test_database import UnitTestDatabase
 
 class PoolStateTest(TestCase):
 
@@ -13,9 +18,9 @@ class PoolStateTest(TestCase):
     def setUpTestData(cls):
     #def setUpClass(cls):
         test_db = UnitTestDatabase()
-        test_db.load_historical_data_for_year(2013)
+        test_db.load_historical_data_for_year(2009)
         test_db.setup_pool_not_started(1975)
-        test_db.setup_week_not_started(1978,1)
+        test_db.setup_week_not_started(1974,1)
         test_db.setup_week_in_progress(1979,1)
         test_db.setup_simple_week(1980,1)   # final week
 
@@ -48,7 +53,7 @@ class PoolStateTest(TestCase):
         super(PoolStateTest, cls).tearDownClass()
 
     def test_end_of_year(self):
-        self.assertEqual(self.__get_pool_state(year=2013),"end_of_year")
+        self.assertEqual(self.__get_pool_state(year=2009),"end_of_year")
 
     def test_invalid_year(self):
         self.assertEqual(self.__get_pool_state(year=1900),"invalid")
@@ -61,7 +66,7 @@ class PoolStateTest(TestCase):
         self.assertEqual(self.__get_pool_state(year=1981),"enter_picks")
 
     def test_week_not_started(self):
-        self.assertEqual(self.__get_pool_state(year=1978),"week_not_started")
+        self.assertEqual(self.__get_pool_state(year=1974),"week_not_started")
 
     def test_week_in_progress(self):
         self.assertEqual(self.__get_pool_state(year=1979),"week_in_progress")

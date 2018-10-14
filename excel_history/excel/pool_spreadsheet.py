@@ -1,14 +1,15 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
 import os as _os
 import re as _re
 from xlrd import *
-#from player import *
-#from game import *
-#from pick import *
-#from team import *
-from player import Player
-from game import Game
-from pick import Pick
-from team import Team
+from .player import Player
+from .game import Game
+from .pick import Pick
+from .team import Team
 
 class PoolSpreadsheet:
 
@@ -27,7 +28,7 @@ class PoolSpreadsheet:
         filelist = [f for f in _os.listdir(dirname) if RE_FILE_SS.match(f) and str(year) in f]
 
         if len(filelist) != 1:
-            raise AssertionError, 'Unable to find matching spreadsheet for %d' % year
+            raise AssertionError('Unable to find matching spreadsheet for %d' % year)
         return dirname + filelist[0]
 
     # depends on what sheets are present
@@ -407,7 +408,7 @@ class PoolSpreadsheet:
                 game.winner = "team2"
             else:
                 game.winner = None
-                #raise AssertionError,"team1_win=%s,team2_win=%s" % (team1_win,team2_win)
+                #raise AssertionError("team1_win=%s,team2_win=%s" % (team1_win,team2_win))
 
         return game
 
@@ -423,7 +424,7 @@ class PoolSpreadsheet:
             favored = "team2"
             spread = float(bottom_spread)
         else:
-            raise AssertionError,"Should not reach here"
+            raise AssertionError("Should not reach here")
         return favored,spread
 
     def __get_picks_info(self,sheet,column):
@@ -445,7 +446,7 @@ class PoolSpreadsheet:
             team1_picked = sheet.cell_type(top_row,column) != CELL_EMPTY
             team2_picked = sheet.cell_type(bottom_row,column) != CELL_EMPTY
             if team1_picked and team2_picked:
-                print "Check spreadsheet for illegal condition (year=%d, week=%s, player=%s)" % (self.year, sheet.name, player_name,)
+                print("Check spreadsheet for illegal condition (year=%d, week=%s, player=%s)" % (self.year, sheet.name, player_name,))
             #assert (team1_picked and team2_picked) == False
 
             pick = Pick()

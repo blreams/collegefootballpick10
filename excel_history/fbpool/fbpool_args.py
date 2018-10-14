@@ -169,7 +169,7 @@ class FBPoolArgs:
     def get_latest_pool_file_and_year(self):
         years = self.__excel_files.keys()
         if years == None or len(years) == 0:
-            print "**ERROR!** could not find any excel pool files"
+            print("**ERROR!** could not find any excel pool files")
             sys.exit(1)
         years_sorted = sorted(years,reverse=True)
         last_year = years_sorted[0]
@@ -178,10 +178,10 @@ class FBPoolArgs:
     def get_excel_file(self,year):
         years = self.__excel_files.keys()
         if years == None or len(years) == 0:
-            print "**ERROR!** could not find any excel pool files"
+            print("**ERROR!** could not find any excel pool files")
             sys.exit(1)
         if year not in years:
-            print "**ERROR!** could not find any excel file for year %d" % (year)
+            print("**ERROR!** could not find any excel file for year %d" % (year))
             sys.exit(1)
         return self.__excel_files[year]
 

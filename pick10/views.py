@@ -1,29 +1,27 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.core.cache import *
 from django.http import HttpResponseNotFound
 from django.contrib.admin.views.decorators import staff_member_required
-from profile import ProfileView
-from create_week import CreateWeekView
-from edit_week import EditWeekSelView
-from edit_week import EditWeekView
-from set_week_winner import SetWeekWinnerView
-#from overall_results_view import *
-#from week_results_view import *
-#from player_results_view import *
-#from update_view import *
-#from tiebreak_view import *
-#from update_games_view import *
-#from enter_picks_view import *
-from index_view import IndexView
-from week_results_view import WeekResultsView
-from player_results_view import PlayerResultsView
-from update_view import UpdatePageView
-from tiebreak_view import TiebreakView
-from update_games_view import UpdateGamesView
-from enter_picks_view import EnterPicksView
-from overall_results_view import OverallResultsView
-from models import get_yearlist, get_weeklist, get_profile_by_user, get_week_with_no_winner
+from .profile import ProfileView
+from .create_week import CreateWeekView
+from .edit_week import EditWeekSelView
+from .edit_week import EditWeekView
+from .set_week_winner import SetWeekWinnerView
+from .index_view import IndexView
+from .week_results_view import WeekResultsView
+from .player_results_view import PlayerResultsView
+from .update_view import UpdatePageView
+from .tiebreak_view import TiebreakView
+from .update_games_view import UpdateGamesView
+from .enter_picks_view import EnterPicksView
+from .overall_results_view import OverallResultsView
+from .models import get_yearlist, get_weeklist, get_profile_by_user, get_week_with_no_winner
 
 def home(request):
     return render(request, 'pick10/home.html')

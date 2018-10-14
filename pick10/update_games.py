@@ -1,12 +1,13 @@
-#from game_data import *
-#from database import *
-#from models import *
-#from calculator import *
-from game_data import GameData
-from database import Database
-from models import get_week, get_game
-from calculator import CalculateResults
-from calculator import NOT_STARTED, IN_PROGRESS, FINAL
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+import six
+
+from .game_data import GameData
+from .database import Database
+from .models import get_week, get_game
+from .calculator import CalculateResults
+from .calculator import NOT_STARTED, IN_PROGRESS, FINAL
 
 class UpdateGames:
 
@@ -50,7 +51,7 @@ class UpdateGames:
             elif game_state == "final":
                 game.game_state = FINAL
             else:
-                raise AssertionError,"Unexpected game state value: %s" % (game_state)
+                raise AssertionError("Unexpected game state value: %s" % (game_state))
 
             if game_state == "final":
                 game.winner = CalculateResults(None).get_pool_game_winner(game)
