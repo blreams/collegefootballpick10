@@ -85,8 +85,8 @@ class Player(models.Model):
 
 @python_2_unicode_compatible
 class PlayerYear(models.Model):
-    player = models.ForeignKey('Player')
-    year = models.ForeignKey('Year')
+    player = models.ForeignKey('Player', on_delete=models.CASCADE)
+    year = models.ForeignKey('Year', on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -115,7 +115,7 @@ class Team(models.Model):
     mascot = models.CharField(max_length=40)                               # Team mascot, 'Gamecocks'
     #TODO Save helmet field for later.
     #helmet = models.ImageField()                                          # Helmet pic, local file (.png, .gif, .jpg)
-    conference = models.ForeignKey('Conference', default=None)             # Pointer back to Conference entry
+    conference = models.ForeignKey('Conference', default=None, on_delete=models.CASCADE)             # Pointer back to Conference entry
     current = models.BooleanField(default=True)                            # True if team should be included in selection lists
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -128,9 +128,9 @@ class Team(models.Model):
 
 @python_2_unicode_compatible
 class Week(models.Model):
-    year = models.ForeignKey('Year')                                        # Season year corresponding to this week
+    year = models.ForeignKey('Year', on_delete=models.CASCADE)                                        # Season year corresponding to this week
     weeknum = models.IntegerField()                                         # Week number within the season
-    winner = models.ForeignKey(Player, null=True, blank=True, default=None) # Link to Player who won the week
+    winner = models.ForeignKey(Player, null=True, blank=True, default=None, on_delete=models.CASCADE) # Link to Player who won the week
     pick_deadline = models.DateTimeField(null=True, blank=True)             # When generating a new Week, use get_default_pick_deadline()
     lock_picks = models.BooleanField(default=False)                         # Commissioner sets to False once games are finalized and picks can begin
     lock_scores = models.BooleanField(default=False)                        # Commissioner sets to True, after which only commissioner can update scores
@@ -155,10 +155,10 @@ class Week(models.Model):
 
 @python_2_unicode_compatible
 class Game(models.Model):
-    week = models.ForeignKey('Week')                                        # Pointer back to Week entry
+    week = models.ForeignKey('Week', on_delete=models.CASCADE)                                        # Pointer back to Week entry
     gamenum = models.IntegerField(default=0)                                # Game number within the week (ie. 1-10)
-    team1 = models.ForeignKey('Team', related_name='team1')                 # Pointer back to Team entry
-    team2 = models.ForeignKey('Team', related_name='team2')                 # Pointer back to Team entry
+    team1 = models.ForeignKey('Team', related_name='team1', on_delete=models.CASCADE)                 # Pointer back to Team entry
+    team2 = models.ForeignKey('Team', related_name='team2', on_delete=models.CASCADE)                 # Pointer back to Team entry
     team1_actual_points = models.IntegerField(default=-1)                   # Actual points scored 
     team2_actual_points = models.IntegerField(default=-1)                   # Actual points scored 
     favored = models.IntegerField(default=0)                                # Indicates which team is the favorite
@@ -179,8 +179,8 @@ class Game(models.Model):
 
 @python_2_unicode_compatible
 class Pick(models.Model):
-    player = models.ForeignKey(Player)                                 # Link to player for which this pick applies
-    game = models.ForeignKey('Game')                                   # Link to game for which this pick applies
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)                                 # Link to player for which this pick applies
+    game = models.ForeignKey('Game', on_delete=models.CASCADE)                                   # Link to game for which this pick applies
     winner = models.IntegerField(default=0)                            # Indicates which team was picked to win (1 or 2)
     team1_predicted_points = models.IntegerField(default=-1)           # Points predicted for team (tie-break game)
     team2_predicted_points = models.IntegerField(default=-1)           # Points predicted for team (tie-break game)
@@ -197,8 +197,8 @@ class Pick(models.Model):
 @python_2_unicode_compatible
 class UserProfile(models.Model):
     tz_choices = [(tz, tz) for tz in pytz.all_timezones if tz.startswith('US')] + [(tz, tz) for tz in pytz.all_timezones if not tz.startswith('US')]
-    user = models.OneToOneField(User)
-    player = models.OneToOneField('Player', blank=True, null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    player = models.OneToOneField('Player', blank=True, null=True, on_delete=models.CASCADE)
     company = models.CharField(max_length=50, blank=True)
     # You can customize this with whatever fields you want to extend User.
     favorite_team = models.CharField(max_length=100, blank=True, null=True)

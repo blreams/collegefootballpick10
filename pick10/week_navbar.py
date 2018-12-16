@@ -1,4 +1,5 @@
-from django.core.urlresolvers import reverse
+#from django.core.urlresolvers import reverse
+from django.urls import reverse
 from .models import UserProfile
 from .database import Database
 from .calculator import NOT_STARTED
