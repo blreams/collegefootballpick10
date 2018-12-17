@@ -13,7 +13,7 @@ class FBPoolPlayerName:
         elif self.__method == "hide_lastname":
             return self.__extract_name_and_hide_lastname(player_name)
 
-        raise AssertionError,"Invalid method"
+        raise AssertionError("Invalid method")
 
     def __fullname_no_remote(self,name):
         return string.replace(name,"Remote","").strip()

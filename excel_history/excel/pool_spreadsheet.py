@@ -408,7 +408,6 @@ class PoolSpreadsheet:
                 game.winner = "team2"
             else:
                 game.winner = None
-                #raise AssertionError("team1_win=%s,team2_win=%s" % (team1_win,team2_win))
 
         return game
 

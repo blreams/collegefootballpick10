@@ -1,5 +1,5 @@
 from .base import FunctionalTest
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from pick10.tests.unit_test_database import *
 from pick10.database import *
 import unittest
@@ -174,7 +174,7 @@ class PlayerResultsTest(FunctionalTest):
         for player in players.values():
             if player.ss_name == ss_name:
                 return player
-        raise AssertionError,'Could not find %s' % (ss_name)
+        raise AssertionError('Could not find %s' % (ss_name))
 
     def __is_page_up(self,title):
         body = self.browser.find_element_by_tag_name('body').text

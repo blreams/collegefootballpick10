@@ -355,7 +355,7 @@ def get_yearlist():
     return sorted([y.yearnum for y in Year.objects.all()])
 
 def get_weeklist(year, only_unlocked_picks=False, only_locked_scores=False):
-    yearobj = Year.objects.filter(yearnum=year)
+    yearobj = Year.objects.filter(yearnum=year)[0]
     if only_locked_scores:
         return [w.weeknum for w in Week.objects.filter(year=yearobj, lock_scores=True).order_by('weeknum')]
     elif only_unlocked_picks:

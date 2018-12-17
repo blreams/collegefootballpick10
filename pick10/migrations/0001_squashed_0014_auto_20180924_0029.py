@@ -42,8 +42,8 @@ class Migration(migrations.Migration):
                 ('spread', models.DecimalField(decimal_places=1, default=0.0, max_digits=4)),
                 ('kickoff', models.DateTimeField(blank=True, null=True)),
                 ('game_state', models.IntegerField(default=0)),
-                ('quarter', models.CharField(default=b'1st', max_length=3)),
-                ('time_left', models.CharField(default=b'15:00', max_length=10)),
+                ('quarter', models.CharField(default='1st', max_length=3)),
+                ('time_left', models.CharField(default='15:00', max_length=10)),
                 ('winner', models.IntegerField(default=0)),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('updated', models.DateTimeField(auto_now=True, auto_now_add=True)),
@@ -71,9 +71,9 @@ class Migration(migrations.Migration):
             name='Player',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('public_name', models.CharField(blank=True, default=b'', max_length=100, null=True)),
-                ('private_name', models.CharField(blank=True, default=b'', max_length=100, null=True)),
-                ('ss_name', models.CharField(blank=True, default=b'', max_length=100, null=True)),
+                ('public_name', models.CharField(blank=True, default='', max_length=100, null=True)),
+                ('private_name', models.CharField(blank=True, default='', max_length=100, null=True)),
+                ('ss_name', models.CharField(blank=True, default='', max_length=100, null=True)),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('updated', models.DateTimeField(auto_now=True, auto_now_add=True)),
             ],
@@ -171,12 +171,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='game',
             name='team1',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name=b'team1', to='pick10.Team'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='team1', to='pick10.Team'),
         ),
         migrations.AddField(
             model_name='game',
             name='team2',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name=b'team2', to='pick10.Team'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='team2', to='pick10.Team'),
         ),
         migrations.AddField(
             model_name='game',
@@ -186,17 +186,17 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='conference',
             name='div_name',
-            field=models.CharField(blank=True, default=b'', max_length=40, null=True),
+            field=models.CharField(blank=True, default='', max_length=40, null=True),
         ),
         migrations.AlterField(
             model_name='game',
             name='quarter',
-            field=models.CharField(default=b'', max_length=3),
+            field=models.CharField(default='', max_length=3),
         ),
         migrations.AlterField(
             model_name='game',
             name='time_left',
-            field=models.CharField(default=b'', max_length=10),
+            field=models.CharField(default='', max_length=10),
         ),
         migrations.AddField(
             model_name='week',

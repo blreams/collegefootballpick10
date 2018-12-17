@@ -1,5 +1,5 @@
 from .base import FunctionalTest
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from pick10.tests.unit_test_database import *
 from pick10.models import *
 from pick10.calculator import *
@@ -822,7 +822,7 @@ class EnterPicksTest(FunctionalTest):
             elif picks[index] == TEAM2:
                 value = 'team2'
             elif picks[index] != 0:
-                raise AssertionError,"Invalid pick value"
+                raise AssertionError("Invalid pick value")
 
             # skip the pick if it is set to 0
             if picks[index] != 0 and game_number != 10:
@@ -865,7 +865,7 @@ class EnterPicksTest(FunctionalTest):
             team1_score = None
             team2_score = None 
         else:
-            raise AssertionError,"expected TEAM1 or TEAM2"
+            raise AssertionError("expected TEAM1 or TEAM2")
 
         return team1_score,team2_score
 

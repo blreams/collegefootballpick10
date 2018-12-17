@@ -2,7 +2,7 @@
 # functions for functional tests in one place
 from pick10.models import *
 from pick10.database import *
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import datetime as dt
@@ -54,7 +54,7 @@ class Utils:
             player = players[player_id]
             if player and player.public_name == name:
                 return player
-        raise AssertionError,"Could not find player %d" % (name)
+        raise AssertionError("Could not find player %d" % (name))
 
     def get_player_from_private_name(self,year,name):
         players = Database().load_players(year)
@@ -62,7 +62,7 @@ class Utils:
             player = players[player_id]
             if player and player.private_name == name:
                 return player
-        raise AssertionError,"Could not find player %d" % (name)
+        raise AssertionError("Could not find player %d" % (name))
 
     def get_player_from_ss_name(self,year,name):
         players = Database().load_players(year)
@@ -70,7 +70,7 @@ class Utils:
             player = players[player_id]
             if player and player.ss_name == name:
                 return player
-        raise AssertionError,"Could not find player %d" % (name)
+        raise AssertionError("Could not find player %d" % (name))
 
     def login_unassigned_user(self,name='user1',password='1234'):
         self.create_user(name,password)
@@ -104,7 +104,7 @@ class Utils:
                 break
 
     def logout(self):
-        raise AssertionError,"Need to implement"
+        raise AssertionError("Need to implement")
 
     def create_user(self,name='user1',email='user1@abc.com',password='1234'):
         user = User.objects.create_user(name,email,password)
@@ -135,7 +135,7 @@ class Utils:
             if e.get_attribute('value') == value:
                 e.click()
                 return
-        raise AssertionError,"Could not find radio button"
+        raise AssertionError("Could not find radio button")
 
     def set_input_text(self,name,text):
         self.browser.find_element_by_name(name).clear()

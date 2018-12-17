@@ -1,5 +1,5 @@
 from .base import FunctionalTest
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from pick10.tests.unit_test_database import *
 import unittest
 from django.core.cache import cache

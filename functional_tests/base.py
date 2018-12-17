@@ -21,7 +21,7 @@ class FunctionalTest(StaticLiveServerTestCase):
 
     def setUp(self):
         if hasattr(settings, 'DISABLE_MEMCACHE') and not settings.DISABLE_MEMCACHE:
-            raise AssertionError, "You must disable memcache before running functional tests"
+            raise AssertionError("You must disable memcache before running functional tests")
         self.debug_setting = settings.DEBUG
         settings.DEBUG = True
         settings.DISABLE_MEMCACHE = True

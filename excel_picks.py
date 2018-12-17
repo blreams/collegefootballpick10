@@ -88,7 +88,7 @@ def get_picks_column(player_id,data):
             column.append('')
             column.append('x')
         else:
-            raise AssertionError,"invalid winner value"
+            raise AssertionError("invalid winner value")
 
         if game_number == 10:
             if pick.winner == 0:
