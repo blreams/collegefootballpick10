@@ -462,6 +462,9 @@ def calc_weekly_points(yearnum, username_or_player_id=None, overunder=False):
     retlist = []
     if username_or_player_id is None:
         # Get a random player
+        player_id_list = get_player_id_list_by_year(yearnum)
+        if not player_id_list:
+            return ('', retlist)
         player_id = random.choice(get_player_id_list_by_year(yearnum))
     elif isinstance(username_or_player_id, six.string_types):
         user = get_user_by_username(username_or_player_id)
