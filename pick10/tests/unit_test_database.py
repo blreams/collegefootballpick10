@@ -3,7 +3,7 @@
 # so each unit test doesn't have to reinvent the wheel every time.
 from django.contrib.auth.models import User
 from pick10.models import Player, Year, PlayerYear, Team, Conference, Game, Pick, UserProfile, Week
-from pick10.models import add_game, add_pick, get_team
+from pick10.models import add_game, add_pick, get_team, create_a_kickoff_time
 from pick10.calculator import CalculateResults, TEAM1, TEAM2, NOT_STARTED, IN_PROGRESS, FINAL
 from stage_history import main, populate_year
 from stage_models import populate_conferences_teams
@@ -453,6 +453,7 @@ class UnitTestDatabase:
         game.game_state = state
         game.team1_actual_points = team1_score
         game.team2_actual_points = team2_score
+        game.kickoff = create_a_kickoff_time(week.year.yearnum, week.weeknum, game_number)
         game.save()
         return game
 

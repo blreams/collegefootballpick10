@@ -3,7 +3,7 @@ from django.urls import reverse
 from pick10.tests.unit_test_database import *
 import unittest
 from django.core.cache import cache
-from utils import *
+from .utils import *
 from django.conf import settings
 
 class NoPicksTest(FunctionalTest):
@@ -465,6 +465,7 @@ class NoPicksTest(FunctionalTest):
         player_with_picks = self.utils.get_player_from_public_name(1978,'Brent')
         player_no_picks = self.utils.get_player_from_public_name(1978,'John')
 
+        import pdb;pdb.set_trace()
         self.utils.tiebreak_page(1978,2)
         self.__is_page_up('Week 2 Tiebreaker')
 

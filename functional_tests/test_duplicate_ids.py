@@ -10,10 +10,10 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from django.test.client import Client
 from .base import FunctionalTest
-from .tests.unit_test_database import UnitTestDatabase
-from .database import Database
-from .calculate_week_results import CalculateWeekResults
-from .calculator import NOT_STARTED, IN_PROGRESS, FINAL
+from pick10.tests.unit_test_database import UnitTestDatabase
+from pick10.database import Database
+from pick10.calculate_week_results import CalculateWeekResults
+from pick10.calculator import NOT_STARTED, IN_PROGRESS, FINAL
 from .utils import Utils
 
 class TestHtmlAnalysis(FunctionalTest):
