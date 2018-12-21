@@ -6,7 +6,7 @@ from pick10.tests.unit_test_database import UnitTestDatabase
 import unittest
 from django.contrib.auth.models import User
 from django.test.client import Client
-from utils import Utils
+from .utils import Utils
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC

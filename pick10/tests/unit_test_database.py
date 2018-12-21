@@ -457,6 +457,7 @@ class UnitTestDatabase:
         game.game_state = state
         game.team1_actual_points = team1_score
         game.team2_actual_points = team2_score
+        game.kickoff = create_a_kickoff_time(week.year.yearnum, week.weeknum, game_number)
         game.save()
         return game
 

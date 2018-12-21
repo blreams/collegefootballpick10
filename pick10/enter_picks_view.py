@@ -319,6 +319,8 @@ class EnterPicksView:
     def __get_pick_deadline(self,year,week_number,player_id):
         profile = UserProfile.objects.get(player__id=player_id)
         deadline = Database().get_pick_deadline(year,week_number)
+        if deadline is None:
+            return ''
         return self.__format_pick_deadline(deadline,profile.preferredtz)
 
     def __get_local_time(self,utc_date,timezone_name):
