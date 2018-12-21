@@ -465,7 +465,6 @@ class NoPicksTest(FunctionalTest):
         player_with_picks = self.utils.get_player_from_public_name(1978,'Brent')
         player_no_picks = self.utils.get_player_from_public_name(1978,'John')
 
-        import pdb;pdb.set_trace()
         self.utils.tiebreak_page(1978,2)
         self.__is_page_up('Week 2 Tiebreaker')
 
