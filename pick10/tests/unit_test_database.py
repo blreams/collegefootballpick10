@@ -3,11 +3,13 @@
 # so each unit test doesn't have to reinvent the wheel every time.
 from django.contrib.auth.models import User
 from pick10.models import Player, Year, PlayerYear, Team, Conference, Game, Pick, UserProfile, Week
-from pick10.models import add_game, add_pick, get_team
+from pick10.models import add_game, add_pick, get_team, create_a_kickoff_time
 from pick10.calculator import CalculateResults, TEAM1, TEAM2, NOT_STARTED, IN_PROGRESS, FINAL
 from stage_history import main, populate_year
 from stage_models import populate_conferences_teams
 import random
+import django.utils.timezone as tz
+from datetime import timedelta
 
 class UnitTestDatabase:
 
@@ -284,17 +286,18 @@ class UnitTestDatabase:
         annie = self.setup_player(year,'Annie')
         kevin = self.setup_player(year,'Kevin')
         john = self.setup_player(year,'John')
+        submit_time = create_a_kickoff_time(year, week_number, 1) - timedelta(minutes=1)
         for game in games:
-            self.setup_pick(brent,game,winner=TEAM1)
-            self.setup_pick(byron,game,winner=TEAM1)
-            self.setup_pick(alice,game,winner=TEAM1)
-            self.setup_pick(joan,game,winner=TEAM1)
-            self.setup_pick(bill,game,winner=TEAM1)
-            self.setup_pick(david,game,winner=TEAM1)
-            self.setup_pick(amy,game,winner=TEAM1)
-            self.setup_pick(annie,game,winner=TEAM1)
-            self.setup_pick(kevin,game,winner=TEAM1)
-            self.setup_pick(john,game,winner=TEAM1)
+            self.setup_pick(brent,game,winner=TEAM1,submit_time=submit_time)
+            self.setup_pick(byron,game,winner=TEAM1,submit_time=submit_time+timedelta(seconds=1))
+            self.setup_pick(alice,game,winner=TEAM1,submit_time=submit_time+timedelta(seconds=1))
+            self.setup_pick(joan,game,winner=TEAM1,submit_time=submit_time+timedelta(seconds=1))
+            self.setup_pick(bill,game,winner=TEAM1,submit_time=submit_time+timedelta(seconds=1))
+            self.setup_pick(david,game,winner=TEAM1,submit_time=submit_time+timedelta(seconds=1))
+            self.setup_pick(amy,game,winner=TEAM1,submit_time=submit_time+timedelta(seconds=1))
+            self.setup_pick(annie,game,winner=TEAM1,submit_time=submit_time+timedelta(seconds=1))
+            self.setup_pick(kevin,game,winner=TEAM1,submit_time=submit_time+timedelta(seconds=1))
+            self.setup_pick(john,game,winner=TEAM1,submit_time=submit_time+timedelta(seconds=1))
 
     def setup_week_final_with_no_pick_defaulters(self,year=1978,week_number=11):
         week = self.setup_week(year,week_number)
@@ -443,7 +446,8 @@ class UnitTestDatabase:
 
     def setup_week(self,year,week_number):
         year_model = populate_year(year)
-        week, created = Week.objects.get_or_create(year=year_model, weeknum=week_number)
+        #week, created = Week.objects.get_or_create(year=year_model, weeknum=week_number)
+        week, created = Week.objects.get_or_create(year=year_model, weeknum=week_number, pick_deadline=create_a_kickoff_time(year, week_number, 1))
         return week
 
     def setup_game(self,week,game_number,team1_name,team2_name,favored=2,spread=0.5,state=FINAL,team1_score=-1,team2_score=-1):
@@ -470,8 +474,12 @@ class UnitTestDatabase:
         player_year = PlayerYear.objects.get_or_create(player=player,year=year_model)[0]
         return player
 
-    def setup_pick(self,player,game,winner,team1_predicted_points=0,team2_predicted_points=0):
+    def setup_pick(self,player,game,winner,team1_predicted_points=0,team2_predicted_points=0,submit_time=None):
         pick = add_pick(player,game,winner,team1_predicted_points,team2_predicted_points)
+        pick.submit_time = submit_time
+        if submit_time is None:
+            pick.submit_time = tz.now()
+        pick.save()
         return pick
 
     def setup_player_default(self,player,games):

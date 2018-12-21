@@ -17,6 +17,23 @@ from django.utils.encoding import python_2_unicode_compatible
 import pytz
 from datetime import datetime, timedelta
 
+def create_a_kickoff_time(yearnum, weeknum, gamenum):
+    """Given a year, week, game calculate an appropriate kickoff time
+    with timezone.
+    """
+    # Start by getting noon Jan 1, year
+    dt = datetime(yearnum, 1, 1, 12, 0, 0, 0, pytz.timezone('EST'))
+    # Figure out the first Saturday
+    if dt.isoweekday() == 6:
+        days_to_add = 6
+    else:
+        days_to_add = 5 - dt.weekday()
+    dt += timedelta(days=days_to_add)
+    # Forward to week 35 + weeknum
+    dt += timedelta(days=7*(34 + weeknum - 1))
+
+    return dt + timedelta(hours=gamenum)
+
 def calc_default_pick_deadline():
     # The idea behind this is to grab the current day, then figure out the
     # next Thursday and use 4:00pm in the US/Eastern timezone.
