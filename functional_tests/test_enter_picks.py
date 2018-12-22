@@ -7,7 +7,7 @@ from pick10.database import *
 import unittest
 from django.contrib.auth.models import User
 from django.test.client import Client
-from utils import *
+from .utils import *
 from pick10.utils import get_timestamp
 from django.conf import settings
 import pytz
