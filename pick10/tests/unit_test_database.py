@@ -129,7 +129,8 @@ class UnitTestDatabase:
             self.setup_pick(john,game,winner=0)
 
     def setup_week_not_started_with_no_pick_defaulters(self,year=1978,week_number=13):
-        week = self.setup_week(year,week_number)
+        pick_deadline = tz.now() + timedelta(days=1)
+        week = self.setup_week(year,week_number, pick_deadline=pick_deadline)
         games = [None]*10
         games[0] = self.setup_game(week,1,"Georgia Tech","Clemson",state=NOT_STARTED)
         games[1] = self.setup_game(week,2,"Duke","North Carolina",state=NOT_STARTED)
@@ -444,10 +445,12 @@ class UnitTestDatabase:
         kevin = self.setup_player(year,'Kevin')
         john = self.setup_player(year,'John')
 
-    def setup_week(self,year,week_number):
+    def setup_week(self,year,week_number, pick_deadline=None):
         year_model = populate_year(year)
+        if pick_deadline is None:
+            pick_deadline = create_a_kickoff_time(year, week_number, 1)
         #week, created = Week.objects.get_or_create(year=year_model, weeknum=week_number)
-        week, created = Week.objects.get_or_create(year=year_model, weeknum=week_number, pick_deadline=create_a_kickoff_time(year, week_number, 1))
+        week, created = Week.objects.get_or_create(year=year_model, weeknum=week_number, pick_deadline=pick_deadline)
         return week
 
     def setup_game(self,week,game_number,team1_name,team2_name,favored=2,spread=0.5,state=FINAL,team1_score=-1,team2_score=-1):

@@ -32,7 +32,7 @@ class NoPicksTest(FunctionalTest):
         self.__is_page_up('Brent Week 1 Results')
 
         self.utils.player_results_page(1978,1,player_no_picks.id)
-        self.__is_page_up('John Week 1 Results')
+        self.__is_page_up('Player results for other players cannot be accessed until after the pick deadline has passed.')
 
         self.utils.enter_picks_page(1978,1,player_with_picks.id)
         self.__is_page_up('Brent Week 1 Picks')
@@ -70,7 +70,7 @@ class NoPicksTest(FunctionalTest):
         self.__is_page_up('John Week 1 Results')
 
         self.utils.player_results_page(1978,2,player_no_picks.id)
-        self.__is_page_up('John Week 2 Results')
+        self.__is_page_up('Player results for other players cannot be accessed until after the pick deadline has passed.')
 
         self.utils.enter_picks_page(1978,1,player_with_picks.id)
         self.__is_page_up('The week is final')
@@ -102,7 +102,7 @@ class NoPicksTest(FunctionalTest):
         self.__is_page_up('1978 Leaderboard')
 
         self.utils.player_results_page(1978,1,player_with_picks.id)
-        self.__is_page_up('Brent Week 1 Results')
+        self.__is_page_up('Player results for other players cannot be accessed until after the pick deadline has passed.')
 
         self.utils.player_results_page(1978,1,player_no_picks.id)
         self.__is_page_up('John Week 1 Results')
@@ -139,7 +139,7 @@ class NoPicksTest(FunctionalTest):
         self.__is_page_up('Brent Week 1 Results')
 
         self.utils.player_results_page(1978,2,player_with_picks.id)
-        self.__is_page_up('Brent Week 2 Results')
+        self.__is_page_up('Player results for other players cannot be accessed until after the pick deadline has passed.')
 
         self.utils.player_results_page(1978,1,player_no_picks.id)
         self.__is_page_up('John Week 1 Results')
