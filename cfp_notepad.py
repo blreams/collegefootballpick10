@@ -1,3 +1,18 @@
+##############################################################################
+from functional_tests.utils import Utils
+from pick10.tests.unit_test_database import UnitTestDatabase
+utils = Utils('a', 'b', nobrowser=True)
+test_db = UnitTestDatabase()
+try:
+    test_db.setup_week_not_started_no_picks(1978,1)
+except:
+    pass
+
+player = utils.get_player_from_public_name(1978, 'Brent')
+utils.login_assigned_user('Brent', player=player)
+utils.login_unassigned_user('user1')
+
+##############################################################################
 from pick10.models import *
 from pick10.tests.unit_test_database import UnitTestDatabase
 from pick10.calculator import CalculateResults, FINAL

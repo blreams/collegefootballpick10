@@ -10,9 +10,10 @@ import django.utils.timezone as tz
 
 class Utils:
 
-    def __init__(self,browser,server_url):
+    def __init__(self,browser,server_url, nobrowser=False):
         self.browser = browser
         self.server_url = server_url
+        self.nobrowser = nobrowser
 
     def landing_page(self):
         self.browser.get(self.server_url + reverse('index'))
@@ -72,15 +73,17 @@ class Utils:
                 return player
         raise AssertionError("Could not find player %d" % (name))
 
-    def login_unassigned_user(self,name='user1',password='1234'):
-        self.create_user(name,password)
-        self.login(name,password)
+    def login_unassigned_user(self,name='user1', email='user1@abc.com', password='1234'):
+        self.create_user(name, email, password)
+        if not self.nobrowser:
+            self.login(name, password)
 
-    def login_assigned_user(self,name='puser1',password='1234',player=None):
-        user = self.create_user(name,password)
-        assert player != None,'Create player not supported yet'
-        user_profile = UserProfile.objects.create(user=user,player=player)
-        self.login(name,password)
+    def login_assigned_user(self, name='puser1', email='puser1@abc.com', password='1234', player=None):
+        user = self.create_user(name, email, password)
+        assert player != None, 'Create player not supported yet'
+        user_profile = UserProfile.objects.create(user=user, player=player)
+        if not self.nobrowser:
+            self.login(name, password)
 
     def login_superuser(self,name='suser1',password='1234'):
         self.create_superuser(name,password)
