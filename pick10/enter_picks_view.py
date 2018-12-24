@@ -19,12 +19,19 @@ class EnterPicksView:
 
     def get(self,request,year,week_number,player_id):
 
+        try:
+            player_by_id_public_name = get_player_by_id(player_id).public_name
+        except Player.DoesNotExist:
+            player_by_id_public_name = 'PLAYER NOT FOUND'
+        except:
+            player_by_id_public_name = ''
+
         if self.__bad_year_or_week_number(year,week_number):
             data={'year':year,'week_number':week_number}
             return render(request,"pick10/bad_week.html",data)
 
         if not(self.__is_player_id_valid(player_id)):
-            data={'player_id':player_id,'player_name': get_player_by_id(player_id).public_name,'error':'bad_id'}
+            data={'player_id':player_id,'player_name': player_by_id_public_name,'error':'bad_id'}
             return render(request,"pick10/bad_player.html",data)
 
         year = int(year)

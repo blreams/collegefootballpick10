@@ -58,7 +58,8 @@ class UnitTestDatabase:
         main(years=[year],weeks=[week_number],load_memcache=False)
 
     def setup_week_not_started(self,year=1978,week_number=6):
-        week = self.setup_week(year,week_number)
+        pick_deadline = tz.now() + timedelta(days=1)
+        week = self.setup_week(year, week_number, pick_deadline=pick_deadline)
         games = [None]*10
         games[0] = self.setup_game(week,1,"Georgia Tech","Clemson",state=NOT_STARTED)
         games[1] = self.setup_game(week,2,"Duke","North Carolina",state=NOT_STARTED)
@@ -335,7 +336,8 @@ class UnitTestDatabase:
         # kevin, john have no picks
 
     def setup_week_not_started_no_picks(self,year=1978,week_number=11):
-        week = self.setup_week(year,week_number)
+        pick_deadline = tz.now() + timedelta(days=1)
+        week = self.setup_week(year,week_number, pick_deadline=pick_deadline)
         games = [None]*10
         games[0] = self.setup_game(week,1,"Georgia Tech","Clemson",state=NOT_STARTED)
         games[1] = self.setup_game(week,2,"Duke","North Carolina",state=NOT_STARTED)
@@ -359,7 +361,8 @@ class UnitTestDatabase:
         john = self.setup_player(year,'John')
 
     def setup_week_not_started_all_picks_default(self,year=1978,week_number=12):
-        week = self.setup_week(year,week_number)
+        pick_deadline = tz.now() + timedelta(days=1)
+        week = self.setup_week(year, week_number, pick_deadline=pick_deadline)
         games = [None]*10
         games[0] = self.setup_game(week,1,"Georgia Tech","Clemson",state=NOT_STARTED)
         games[1] = self.setup_game(week,2,"Duke","North Carolina",state=NOT_STARTED)
