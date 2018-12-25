@@ -57,8 +57,9 @@ class UnitTestDatabase:
     def load_historical_data_for_week(self,year=2014,week_number=1):
         main(years=[year],weeks=[week_number],load_memcache=False)
 
-    def setup_week_not_started(self,year=1978,week_number=6):
-        pick_deadline = tz.now() + timedelta(days=1)
+    def setup_week_not_started(self,year=1978,week_number=6, pick_deadline=None):
+        if pick_deadline is None:
+            pick_deadline = tz.now() + timedelta(days=1)
         week = self.setup_week(year, week_number, pick_deadline=pick_deadline)
         games = [None]*10
         games[0] = self.setup_game(week,1,"Georgia Tech","Clemson",state=NOT_STARTED)

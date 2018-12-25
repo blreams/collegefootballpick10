@@ -4,7 +4,9 @@ from pick10.tests.unit_test_database import *
 from pick10.database import *
 import unittest
 from django.core.cache import cache
-from utils import *
+from django.utils import timezone as tz
+from datetime import timedelta
+from .utils import *
 
 class PlayerResultsTest(FunctionalTest):
 
@@ -42,7 +44,7 @@ class PlayerResultsTest(FunctionalTest):
 
     def test_week_not_started(self):
         test_db = UnitTestDatabase()
-        test_db.setup_week_not_started(1978,6)
+        test_db.setup_week_not_started(1978,6, pick_deadline=tz.now()-timedelta(hours=1))
         player = self.__get_valid_player(year=1978)
 
         self.__open_week_results_page(year=1978,week_number=6,player_id=player.id)
@@ -120,7 +122,7 @@ class PlayerResultsTest(FunctionalTest):
 
         self.__open_week_results_page(year=2013,week_number=1,player_id=player_2012.id)
         body = self.browser.find_element_by_tag_name('body').text
-        expected = "Player %d is not participating in the 2013 pool." % (player_2012.id)
+        expected = "Player (id=%d) is not participating in the 2013 pool." % (player_2012.id)
         self.assertIn(expected,body)
 
         test_db.delete_database()
@@ -166,7 +168,7 @@ class PlayerResultsTest(FunctionalTest):
     def __get_valid_player(self,year):
         d = Database()
         players = d.load_players(year)
-        return players.values()[0]
+        return list(players.values())[0]
 
     def __get_player(self,year,ss_name):
         d = Database()
