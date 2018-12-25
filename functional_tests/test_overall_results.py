@@ -5,7 +5,7 @@ import unittest
 import datetime as dt
 import pytz
 from django.core.cache import cache
-from utils import *
+from .utils import *
 
 class OverallResultsTest(FunctionalTest):
 
@@ -105,7 +105,7 @@ class OverallResultsTest(FunctionalTest):
         self.assertIn('1978 Leaderboard',title)
 
         header = self.browser.find_element_by_class_name('results-header').text
-        expected = 'Rank Player Overall Possible Win% Pick% Picks 1 2 3 4'
+        expected = 'Rank Player Overall Win% Pick% Picks 1 2 3 4'
         self.assertEqual(expected,header)
 
         test_db.delete_database()
