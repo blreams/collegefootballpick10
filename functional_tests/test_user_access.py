@@ -1,12 +1,12 @@
 from .base import FunctionalTest
 from django.urls import reverse
 from pick10.tests.unit_test_database import UnitTestDatabase
-#from pick10.models import *
-#from pick10.calculator import *
 import unittest
 from django.contrib.auth.models import User
 from django.test.client import Client
-from utils import Utils
+from .utils import Utils
+from django.utils import timezone as tz
+from datetime import timedelta
 
 class UserAccessTest(FunctionalTest):
 
@@ -60,10 +60,11 @@ class UserAccessTest(FunctionalTest):
 
     def test_public_user(self):
         test_db = UnitTestDatabase()
-        test_db.setup_week_not_started(1978,1)
+        test_db.setup_week_not_started(1978,1, pick_deadline=tz.now()-timedelta(hours=1))
 
         self.utils.login_unassigned_user('Brent')
 
+        import pdb;pdb.set_trace()
         self.__overall_results()
         self.__week_results()
         self.__player_results()
@@ -93,7 +94,7 @@ class UserAccessTest(FunctionalTest):
 
     def test_superuser(self):
         test_db = UnitTestDatabase()
-        test_db.setup_week_not_started(1978,1)
+        test_db.setup_week_not_started(1978,1, pick_deadline=tz.now()-timedelta(hours=1))
 
         self.utils.login_superuser(name='Brent')
 

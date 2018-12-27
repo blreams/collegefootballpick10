@@ -5,7 +5,7 @@ from pick10.models import *
 from pick10.calculator import *
 from pick10.database import *
 import unittest
-from utils import *
+from .utils import *
 
 class RaceConditionTest(FunctionalTest):
 

@@ -3,7 +3,7 @@ from django.urls import reverse
 from pick10.tests.unit_test_database import *
 import unittest
 from django.core.cache import cache
-from utils import *
+from .utils import *
 
 class TiebreakTest(FunctionalTest):
 

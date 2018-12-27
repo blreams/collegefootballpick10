@@ -1,5 +1,5 @@
 from .base import FunctionalTest
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from pick10.tests.unit_test_database import *
 from pick10.models import *
 from pick10.calculator import *
@@ -7,7 +7,7 @@ import unittest
 from django.contrib.auth.models import User
 from django.test.client import Client
 from django.core.cache import cache
-from utils import *
+from .utils import *
 
 class UpdateGamesTest(FunctionalTest):
 
