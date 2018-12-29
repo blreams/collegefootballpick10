@@ -64,7 +64,6 @@ class UserAccessTest(FunctionalTest):
 
         self.utils.login_unassigned_user('Brent')
 
-        import pdb;pdb.set_trace()
         self.__overall_results()
         self.__week_results()
         self.__player_results()
