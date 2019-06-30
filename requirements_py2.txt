@@ -1,14 +1,16 @@
-beautifulsoup4==4.5.1
-Django==1.11
-django-dbbackup==3.1.1
-django-registration-redux==1.6
-fancy-tag==0.2.0
-lxml==3.6.4
-#MySQL-python==1.2.5
-pytz==2017.2
-PyYAML==3.11
-requests==2.5.1
-selenium==2.45.0
-six==1.10.0
-xlrd==0.9.3
-xlwt==1.0.0
+# Commenting all of these since github is generating security alerts from them.
+# We have officially upgraded to python3.5 on pythonanywhere. If you want to 
+# setup to run on python2.7, you would use these requirements after uncommenting.
+#beautifulsoup4==4.5.1
+#Django==1.11
+#django-dbbackup==3.1.1
+#django-registration-redux==1.6
+#fancy-tag==0.2.0
+#lxml==3.6.4
+#pytz==2017.2
+#PyYAML==3.11
+#requests==2.5.1
+#selenium==2.45.0
+#six==1.10.0
+#xlrd==0.9.3
+#xlwt==1.0.0
