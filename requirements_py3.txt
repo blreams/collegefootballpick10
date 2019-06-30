@@ -1,5 +1,5 @@
 beautifulsoup4==4.5.1
-Django==2.1.4
+Django==2.2.2
 django-dbbackup==3.1.1
 django-registration-redux==2.5
 fancy-tag==0.2.0
@@ -9,6 +9,7 @@ pytz==2017.2
 PyYAML==3.11
 selenium==3.141.0
 six==1.10.0
+sqlparse==0.3.0
 urllib3==1.24.1
 xlrd==0.9.3
 xlwt==1.0.0
