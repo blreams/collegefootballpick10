@@ -2,9 +2,15 @@
 
 {% load staticfiles %}
 
+{% block custom_css %}<link href={% static 'home.css' %} rel="stylesheet" media="screen">{% endblock %}
+
 {% block body_block %}
-<p id="home_p">This is the main landing page for the pool. You must be
-a registered user to participate.</p>
+<div id="home_div">
+{% if user.username %}
+<h2>Welcome {{user.username}}</h2>
+{% else %}
+<h2>Welcome</h2>
+<p id="home_p">You must be a registered user to participate.</p>
 <ul>
     <li>To register, click on the Register button and provide the requested information:</li>
         <ol>
@@ -14,7 +20,9 @@ a registered user to participate.</p>
         </ol>
     <li>To login, click on the Login button and login using your credentials.</li>
     <li>If you have questions, contact the site admin at <a href="mailto:collegefootballpick10@gmail.com">collegefootballpick10@gmail.com</a></li>
+{% endif %}
 </ul>
-<img src="{% static 'images/cf_map.jpg' %}" alt="Logo Map" height="452" width="560">
+<img src="{% static 'images/cf_map.png' %}" alt="Logo Map" height="470" width="740">
 {% endblock %}
+</div>
 

@@ -1,0 +1,20 @@
+#body_block {
+    opacity: 0.8;
+}
+
+#home_div {
+    background: #f0e1dc;
+}
+
+#home_div ul {
+    list-style-type: none;
+}
+#home_div li {
+    padding-top: 6px;
+    padding-left: 40px;
+    background-image: url(images/football_bullet.png);
+    background-repeat: no-repeat;
+    background-position: 0px 0px;
+    list-style-type: none;
+}
+

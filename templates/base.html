@@ -14,6 +14,8 @@
     <title>{% block header_text %}College Football Pick 10{% endblock %}</title>
 
     <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+    <link href="{% static 'base.css' %}" rel="stylesheet" media="screen">
+    {% block custom_css %}{% endblock %}
     <!--[if lt IE 9]>
     <script src="{% static 'jquery/html5shiv.min.js' %}"></script>
     <script src="{% static 'jquery/respond.min.js' %}"></script>
@@ -32,6 +34,7 @@
 
 <body>
 
+    <div id="background-image"></div>
     <nav class="navbar navbar-default navbar-inverse" role="navigation">
         <div class="container">
             <div class="navbar-header">
@@ -88,7 +91,9 @@
                 <div>
                     <h1 id="base_id">College Football Pick 10</h1>
                     {% block body_header_block %}{% endblock %}
+                    <div id="body_block">
                     {% block body_block %}{% endblock %}
+                    </div>
                 </div>
             </div>
         </div>

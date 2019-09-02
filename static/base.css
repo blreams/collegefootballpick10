@@ -1,0 +1,10 @@
+#background-image {
+    background-image: url("images/pigskin1.jpg");
+    width: 100%;
+    height: 100%;
+    opacity: 0.3;
+    position: fixed;
+    background-repeat: repeat;
+    z-index: 0;
+}
+
