@@ -3,7 +3,7 @@
 {% block body_block %}
 <link href="/static/edit_picks.css" rel="stylesheet" type="text/css" media="all">
 
-<h2>Commissioner Edit {{year}} Week {{week_number}}</h2>
+<h2>Commissioner Edit {{year}} Week {{week_number}}</h2><p>NOTE: Kickoffs to be entered using Eastern timezone. Format: YYYY-MM-DD HH:MM:SS</p>
 
 <form id="edit_week_form" action="{% url 'edit_week' year week_number %}" method="post">
     {% csrf_token %}
