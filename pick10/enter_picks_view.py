@@ -4,6 +4,8 @@ from __future__ import print_function
 import six
 
 import pytz
+from datetime import timedelta
+from django.utils import timezone
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.http import HttpResponseNotFound
@@ -197,6 +199,7 @@ class EnterPicksView:
         params['player_name'] = self.__get_player_name(player_id)
         params['overall_error_message'] = overall_error_message
         params['pick_deadline'] = self.__get_pick_deadline(year, week_number, player_id)
+        params['pick_deadline_delta'] = self.__get_pick_deadline(year, week_number, player_id, delta=True)
 
         self.__setup_pick_team_rows(picks)
         self.__set_game10_params(picks,params)
@@ -323,11 +326,13 @@ class EnterPicksView:
         d = Database()
         return d.after_pick_deadline(year,week_number)
 
-    def __get_pick_deadline(self,year,week_number,player_id):
+    def __get_pick_deadline(self,year,week_number,player_id, delta=False):
         profile = UserProfile.objects.get(player__id=player_id)
         deadline = Database().get_pick_deadline(year,week_number)
         if deadline is None:
             return ''
+        if delta:
+            return self.__format_pick_deadline_delta(deadline)
         return self.__format_pick_deadline(deadline,profile.preferredtz)
 
     def __get_local_time(self,utc_date,timezone_name):
@@ -338,6 +343,16 @@ class EnterPicksView:
         pick_deadline = self.__get_local_time(pick_deadline_utc,timezone)
         date_format = "%a %m/%d/%Y %I:%M %p %Z"
         return pick_deadline.strftime(date_format)
+
+    def __format_pick_deadline_delta(self,pick_deadline_utc):
+        pick_deadline_delta = pick_deadline_utc - timezone.now()
+        days = pick_deadline_delta.days
+        pick_deadline_delta_minus_days = pick_deadline_delta - timedelta(days=days)
+        hours, remainder = divmod(pick_deadline_delta_minus_days.seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        if days > 0:
+            s = '{} days, '.format(days)
+        return s + '{:02d}:{:02d}:{:02d}'.format(hours, minutes, seconds)
 
     def __user_is_not_participant(self,user):
         try:
