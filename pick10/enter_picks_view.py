@@ -350,6 +350,7 @@ class EnterPicksView:
         pick_deadline_delta_minus_days = pick_deadline_delta - timedelta(days=days)
         hours, remainder = divmod(pick_deadline_delta_minus_days.seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
+        s = ''
         if days > 0:
             s = '{} days, '.format(days)
         return s + '{:02d}:{:02d}:{:02d}'.format(hours, minutes, seconds)
