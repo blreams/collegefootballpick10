@@ -3,6 +3,7 @@ from __future__ import division
 from __future__ import print_function
 import six
 
+from django.core.cache import cache
 from .models import get_playeryears_by_id, get_player_by_id, get_weeklist
 from .player_results import PlayerResult, PlayerSummary
 from .database import Database
@@ -52,11 +53,17 @@ class CalculatePlayerStats:
             self.stats.append(stat)
 
     def __calculate_player_score_for_week(self, year, week):
-        database = Database()
-        self.__week_data = database.load_week_data(year,week)
-        self.__calc = CalculateResults(self.__week_data)
+        player_score_key = "{year},{week},{player_id}".format(year=year, week=week, player_id=self.player_id)
+        player_score = cache.get(player_score_key)
+        if player_score is None:
+            database = Database()
+            self.__week_data = database.load_week_data(year,week)
+            self.__calc = CalculateResults(self.__week_data)
 
-        assert self.player_id in self.__week_data.players,"Bad player id"
-        self.__player = self.__week_data.players[self.player_id]
-        return self.__calc.get_number_of_wins(self.__player)
+            assert self.player_id in self.__week_data.players,"Bad player id"
+            self.__player = self.__week_data.players[self.player_id]
+            player_score = self.__calc.get_number_of_wins(self.__player)
+            if database.is_week_scores_locked(year, week):
+                cache.set(player_score_key, player_score) # do this only if week is complete
+        return player_score
 

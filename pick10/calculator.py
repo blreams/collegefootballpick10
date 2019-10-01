@@ -9,8 +9,6 @@ class CalculateResults:
 
     def __init__(self,data):
         self.__data = data
-        self.year = data.week.year.yearnum
-        self.week = data.week.weeknum
 
     def get_game_state(self):
         raise AssertionError("Not implemented")

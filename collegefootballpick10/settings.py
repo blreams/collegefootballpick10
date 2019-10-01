@@ -161,7 +161,8 @@ if not DISABLE_MEMCACHE:
         'default': {
              'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
              'LOCATION': 'memcache_table',
-             'TIMEOUT':None
+             'TIMEOUT':None,
+             'MAX_ENTRIES': 100000,
         }
     }
 else:
