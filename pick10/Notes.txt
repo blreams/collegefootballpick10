@@ -1,0 +1,25 @@
+============================================================================
+url: pick10/2019/week/1/player/39/results
+
+year=2019, week_number=1, player_id=39
+calls views.player_results(request, year, week_number, player_id)
+calls player_results_view.PlayerResultsView(request, year, week_number, player_id)
+
+PlayerResultsView is a class with a get() method and additional private helper
+methods.
+
+get()
+  o Creates Database instance.
+  o Gets UserAccess object (allows access to Profile).
+  o Creates CalculatePlayerResults object and uses methods to get summary
+    and results dicts.
+  o Creates sidebar html string for the years buttons on left side.
+  o WeekNavbar object adds to params. It also creates custom navbar buttons
+    based on pool state and other info about what can be shown.
+  o Render from template pick10/player_results.html.
+
+CalculatePlayerResults object has methods get_player_summary and get_results.
+Each of these in turn calls a private __calculate_player_summary or
+__calculate_player_results method respectively. There are separate classes
+(PlayerSummary, PlayerResult) for each of these methods to fill in.
+

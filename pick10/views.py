@@ -5,7 +5,7 @@ import six
 
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.core.cache import *
+#from django.core.cache import *
 from django.http import HttpResponseNotFound
 from django.contrib.admin.views.decorators import staff_member_required
 from .profile import ProfileView
@@ -16,6 +16,7 @@ from .set_week_winner import SetWeekWinnerView
 from .index_view import IndexView
 from .week_results_view import WeekResultsView
 from .player_results_view import PlayerResultsView
+from .player_stats_view import PlayerStatsView
 from .update_view import UpdatePageView
 from .tiebreak_view import TiebreakView
 from .update_games_view import UpdateGamesView
@@ -109,6 +110,13 @@ def week_results(request,year,week_number):
 def player_results(request,year,week_number,player_id):
     if request.method == "GET":
         response = PlayerResultsView().get(request,year,week_number,player_id)
+        return response
+    return HttpResponseNotFound('<h1>Page not found</h1>')
+
+@login_required
+def player_stats(request, player_id):
+    if request.method == "GET":
+        response = PlayerStatsView().get(request, player_id)
         return response
     return HttpResponseNotFound('<h1>Page not found</h1>')
 

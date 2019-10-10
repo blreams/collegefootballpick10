@@ -11,7 +11,6 @@ else:
 import re
 from django.shortcuts import render
 from django.template.loader import render_to_string
-from django.http import HttpResponse
 from django.core.cache import cache
 from .models import get_week
 from .database import Database

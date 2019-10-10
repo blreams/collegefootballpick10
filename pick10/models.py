@@ -509,4 +509,6 @@ def calc_weekly_points(yearnum, username_or_player_id=None, overunder=False):
                     retlist[-1] += 1.0
     return (player_name, retlist[1:])
 
-
+def get_playeryears_by_id(player_id):
+    playeryears = PlayerYear.objects.filter(player_id=player_id)
+    return sorted([py.year.yearnum for py in playeryears], reverse=True)

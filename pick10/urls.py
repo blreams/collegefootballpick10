@@ -11,6 +11,7 @@ from .views import week_results
 from .views import tiebreak
 from .views import update_games
 from .views import player_results
+from .views import player_stats
 from .views import enter_picks
 from .views import update_pages
 from .views import update_week
@@ -35,5 +36,6 @@ urlpatterns = [
     url(r'^(?P<year>[0-9]{4})/week/(?P<week_number>[0-9]{1,2})/update/week$', update_week, name='update_week'),
     url(r'^(?P<year>[0-9]{4})/week/(?P<week_number>[0-9]{1,2})/update/tiebreak$', update_tiebreak, name='update_tiebreak'),
     url(r'^(?P<year>[0-9]{4})/update/overall$', update_overall, name='update_overall'),
+    url(r'^stats/player/(?P<player_id>[0-9]+)/all$', player_stats, name='player_stats'),
 ]
 

@@ -68,6 +68,10 @@ class Database:
         weeks_and_years = self.load_weeks_and_years()
         return sorted(weeks_and_years.keys())
 
+    def get_player_years_weeks(self, player_id):
+        weeks_and_years = self.load_player_weeks_and_years(player_id)
+        return weeks_and_years
+
     def get_pool_state(self,year):
         if not(self.is_year_valid(year)):
             return "invalid"
@@ -121,6 +125,10 @@ class Database:
 
     def load_weeks_and_years(self):
         weeks_and_years = self.__load_week_numbers_and_years()
+        return weeks_and_years
+
+    def load_player_weeks_and_years(self, player_id):
+        weeks_and_years = self.__load_player_week_numbers_and_years(player_id)
         return weeks_and_years
 
     def load_players(self,year):
@@ -180,6 +188,18 @@ class Database:
                 week_numbers_and_years[year] = []
 
             week_numbers_and_years[year].append(week_number)
+        return week_numbers_and_years
+
+    def __load_player_week_numbers_and_years(self, player_id):
+        week_numbers_and_years = dict()
+        playeryears = PlayerYear.objects.filter(player_id=player_id)
+
+        for playeryear in playeryears:
+            year = playeryear.year
+            week_numbers_and_years[year.yearnum] = []
+            weeks = Week.objects.filter(year=year)
+            for week in weeks:
+                week_numbers_and_years[year.yearnum].append(week.weeknum)
         return week_numbers_and_years
 
     def __before_pick_deadline(self,week):
