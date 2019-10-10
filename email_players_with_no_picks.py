@@ -10,11 +10,8 @@ django.setup()
 
 from django.core.mail import send_mail
 
-#from pick10.database import *
 from pick10.database import Database
-#from pick10.calculator import *
 from pick10.calculator import CalculateResults
-#from pick10.models import *
 from pick10.models import get_profile_by_player, get_staff
 import django.utils.timezone as tz
 import datetime
@@ -34,10 +31,10 @@ def get_current_week():
     weeks_and_years = database.load_weeks_and_years()
     assert weeks_and_years != None
 
-    years = weeks_and_years.keys()
+    years = list(weeks_and_years.keys())
     assert years != None and len(years) > 0
 
-    current_year = max(weeks_and_years.keys())
+    current_year = max(list(weeks_and_years.keys()))
 
     weeks = weeks_and_years[current_year]
     assert weeks != None and len(weeks) > 0
