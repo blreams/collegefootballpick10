@@ -4,7 +4,8 @@ from __future__ import print_function
 import six
 
 from django.core.cache import cache
-from .models import get_playeryears_by_id, get_player_by_id, get_weeklist, PlayerWeekStat, Week, calc_player_week_points_picks_winner
+from .models import Week, PlayerWeekStat
+from .models import get_playeryears_by_id, get_player_by_id, get_weeklist, calc_player_week_points_picks_winner, get_last_week_with_winner
 from .player_results import PlayerResult, PlayerSummary
 from .database import Database
 from .calculator import CalculateResults
@@ -26,6 +27,9 @@ class CalculatePlayerStats:
     def get_player_summary(self):
         self.playeryearnums = get_playeryears_by_id(self.player_id)
         self.summary['number_of_years'] = len(self.playeryearnums)
+        self.summary['number_of_weeks'] = 0
+        for yearnum in self.playeryearnums:
+            self.summary['number_of_weeks'] += get_last_week_with_winner(yearnum)
         self.player = get_player_by_id(self.player_id)
         self.summary['player_name'] = self.player.public_name
         if self.__use_private_names:
@@ -45,7 +49,8 @@ class CalculatePlayerStats:
 
     def __calculate_player_stats(self):
         playerweekstats = PlayerWeekStat.objects.filter(player__id=self.player_id).order_by('week__weeknum').order_by('-week__year__yearnum')
-        if len(playerweekstats) == 0:
+        if len(playerweekstats) < self.summary['number_of_weeks']:
+            print("Calling refresh_database() for PlayerWeekStats")
             self.refresh_database()
             playerweekstats = PlayerWeekStat.objects.filter(player__id=self.player_id).order_by('week__weeknum').order_by('-week__year__yearnum')
         year = 10000
