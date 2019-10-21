@@ -212,6 +212,22 @@ class Pick(models.Model):
         return 'User=%s, Year=%d, Week=%d, Game=%d'%(self.player.private_name, self.game.week.year.yearnum, self.game.week.weeknum, self.game.gamenum,)
 
 @python_2_unicode_compatible
+class PlayerWeekStat(models.Model):
+    player = models.ForeignKey(Player, on_delete=models.CASCADE)
+    week = models.ForeignKey(Week, on_delete=models.CASCADE)
+    score = models.IntegerField(default=0)
+    picks = models.IntegerField(default=0)
+    winner = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = '9. PlayerWeekStats'
+
+    def __str__(self):
+        return 'Player={}, Year={}, Week={}'.format(self.player.ss_name, self.week.year.yearnum, self.week.weeknum)
+
+@python_2_unicode_compatible
 class UserProfile(models.Model):
     tz_choices = [(tz, tz) for tz in pytz.all_timezones if tz.startswith('US')] + [(tz, tz) for tz in pytz.all_timezones if not tz.startswith('US')]
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -352,6 +368,12 @@ def get_week_with_no_winner(yearnum):
     if not weekobjs:
         return 0
     return weekobjs[0].weeknum
+
+def get_last_week_with_winner(yearnum):
+    weekobjs = Week.objects.filter(year__yearnum=yearnum, lock_picks=False).exclude(winner=None).order_by('weeknum')
+    if not weekobjs:
+        return 0
+    return weekobjs[len(weekobjs) - 1].weeknum
 
 def query_picks(username, yearnum, weeknum):
     user = get_user_by_username(username)
@@ -509,6 +531,44 @@ def calc_weekly_points(yearnum, username_or_player_id=None, overunder=False):
                     retlist[-1] += 1.0
     return (player_name, retlist[1:])
 
+def calc_player_week_points_picks_winner(player_id, yearnum, weeknum):
+    picks = query_picks_by_player_id(player_id, yearnum, weeknum)
+    if len(picks) == 0:
+        return [0, 0, False]
+    week = Week.objects.get(year__yearnum=yearnum, weeknum=weeknum)
+    if week.winner is not None:
+        week_winner = week.winner.id == player_id
+    else:
+        week_winner = None
+    picks_entered = 0
+    points = 0
+    games = get_games(yearnum, weeknum)
+    for pick, game in zip(picks, games):
+        if game.game_state == 3:
+            picks_entered += 1
+            if pick.winner == game.winner:
+                points += 1
+    return [points, picks_entered, week_winner]
+
 def get_playeryears_by_id(player_id):
     playeryears = PlayerYear.objects.filter(player_id=player_id)
     return sorted([py.year.yearnum for py in playeryears], reverse=True)
+
+def get_player_id_with_stats_list(yearnum, weeknum):
+    playerweekstats = PlayerWeekStat.objects.filter(week__year__yearnum=yearnum, week__weeknum=weeknum)
+    return [pws.player_id for pws in playerweekstats]
+
+def update_player_stats(week):
+    players = [py.player for py in PlayerYear.objects.filter(year__yearnum=week.year.yearnum)]
+    for player in players:
+        points, picks, winner = calc_player_week_points_picks_winner(player.id, week.year.yearnum, week.weeknum)
+        if winner is None:
+            print("Warning: Year {} Week {} has no winner".format(week.year.yearnum, week.weeknum))
+            return
+        pws, created = PlayerWeekStat.objects.get_or_create(player=player, week=week)
+        pws.score = points
+        pws.picks = picks
+        pws.winner = winner
+        print("Adding PlayerWeekStat({})".format(pws))
+        pws.save
+

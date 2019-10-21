@@ -15,14 +15,23 @@
 {% block body_block %}
 <link href="/static/title_bar.css" rel="stylesheet" type="text/css" media="all">
 <link href="/static/player_results_1.css" rel="stylesheet" type="text/css" media="all">
+<link href="/static/week_results_3.css" rel="stylesheet" type="text/css" media="all">
 <br>
     <table>
         <tr>
             <td class="table-line" colspan="10"></td>
         </tr>
         <tr class="summary-content">
-            <td class="summary-label">Number of years</td>
+            <td class="summary-label">Years</td>
             <td class="summary-value">{{summary.number_of_years}}</td>
+            <td class="summary-label">Pct</td>
+            <td class="summary-value">{{summary.pick_pct}}</td>
+            <td class="summary-label">Wins</td>
+            <td class="summary-value">{{summary.total_wins}}</td>
+            <td class="summary-label">Tens</td>
+            <td class="summary-value">{{summary.total_tens}}</td>
+            <td class="summary-label">Zeros</td>
+            <td class="summary-value">{{summary.total_zeros}}</td>
         </tr>
         <tr>
             <td class="table-line" colspan="10"></td>
@@ -49,31 +58,31 @@
                 <th class="result-header">Wk13</th>
             </tr>
         </thead>
+        {% for stat in stats %}
+            <tr>
+                <td class="player-content pick-content">{{stat.year}}</td>
+                <td class="p_content">{{stat.total_score}}</td>
+                <td class="p_content">{{stat.week1_score}}</td>
+                <td class="p_content">{{stat.week2_score}}</td>
+                <td class="p_content">{{stat.week3_score}}</td>
+                <td class="p_content">{{stat.week4_score}}</td>
+                <td class="p_content">{{stat.week5_score}}</td>
+                <td class="p_content">{{stat.week6_score}}</td>
+                <td class="p_content">{{stat.week7_score}}</td>
+                <td class="p_content">{{stat.week8_score}}</td>
+                <td class="p_content">{{stat.week9_score}}</td>
+                <td class="p_content">{{stat.week10_score}}</td>
+                <td class="p_content">{{stat.week11_score}}</td>
+                <td class="p_content">{{stat.week12_score}}</td>
+                <td class="p_content">{{stat.week13_score}}</td>
+            </tr>
+        {% endfor %}
         <tr>
             <td class="result-row pick-content">Total</td>
+            <td class="result-row pick-content">{{summary.total_points}}</td>
             <td class="result-row">
             </td>
         </tr>
-        {% for stat in stats %}
-            <tr>
-                <td class="result-row pick-content">{{stat.year}}</td>
-                <td class="result-row">{{stat.total_score}}</td>
-                <td class="result-row">{{stat.week1_score}}</td>
-                <td class="result-row">{{stat.week2_score}}</td>
-                <td class="result-row">{{stat.week3_score}}</td>
-                <td class="result-row">{{stat.week4_score}}</td>
-                <td class="result-row">{{stat.week5_score}}</td>
-                <td class="result-row">{{stat.week6_score}}</td>
-                <td class="result-row">{{stat.week7_score}}</td>
-                <td class="result-row">{{stat.week8_score}}</td>
-                <td class="result-row">{{stat.week9_score}}</td>
-                <td class="result-row">{{stat.week10_score}}</td>
-                <td class="result-row">{{stat.week11_score}}</td>
-                <td class="result-row">{{stat.week12_score}}</td>
-                <td class="result-row">{{stat.week13_score}}</td>
-            </tr>
-            <tr><td class="table-line" colspan="4"></td></tr>
-        {% endfor %}
     </table>
     <br><br>
 

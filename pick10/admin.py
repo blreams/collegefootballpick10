@@ -10,7 +10,7 @@ from django.contrib import admin
 from django.utils.translation import ugettext_lazy
 
 from .models import get_profile_by_player
-from .models import Year, Player, PlayerYear, Conference, Team, Game, Week, Pick, UserProfile
+from .models import Year, Player, PlayerYear, Conference, Team, Game, Week, Pick, PlayerWeekStat, UserProfile
 from .forms import UserProfileForm
 
 site_text = 'College Football Pick10'
@@ -74,6 +74,10 @@ class PickAdmin(admin.ModelAdmin):
     list_display = ('player', 'game', 'winner', 'created', 'updated')
     list_filter = ('game__week__year', 'game__week__weeknum', 'game__gamenum', 'player')
 
+class PlayerWeekStatAdmin(admin.ModelAdmin):
+    list_display = ('player', 'week', 'score', 'picks', 'winner', 'created', 'updated')
+    list_filter = ('week__year__yearnum', 'week__weeknum')
+
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'player', 'company', 'preferredtz', 'favorite_team')
     list_filter = ('company', 'favorite_team', 'preferredtz')
@@ -106,6 +110,7 @@ admin.site.register(Team, TeamAdmin)
 admin.site.register(Game, GameAdmin)
 admin.site.register(Week, WeekAdmin)
 admin.site.register(Pick, PickAdmin)
+admin.site.register(PlayerWeekStat, PlayerWeekStatAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)

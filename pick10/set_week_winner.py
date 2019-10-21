@@ -6,7 +6,7 @@ import six
 from django.shortcuts import render, redirect
 from django.http import HttpResponseNotFound
 from datetime import datetime
-from .models import get_week, get_player_by_private_name
+from .models import get_week, get_player_by_private_name, update_player_stats
 from .forms import SetWeekWinnerForm
 
 class SetWeekWinnerView:
@@ -23,6 +23,7 @@ class SetWeekWinnerView:
             w = get_week(year_num, week_num)
             w.winner = get_player_by_private_name(winner)
             w.save()
+            update_player_stats(w)
             return redirect('/pick10/commissioner')
         return render(request, 'pick10/set_week_winner_form.html', {'form': form, 'year_num': year_num, 'week_num': week_num})
 

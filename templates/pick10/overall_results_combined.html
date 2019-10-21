@@ -51,7 +51,7 @@
 {% else %}
 			<td class="p_content">{{result.rank}}</td>
 {% endif %}
-			<td class="player-content">{{result.player_name}}</td>
+			<td class="player-content"><a class="week-link" href="{% url 'player_stats' result.player_id %}">{{result.player_name}}</a></td>
 			<td class="highlight-content">{{result.overall}}</td>
 {% if pool_state == "week_in_progress" %}
 			<td class="highlight-content">{{result.projected}}</td>
