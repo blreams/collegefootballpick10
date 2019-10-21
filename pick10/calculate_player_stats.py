@@ -50,7 +50,6 @@ class CalculatePlayerStats:
     def __calculate_player_stats(self):
         playerweekstats = PlayerWeekStat.objects.filter(player__id=self.player_id).order_by('week__weeknum').order_by('-week__year__yearnum')
         if len(playerweekstats) < self.summary['number_of_weeks']:
-            print("Calling refresh_database() for PlayerWeekStats")
             self.refresh_database()
             playerweekstats = PlayerWeekStat.objects.filter(player__id=self.player_id).order_by('week__weeknum').order_by('-week__year__yearnum')
         year = 10000
@@ -94,6 +93,5 @@ class CalculatePlayerStats:
         pws.score = points
         pws.picks = picks
         pws.winner = winner
-        print("Adding PlayerWeekStat({})".format(pws))
         pws.save()
 
