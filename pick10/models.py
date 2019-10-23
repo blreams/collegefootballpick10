@@ -498,38 +498,30 @@ def calc_weekly_points(yearnum, username_or_player_id=None, overunder=False):
     Can query using username or player_id. If neither is given, it picks a random
     player.
     """
-    retlist = []
+    scorelist = []
     if yearnum == 0:
-        return ('', retlist)
-    if username_or_player_id is None:
-        # Get a random player
-        player_id_list = get_player_id_list_by_year(yearnum)
-        if not player_id_list:
-            return ('', retlist)
-        player_id = random.choice(get_player_id_list_by_year(yearnum))
-    elif isinstance(username_or_player_id, six.string_types):
+        return ('', scorelist)
+    if isinstance(username_or_player_id, six.string_types):
         user = get_user_by_username(username_or_player_id)
         if not user or not hasattr(user, 'userprofile') or not hasattr(user.userprofile, 'player') or user.userprofile.player is None:
             return ('', retlist)
         player_id = user.userprofile.player.id
-    else:
+    elif username_or_player_id is not None:
         if not get_player_by_id(username_or_player_id):
             return ('', retlist)
         player_id = username_or_player_id
+    else:
+        player_id = random.sample(set([pws.player.id for pws in PlayerWeekStat.objects.filter(week__year__yearnum=yearnum)]), 1)[0]
     player_name = get_player_by_id(player_id).private_name
-    weeknums = get_weeklist(yearnum, only_locked_scores=True)
-    retlist.append(0.0)
-    for weeknum in weeknums:
-        picks = query_picks_by_player_id(player_id, yearnum, weeknum)
-        games = get_games(yearnum, weeknum)
-        retlist.append(retlist[-1])
-        for pick, game in zip(picks, games):
-            if game.game_state == 3:
-                if overunder:
-                    retlist[-1] -= 0.5
-                if pick.winner == game.winner:
-                    retlist[-1] += 1.0
-    return (player_name, retlist[1:])
+    scorelist = [pws.score for pws in PlayerWeekStat.objects.filter(player__id=player_id, week__year__yearnum=yearnum).order_by('week__weeknum')]
+    if overunder:
+        cumulative = 0
+        new_scorelist = []
+        for score in scorelist:
+            cumulative += score - 5
+            new_scorelist.append(cumulative)
+        scorelist = new_scorelist
+    return (player_name, scorelist)
 
 def calc_player_week_points_picks_winner(player_id, yearnum, weeknum):
     picks = query_picks_by_player_id(player_id, yearnum, weeknum)
