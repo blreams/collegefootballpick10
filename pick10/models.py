@@ -504,11 +504,11 @@ def calc_weekly_points(yearnum, username_or_player_id=None, overunder=False):
     if isinstance(username_or_player_id, six.string_types):
         user = get_user_by_username(username_or_player_id)
         if not user or not hasattr(user, 'userprofile') or not hasattr(user.userprofile, 'player') or user.userprofile.player is None:
-            return ('', retlist)
+            return ('', scorelist)
         player_id = user.userprofile.player.id
     elif username_or_player_id is not None:
         if not get_player_by_id(username_or_player_id):
-            return ('', retlist)
+            return ('', scorelist)
         player_id = username_or_player_id
     else:
         player_id = random.sample(set([pws.player.id for pws in PlayerWeekStat.objects.filter(week__year__yearnum=yearnum)]), 1)[0]
