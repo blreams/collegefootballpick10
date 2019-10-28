@@ -561,5 +561,5 @@ def update_player_stats(week):
         pws.score = points
         pws.picks = picks
         pws.winner = winner
-        pws.save
+        pws.save()
 
