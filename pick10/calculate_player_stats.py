@@ -40,6 +40,7 @@ class CalculatePlayerStats:
         self.summary['total_wins'] = 0
         self.summary['total_tens'] = 0
         self.summary['total_zeros'] = 0
+        self.summary['histo'] = [0] * 11
         return self.summary
 
     def get_player_stats(self):
@@ -69,6 +70,7 @@ class CalculatePlayerStats:
             setattr(stat, stat_attr, playerweekstat.score)
             stat.total_score += getattr(stat, stat_attr)
             self.summary['total_points'] += playerweekstat.score
+            self.summary['histo'][playerweekstat.score] += 1
             self.summary['total_picks'] += playerweekstat.picks
             if playerweekstat.winner:
                 self.summary['total_wins'] += 1

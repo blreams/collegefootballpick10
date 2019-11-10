@@ -8,6 +8,8 @@ import re
 import pytz
 from django.shortcuts import render
 from django.template.loader import render_to_string
+from bokeh.plotting import figure
+from bokeh.embed import components
 from .models import Player, get_week
 from .database import Database
 from .calculate_player_stats import CalculatePlayerStats
@@ -37,12 +39,20 @@ class PlayerStatsView:
         year = summary['year_numbers'][0]
         week_number = 1
 
+        # bokeh plot for histogram
+        plot = figure(title="Weekly Scores Histogram for {}".format(summary['player_name']), plot_height=400, toolbar_location=None, tools="", x_axis_label="Weekly Scores", y_axis_label="Weekly Score Counts")
+        plot.vbar(x=range(len(summary['histo'])), width=0.9, top=summary['histo'])
+        plot.xaxis.ticker = list(range(len(summary['histo'])))
+        script, div = components(plot)
+
         sidebar = render_to_string("pick10/year_sidebar.html", {'years_in_pool': years_in_pool, 'year': year})
 
         params = dict()
         params['summary'] = summary
         params['stats'] = stats
         params['side_block_content'] = sidebar
+        params['histo_script'] = script
+        params['histo_div'] = div
 
         WeekNavbar(year,week_number,'player_stats',request.user).add_parameters(params)
 

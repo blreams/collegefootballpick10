@@ -11,6 +11,12 @@
     {% include "pick10/week_navbar.html" %}
     <br>
 {% endblock %}
+{% block custom_page_script %}
+<script src="https://cdn.bokeh.org/bokeh/release/bokeh-1.4.0.min.js"></script>
+<script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-1.4.0.min.js"></script>
+<script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-1.4.0.min.js"></script>
+{{ histo_script | safe }}
+{% endblock %}
 
 {% block body_block %}
 <link href="/static/title_bar.css" rel="stylesheet" type="text/css" media="all">
@@ -215,6 +221,8 @@
         {% endfor %}
     </table>
     <br><br>
+
+    {{ histo_div | safe }}
 
 {% endblock %}
 {% block script_block %}
