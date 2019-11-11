@@ -28,7 +28,7 @@ class Stats(object):
 
     def calc_stats(self):
         if len(self.scores) >= 1:
-            self.mean = float(sum(self.scores)) // len(self.scores)
+            self.mean = float(sum(self.scores)) / len(self.scores)
             self.scores.sort()
             self.median = self.scores[len(self.scores) // 2]
             qty_scores = [(self.scores.count(score), score) for score in self.scores]
