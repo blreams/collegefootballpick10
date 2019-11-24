@@ -48,6 +48,8 @@
             <tr>
                 <th class="pick-header th_header"><span><a class="link-header btn btn-default btn-xs active" href="#" role="button">Player Year</a></span></th>
                 <th class="result-header th_header"><span><a class="link-header btn btn-default btn-xs active" href="#" role="button">Score</a></span></th>
+                <th class="result-header th_header"><span><a class="link-header btn btn-default btn-xs active" href="#" role="button">Max</a></span></th>
+                <th class="result-header th_header"><span><a class="link-header btn btn-default btn-xs active" href="#" role="button">Min</a></span></th>
                 <th class="result-header">Wk1</th>
                 <th class="result-header">Wk2</th>
                 <th class="result-header">Wk3</th>
@@ -74,149 +76,21 @@
             <tr>
                 <td class="year-content pick-content">{{stat.year}}</td>
                 <td class="year-content pick-content">{{stat.total_score}}</td>
-                {% if stat.week1_score == 10 %}
-                    <td class="p_content_grn">{{stat.week1_score}}</td>
-                {% elif stat.week1_score >= 7 and stat.week1_score <= 9 %}
-                    <td class="p_content_lgrn">{{stat.week1_score}}</td>
-                {% elif stat.week1_score >= 1 and stat.week1_score <= 3 %}
-                    <td class="p_content_lred">{{stat.week1_score}}</td>
-                {% elif stat.week1_score == 0 %}
-                    <td class="p_content_red">{{stat.week1_score}}</td>
-                {% else %}
-                    <td class="p_content">{{stat.week1_score}}</td>
-                {% endif %}
-                {% if stat.week2_score == 10 %}
-                    <td class="p_content_grn">{{stat.week2_score}}</td>
-                {% elif stat.week2_score >= 7 and stat.week2_score <= 9 %}
-                    <td class="p_content_lgrn">{{stat.week2_score}}</td>
-                {% elif stat.week2_score >= 1 and stat.week2_score <= 3 %}
-                    <td class="p_content_lred">{{stat.week2_score}}</td>
-                {% elif stat.week2_score == 0 %}
-                    <td class="p_content_red">{{stat.week2_score}}</td>
-                {% else %}
-                    <td class="p_content">{{stat.week2_score}}</td>
-                {% endif %}
-                {% if stat.week3_score == 10 %}
-                    <td class="p_content_grn">{{stat.week3_score}}</td>
-                {% elif stat.week3_score >= 7 and stat.week3_score <= 9 %}
-                    <td class="p_content_lgrn">{{stat.week3_score}}</td>
-                {% elif stat.week3_score >= 1 and stat.week3_score <= 3 %}
-                    <td class="p_content_lred">{{stat.week3_score}}</td>
-                {% elif stat.week3_score == 0 %}
-                    <td class="p_content_red">{{stat.week3_score}}</td>
-                {% else %}
-                    <td class="p_content">{{stat.week3_score}}</td>
-                {% endif %}
-                {% if stat.week4_score == 10 %}
-                    <td class="p_content_grn">{{stat.week4_score}}</td>
-                {% elif stat.week4_score >= 7 and stat.week4_score <= 9 %}
-                    <td class="p_content_lgrn">{{stat.week4_score}}</td>
-                {% elif stat.week4_score >= 1 and stat.week4_score <= 3 %}
-                    <td class="p_content_lred">{{stat.week4_score}}</td>
-                {% elif stat.week4_score == 0 %}
-                    <td class="p_content_red">{{stat.week4_score}}</td>
-                {% else %}
-                    <td class="p_content">{{stat.week4_score}}</td>
-                {% endif %}
-                {% if stat.week5_score == 10 %}
-                    <td class="p_content_grn">{{stat.week5_score}}</td>
-                {% elif stat.week5_score >= 7 and stat.week5_score <= 9 %}
-                    <td class="p_content_lgrn">{{stat.week5_score}}</td>
-                {% elif stat.week5_score >= 1 and stat.week5_score <= 3 %}
-                    <td class="p_content_lred">{{stat.week5_score}}</td>
-                {% elif stat.week5_score == 0 %}
-                    <td class="p_content_red">{{stat.week5_score}}</td>
-                {% else %}
-                    <td class="p_content">{{stat.week5_score}}</td>
-                {% endif %}
-                {% if stat.week6_score == 10 %}
-                    <td class="p_content_grn">{{stat.week6_score}}</td>
-                {% elif stat.week6_score >= 7 and stat.week6_score <= 9 %}
-                    <td class="p_content_lgrn">{{stat.week6_score}}</td>
-                {% elif stat.week6_score >= 1 and stat.week6_score <= 3 %}
-                    <td class="p_content_lred">{{stat.week6_score}}</td>
-                {% elif stat.week6_score == 0 %}
-                    <td class="p_content_red">{{stat.week6_score}}</td>
-                {% else %}
-                    <td class="p_content">{{stat.week6_score}}</td>
-                {% endif %}
-                {% if stat.week7_score == 10 %}
-                    <td class="p_content_grn">{{stat.week7_score}}</td>
-                {% elif stat.week7_score >= 7 and stat.week7_score <= 9 %}
-                    <td class="p_content_lgrn">{{stat.week7_score}}</td>
-                {% elif stat.week7_score >= 1 and stat.week7_score <= 3 %}
-                    <td class="p_content_lred">{{stat.week7_score}}</td>
-                {% elif stat.week7_score == 0 %}
-                    <td class="p_content_red">{{stat.week7_score}}</td>
-                {% else %}
-                    <td class="p_content">{{stat.week7_score}}</td>
-                {% endif %}
-                {% if stat.week8_score == 10 %}
-                    <td class="p_content_grn">{{stat.week8_score}}</td>
-                {% elif stat.week8_score >= 7 and stat.week8_score <= 9 %}
-                    <td class="p_content_lgrn">{{stat.week8_score}}</td>
-                {% elif stat.week8_score >= 1 and stat.week8_score <= 3 %}
-                    <td class="p_content_lred">{{stat.week8_score}}</td>
-                {% elif stat.week8_score == 0 %}
-                    <td class="p_content_red">{{stat.week8_score}}</td>
-                {% else %}
-                    <td class="p_content">{{stat.week8_score}}</td>
-                {% endif %}
-                {% if stat.week9_score == 10 %}
-                    <td class="p_content_grn">{{stat.week9_score}}</td>
-                {% elif stat.week9_score >= 7 and stat.week9_score <= 9 %}
-                    <td class="p_content_lgrn">{{stat.week9_score}}</td>
-                {% elif stat.week9_score >= 1 and stat.week9_score <= 3 %}
-                    <td class="p_content_lred">{{stat.week9_score}}</td>
-                {% elif stat.week9_score == 0 %}
-                    <td class="p_content_red">{{stat.week9_score}}</td>
-                {% else %}
-                    <td class="p_content">{{stat.week9_score}}</td>
-                {% endif %}
-                {% if stat.week10_score == 10 %}
-                    <td class="p_content_grn">{{stat.week10_score}}</td>
-                {% elif stat.week10_score >= 7 and stat.week10_score <= 9 %}
-                    <td class="p_content_lgrn">{{stat.week10_score}}</td>
-                {% elif stat.week10_score >= 1 and stat.week10_score <= 3 %}
-                    <td class="p_content_lred">{{stat.week10_score}}</td>
-                {% elif stat.week10_score == 0 %}
-                    <td class="p_content_red">{{stat.week10_score}}</td>
-                {% else %}
-                    <td class="p_content">{{stat.week10_score}}</td>
-                {% endif %}
-                {% if stat.week11_score == 10 %}
-                    <td class="p_content_grn">{{stat.week11_score}}</td>
-                {% elif stat.week11_score >= 7 and stat.week11_score <= 9 %}
-                    <td class="p_content_lgrn">{{stat.week11_score}}</td>
-                {% elif stat.week11_score >= 1 and stat.week11_score <= 3 %}
-                    <td class="p_content_lred">{{stat.week11_score}}</td>
-                {% elif stat.week11_score == 0 %}
-                    <td class="p_content_red">{{stat.week11_score}}</td>
-                {% else %}
-                    <td class="p_content">{{stat.week11_score}}</td>
-                {% endif %}
-                {% if stat.week12_score == 10 %}
-                    <td class="p_content_grn">{{stat.week12_score}}</td>
-                {% elif stat.week12_score >= 7 and stat.week12_score <= 9 %}
-                    <td class="p_content_lgrn">{{stat.week12_score}}</td>
-                {% elif stat.week12_score >= 1 and stat.week12_score <= 3 %}
-                    <td class="p_content_lred">{{stat.week12_score}}</td>
-                {% elif stat.week12_score == 0 %}
-                    <td class="p_content_red">{{stat.week12_score}}</td>
-                {% else %}
-                    <td class="p_content">{{stat.week12_score}}</td>
-                {% endif %}
-                {% if stat.week13_score == 10 %}
-                    <td class="p_content_grn">{{stat.week13_score}}</td>
-                {% elif stat.week13_score >= 7 and stat.week13_score <= 9 %}
-                    <td class="p_content_lgrn">{{stat.week13_score}}</td>
-                {% elif stat.week13_score >= 1 and stat.week13_score <= 3 %}
-                    <td class="p_content_lred">{{stat.week13_score}}</td>
-                {% elif stat.week13_score == 0 %}
-                    <td class="p_content_red">{{stat.week13_score}}</td>
-                {% else %}
-                    <td class="p_content">{{stat.week13_score}}</td>
-                {% endif %}
+                <td class="year-content pick-content">{{stat.max_score}}</td>
+                <td class="year-content pick-content">{{stat.min_score}}</td>
+                {% if stat.week1_score  > -1 %}<td class="{{stat.week1_decoration}}">{{stat.week1_score}}</td>{% else %}<td class="p_no_content"></td>{% endif %}
+                {% if stat.week2_score  > -1 %}<td class="{{stat.week2_decoration}}">{{stat.week2_score}}</td>{% else %}<td class="p_no_content"></td>{% endif %}
+                {% if stat.week3_score  > -1 %}<td class="{{stat.week3_decoration}}">{{stat.week3_score}}</td>{% else %}<td class="p_no_content"></td>{% endif %}
+                {% if stat.week4_score  > -1 %}<td class="{{stat.week4_decoration}}">{{stat.week4_score}}</td>{% else %}<td class="p_no_content"></td>{% endif %}
+                {% if stat.week5_score  > -1 %}<td class="{{stat.week5_decoration}}">{{stat.week5_score}}</td>{% else %}<td class="p_no_content"></td>{% endif %}
+                {% if stat.week6_score  > -1 %}<td class="{{stat.week6_decoration}}">{{stat.week6_score}}</td>{% else %}<td class="p_no_content"></td>{% endif %}
+                {% if stat.week7_score  > -1 %}<td class="{{stat.week7_decoration}}">{{stat.week7_score}}</td>{% else %}<td class="p_no_content"></td>{% endif %}
+                {% if stat.week8_score  > -1 %}<td class="{{stat.week8_decoration}}">{{stat.week8_score}}</td>{% else %}<td class="p_no_content"></td>{% endif %}
+                {% if stat.week9_score  > -1 %}<td class="{{stat.week9_decoration}}">{{stat.week9_score}}</td>{% else %}<td class="p_no_content"></td>{% endif %}
+                {% if stat.week10_score > -1 %}<td class="{{stat.week10_decoration}}">{{stat.week10_score}}</td>{% else %}<td class="p_no_content"></td>{% endif %}
+                {% if stat.week11_score > -1 %}<td class="{{stat.week11_decoration}}">{{stat.week11_score}}</td>{% else %}<td class="p_no_content"></td>{% endif %}
+                {% if stat.week12_score > -1 %}<td class="{{stat.week12_decoration}}">{{stat.week12_score}}</td>{% else %}<td class="p_no_content"></td>{% endif %}
+                {% if stat.week13_score > -1 %}<td class="{{stat.week13_decoration}}">{{stat.week13_score}}</td>{% else %}<td class="p_no_content"></td>{% endif %}
             </tr>
         {% endfor %}
     </table>
