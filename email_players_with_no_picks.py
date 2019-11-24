@@ -1,6 +1,7 @@
 # This script sends an email reminder to players that haven't entered picks.
 
 SCRIPT_TEST = False
+#SCRIPT_TEST = True
 
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'collegefootballpick10.settings')
