@@ -11,6 +11,20 @@ from .database import Database
 from .calculator import CalculateResults
 from .calculator import NOT_STARTED, IN_PROGRESS, FINAL
 
+def get_decoration(score):
+    if   score == 10: decoration = 'p_content_grn5'
+    elif score ==  9: decoration = 'p_content_grn4'
+    elif score ==  8: decoration = 'p_content_grn3'
+    elif score ==  7: decoration = 'p_content_grn2'
+    elif score ==  6: decoration = 'p_content_grn1'
+    elif score ==  5: decoration = 'p_content'
+    elif score ==  4: decoration = 'p_content_red1'
+    elif score ==  3: decoration = 'p_content_red2'
+    elif score ==  2: decoration = 'p_content_red3'
+    elif score ==  1: decoration = 'p_content_red4'
+    elif score ==  0: decoration = 'p_content_red5'
+    return decoration
+
 class Stat(object):
     def __init__(self):
         pass
@@ -65,9 +79,15 @@ class CalculatePlayerStats:
                 stat = Stat()
                 stat.year = playerweekstat.week.year.yearnum
                 stat.total_score = 0
+                stat.min_score = playerweekstat.score
+                stat.max_score = playerweekstat.score
                 year = stat.year
+            if stat.min_score > playerweekstat.score: stat.min_score = playerweekstat.score
+            if stat.max_score < playerweekstat.score: stat.max_score = playerweekstat.score
             stat_attr = 'week{}_score'.format(playerweekstat.week.weeknum)
             setattr(stat, stat_attr, playerweekstat.score)
+            stat_decoration = 'week{}_decoration'.format(playerweekstat.week.weeknum)
+            setattr(stat, stat_decoration, get_decoration(playerweekstat.score))
             stat.total_score += getattr(stat, stat_attr)
             self.summary['total_points'] += playerweekstat.score
             self.summary['histo'][playerweekstat.score] += 1
