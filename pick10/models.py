@@ -218,6 +218,7 @@ class PlayerWeekStat(models.Model):
     score = models.IntegerField(default=0)
     picks = models.IntegerField(default=0)
     winner = models.BooleanField(default=False)
+    defaulter = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
