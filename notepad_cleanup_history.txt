@@ -4,11 +4,12 @@ from excel_history.excel.pool_spreadsheet import *
 pool_spreadsheet = PoolSpreadsheet(1997)
 import hard_code_default_picks
 hard_code_default_picks.main(args='--query=get_defaults --year=1997 --year=1998')
-pick = pool_spreadsheet.get_picks(1)[0]
-pick
-pick.player_name
-hard_code_default_picks.main(args='--query=get_defaults --year=1997)
-hard_code_default_picks.main(args='--query=get_defaults --year=1997')
+hard_code_default_picks.main(args='--query=update_nonzero_defaults')
+weeks = Week.objects.all()
+for week in weeks: update_player_stats(week)
 
-
-
+# Had some issues with 1999, failing tie-break check because:
+#   1. We had a tie between Dale/Vaughn with equivalent tie break scores.
+#   2. The Game 10 submit times were later than the deadline (loaded from Excel).
+#   3. I modified each player's submit time to be earlier than deadline.
+#   4. I randomly made set Dale earlier than Vaughn.
