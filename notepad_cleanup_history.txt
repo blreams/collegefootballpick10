@@ -1,0 +1,14 @@
+from pick10.models import *
+from importlib import reload
+from excel_history.excel.pool_spreadsheet import *
+pool_spreadsheet = PoolSpreadsheet(1997)
+import hard_code_default_picks
+hard_code_default_picks.main(args='--query=get_defaults --year=1997 --year=1998')
+pick = pool_spreadsheet.get_picks(1)[0]
+pick
+pick.player_name
+hard_code_default_picks.main(args='--query=get_defaults --year=1997)
+hard_code_default_picks.main(args='--query=get_defaults --year=1997')
+
+
+
