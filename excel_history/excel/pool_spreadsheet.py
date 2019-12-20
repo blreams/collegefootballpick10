@@ -99,19 +99,21 @@ class PoolSpreadsheet:
         self.__week_games[week_number] = games
         return games
 
-    def get_picks(self,week_number):
+    def get_picks(self, week_number, playername=None, bypass_defaults=False):
         if week_number in self.__week_picks:
-            return self.__week_picks[week_number]
+            #return self.__week_picks[week_number]
+            picks = self.__week_picks[week_number]
+        else:
+            first_player_column = 10
+            sheet = self.__get_weekly_sheet(week_number)
 
-        first_player_column = 10
-        sheet = self.__get_weekly_sheet(week_number)
+            picks = []
+            for column in range(first_player_column,sheet.ncols):
+                picks += self.__get_picks_info(sheet, column, bypass_defaults)
+            self.__week_picks[week_number] = picks
 
-        picks = []
-        for column in range(first_player_column,sheet.ncols):
-            picks += self.__get_picks_info(sheet,column)
-
-        self.__week_picks[week_number] = picks
-        return picks
+        #return picks
+        return [p for p in picks if playername is None or playername == p.player_name]
 
     def get_game_info(self,week_number,game_number):
         games = self.get_games(week_number)
@@ -426,7 +428,7 @@ class PoolSpreadsheet:
             raise AssertionError("Should not reach here")
         return favored,spread
 
-    def __get_picks_info(self,sheet,column):
+    def __get_picks_info(self, sheet, column, bypass_defaults=False):
         player_row = 1
         first_game_row = 2
         game10_score_top_row = 22
@@ -466,7 +468,7 @@ class PoolSpreadsheet:
 
         team1_score = str(sheet.cell(game10_score_top_row,column).value) 
         team2_score = str(sheet.cell(game10_score_bottom_row,column).value) 
-        default = team1_score == '' and team2_score == ''
+        default = team1_score == '' and team2_score == '' and not bypass_defaults
 
         if default:
             for i in range(len(picks)):
