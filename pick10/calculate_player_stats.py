@@ -11,8 +11,8 @@ from .database import Database
 from .calculator import CalculateResults
 from .calculator import NOT_STARTED, IN_PROGRESS, FINAL
 
-def get_decoration(score, defaulter):
-    if not defaulter:
+def get_decoration(score, winner, defaulter):
+    if not winner and not defaulter:
         if   score == 10: decoration = 'p_content_grn5'
         elif score ==  9: decoration = 'p_content_grn4'
         elif score ==  8: decoration = 'p_content_grn3'
@@ -24,7 +24,9 @@ def get_decoration(score, defaulter):
         elif score ==  2: decoration = 'p_content_red3'
         elif score ==  1: decoration = 'p_content_red4'
         elif score ==  0: decoration = 'p_content_red5'
-    else:
+    elif winner:
+        decoration = 'p_winner'
+    elif defaulter:
         decoration = 'p_defaulter'
     return decoration
 
@@ -90,7 +92,7 @@ class CalculatePlayerStats:
             stat_attr = 'week{}_score'.format(playerweekstat.week.weeknum)
             setattr(stat, stat_attr, playerweekstat.score)
             stat_decoration = 'week{}_decoration'.format(playerweekstat.week.weeknum)
-            setattr(stat, stat_decoration, get_decoration(playerweekstat.score, playerweekstat.defaulter))
+            setattr(stat, stat_decoration, get_decoration(playerweekstat.score, playerweekstat.winner, playerweekstat.defaulter))
             stat.total_score += getattr(stat, stat_attr)
             self.summary['total_points'] += playerweekstat.score
             self.summary['histo'][playerweekstat.score] += 1

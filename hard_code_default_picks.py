@@ -12,7 +12,7 @@ from django.conf import settings
 django.setup()
 
 from django.core.exceptions import ObjectDoesNotExist
-from pick10.models import Pick, get_yearlist, get_player_by_private_name
+from pick10.models import Pick, Week, get_yearlist, get_player_by_private_name
 
 from excel_history.excel.pool_spreadsheet import PoolSpreadsheet
 
@@ -20,6 +20,12 @@ SCRIPT_TEST = False
 arguments = argparse.Namespace()
 
 PickTuple = namedtuple('PickTuple', ['ss_name', 'year', 'week', 'game', 'winner',])
+WeekTuple = namedtuple('WeekTuple', ['year', 'week', 'winner',])
+query_choices = [
+        'get_defaults',
+        'update_nonzero_defaults',
+        'get_winners',
+        ]
 
 def parse_arguments(args):
     global arguments
@@ -27,8 +33,7 @@ def parse_arguments(args):
     parser.add_argument('--debug', '-d', action='store_true', default=False, help="Run in debug mode")
     parser.add_argument('--year', '-y', action='append', type=int, default=[], help="Choose year for query")
     parser.add_argument('--player', '-p', action='append', default=[], help="Choose player (private_name, use underscore to separate first_last) for query")
-    parser.add_argument('--query', '-q', choices=['get_defaults', 'update_nonzero_defaults',], default='get_defaults', help="Get default picks from DB, return list of tuples")
-    #parser.add_argument('--update', '-u', choices=['update', 'all'], default='update', help="Perform an update")
+    parser.add_argument('--query', '-q', choices=query_choices, default='get_defaults', help="Get default picks from DB, return list of tuples")
     arguments = parser.parse_args(args)
 
 def process_arguments():
@@ -84,12 +89,25 @@ def update_nonzero_defaults(pick_tuples):
         else:
             print("Saving Pick({})...".format(pick_tuple))
 
+def get_winners():
+    weeks = Week.objects.filter(year__yearnum__in=arguments.yearnums).order_by('year', 'weeknum')
+
+    retval = []
+    for week in weeks:
+        winner = week.winner.private_name
+        year = week.year.yearnum
+        week = week.weeknum
+        retval.append(WeekTuple(year, week, winner))
+    return retval
+
 def perform_action():
     if arguments.query == 'get_defaults':
         print('\n'.join(map(str, get_defaults())))
     elif arguments.query == 'update_nonzero_defaults':
         pick_tuples = get_defaults()
         update_nonzero_defaults(pick_tuples)
+    elif arguments.query == 'get_winners':
+        print('\n'.join(map(str, get_winners())))
 
 def main(args=''):
     global arguments
