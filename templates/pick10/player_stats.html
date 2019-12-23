@@ -27,15 +27,15 @@
             <td class="table-line" colspan="10"></td>
         </tr>
         <tr class="summary-content">
-            <td class="summary-label">Years</td>
+            <td class="summary-label">Years:</td>
             <td class="summary-value">{{summary.number_of_years}}</td>
-            <td class="summary-label">Pct</td>
+            <td class="summary-label">Pct:</td>
             <td class="summary-value">{{summary.pick_pct}}</td>
-            <td class="summary-label">Wins</td>
+            <td class="summary-label">Wins:</td>
             <td class="summary-value">{{summary.total_wins}}</td>
-            <td class="summary-label">Tens</td>
+            <td class="summary-label">Tens:</td>
             <td class="summary-value">{{summary.total_tens}}</td>
-            <td class="summary-label">Zeros</td>
+            <td class="summary-label">Zeros:</td>
             <td class="summary-value">{{summary.total_zeros}}</td>
         </tr>
         <tr>
@@ -48,6 +48,7 @@
             <tr>
                 <th class="pick-header th_header"><span><a class="link-header btn btn-default btn-xs active" href="#" role="button">Player Year</a></span></th>
                 <th class="result-header th_header"><span><a class="link-header btn btn-default btn-xs active" href="#" role="button">Score</a></span></th>
+                <th class="result-header th_header"><span><a class="link-header btn btn-default btn-xs active" href="#" role="button">Earned Score</a></span></th>
                 <th class="result-header th_header"><span><a class="link-header btn btn-default btn-xs active" href="#" role="button">Max</a></span></th>
                 <th class="result-header th_header"><span><a class="link-header btn btn-default btn-xs active" href="#" role="button">Min</a></span></th>
                 <th class="result-header">Wk1</th>
@@ -69,13 +70,32 @@
             <tr>
                 <td class="pick-header">Total</td>
                 <td class="result-header">{{summary.total_points}}</td>
-                </td>
+                <td class="result-header">{{summary.earned_points}}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="18">Earned Score does not include weeks where there was a default.</td>
             </tr>
         </tfoot>
         {% for stat in stats %}
             <tr>
                 <td class="year-content pick-content">{{stat.year}}</td>
                 <td class="year-content pick-content">{{stat.total_score}}</td>
+                <td class="year-content pick-content">{{stat.earned_score}}</td>
                 <td class="year-content pick-content">{{stat.max_score}}</td>
                 <td class="year-content pick-content">{{stat.min_score}}</td>
                 {% if stat.week1_score  > -1 %}<td class="{{stat.week1_decoration}}">{{stat.week1_score}}</td>{% else %}<td class="p_no_content"></td>{% endif %}
