@@ -55,7 +55,9 @@ class CalculatePlayerStats:
             self.summary['player_name'] = self.player.private_name
         self.summary['year_numbers'] = self.playeryearnums
         self.summary['total_points'] = 0
+        self.summary['earned_points'] = 0
         self.summary['total_picks'] = 0
+        self.summary['earned_picks'] = 0
         self.summary['total_wins'] = 0
         self.summary['total_tens'] = 0
         self.summary['total_zeros'] = 0
@@ -64,7 +66,7 @@ class CalculatePlayerStats:
 
     def get_player_stats(self):
         self.__calculate_player_stats()
-        self.summary['pick_pct'] = "{:.1f}%".format(100.0 * self.summary['total_points'] / self.summary['total_picks'])
+        self.summary['pick_pct'] = "{:.1f}%".format(100.0 * self.summary['earned_points'] / self.summary['earned_picks'])
         return self.stats
 
     def __calculate_player_stats(self):
@@ -84,6 +86,7 @@ class CalculatePlayerStats:
                 stat = Stat()
                 stat.year = playerweekstat.week.year.yearnum
                 stat.total_score = 0
+                stat.earned_score = 0
                 stat.min_score = playerweekstat.score
                 stat.max_score = playerweekstat.score
                 year = stat.year
@@ -93,7 +96,12 @@ class CalculatePlayerStats:
             setattr(stat, stat_attr, playerweekstat.score)
             stat_decoration = 'week{}_decoration'.format(playerweekstat.week.weeknum)
             setattr(stat, stat_decoration, get_decoration(playerweekstat.score, playerweekstat.winner, playerweekstat.defaulter))
-            stat.total_score += getattr(stat, stat_attr)
+            #stat.total_score += getattr(stat, stat_attr)
+            stat.total_score += playerweekstat.score
+            if not playerweekstat.defaulter:
+                stat.earned_score += playerweekstat.score
+                self.summary['earned_points'] += playerweekstat.score
+                self.summary['earned_picks'] += playerweekstat.picks
             self.summary['total_points'] += playerweekstat.score
             self.summary['histo'][playerweekstat.score] += 1
             self.summary['total_picks'] += playerweekstat.picks
