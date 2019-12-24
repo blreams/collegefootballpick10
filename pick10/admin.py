@@ -28,7 +28,7 @@ class PlayerAdmin(admin.ModelAdmin):
     list_display = ('public_name', 'private_name', 'ss_name')
 
 class PlayerYearAdmin(admin.ModelAdmin):
-    list_display = ('user_name', 'user_email', 'player', 'year')
+    list_display = ('user_name', 'user_email', 'player', 'year', 'first_place', 'second_place', 'third_place')
     list_filter = ('year', 'player')
     ordering = ('-year', 'player') # Default ordering is reverse year, then player
 
