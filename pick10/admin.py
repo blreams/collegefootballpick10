@@ -75,7 +75,7 @@ class PickAdmin(admin.ModelAdmin):
     list_filter = ('game__week__year', 'game__week__weeknum', 'game__gamenum', 'player')
 
 class PlayerWeekStatAdmin(admin.ModelAdmin):
-    list_display = ('player', 'week', 'score', 'picks', 'winner', 'created', 'updated')
+    list_display = ('player', 'week', 'score', 'picks', 'winner', 'defaulter', 'created', 'updated')
     list_filter = ('week__year__yearnum', 'week__weeknum')
 
 class UserProfileAdmin(admin.ModelAdmin):
