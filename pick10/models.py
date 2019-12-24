@@ -104,6 +104,9 @@ class Player(models.Model):
 class PlayerYear(models.Model):
     player = models.ForeignKey('Player', on_delete=models.CASCADE)
     year = models.ForeignKey('Year', on_delete=models.CASCADE)
+    first_place = models.BooleanField(default=False)
+    second_place = models.BooleanField(default=False)
+    third_place = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
