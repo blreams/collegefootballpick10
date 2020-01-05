@@ -13,7 +13,7 @@ django.setup()
 from django.core.exceptions import ObjectDoesNotExist
 from pick10.models import Player, Week, PlayerWeekStat
 from pick10.models import get_yearlist, get_weeklist, get_player_id_list_by_year, get_player_id_with_stats_list
-from pick10.models import calc_player_week_points_picks_winner, get_last_week_with_winner, get_playeryears_by_id
+from pick10.models import calc_player_week_points_picks_winner_defaulter, get_last_week_with_winner, get_playeryears_by_id
 
 SCRIPT_TEST = False
 arguments = argparse.Namespace()
@@ -72,7 +72,7 @@ def refresh_database():
                 add_to_database(player, week)
 
 def add_to_database(player, week):
-    points, picks, winner = calc_player_week_points_picks_winner(player.id, week.year.yearnum, week.weeknum)
+    points, picks, winner, defaulter = calc_player_week_points_picks_winner_defaulter(player.id, week.year.yearnum, week.weeknum)
     if winner is None:
         print("WARNING: Year {} Week {} has no winner".format(week.year.yearnum, week.weeknum))
         return
@@ -81,6 +81,7 @@ def add_to_database(player, week):
         pws.score = points
         pws.picks = picks
         pws.winner = winner
+        pws.defaulter = defaulter
         print("Adding PlayerWeekStat({})".format(pws))
         pws.save()
     else:

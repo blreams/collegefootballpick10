@@ -5,24 +5,29 @@ import six
 
 from django.core.cache import cache
 from .models import Week, PlayerWeekStat
-from .models import get_playeryears_by_id, get_player_by_id, get_weeklist, calc_player_week_points_picks_winner, get_last_week_with_winner
+from .models import get_playeryears_by_id, get_player_by_id, get_weeklist, calc_player_week_points_picks_winner_defaulter, get_last_week_with_winner
 from .player_results import PlayerResult, PlayerSummary
 from .database import Database
 from .calculator import CalculateResults
 from .calculator import NOT_STARTED, IN_PROGRESS, FINAL
 
-def get_decoration(score):
-    if   score == 10: decoration = 'p_content_grn5'
-    elif score ==  9: decoration = 'p_content_grn4'
-    elif score ==  8: decoration = 'p_content_grn3'
-    elif score ==  7: decoration = 'p_content_grn2'
-    elif score ==  6: decoration = 'p_content_grn1'
-    elif score ==  5: decoration = 'p_content'
-    elif score ==  4: decoration = 'p_content_red1'
-    elif score ==  3: decoration = 'p_content_red2'
-    elif score ==  2: decoration = 'p_content_red3'
-    elif score ==  1: decoration = 'p_content_red4'
-    elif score ==  0: decoration = 'p_content_red5'
+def get_decoration(score, winner, defaulter):
+    if not winner and not defaulter:
+        if   score == 10: decoration = 'p_content_grn5'
+        elif score ==  9: decoration = 'p_content_grn4'
+        elif score ==  8: decoration = 'p_content_grn3'
+        elif score ==  7: decoration = 'p_content_grn2'
+        elif score ==  6: decoration = 'p_content_grn1'
+        elif score ==  5: decoration = 'p_content'
+        elif score ==  4: decoration = 'p_content_red1'
+        elif score ==  3: decoration = 'p_content_red2'
+        elif score ==  2: decoration = 'p_content_red3'
+        elif score ==  1: decoration = 'p_content_red4'
+        elif score ==  0: decoration = 'p_content_red5'
+    elif winner:
+        decoration = 'p_winner'
+    elif defaulter:
+        decoration = 'p_defaulter'
     return decoration
 
 class Stat(object):
@@ -50,7 +55,9 @@ class CalculatePlayerStats:
             self.summary['player_name'] = self.player.private_name
         self.summary['year_numbers'] = self.playeryearnums
         self.summary['total_points'] = 0
+        self.summary['earned_points'] = 0
         self.summary['total_picks'] = 0
+        self.summary['earned_picks'] = 0
         self.summary['total_wins'] = 0
         self.summary['total_tens'] = 0
         self.summary['total_zeros'] = 0
@@ -59,7 +66,7 @@ class CalculatePlayerStats:
 
     def get_player_stats(self):
         self.__calculate_player_stats()
-        self.summary['pick_pct'] = "{:.1f}%".format(100.0 * self.summary['total_points'] / self.summary['total_picks'])
+        self.summary['pick_pct'] = "{:.1f}%".format(100.0 * self.summary['earned_points'] / self.summary['earned_picks'])
         return self.stats
 
     def __calculate_player_stats(self):
@@ -79,6 +86,7 @@ class CalculatePlayerStats:
                 stat = Stat()
                 stat.year = playerweekstat.week.year.yearnum
                 stat.total_score = 0
+                stat.earned_score = 0
                 stat.min_score = playerweekstat.score
                 stat.max_score = playerweekstat.score
                 year = stat.year
@@ -87,8 +95,13 @@ class CalculatePlayerStats:
             stat_attr = 'week{}_score'.format(playerweekstat.week.weeknum)
             setattr(stat, stat_attr, playerweekstat.score)
             stat_decoration = 'week{}_decoration'.format(playerweekstat.week.weeknum)
-            setattr(stat, stat_decoration, get_decoration(playerweekstat.score))
-            stat.total_score += getattr(stat, stat_attr)
+            setattr(stat, stat_decoration, get_decoration(playerweekstat.score, playerweekstat.winner, playerweekstat.defaulter))
+            #stat.total_score += getattr(stat, stat_attr)
+            stat.total_score += playerweekstat.score
+            if not playerweekstat.defaulter:
+                stat.earned_score += playerweekstat.score
+                self.summary['earned_points'] += playerweekstat.score
+                self.summary['earned_picks'] += playerweekstat.picks
             self.summary['total_points'] += playerweekstat.score
             self.summary['histo'][playerweekstat.score] += 1
             self.summary['total_picks'] += playerweekstat.picks
@@ -107,7 +120,7 @@ class CalculatePlayerStats:
                 self.add_to_database(self.player, week)
 
     def add_to_database(self, player, week):
-        points, picks, winner = calc_player_week_points_picks_winner(player.id, week.year.yearnum, week.weeknum)
+        points, picks, winner, defaulter = calc_player_week_points_picks_winner_defaulter(player.id, week.year.yearnum, week.weeknum)
         if winner is None:
             print("WARNING: Year {} Week {} has no winner".format(week.year.yearnum, week.weeknum))
             return
@@ -115,5 +128,6 @@ class CalculatePlayerStats:
         pws.score = points
         pws.picks = picks
         pws.winner = winner
+        pws.defaulter = defaulter
         pws.save()
 

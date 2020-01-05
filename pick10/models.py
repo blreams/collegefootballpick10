@@ -527,10 +527,10 @@ def calc_weekly_points(yearnum, username_or_player_id=None, overunder=False):
         scorelist = new_scorelist
     return (player_name, scorelist)
 
-def calc_player_week_points_picks_winner(player_id, yearnum, weeknum):
+def calc_player_week_points_picks_winner_defaulter(player_id, yearnum, weeknum):
     picks = query_picks_by_player_id(player_id, yearnum, weeknum)
     if len(picks) == 0:
-        return [0, 0, False]
+        return [0, 0, False, True]
     week = Week.objects.get(year__yearnum=yearnum, weeknum=weeknum)
     if week.winner is not None:
         week_winner = week.winner.id == player_id
@@ -538,13 +538,16 @@ def calc_player_week_points_picks_winner(player_id, yearnum, weeknum):
         week_winner = None
     picks_entered = 0
     points = 0
+    defaulter = False
     games = get_games(yearnum, weeknum)
     for pick, game in zip(picks, games):
         if game.game_state == 3:
             picks_entered += 1
             if pick.winner == game.winner:
                 points += 1
-    return [points, picks_entered, week_winner]
+        if game.gamenum == 10 and pick.team1_predicted_points == -1:
+            defaulter = True
+    return [points, picks_entered, week_winner, defaulter]
 
 def get_playeryears_by_id(player_id):
     playeryears = PlayerYear.objects.filter(player_id=player_id)
@@ -557,7 +560,7 @@ def get_player_id_with_stats_list(yearnum, weeknum):
 def update_player_stats(week):
     players = [py.player for py in PlayerYear.objects.filter(year__yearnum=week.year.yearnum)]
     for player in players:
-        points, picks, winner = calc_player_week_points_picks_winner(player.id, week.year.yearnum, week.weeknum)
+        points, picks, winner, defaulter = calc_player_week_points_picks_winner_defaulter(player.id, week.year.yearnum, week.weeknum)
         if winner is None:
             print("Warning: Year {} Week {} has no winner".format(week.year.yearnum, week.weeknum))
             return
@@ -565,5 +568,6 @@ def update_player_stats(week):
         pws.score = points
         pws.picks = picks
         pws.winner = winner
+        pws.defaulter = defaulter
         pws.save()
 

@@ -1,0 +1,27 @@
+from pick10.models import *
+from importlib import reload
+from excel_history.excel.pool_spreadsheet import *
+pool_spreadsheet = PoolSpreadsheet(1997)
+import hard_code_default_picks
+hard_code_default_picks.main(args='--query=get_defaults --year=1997 --year=1998')
+hard_code_default_picks.main(args='--query=update_nonzero_defaults')
+weeks = Week.objects.all()
+for week in weeks: update_player_stats(week)
+
+# Had some issues with 1999, failing tie-break check because:
+#   1. We had a tie between Dale/Vaughn with equivalent tie break scores.
+#   2. The Game 10 submit times were later than the deadline (loaded from Excel).
+#   3. I modified each player's submit time to be earlier than deadline.
+#   4. I randomly set Dale earlier than Vaughn.
+#   5. Had to set the Week winner to Dale.
+pick = Pick.objects.filter(player__private_name='Vaughn Blackmon', game__week__year__yearnum=1999, game__week__weeknum=3, game__gamenum=10)[0]
+pick.submit_time = datetime(1999, 9, 17, 0, 0, 52)
+pick.save()
+pick = Pick.objects.filter(player__private_name='Dale Robbins', game__week__year__yearnum=1999, game__week__weeknum=3, game__gamenum=10)[0]
+pick.submit_time = datetime(1999, 9, 17, 0, 0, 51)
+pick.save()
+week = Week.objects.filter(year__yearnum=1999, weeknum=3)[0]
+week.pick_deadline = datetime(1999, 9, 18, 0, 0, 51)
+player = Player.objects.get(private_name='Dale Robbins')
+week.winner = player
+week.save()

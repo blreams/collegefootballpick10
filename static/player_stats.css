@@ -88,6 +88,8 @@
    text-align: center;
 }
 
+.p_winner { color: white; background-color: #0000ff; border-bottom: 1px solid lightgray; font-size: 10pt; padding: 0px 4px; font-family: Helvetica; font-weight: 100; white-space: nowrap; text-align: center; }
+.p_defaulter { color: white; background-color: #000000; border-bottom: 1px solid lightgray; font-size: 10pt; padding: 0px 4px; font-family: Helvetica; font-weight: 100; white-space: nowrap; text-align: center; }
 .p_content_grn5 { color: white; background-color: #38ad33; border-bottom: 1px solid lightgray; font-size: 10pt; padding: 0px 4px; font-family: Helvetica; font-weight: 100; white-space: nowrap; text-align: center; }
 .p_content_grn4 { color: black; background-color: #a1ff99; border-bottom: 1px solid lightgray; font-size: 10pt; padding: 0px 4px; font-family: Helvetica; font-weight: 100; white-space: nowrap; text-align: center; }
 .p_content_grn3 { color: black; background-color: #bbffb3; border-bottom: 1px solid lightgray; font-size: 10pt; padding: 0px 4px; font-family: Helvetica; font-weight: 100; white-space: nowrap; text-align: center; }
