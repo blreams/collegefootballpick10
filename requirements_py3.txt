@@ -1,5 +1,5 @@
 beautifulsoup4==4.7.1
-Django==2.2.8
+Django==2.2.10
 django-dbbackup==3.2.0
 django-registration-redux==2.6
 fancy-tag==0.2.0
