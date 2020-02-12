@@ -34,7 +34,7 @@ ALLOWED_HOSTS = [
     'localhost',
     'jkt-myth',
     'skx-linux',
-    'jander.homelinux.net',
+    'collegefootballpick10.homelinux.net',
 ]
 
 
