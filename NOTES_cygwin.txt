@@ -1,0 +1,40 @@
+This is just some notes I took while setting up the pool on a new Windows
+system.
+
+
+Before I even got started, I noticed the machine name was incorrect.
+==============================================================================
+Problem: Need to change machine name in windows
+
+Run Control Panel->System and Security->System
+Click on Change settings under Computer name, domain and workgroup settings.
+Complete rename in dialog window.
+Reboot computer.
+==============================================================================
+
+The first issues occurred with trying to install requirements.
+==============================================================================
+Problem: Failed to install lxml from requirements_py3.txt
+
+I noticed that the base cygwin install included lxml (slightly older version).
+I commented the lxml line in requirements_py3.txt.
+==============================================================================
+
+
+The next step was trying to run the django check (python manage.py check).
+==============================================================================
+Problem: Complaining about SECRET_KEY
+
+This is easily fixed by setting up all the environment variables in the
+virtualenv postactivate script.
+==============================================================================
+Problem: No module named 'MysQLdb'
+
+Ultimately, this was because I had not done any of the initial setup of mysql
+for cygwin. Had to run a few things:
+  $ mysql_install_db
+  $ mysqld_safe &
+
+At this point I could run mysql and get an interactive shell.
+==============================================================================
+Problem: 
