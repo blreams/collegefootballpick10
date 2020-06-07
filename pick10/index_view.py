@@ -38,7 +38,11 @@ class IndexView:
                     pass
         profile = get_profile_by_user(user=request.user)
         player_name, player_over_under_list = calc_weekly_points(year_num, request.user.username, overunder=True)
-        compare_name, compare_over_under_list = calc_weekly_points(year_num, None, overunder=True)
+        try:
+            compare_name, compare_over_under_list = calc_weekly_points(year_num, None, overunder=True)
+        except:
+            compare_name = ''
+            compare_over_under_list = []
         form = IndexForm()
         context = {
                 'year_num': year_num,
@@ -89,7 +93,11 @@ class IndexView:
                     pass
         profile = get_profile_by_user(user=request.user)
         player_name, player_over_under_list = calc_weekly_points(year_num, request.user.username, overunder=True)
-        compare_name, compare_over_under_list = calc_weekly_points(year_num, None, overunder=True)
+        try:
+            compare_name, compare_over_under_list = calc_weekly_points(year_num, None, overunder=True)
+        except:
+            compare_name = ''
+            compare_over_under_list = []
         context = {
                 'year_num': year_num,
                 'week_num': week_num,

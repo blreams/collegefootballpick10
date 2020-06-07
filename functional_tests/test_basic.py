@@ -20,7 +20,7 @@ class NewVisitorTest(FunctionalTest):
 
         # There should be id="home_p" element
         body_text = self.browser.find_element_by_id('home_p').text
-        self.assertIn('main landing page', body_text)
+        self.assertIn('You must be a registered user to participate.', body_text)
 
         # He clicks Register to see if he can get in.
         register_link = self.browser.find_element_by_link_text('Register')
