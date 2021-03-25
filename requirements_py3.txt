@@ -6,7 +6,7 @@ fancy-tag==0.2.0
 #lxml==4.3.4 # system installed 4.3.2
 mysqlclient==1.4.2
 pytz==2019.1
-PyYAML==5.1.1
+PyYAML==5.4
 selenium==3.141.0
 six==1.12.0
 sqlparse==0.3.0
